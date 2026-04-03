@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/lib/rendering/canvassbnrenderer.ts","./src/lib/rendering/pixibridge.ts","./src/lib/runtime/audioengine.ts","./src/lib/runtime/dialoguescript.ts","./src/lib/sbn/loadsbnbundle.ts","./src/lib/sbn/sampling.ts","./src/store/novelstore.ts","./src/types/novel.ts","./src/types/sbn.ts"],"errors":true,"version":"6.0.2"}
