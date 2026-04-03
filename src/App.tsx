@@ -1,5 +1,7 @@
 import { type CSSProperties, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
+import { characterBundleRegistry } from "@/character";
+import { applyCharacterBundleConfig } from "@/lib/runtime/characterRegistry";
 import { loadSbnBundle } from "@/lib/sbn/loadSbnBundle";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
@@ -7,7 +9,6 @@ import { useNovelStore } from "@/store/novelStore";
 import type { CharacterInstance } from "@/types/novel";
 import type { LoadedSbnBundle } from "@/types/sbn";
 
-const DEMO_BUNDLE_PATH = "/demo/PLAYER.sbn";
 const TEXT_SPEED = 18;
 
 type CharacterSpriteProps = {
@@ -87,7 +88,7 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
 
   const spriteStyle = {
     left: `calc(${character.x * 100}% + ${character.xOffset * 100}%)`,
-    bottom: `calc(${character.y}px + ${character.yOffset}px)`,
+    bottom: `calc(${character.y}px - ${character.yOffset}px)`,
     opacity: character.opacity,
     transform: "translateX(-50%) scale(var(--vn-scale))",
     transformOrigin: "bottom center",
@@ -99,7 +100,7 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
 
   return (
     <div
-      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 h-[82vh] w-[min(42vw,560px)] min-w-[280px] max-w-full`}
+      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 h-[92vh] w-[min(46vw,620px)] min-w-[300px] max-w-full`}
       style={spriteStyle}
     >
       <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
@@ -135,6 +136,7 @@ const App = () => {
   const suppressAdvanceOnceRef = useRef(false);
   const visibleLine = line.slice(0, revealedCount);
   const isTyping = revealedCount < line.length;
+  const isNarration = speaker === null && choices.length === 0 && Boolean(line);
 
   useEffect(() => {
     audioRef.current = new NovelAudioEngine();
@@ -148,18 +150,32 @@ const App = () => {
 
     const load = async () => {
       try {
-        setStatusMessage("Memuat karakter utama...");
-        const response = await fetch(DEMO_BUNDLE_PATH);
-        if (!response.ok) {
-          throw new Error("Bundle karakter utama tidak ditemukan.");
-        }
+        setStatusMessage("Memuat bundle karakter...");
+        const bundleEntries = Object.entries(characterBundleRegistry);
 
-        const blob = await response.blob();
-        const bundle = await loadSbnBundle(blob, "PLAYER.sbn");
+        const loadedBundles = await Promise.all(
+          bundleEntries.map(async ([bundleId, bundlePath]) => {
+            const response = await fetch(bundlePath);
+            if (!response.ok) {
+              throw new Error(`Bundle karakter tidak ditemukan: ${bundleId}`);
+            }
+
+            const blob = await response.blob();
+            const bundle = await loadSbnBundle(blob, `${bundleId}.sbn`);
+            return [bundleId, applyCharacterBundleConfig(bundleId, bundle)] as const;
+          }),
+        );
+
         if (cancelled) return;
 
-        registerBundle("player", bundle);
-        audioRef.current?.load(bundle.project);
+        for (const [bundleId, bundle] of loadedBundles) {
+          registerBundle(bundleId, bundle);
+        }
+
+        const firstBundle = loadedBundles[0]?.[1];
+        if (firstBundle) {
+          audioRef.current?.load(firstBundle.project);
+        }
         startStory();
       } catch (error) {
         const message = error instanceof Error ? error.message : "Gagal memuat visual novel.";
@@ -319,32 +335,52 @@ const App = () => {
         </div>
       </div>
 
-      <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
-        <div className="vn-dialogue-box">
-          {speaker ? <div className="vn-speaker">{speaker}</div> : null}
-          <div className="vn-line">{line ? visibleLine : ""}</div>
-
-          {choices.length > 0 ? (
-            <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
-              {choices.map((choice) => (
-                <button
-                  key={choice.id}
-                  className="vn-choice"
-                  type="button"
-                  onClick={() => {
-                    suppressAdvanceOnceRef.current = true;
-                    choose(choice.next);
-                  }}
-                >
-                  {choice.label}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="vn-hint">{isTyping ? "Klik untuk selesaikan teks" : "Klik / Space / Enter untuk lanjut"}</div>
-          )}
+      {isNarration ? (
+        <div className={`vn-narrator-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+          <div className="vn-narrator-box">
+            <div className="vn-narrator-line">{visibleLine}</div>
+            <div className="vn-narrator-hint">{isTyping ? "Klik untuk selesaikan teks" : "Klik / Space / Enter untuk lanjut"}</div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+          <div className="vn-dialogue-box">
+            {speaker ? <div className="vn-speaker">{speaker}</div> : null}
+            <div className="vn-line">{line ? visibleLine : ""}</div>
+
+            {choices.length > 0 ? (
+              <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
+                {choices.map((choice) => (
+                  <button
+                    key={choice.id}
+                    className="vn-choice"
+                    type="button"
+                    onClick={() => {
+                      suppressAdvanceOnceRef.current = true;
+                      choose(choice.next);
+                    }}
+                  >
+                    {choice.label}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="vn-dialogue-bar">
+                <div className="vn-controls" aria-hidden="true">
+                  <span className="vn-control">Log</span>
+                  <span className="vn-control">Auto</span>
+                  <span className="vn-control">Skip</span>
+                  <span className="vn-control">Save</span>
+                  <span className="vn-control">Load</span>
+                  <span className="vn-control">Config</span>
+                  <span className="vn-control">Quit</span>
+                </div>
+                <div className="vn-hint">{isTyping ? "Klik untuk selesaikan teks" : "Klik / Space / Enter untuk lanjut"}</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {bundleList.length === 0 ? (
         <div className="vn-loading">

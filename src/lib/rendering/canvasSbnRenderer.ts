@@ -70,9 +70,14 @@ export class CanvasSbnRenderer {
     camera: SceneBounds,
     scale: number,
   ) {
+    const sceneWidth = (camera.maxX - camera.minX) * camera.zoom * scale;
+    const sceneHeight = (camera.maxY - camera.minY) * camera.zoom * scale;
+    const horizontalPadding = (viewportWidth - sceneWidth) / 2;
+    const bottomPadding = Math.max(0, (viewportHeight - sceneHeight) * 0.04);
+
     return {
-      x: viewportWidth / 2 + (x - camera.centerX) * camera.zoom * scale,
-      y: viewportHeight / 2 + (y - camera.centerY) * camera.zoom * scale,
+      x: horizontalPadding + (x - camera.minX) * camera.zoom * scale,
+      y: viewportHeight - bottomPadding - (camera.maxY - y) * camera.zoom * scale,
     };
   }
 

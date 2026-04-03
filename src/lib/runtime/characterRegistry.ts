@@ -4,20 +4,21 @@ type CharacterBundleConfig = {
   attachmentDrawOrderOverrides?: Record<string, number>;
 };
 
-const registry: Record<string, CharacterBundleConfig> = {
-  player: {
-    attachmentDrawOrderOverrides: {
-      Bahu: -2,
-      Lengan: -1,
-      Body: 10,
-      Kepala: 20,
-      Rambut: 30,
-    },
+const sharedCharacterConfig: CharacterBundleConfig = {
+  attachmentDrawOrderOverrides: {
+    Bahu: -2,
+    Lengan: -1,
+    Body: 10,
+    Kepala: 20,
+    Rambut: 30,
   },
 };
 
 export const applyCharacterBundleConfig = (bundleId: string, bundle: LoadedSbnBundle): LoadedSbnBundle => {
-  const config = registry[bundleId];
+  const config =
+    bundleId.startsWith("aira-") || bundleId.startsWith("reno-")
+      ? sharedCharacterConfig
+      : undefined;
   if (!config) return bundle;
 
   return {

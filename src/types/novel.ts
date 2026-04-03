@@ -125,7 +125,8 @@ export type CharacterInstance = {
 export type CharacterDefinition = {
   id: CharacterId;
   displayName: string;
-  bundleId: string;
+  defaultBundleId: string;
+  bundleIdByEmotion?: Partial<Record<AnyCharacterEmotion, string>>;
   defaultEmotion?: AnyCharacterEmotion;
   defaultPosition?: CharacterStagePosition;
   defaultEnterFrom?: CharacterEnterFrom;

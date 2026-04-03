@@ -103,10 +103,12 @@ const normalizeCharacter = (
   command: Extract<VisualNovelCommand, { type: "showCharacter" }>,
   definition: CharacterDefinition,
 ): CharacterInstance => {
+  const emotion = command.emotion ?? current?.emotion ?? definition.defaultEmotion ?? null;
   const position = command.position ?? current?.position ?? definition.defaultPosition ?? "center";
   const enterFrom: CharacterEnterFrom = command.enterFrom ?? definition.defaultEnterFrom ?? "none";
   const xOffset = command.xOffset ?? current?.xOffset ?? definition.defaultXOffset ?? 0;
   const yOffset = command.yOffset ?? current?.yOffset ?? definition.defaultYOffset ?? 0;
+  const bundleId = (emotion ? definition.bundleIdByEmotion?.[emotion] : undefined) ?? definition.defaultBundleId;
   const resolvedX =
     command.x ??
     (command.position ? positionToX(position) : undefined) ??
@@ -118,9 +120,9 @@ const normalizeCharacter = (
   return {
     id: command.id,
     characterId: definition.id,
-    bundleId: definition.bundleId,
+    bundleId,
     displayName: definition.displayName,
-    emotion: command.emotion ?? current?.emotion ?? definition.defaultEmotion ?? null,
+    emotion,
     position,
     enterFrom,
     entryVersion: (current?.entryVersion ?? 0) + 1,
@@ -254,11 +256,18 @@ const runScriptUntilPause = (state: NovelStore) => {
           );
           if (activeCharacter) {
             const [id, value] = activeCharacter;
+            const definition = characterRegistry[command.speaker as keyof typeof characterRegistry];
+            const nextEmotion = command.emotion ?? value.emotion;
+            const nextBundleId =
+              (nextEmotion ? definition?.bundleIdByEmotion?.[nextEmotion] : undefined) ??
+              definition?.defaultBundleId ??
+              value.bundleId;
             nextState.characters = {
               ...nextState.characters,
               [id]: {
                 ...value,
-                emotion: command.emotion ?? value.emotion,
+                emotion: nextEmotion,
+                bundleId: nextBundleId,
               },
             };
           }
