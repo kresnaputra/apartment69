@@ -51,6 +51,17 @@ export class CanvasSbnRenderer {
     return task;
   }
 
+  async preloadProject(project: SbnProject) {
+    const imageSources = [
+      ...(project.backgroundImage ? [project.backgroundImage] : []),
+      ...project.attachments
+        .map((attachment) => attachment.imageData)
+        .filter((imageData): imageData is string => Boolean(imageData)),
+    ];
+
+    await Promise.all(imageSources.map((source) => this.loadImage(source)));
+  }
+
   private worldToScreen(
     x: number,
     y: number,

@@ -4,7 +4,9 @@ import { demoScript } from "@/lib/runtime/dialogueScript";
 import type { LoadedSbnBundle } from "@/types/sbn";
 import type {
   CharacterDefinition,
+  CharacterEnterFrom,
   CharacterInstance,
+  CharacterStagePosition,
   ChoiceOption,
   DialogueEntry,
   VisualNovelCommand,
@@ -16,6 +18,10 @@ type NovelStore = {
   background: string;
   location: string;
   speaker: string | null;
+  activeCharacterId: string | null;
+  sceneTransitionDuration: number;
+  sceneTransitionToken: number;
+  pendingSceneContinuation: boolean;
   line: string;
   choices: ChoiceOption[];
   choicePrompt: string;
@@ -39,6 +45,10 @@ const emptyState = {
   background: "linear-gradient(180deg, #080b12 0%, #04050a 100%)",
   location: "",
   speaker: null,
+  activeCharacterId: null,
+  sceneTransitionDuration: 720,
+  sceneTransitionToken: 0,
+  pendingSceneContinuation: false,
   line: "",
   choices: [] as ChoiceOption[],
   choicePrompt: "",
@@ -51,36 +61,93 @@ const emptyState = {
 
 const MAX_STEPS_PER_PASS = 100;
 
+const positionToX = (position: CharacterStagePosition) => {
+  if (position === "left") return 0.25;
+  if (position === "right") return 0.75;
+  return 0.5;
+};
+
 const createHistoryEntry = (speaker: string | null, text: string): DialogueEntry => ({
   id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   speaker,
   text,
 });
 
+const moveCharacter = (
+  current: CharacterInstance,
+  command: Extract<VisualNovelCommand, { type: "moveCharacter" }>,
+): CharacterInstance => {
+  const position = command.position ?? current.position;
+  const xOffset = command.xOffset ?? current.xOffset;
+  const yOffset = command.yOffset ?? current.yOffset;
+  const baseX = command.x ?? (command.position ? positionToX(position) : current.x - current.xOffset);
+  const baseY = command.y ?? current.y;
+
+  return {
+    ...current,
+    position,
+    enterFrom: "none",
+    xOffset,
+    yOffset,
+    moveDuration: command.duration ?? current.moveDuration,
+    moveEasing: command.easing ?? current.moveEasing,
+    x: baseX,
+    y: baseY,
+    scale: command.scale ?? current.scale,
+    opacity: command.opacity ?? current.opacity,
+  };
+};
+
 const normalizeCharacter = (
   current: CharacterInstance | undefined,
   command: Extract<VisualNovelCommand, { type: "showCharacter" }>,
   definition: CharacterDefinition,
-): CharacterInstance => ({
-  id: command.id,
-  characterId: definition.id,
-  bundleId: definition.bundleId,
-  displayName: definition.displayName,
-  x: command.x ?? current?.x ?? definition.defaultX ?? 0.5,
-  y: command.y ?? current?.y ?? definition.defaultY ?? 0,
-  scale: command.scale ?? current?.scale ?? definition.defaultScale ?? 1,
-  opacity: command.opacity ?? current?.opacity ?? definition.defaultOpacity ?? 1,
-  frame: command.frame ?? current?.frame ?? definition.defaultFrame ?? 0,
-  fps: command.fps ?? current?.fps ?? definition.defaultFps ?? 24,
-  loop: command.loop ?? current?.loop ?? definition.defaultLoop ?? true,
-  visible: true,
-});
+): CharacterInstance => {
+  const position = command.position ?? current?.position ?? definition.defaultPosition ?? "center";
+  const enterFrom: CharacterEnterFrom = command.enterFrom ?? definition.defaultEnterFrom ?? "none";
+  const xOffset = command.xOffset ?? current?.xOffset ?? definition.defaultXOffset ?? 0;
+  const yOffset = command.yOffset ?? current?.yOffset ?? definition.defaultYOffset ?? 0;
+  const resolvedX =
+    command.x ??
+    (command.position ? positionToX(position) : undefined) ??
+    current?.x ??
+    definition.defaultX ??
+    positionToX(position);
+  const resolvedY = command.y ?? current?.y ?? definition.defaultY ?? 0;
+
+  return {
+    id: command.id,
+    characterId: definition.id,
+    bundleId: definition.bundleId,
+    displayName: definition.displayName,
+    emotion: command.emotion ?? current?.emotion ?? definition.defaultEmotion ?? null,
+    position,
+    enterFrom,
+    entryVersion: (current?.entryVersion ?? 0) + 1,
+    xOffset,
+    yOffset,
+    moveDuration: current?.moveDuration ?? definition.defaultMoveDuration ?? 420,
+    moveEasing: current?.moveEasing ?? definition.defaultMoveEasing ?? "ease-in-out",
+    x: resolvedX,
+    y: resolvedY,
+    scale: command.scale ?? current?.scale ?? definition.defaultScale ?? 1,
+    opacity: command.opacity ?? current?.opacity ?? definition.defaultOpacity ?? 1,
+    frame: command.frame ?? current?.frame ?? definition.defaultFrame ?? 0,
+    fps: command.fps ?? current?.fps ?? definition.defaultFps ?? 24,
+    loop: command.loop ?? current?.loop ?? definition.defaultLoop ?? true,
+    visible: true,
+  };
+};
 
 const runScriptUntilPause = (state: NovelStore) => {
   const nextState: Partial<NovelStore> = {
     background: state.background,
     location: state.location,
     speaker: state.speaker,
+    activeCharacterId: state.activeCharacterId,
+    sceneTransitionDuration: state.sceneTransitionDuration,
+    sceneTransitionToken: state.sceneTransitionToken,
+    pendingSceneContinuation: state.pendingSceneContinuation,
     line: state.line,
     choices: [],
     choicePrompt: "",
@@ -107,8 +174,12 @@ const runScriptUntilPause = (state: NovelStore) => {
       case "scene":
         nextState.background = command.background;
         nextState.location = command.location ?? "";
+        nextState.sceneTransitionDuration = command.transitionDuration ?? 720;
+        nextState.sceneTransitionToken = (nextState.sceneTransitionToken ?? 0) + 1;
+        nextState.pendingSceneContinuation = true;
         nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
-        break;
+        nextState.ready = true;
+        return nextState;
 
       case "showCharacter":
         if (!characterRegistry[command.characterId]) {
@@ -138,23 +209,68 @@ const runScriptUntilPause = (state: NovelStore) => {
         break;
       }
 
+      case "moveCharacter": {
+        const current = nextState.characters?.[command.id];
+        if (current) {
+          nextState.characters = {
+            ...nextState.characters,
+            [command.id]: moveCharacter(current, command),
+          };
+        }
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        break;
+      }
+
       case "jump":
         nextState.currentLabel = command.target;
         nextState.currentIndex = 0;
         break;
 
       case "say":
-        nextState.speaker = command.speaker ?? null;
+        nextState.speaker =
+          command.speaker && characterRegistry[command.speaker as keyof typeof characterRegistry]
+            ? characterRegistry[command.speaker as keyof typeof characterRegistry].displayName
+            : command.speaker ?? null;
+        nextState.activeCharacterId = command.speaker ?? null;
+        nextState.pendingSceneContinuation = false;
         nextState.line = command.text;
         nextState.choices = [];
         nextState.choicePrompt = "";
-        nextState.history = [...(nextState.history ?? []), createHistoryEntry(command.speaker ?? null, command.text)];
+        nextState.history = [
+          ...(nextState.history ?? []),
+          {
+            ...createHistoryEntry(
+              command.speaker && characterRegistry[command.speaker as keyof typeof characterRegistry]
+                ? characterRegistry[command.speaker as keyof typeof characterRegistry].displayName
+                : command.speaker ?? null,
+              command.text,
+            ),
+            emotion: command.emotion ?? null,
+          },
+        ];
+        if (command.speaker) {
+          const activeCharacter = Object.entries(nextState.characters ?? {}).find(
+            ([, value]) => value.characterId === command.speaker,
+          );
+          if (activeCharacter) {
+            const [id, value] = activeCharacter;
+            nextState.characters = {
+              ...nextState.characters,
+              [id]: {
+                ...value,
+                emotion: command.emotion ?? value.emotion,
+              },
+            };
+          }
+        }
         nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
         nextState.ready = true;
         return nextState;
 
       case "menu":
         nextState.speaker = null;
+        nextState.activeCharacterId = null;
+        nextState.pendingSceneContinuation = false;
         nextState.line = command.prompt ?? "";
         nextState.choicePrompt = command.prompt ?? "";
         nextState.choices = command.options;
@@ -178,7 +294,7 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
         ...state.bundles,
         [id]: bundle,
       },
-      statusMessage: `Bundle ${bundle.fileName} siap dipakai sebagai karakter.`,
+      statusMessage: "Karakter siap ditampilkan.",
     })),
 
   setStatusMessage: (message) => set({ statusMessage: message }),
@@ -201,6 +317,7 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
 
       return runScriptUntilPause({
         ...state,
+        pendingSceneContinuation: false,
         ready: false,
       });
     }),

@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useRef, useState } from "react";
+import { type CSSProperties, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
 import { loadSbnBundle } from "@/lib/sbn/loadSbnBundle";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
@@ -13,17 +13,39 @@ const TEXT_SPEED = 18;
 type CharacterSpriteProps = {
   bundle: LoadedSbnBundle;
   character: CharacterInstance;
+  isDimmed: boolean;
 };
 
-const CharacterSprite = ({ bundle, character }: CharacterSpriteProps) => {
+const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) => {
   const rendererRef = useRef<CanvasSbnRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frame = useDeferredValue(character.frame);
   const [viewport, setViewport] = useState({ width: 520, height: 880 });
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     rendererRef.current = new CanvasSbnRenderer();
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const preload = async () => {
+      const renderer = rendererRef.current;
+      if (!renderer) return;
+      setIsReady(false);
+      await renderer.preloadProject(bundle.project);
+      if (!cancelled) {
+        setIsReady(true);
+      }
+    };
+
+    void preload();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [bundle]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,7 +69,7 @@ const CharacterSprite = ({ bundle, character }: CharacterSpriteProps) => {
 
   useEffect(() => {
     const renderer = rendererRef.current;
-    if (!renderer) return;
+    if (!renderer || !isReady) return;
 
     const camera = fitCameraToScene(bundle.project, viewport.width, viewport.height);
     renderer.resize(viewport.width, viewport.height);
@@ -59,20 +81,26 @@ const CharacterSprite = ({ bundle, character }: CharacterSpriteProps) => {
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, frame, viewport.height, viewport.width]);
+  }, [bundle, frame, isReady, viewport.height, viewport.width]);
 
   if (!character.visible) return null;
 
+  const spriteStyle = {
+    left: `calc(${character.x * 100}% + ${character.xOffset * 100}%)`,
+    bottom: `calc(${character.y}px + ${character.yOffset}px)`,
+    opacity: character.opacity,
+    transform: "translateX(-50%) scale(var(--vn-scale))",
+    transformOrigin: "bottom center",
+    animationDuration: "520ms",
+    transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity 220ms ease`,
+    "--vn-scale": String(character.scale),
+    visibility: isReady ? "visible" : "hidden",
+  } as CSSProperties;
+
   return (
     <div
-      className="pointer-events-none absolute bottom-0 z-10 h-[82vh] w-[min(42vw,560px)] min-w-[280px] max-w-full"
-      style={{
-        left: `${character.x * 100}%`,
-        bottom: `${character.y}px`,
-        opacity: character.opacity,
-        transform: `translateX(-50%) scale(${character.scale})`,
-        transformOrigin: "bottom center",
-      }}
+      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 h-[82vh] w-[min(42vw,560px)] min-w-[280px] max-w-full`}
+      style={spriteStyle}
     >
       <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
     </div>
@@ -84,6 +112,10 @@ const App = () => {
   const background = useNovelStore((state) => state.background);
   const location = useNovelStore((state) => state.location);
   const speaker = useNovelStore((state) => state.speaker);
+  const activeCharacterId = useNovelStore((state) => state.activeCharacterId);
+  const sceneTransitionDuration = useNovelStore((state) => state.sceneTransitionDuration);
+  const sceneTransitionToken = useNovelStore((state) => state.sceneTransitionToken);
+  const pendingSceneContinuation = useNovelStore((state) => state.pendingSceneContinuation);
   const line = useNovelStore((state) => state.line);
   const choices = useNovelStore((state) => state.choices);
   const statusMessage = useNovelStore((state) => state.statusMessage);
@@ -96,7 +128,11 @@ const App = () => {
   const tickCharacters = useNovelStore((state) => state.tickCharacters);
 
   const [revealedCount, setRevealedCount] = useState(0);
+  const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
+  const [isSceneTransitioning, setIsSceneTransitioning] = useState(false);
   const audioRef = useRef<NovelAudioEngine | null>(null);
+  const previousSceneTransitionTokenRef = useRef<number | null>(null);
+  const suppressAdvanceOnceRef = useRef(false);
   const visibleLine = line.slice(0, revealedCount);
   const isTyping = revealedCount < line.length;
 
@@ -138,7 +174,40 @@ const App = () => {
     };
   }, [registerBundle, setStatusMessage, startStory]);
 
+  useLayoutEffect(() => {
+    if (previousSceneTransitionTokenRef.current === null) {
+      previousSceneTransitionTokenRef.current = sceneTransitionToken;
+      return;
+    }
+
+    if (previousSceneTransitionTokenRef.current !== sceneTransitionToken) {
+      previousSceneTransitionTokenRef.current = sceneTransitionToken;
+      setSceneTransitionKey((current) => current + 1);
+      setIsSceneTransitioning(true);
+    }
+  }, [sceneTransitionToken]);
+
   useEffect(() => {
+    if (!isSceneTransitioning) return;
+
+    const timer = window.setTimeout(() => {
+      setIsSceneTransitioning(false);
+    }, sceneTransitionDuration);
+
+    return () => window.clearTimeout(timer);
+  }, [isSceneTransitioning, sceneTransitionDuration]);
+
+  useEffect(() => {
+    if (!pendingSceneContinuation || isSceneTransitioning) return;
+
+    const timer = window.setTimeout(() => {
+      advance();
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [advance, isSceneTransitioning, pendingSceneContinuation]);
+
+  useLayoutEffect(() => {
     setRevealedCount(0);
   }, [line]);
 
@@ -177,6 +246,11 @@ const App = () => {
 
   useEffect(() => {
     const handleAdvance = () => {
+      if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
+        suppressAdvanceOnceRef.current = false;
+        return;
+      }
+
       if (choices.length > 0) return;
 
       if (isTyping) {
@@ -195,7 +269,7 @@ const App = () => {
 
     window.addEventListener("keydown", handleKeydown);
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [advance, choices.length, isTyping, line.length]);
+  }, [advance, choices.length, isSceneTransitioning, isTyping, line.length]);
 
   const bundleList = Object.values(bundles);
   const renderCharacters = Object.values(characters)
@@ -209,6 +283,10 @@ const App = () => {
         backgroundImage: background,
       }}
       onClick={() => {
+        if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
+          suppressAdvanceOnceRef.current = false;
+          return;
+        }
         if (choices.length > 0) return;
         if (isTyping) {
           setRevealedCount(line.length);
@@ -220,22 +298,31 @@ const App = () => {
       <div className="vn-vignette" />
       <div className="vn-stage">
         <div className="vn-lighting" />
+        {sceneTransitionKey > 0 ? (
+          <div
+            key={sceneTransitionKey}
+            className="vn-scene-transition"
+            style={{ animationDuration: `${sceneTransitionDuration}ms` }}
+          />
+        ) : null}
 
-        {renderCharacters.map((character) => {
+        {!isSceneTransitioning &&
+          renderCharacters.map((character) => {
           const bundle = bundles[character.bundleId];
           if (!bundle) return null;
-          return <CharacterSprite key={character.id} bundle={bundle} character={character} />;
-        })}
+          const isDimmed = activeCharacterId !== null && activeCharacterId !== character.characterId;
+          return <CharacterSprite key={`${character.id}-${character.entryVersion}`} bundle={bundle} character={character} isDimmed={isDimmed} />;
+          })}
 
         <div className="vn-caption">
           <div className="vn-location">{location || " "}</div>
         </div>
       </div>
 
-      <div className="vn-dialogue-shell">
+      <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
         <div className="vn-dialogue-box">
           {speaker ? <div className="vn-speaker">{speaker}</div> : null}
-          <div className="vn-line">{visibleLine || statusMessage}</div>
+          <div className="vn-line">{line ? visibleLine : ""}</div>
 
           {choices.length > 0 ? (
             <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
@@ -244,7 +331,10 @@ const App = () => {
                   key={choice.id}
                   className="vn-choice"
                   type="button"
-                  onClick={() => choose(choice.next)}
+                  onClick={() => {
+                    suppressAdvanceOnceRef.current = true;
+                    choose(choice.next);
+                  }}
                 >
                   {choice.label}
                 </button>
