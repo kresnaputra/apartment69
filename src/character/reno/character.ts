@@ -1,28 +1,16 @@
-import neutralSbn from "@/character/reno/neutral.sbn?url";
-import calmSbn from "@/character/reno/calm.sbn?url";
-import teasingSbn from "@/character/reno/teasing.sbn?url";
-import worriedSbn from "@/character/reno/worried.sbn?url";
-import surprisedSbn from "@/character/reno/surprised.sbn?url";
+import normalSbn from "@/character/reno/normal.sbn?url";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const renoBundleRegistry = {
-  "reno-neutral": neutralSbn,
-  "reno-calm": calmSbn,
-  "reno-teasing": teasingSbn,
-  "reno-worried": worriedSbn,
-  "reno-surprised": surprisedSbn,
+  "reno-normal": normalSbn,
 } as const;
 
 export const renoCharacter: CharacterDefinition = {
   id: "reno",
   displayName: "Reno",
-  defaultBundleId: "reno-neutral",
+  defaultBundleId: "reno-normal",
   bundleIdByEmotion: {
-    neutral: "reno-neutral",
-    calm: "reno-calm",
-    teasing: "reno-teasing",
-    worried: "reno-worried",
-    surprised: "reno-surprised",
+    neutral: "reno-normal",
   },
   defaultEmotion: "neutral",
   defaultPosition: "right",

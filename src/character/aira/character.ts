@@ -1,16 +1,8 @@
 import normalSbn from "@/character/aira/normal.sbn?url";
-import gentleSbn from "@/character/aira/gentle.sbn?url";
-import seriousSbn from "@/character/aira/serious.sbn?url";
-import shySbn from "@/character/aira/shy.sbn?url";
-import surprisedSbn from "@/character/aira/surprised.sbn?url";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const airaBundleRegistry = {
   "aira-normal": normalSbn,
-  "aira-gentle": gentleSbn,
-  "aira-serious": seriousSbn,
-  "aira-shy": shySbn,
-  "aira-surprised": surprisedSbn,
 } as const;
 
 export const airaCharacter: CharacterDefinition = {
@@ -19,10 +11,6 @@ export const airaCharacter: CharacterDefinition = {
   defaultBundleId: "aira-normal",
   bundleIdByEmotion: {
     neutral: "aira-normal",
-    gentle: "aira-gentle",
-    serious: "aira-serious",
-    shy: "aira-shy",
-    surprised: "aira-surprised",
   },
   defaultEmotion: "neutral",
   defaultPosition: "center",
