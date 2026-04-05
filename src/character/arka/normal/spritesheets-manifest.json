@@ -1,0 +1,43 @@
+{
+  "app": "SpineBones",
+  "version": "1.0",
+  "totalFrames": 61,
+  "fps": 24,
+  "sheets": [
+    {
+      "index": 0,
+      "frameStart": 0,
+      "frameEnd": 14,
+      "image": "spritesheet-01.png",
+      "data": "spritesheet-01.json"
+    },
+    {
+      "index": 1,
+      "frameStart": 15,
+      "frameEnd": 29,
+      "image": "spritesheet-02.png",
+      "data": "spritesheet-02.json"
+    },
+    {
+      "index": 2,
+      "frameStart": 30,
+      "frameEnd": 44,
+      "image": "spritesheet-03.png",
+      "data": "spritesheet-03.json"
+    },
+    {
+      "index": 3,
+      "frameStart": 45,
+      "frameEnd": 59,
+      "image": "spritesheet-04.png",
+      "data": "spritesheet-04.json"
+    },
+    {
+      "index": 4,
+      "frameStart": 60,
+      "frameEnd": 60,
+      "image": "spritesheet-05.png",
+      "data": "spritesheet-05.json"
+    }
+  ]
+}

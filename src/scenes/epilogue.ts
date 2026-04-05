@@ -7,9 +7,9 @@ export const epilogueScene: VisualNovelCommand[] = [
     "Peron Setelah Hujan",
     1000,
   ),
-  show("reno-main", "reno", "calm", { position: "right", enterFrom: "none", yOffset: 60, scale: 1.08 }),
+  show("maya-main", "maya", "calm", { position: "right", enterFrom: "none", yOffset: 60, scale: 1.08 }),
   narrate("Dialog sekarang sudah dipisah per file scene, jadi struktur ceritanya lebih rapi dan gampang diperluas."),
-  say("reno", "teasing", "Dan satu bundle `.sbn` pun sekarang bisa dipakai oleh lebih dari satu karakter."),
-  say("aira", "surprised", "Klik, tekan Space, atau Enter untuk mengulang adegan dari awal."),
+  say("maya", "teasing", "Dan satu bundle `.sbn` pun sekarang bisa dipakai oleh lebih dari satu karakter."),
+  say("arka", "surprised", "Klik, tekan Space, atau Enter untuk mengulang adegan dari awal."),
   menu("Lanjut ke mana?", [{ id: "restart", label: "Ulang dari awal", next: "opening" }]),
 ];

@@ -1,16 +1,16 @@
-import normalSbn from "@/character/reno/normal.sbn?url";
+import normalManifest from "@/character/maya/normal/spritesheets-manifest.json?url";
 import type { CharacterDefinition } from "@/types/novel";
 
-export const renoBundleRegistry = {
-  "reno-normal": normalSbn,
+export const mayaBundleRegistry = {
+  "maya-normal": normalManifest,
 } as const;
 
-export const renoCharacter: CharacterDefinition = {
-  id: "reno",
-  displayName: "Reno",
-  defaultBundleId: "reno-normal",
+export const mayaCharacter: CharacterDefinition = {
+  id: "maya",
+  displayName: "Maya",
+  defaultBundleId: "maya-normal",
   bundleIdByEmotion: {
-    neutral: "reno-normal",
+    neutral: "maya-normal",
   },
   defaultEmotion: "neutral",
   defaultPosition: "right",

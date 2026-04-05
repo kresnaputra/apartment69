@@ -1,52 +1,29 @@
 import { type CSSProperties, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
+import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { characterBundleRegistry } from "@/character";
-import { applyCharacterBundleConfig } from "@/lib/runtime/characterRegistry";
-import { loadSbnBundle } from "@/lib/sbn/loadSbnBundle";
-import { fitCameraToScene } from "@/lib/sbn/sampling";
+import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { useNovelStore } from "@/store/novelStore";
 import type { CharacterInstance } from "@/types/novel";
-import type { LoadedSbnBundle } from "@/types/sbn";
+import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 
 const TEXT_SPEED = 18;
 
 type CharacterSpriteProps = {
-  bundle: LoadedSbnBundle;
+  bundle: LoadedSpritesheetBundle;
   character: CharacterInstance;
   isDimmed: boolean;
 };
 
 const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) => {
-  const rendererRef = useRef<CanvasSbnRenderer | null>(null);
+  const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frame = useDeferredValue(character.frame);
   const [viewport, setViewport] = useState({ width: 520, height: 880 });
-  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    rendererRef.current = new CanvasSbnRenderer();
+    rendererRef.current = new CanvasSpritesheetRenderer();
   }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const preload = async () => {
-      const renderer = rendererRef.current;
-      if (!renderer) return;
-      setIsReady(false);
-      await renderer.preloadProject(bundle.project);
-      if (!cancelled) {
-        setIsReady(true);
-      }
-    };
-
-    void preload();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [bundle]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -70,19 +47,16 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
 
   useEffect(() => {
     const renderer = rendererRef.current;
-    if (!renderer || !isReady) return;
+    if (!renderer) return;
 
-    const camera = fitCameraToScene(bundle.project, viewport.width, viewport.height);
     renderer.resize(viewport.width, viewport.height);
-    void renderer.render({
-      project: bundle.project,
+    renderer.render({
+      bundle,
       frame,
-      scale: 1,
-      camera,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, frame, isReady, viewport.height, viewport.width]);
+  }, [bundle, frame, viewport.height, viewport.width]);
 
   if (!character.visible) return null;
 
@@ -95,7 +69,7 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
     animationDuration: "520ms",
     transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity 220ms ease`,
     "--vn-scale": String(character.scale),
-    visibility: isReady ? "visible" : "hidden",
+    visibility: "visible" as const,
   } as CSSProperties;
 
   return (
@@ -155,14 +129,8 @@ const App = () => {
 
         const loadedBundles = await Promise.all(
           bundleEntries.map(async ([bundleId, bundlePath]) => {
-            const response = await fetch(bundlePath);
-            if (!response.ok) {
-              throw new Error(`Bundle karakter tidak ditemukan: ${bundleId}`);
-            }
-
-            const blob = await response.blob();
-            const bundle = await loadSbnBundle(blob, `${bundleId}.sbn`);
-            return [bundleId, applyCharacterBundleConfig(bundleId, bundle)] as const;
+            const bundle = await loadSpritesheetBundle(bundleId, bundlePath);
+            return [bundleId, bundle] as const;
           }),
         );
 
@@ -172,10 +140,6 @@ const App = () => {
           registerBundle(bundleId, bundle);
         }
 
-        const firstBundle = loadedBundles[0]?.[1];
-        if (firstBundle) {
-          audioRef.current?.load(firstBundle.project);
-        }
         startStory();
       } catch (error) {
         const message = error instanceof Error ? error.message : "Gagal memuat visual novel.";

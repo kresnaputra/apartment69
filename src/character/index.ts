@@ -1,13 +1,13 @@
-import { airaBundleRegistry, airaCharacter } from "@/character/aira/character";
-import { renoBundleRegistry, renoCharacter } from "@/character/reno/character";
+import { arkaBundleRegistry, arkaCharacter } from "@/character/arka/character";
+import { mayaBundleRegistry, mayaCharacter } from "@/character/maya/character";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const characterRegistry: Record<string, CharacterDefinition> = {
-  [airaCharacter.id]: airaCharacter,
-  [renoCharacter.id]: renoCharacter,
+  [arkaCharacter.id]: arkaCharacter,
+  [mayaCharacter.id]: mayaCharacter,
 };
 
 export const characterBundleRegistry: Record<string, string> = {
-  ...airaBundleRegistry,
-  ...renoBundleRegistry,
+  ...arkaBundleRegistry,
+  ...mayaBundleRegistry,
 };

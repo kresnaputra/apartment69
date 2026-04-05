@@ -16,7 +16,7 @@ const sharedCharacterConfig: CharacterBundleConfig = {
 
 export const applyCharacterBundleConfig = (bundleId: string, bundle: LoadedSbnBundle): LoadedSbnBundle => {
   const config =
-    bundleId.startsWith("aira-") || bundleId.startsWith("reno-")
+    bundleId.startsWith("arka-") || bundleId.startsWith("maya-")
       ? sharedCharacterConfig
       : undefined;
   if (!config) return bundle;

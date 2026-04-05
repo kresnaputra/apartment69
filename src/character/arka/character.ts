@@ -1,16 +1,16 @@
-import normalSbn from "@/character/aira/normal.sbn?url";
+import normalManifest from "@/character/arka/normal/spritesheets-manifest.json?url";
 import type { CharacterDefinition } from "@/types/novel";
 
-export const airaBundleRegistry = {
-  "aira-normal": normalSbn,
+export const arkaBundleRegistry = {
+  "arka-normal": normalManifest,
 } as const;
 
-export const airaCharacter: CharacterDefinition = {
-  id: "aira",
-  displayName: "Aira",
-  defaultBundleId: "aira-normal",
+export const arkaCharacter: CharacterDefinition = {
+  id: "arka",
+  displayName: "Arka",
+  defaultBundleId: "arka-normal",
   bundleIdByEmotion: {
-    neutral: "aira-normal",
+    neutral: "arka-normal",
   },
   defaultEmotion: "neutral",
   defaultPosition: "center",

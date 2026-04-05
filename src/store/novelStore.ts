@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { characterRegistry } from "@/character";
 import { demoScript } from "@/lib/runtime/dialogueScript";
-import type { LoadedSbnBundle } from "@/types/sbn";
+import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import type {
   CharacterDefinition,
   CharacterEnterFrom,
@@ -14,7 +14,7 @@ import type {
 } from "@/types/novel";
 
 type NovelStore = {
-  bundles: Record<string, LoadedSbnBundle>;
+  bundles: Record<string, LoadedSpritesheetBundle>;
   background: string;
   location: string;
   speaker: string | null;
@@ -31,7 +31,7 @@ type NovelStore = {
   currentIndex: number;
   statusMessage: string;
   ready: boolean;
-  registerBundle: (id: string, bundle: LoadedSbnBundle) => void;
+  registerBundle: (id: string, bundle: LoadedSpritesheetBundle) => void;
   setStatusMessage: (message: string) => void;
   startStory: () => void;
   advance: () => void;
@@ -354,7 +354,7 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
             return [id, character];
           }
 
-          const duration = Math.max(1, bundle.project.duration);
+          const duration = Math.max(1, bundle.totalFrames);
           const nextFrame = character.loop ? (character.frame + 1) % duration : Math.min(duration - 1, character.frame + 1);
 
           return [
