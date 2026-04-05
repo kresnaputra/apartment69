@@ -9,6 +9,7 @@ import type { CharacterInstance } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 
 const TEXT_SPEED = 18;
+const CHARACTER_TICK_FPS = 60;
 
 type CharacterSpriteProps = {
   bundle: LoadedSpritesheetBundle;
@@ -216,7 +217,7 @@ const App = () => {
     let lastTick = performance.now();
 
     const loop = (time: number) => {
-      if (time - lastTick >= 1000 / 24) {
+      if (time - lastTick >= 1000 / CHARACTER_TICK_FPS) {
         tickCharacters();
         lastTick = time;
       }
