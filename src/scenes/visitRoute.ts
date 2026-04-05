@@ -6,7 +6,7 @@ export const visitRouteScene: VisualNovelCommand[] = [
     "radial-gradient(circle at top, rgba(193,127,255,0.28), transparent 34%), linear-gradient(180deg, #271524 0%, #161024 55%, #08070e 100%)",
     "Stasiun Senja",
   ),
-  show("maya-main", "maya", "worried", { position: "right", enterFrom: "none", yOffset: 60, scale: 1.08 }),
+  show("maya-main", "maya", "worried", { position: "right", enterFrom: "none" }),
   moveTo("maya-main", "center", { duration: 760, easing: "ease-in-out", xOffset: 0.03 }),
   say("arka", "shy", "Kalau begitu jangan beri aku janji. Duduklah sebentar, dengarkan ceritaku, lalu pergilah tanpa merasa berutang apa pun."),
   say("maya", "teasing", "Kalau cuma mampir, setidaknya duduk sampai kereta terakhir benar-benar lewat."),

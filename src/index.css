@@ -101,6 +101,11 @@ textarea {
 
 .vn-character {
   will-change: transform, opacity;
+  background: transparent;
+}
+
+.vn-character canvas {
+  display: block;
 }
 
 .vn-character-dimmed {
@@ -348,6 +353,237 @@ textarea {
   }
 }
 
+/* ─── Main Menu ─────────────────────────────────────────────── */
+
+.vn-menu-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 640ms ease;
+}
+
+.vn-menu-visible {
+  opacity: 1;
+}
+
+.vn-menu-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vn-menu-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(180, 80, 60, 0.22), transparent 55%),
+    radial-gradient(ellipse 60% 70% at 75% 70%, rgba(60, 40, 120, 0.28), transparent 55%),
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(10, 6, 20, 0.9), transparent 50%),
+    linear-gradient(160deg, #0d0a18 0%, #120b1f 40%, #0a0d1a 70%, #07090f 100%);
+}
+
+.vn-menu-noise {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+.vn-menu-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: vn-menu-drift 10s ease-in-out infinite alternate;
+}
+
+.vn-menu-orb-1 {
+  width: 520px;
+  height: 520px;
+  top: -180px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(210, 100, 70, 0.18), transparent 65%);
+  animation-duration: 13s;
+}
+
+.vn-menu-orb-2 {
+  width: 640px;
+  height: 640px;
+  bottom: -220px;
+  right: -160px;
+  background: radial-gradient(circle, rgba(80, 50, 160, 0.22), transparent 65%);
+  animation-duration: 17s;
+  animation-direction: alternate-reverse;
+}
+
+.vn-menu-orb-3 {
+  width: 360px;
+  height: 360px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 214, 173, 0.06), transparent 60%);
+  animation-duration: 9s;
+}
+
+.vn-menu-layout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 3rem 2rem;
+  gap: 3rem;
+}
+
+.vn-menu-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vn-menu-eyebrow {
+  margin: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(255, 214, 173, 0.52);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.vn-menu-title {
+  margin: 0;
+  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: #f5efe8;
+  text-shadow:
+    0 0 60px rgba(255, 180, 120, 0.22),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  font-style: italic;
+  max-width: 18ch;
+}
+
+.vn-menu-subtitle {
+  margin: 0;
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  color: rgba(204, 185, 169, 0.6);
+  letter-spacing: 0.03em;
+  max-width: 42ch;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.vn-menu-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  max-width: 360px;
+}
+
+.vn-menu-btn {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    background 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    opacity 160ms ease;
+}
+
+.vn-menu-btn:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+.vn-menu-btn-primary {
+  background: rgba(255, 214, 173, 0.12);
+  color: #ffd6ad;
+  border-color: rgba(255, 214, 173, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.vn-menu-btn-primary:not(:disabled):hover {
+  transform: translateY(-2px);
+  background: rgba(255, 214, 173, 0.2);
+  border-color: rgba(255, 214, 173, 0.52);
+  box-shadow: 0 6px 32px rgba(255, 180, 100, 0.15);
+}
+
+.vn-menu-btn-primary:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.vn-menu-btn-secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(245, 239, 232, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.vn-menu-btn-secondary:not(:disabled):hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vn-menu-btn-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.vn-menu-dots::after {
+  content: "...";
+  display: inline-block;
+  animation: vn-menu-ellipsis 1.4s steps(4, end) infinite;
+  width: 1.2em;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.vn-menu-footer {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: rgba(204, 185, 169, 0.28);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: nowrap;
+}
+
+@keyframes vn-menu-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.06); }
+}
+
+@keyframes vn-menu-ellipsis {
+  0%  { width: 0; }
+  25% { width: 0.4em; }
+  50% { width: 0.8em; }
+  75% { width: 1.2em; }
+  100%{ width: 0; }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .vn-narrator-shell {
     align-items: center;

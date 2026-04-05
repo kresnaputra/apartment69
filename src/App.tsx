@@ -1,5 +1,6 @@
 import { type CSSProperties, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
+import { MainMenu } from "@/components/MainMenu";
 import { characterBundleRegistry } from "@/character";
 import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
@@ -74,7 +75,7 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
 
   return (
     <div
-      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 h-[92vh] w-[min(46vw,620px)] min-w-[300px] max-w-full`}
+      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 h-[92vh] w-[min(46vw,620px)] min-w-[300px] max-w-full overflow-hidden`}
       style={spriteStyle}
     >
       <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
@@ -83,6 +84,9 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
 };
 
 const App = () => {
+  const [phase, setPhase] = useState<"menu" | "story">("menu");
+  const [bundlesReady, setBundlesReady] = useState(false);
+
   const bundles = useNovelStore((state) => state.bundles);
   const background = useNovelStore((state) => state.background);
   const location = useNovelStore((state) => state.location);
@@ -140,7 +144,7 @@ const App = () => {
           registerBundle(bundleId, bundle);
         }
 
-        startStory();
+        setBundlesReady(true);
       } catch (error) {
         const message = error instanceof Error ? error.message : "Gagal memuat visual novel.";
         setStatusMessage(message);
@@ -152,7 +156,7 @@ const App = () => {
     return () => {
       cancelled = true;
     };
-  }, [registerBundle, setStatusMessage, startStory]);
+  }, [registerBundle, setStatusMessage]);
 
   useLayoutEffect(() => {
     if (previousSceneTransitionTokenRef.current === null) {
@@ -251,17 +255,24 @@ const App = () => {
     return () => window.removeEventListener("keydown", handleKeydown);
   }, [advance, choices.length, isSceneTransitioning, isTyping, line.length]);
 
+  const handleStartStory = () => {
+    startStory();
+    setPhase("story");
+  };
+
   const bundleList = Object.values(bundles);
   const renderCharacters = Object.values(characters)
     .filter((character) => character.visible)
     .sort((left, right) => left.y - right.y);
 
   return (
-    <main
-      className="vn-root"
-      style={{
-        backgroundImage: background,
-      }}
+    <>
+      {phase === "menu" && (
+        <MainMenu onStart={handleStartStory} isReady={bundlesReady} />
+      )}
+      <main
+        className="vn-root"
+        style={{ visibility: phase === "story" ? "visible" : "hidden", backgroundImage: background }}
       onClick={() => {
         if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
           suppressAdvanceOnceRef.current = false;
@@ -355,6 +366,7 @@ const App = () => {
         </div>
       ) : null}
     </main>
+    </>
   );
 };
 

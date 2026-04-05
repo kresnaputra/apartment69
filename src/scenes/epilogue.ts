@@ -7,7 +7,7 @@ export const epilogueScene: VisualNovelCommand[] = [
     "Peron Setelah Hujan",
     1000,
   ),
-  show("maya-main", "maya", "calm", { position: "right", enterFrom: "none", yOffset: 60, scale: 1.08 }),
+  show("maya-main", "maya", "calm", { position: "right", enterFrom: "none" }),
   narrate("Dialog sekarang sudah dipisah per file scene, jadi struktur ceritanya lebih rapi dan gampang diperluas."),
   say("maya", "teasing", "Dan satu bundle `.sbn` pun sekarang bisa dipakai oleh lebih dari satu karakter."),
   say("arka", "surprised", "Klik, tekan Space, atau Enter untuk mengulang adegan dari awal."),
