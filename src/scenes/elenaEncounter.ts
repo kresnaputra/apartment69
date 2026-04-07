@@ -66,5 +66,5 @@ export const helpElenaScene: VisualNovelCommand[] = [
   narrate("That evening, Arka crouches in front of the cabinet under Elena's sink and examines the leaking joint."),
   minigame("pipe-connection"),
   narrate("The dripping stops."),
-  jump("epilogue"),
+  jump("nadia-balcony"),
 ];

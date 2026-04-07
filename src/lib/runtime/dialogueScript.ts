@@ -1,6 +1,7 @@
 import { elenaEncounterScene, helpElenaScene, ignoreElenaScene } from "@/scenes/elenaEncounter";
 import { elevatorMeetingScene } from "@/scenes/elevatorMeeting";
 import { epilogueScene } from "@/scenes/epilogue";
+import { nadiaAdviceHelpScene, nadiaAdviceRefuseScene, nadiaBalconyScene } from "@/scenes/nadiaBalcony";
 import { openingScene } from "@/scenes/opening";
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
@@ -16,6 +17,9 @@ export const demoScript: VisualNovelScript = {
     "ignore-elena": ignoreElenaScene,
     "stay-route": stayRouteScene,
     "visit-route": visitRouteScene,
+    "nadia-balcony": nadiaBalconyScene,
+    "nadia-advice-help": nadiaAdviceHelpScene,
+    "nadia-advice-refuse": nadiaAdviceRefuseScene,
     epilogue: epilogueScene,
   },
 };
