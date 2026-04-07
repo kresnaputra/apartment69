@@ -1,9 +1,9 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { bg, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
-import skyUrl from "@/background/sky.png";
+import elevator from "@/background/elevator.png";
 
 export const elevatorMeetingScene: VisualNovelCommand[] = [
-  bg(skyUrl, "Lentera Apartments - Elevator"),
+  bg(elevator , "Lentera Apartments - Elevator"),
   narrate(
     "Inside a slow, slightly creaking elevator, Arka stands in the corner, leaning his shoulder against the wall and holding onto his backpack strap.",
   ),

@@ -1,5 +1,6 @@
 import { type CSSProperties, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
+import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { MainMenu } from "@/components/MainMenu";
 import { characterBundleRegistry } from "@/character";
@@ -396,6 +397,8 @@ const App = () => {
 
         {activeMinigame?.id === "elevator-button" ? (
           <ElevatorButtonMinigame onComplete={completeMinigame} />
+        ) : activeMinigame?.id === "pipe-connection" ? (
+          <PipeConnectionMinigame onComplete={completeMinigame} />
         ) : null}
 
         {bundleList.length === 0 ? (

@@ -546,6 +546,75 @@ textarea {
     inset 0 0 24px rgba(255, 208, 88, 0.08);
 }
 
+/* ─── Pipe Connection Minigame ──────────────────────────────── */
+
+.vn-pipe-card {
+  justify-items: center;
+}
+
+.vn-pipe-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.vn-pipe-side {
+  position: relative;
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.vn-pipe-side-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(190, 200, 215, 0.45);
+  pointer-events: none;
+}
+
+.vn-pipe-stub {
+  position: absolute;
+  left: 0;
+  width: 36px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.vn-pipe-stub-left {
+  border-radius: 4px 0 0 4px;
+}
+
+.vn-pipe-stub-right {
+  border-radius: 0 4px 4px 0;
+}
+
+.vn-pipe-success {
+  color: #00e5a0;
+  text-align: center;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  animation: vn-pipe-pop 0.4s ease-out both;
+}
+
+.vn-pipe-solved {
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.34),
+    0 0 60px rgba(0, 229, 160, 0.14);
+  transition: box-shadow 0.6s ease;
+}
+
+@keyframes vn-pipe-pop {
+  from { opacity: 0; transform: scale(0.88) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 @keyframes vn-enter-left {
   from {
     opacity: 0;

@@ -13,7 +13,7 @@ export type ChoiceOption = {
   next: string;
 };
 
-export type MinigameId = "elevator-button";
+export type MinigameId = "elevator-button" | "pipe-connection";
 
 export type ActiveMinigame = {
   id: MinigameId;

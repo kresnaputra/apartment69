@@ -1,9 +1,9 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import { bg, hide, jump, menu, narrate, say, show } from "@/scenes/scriptTypes";
-import apartementUrl from "@/background/apartement.png";
+import { bg, hide, jump, menu, minigame, narrate, say, show } from "@/scenes/scriptTypes";
+import frontOfficeUrl from "@/background/front-office.png";
 
 export const elenaEncounterScene: VisualNovelCommand[] = [
-  bg(apartementUrl, "Lentera Apartments - 3rd Floor Hallway"),
+  bg(frontOfficeUrl, "Lentera Apartments - Front Office"),
   hide("maya-elevator"),
   hide("arka-elevator"),
   show("arka-hallway", "arka", "neutral", {
@@ -63,5 +63,8 @@ export const helpElenaScene: VisualNovelCommand[] = [
     "neutral",
     "Fine. I don't have another option. Find me in Room 303. Come tonight if you're serious. And do not make me wait.",
   ),
+  narrate("That evening, Arka crouches in front of the cabinet under Elena's sink and examines the leaking joint."),
+  minigame("pipe-connection"),
+  narrate("The dripping stops."),
   jump("epilogue"),
 ];
