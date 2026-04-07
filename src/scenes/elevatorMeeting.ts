@@ -20,6 +20,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
   show("maya-elevator", "maya", "neutral", {
     position: "center",
     enterFrom: "right",
+    xOffset: 0.1,
   }),
   say("maya", "worried", "Almost missed it... please don't get stuck now..."),
   narrate(
