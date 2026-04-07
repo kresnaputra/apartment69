@@ -24,10 +24,30 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frame = useDeferredValue(character.frame);
   const [viewport, setViewport] = useState({ width: 520, height: 880 });
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1280);
   const resizeTimeoutRef = useRef<number | null>(null);
+  const windowResizeTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();
+
+    const handleWindowResize = () => {
+      if (windowResizeTimeoutRef.current !== null) {
+        window.cancelAnimationFrame(windowResizeTimeoutRef.current);
+      }
+      windowResizeTimeoutRef.current = window.requestAnimationFrame(() => {
+        setWindowWidth(window.innerWidth);
+        windowResizeTimeoutRef.current = null;
+      });
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+      if (windowResizeTimeoutRef.current !== null) {
+        window.cancelAnimationFrame(windowResizeTimeoutRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -78,6 +98,16 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
 
   if (!character.visible) return null;
 
+  // Responsive scale multiplier based on viewport width
+  const getResponsiveScale = () => {
+    if (windowWidth < 640) return 0.65; // Mobile
+    if (windowWidth < 1024) return 0.8; // Tablet
+    if (windowWidth < 1280) return 0.9; // Small desktop
+    return 1; // Full desktop
+  };
+
+  const responsiveScale = character.scale * getResponsiveScale();
+
   const spriteStyle = {
     left: `calc(${character.x * 100}% + ${character.xOffset * 100}%)`,
     bottom: `calc(${character.y}px - ${character.yOffset}px)`,
@@ -85,8 +115,8 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     transform: "translateX(-50%) scale(var(--vn-scale))",
     transformOrigin: "bottom center",
     animationDuration: "520ms",
-    transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity 220ms ease`,
-    "--vn-scale": String(character.scale),
+    transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity 220ms ease, transform 300ms ease`,
+    "--vn-scale": String(responsiveScale),
     visibility: "visible" as const,
   } as CSSProperties;
 
@@ -366,7 +396,7 @@ const App = () => {
           <div className={`vn-narrator-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
             <div className="vn-narrator-box">
               <div className="vn-narrator-line">{visibleLine}</div>
-              <div className="vn-narrator-hint">{isTyping ? "Klik untuk selesaikan teks" : "Klik / Space / Enter untuk lanjut"}</div>
+              <div className="vn-narrator-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
             </div>
           </div>
         ) : (
@@ -402,7 +432,7 @@ const App = () => {
                     <span className="vn-control">Config</span>
                     <span className="vn-control">Quit</span>
                   </div>
-                  <div className="vn-hint">{isTyping ? "Klik untuk selesaikan teks" : "Klik / Space / Enter untuk lanjut"}</div>
+                  <div className="vn-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
                 </div>
               )}
             </div>

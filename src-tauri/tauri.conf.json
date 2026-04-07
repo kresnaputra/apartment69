@@ -15,10 +15,8 @@
         "title": "Visual Novel Engine",
         "width": 1280,
         "height": 720,
-        "minWidth": 1024,
-        "minHeight": 576,
-        "resizable": true,
-        "fullscreen": false,
+        "resizable": false,
+        "fullscreen": true,
         "center": true
       }
     ],
