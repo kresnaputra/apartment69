@@ -1,5 +1,5 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import { bg, minigame, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
 import skyUrl from "@/background/sky.png";
 
 export const elevatorMeetingScene: VisualNovelCommand[] = [
@@ -52,4 +52,5 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     "gentle",
     "Sure. Let me know if you need anything, Maya.",
   ),
+  jump("elena-encounter"),
 ];

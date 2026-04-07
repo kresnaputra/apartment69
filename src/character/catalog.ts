@@ -1,10 +1,11 @@
-export const characterIds = ["arka", "maya"] as const;
+export const characterIds = ["arka", "maya", "elena"] as const;
 
 export type CharacterId = (typeof characterIds)[number];
 
 export const characterEmotions = {
   arka: ["neutral", "gentle", "serious", "shy", "surprised"] as const,
   maya: ["neutral", "calm", "teasing", "worried", "surprised"] as const,
+  elena: ["neutral"] as const,
 } as const;
 
 export type CharacterEmotionMap = typeof characterEmotions;

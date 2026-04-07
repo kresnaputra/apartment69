@@ -1,6 +1,7 @@
 import type { CharacterEmotion, CharacterId } from "@/character/catalog";
 import type {
   ChoiceOption,
+  HideCharacterCommand,
   MinigameId,
   MoveCharacterCommand,
   ParallaxLayer,
@@ -60,6 +61,11 @@ export const show = <TCharacterId extends CharacterId>(
   characterId,
   ...(emotion !== undefined && { emotion }),
   ...overrides,
+});
+
+export const hide = (id: string): HideCharacterCommand => ({
+  type: "hideCharacter",
+  id,
 });
 
 export const narrate = (text: string, speaker?: string): SayCommand => ({
