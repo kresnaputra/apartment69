@@ -7,135 +7,261 @@
     {
       "index": 0,
       "frameStart": 0,
-      "frameEnd": 9,
+      "frameEnd": 4,
       "image": "spritesheet-01.png",
       "data": "spritesheet-01.json"
     },
     {
       "index": 1,
-      "frameStart": 10,
-      "frameEnd": 19,
+      "frameStart": 5,
+      "frameEnd": 9,
       "image": "spritesheet-02.png",
       "data": "spritesheet-02.json"
     },
     {
       "index": 2,
-      "frameStart": 20,
-      "frameEnd": 29,
+      "frameStart": 10,
+      "frameEnd": 14,
       "image": "spritesheet-03.png",
       "data": "spritesheet-03.json"
     },
     {
       "index": 3,
-      "frameStart": 30,
-      "frameEnd": 39,
+      "frameStart": 15,
+      "frameEnd": 19,
       "image": "spritesheet-04.png",
       "data": "spritesheet-04.json"
     },
     {
       "index": 4,
-      "frameStart": 40,
-      "frameEnd": 49,
+      "frameStart": 20,
+      "frameEnd": 24,
       "image": "spritesheet-05.png",
       "data": "spritesheet-05.json"
     },
     {
       "index": 5,
-      "frameStart": 50,
-      "frameEnd": 59,
+      "frameStart": 25,
+      "frameEnd": 29,
       "image": "spritesheet-06.png",
       "data": "spritesheet-06.json"
     },
     {
       "index": 6,
-      "frameStart": 60,
-      "frameEnd": 69,
+      "frameStart": 30,
+      "frameEnd": 34,
       "image": "spritesheet-07.png",
       "data": "spritesheet-07.json"
     },
     {
       "index": 7,
-      "frameStart": 70,
-      "frameEnd": 79,
+      "frameStart": 35,
+      "frameEnd": 39,
       "image": "spritesheet-08.png",
       "data": "spritesheet-08.json"
     },
     {
       "index": 8,
-      "frameStart": 80,
-      "frameEnd": 89,
+      "frameStart": 40,
+      "frameEnd": 44,
       "image": "spritesheet-09.png",
       "data": "spritesheet-09.json"
     },
     {
       "index": 9,
-      "frameStart": 90,
-      "frameEnd": 99,
+      "frameStart": 45,
+      "frameEnd": 49,
       "image": "spritesheet-10.png",
       "data": "spritesheet-10.json"
     },
     {
       "index": 10,
-      "frameStart": 100,
-      "frameEnd": 109,
+      "frameStart": 50,
+      "frameEnd": 54,
       "image": "spritesheet-11.png",
       "data": "spritesheet-11.json"
     },
     {
       "index": 11,
-      "frameStart": 110,
-      "frameEnd": 119,
+      "frameStart": 55,
+      "frameEnd": 59,
       "image": "spritesheet-12.png",
       "data": "spritesheet-12.json"
     },
     {
       "index": 12,
-      "frameStart": 120,
-      "frameEnd": 129,
+      "frameStart": 60,
+      "frameEnd": 64,
       "image": "spritesheet-13.png",
       "data": "spritesheet-13.json"
     },
     {
       "index": 13,
-      "frameStart": 130,
-      "frameEnd": 139,
+      "frameStart": 65,
+      "frameEnd": 69,
       "image": "spritesheet-14.png",
       "data": "spritesheet-14.json"
     },
     {
       "index": 14,
-      "frameStart": 140,
-      "frameEnd": 149,
+      "frameStart": 70,
+      "frameEnd": 74,
       "image": "spritesheet-15.png",
       "data": "spritesheet-15.json"
     },
     {
       "index": 15,
-      "frameStart": 150,
-      "frameEnd": 159,
+      "frameStart": 75,
+      "frameEnd": 79,
       "image": "spritesheet-16.png",
       "data": "spritesheet-16.json"
     },
     {
       "index": 16,
-      "frameStart": 160,
-      "frameEnd": 169,
+      "frameStart": 80,
+      "frameEnd": 84,
       "image": "spritesheet-17.png",
       "data": "spritesheet-17.json"
     },
     {
       "index": 17,
-      "frameStart": 170,
-      "frameEnd": 179,
+      "frameStart": 85,
+      "frameEnd": 89,
       "image": "spritesheet-18.png",
       "data": "spritesheet-18.json"
     },
     {
       "index": 18,
-      "frameStart": 180,
-      "frameEnd": 180,
+      "frameStart": 90,
+      "frameEnd": 94,
       "image": "spritesheet-19.png",
       "data": "spritesheet-19.json"
+    },
+    {
+      "index": 19,
+      "frameStart": 95,
+      "frameEnd": 99,
+      "image": "spritesheet-20.png",
+      "data": "spritesheet-20.json"
+    },
+    {
+      "index": 20,
+      "frameStart": 100,
+      "frameEnd": 104,
+      "image": "spritesheet-21.png",
+      "data": "spritesheet-21.json"
+    },
+    {
+      "index": 21,
+      "frameStart": 105,
+      "frameEnd": 109,
+      "image": "spritesheet-22.png",
+      "data": "spritesheet-22.json"
+    },
+    {
+      "index": 22,
+      "frameStart": 110,
+      "frameEnd": 114,
+      "image": "spritesheet-23.png",
+      "data": "spritesheet-23.json"
+    },
+    {
+      "index": 23,
+      "frameStart": 115,
+      "frameEnd": 119,
+      "image": "spritesheet-24.png",
+      "data": "spritesheet-24.json"
+    },
+    {
+      "index": 24,
+      "frameStart": 120,
+      "frameEnd": 124,
+      "image": "spritesheet-25.png",
+      "data": "spritesheet-25.json"
+    },
+    {
+      "index": 25,
+      "frameStart": 125,
+      "frameEnd": 129,
+      "image": "spritesheet-26.png",
+      "data": "spritesheet-26.json"
+    },
+    {
+      "index": 26,
+      "frameStart": 130,
+      "frameEnd": 134,
+      "image": "spritesheet-27.png",
+      "data": "spritesheet-27.json"
+    },
+    {
+      "index": 27,
+      "frameStart": 135,
+      "frameEnd": 139,
+      "image": "spritesheet-28.png",
+      "data": "spritesheet-28.json"
+    },
+    {
+      "index": 28,
+      "frameStart": 140,
+      "frameEnd": 144,
+      "image": "spritesheet-29.png",
+      "data": "spritesheet-29.json"
+    },
+    {
+      "index": 29,
+      "frameStart": 145,
+      "frameEnd": 149,
+      "image": "spritesheet-30.png",
+      "data": "spritesheet-30.json"
+    },
+    {
+      "index": 30,
+      "frameStart": 150,
+      "frameEnd": 154,
+      "image": "spritesheet-31.png",
+      "data": "spritesheet-31.json"
+    },
+    {
+      "index": 31,
+      "frameStart": 155,
+      "frameEnd": 159,
+      "image": "spritesheet-32.png",
+      "data": "spritesheet-32.json"
+    },
+    {
+      "index": 32,
+      "frameStart": 160,
+      "frameEnd": 164,
+      "image": "spritesheet-33.png",
+      "data": "spritesheet-33.json"
+    },
+    {
+      "index": 33,
+      "frameStart": 165,
+      "frameEnd": 169,
+      "image": "spritesheet-34.png",
+      "data": "spritesheet-34.json"
+    },
+    {
+      "index": 34,
+      "frameStart": 170,
+      "frameEnd": 174,
+      "image": "spritesheet-35.png",
+      "data": "spritesheet-35.json"
+    },
+    {
+      "index": 35,
+      "frameStart": 175,
+      "frameEnd": 179,
+      "image": "spritesheet-36.png",
+      "data": "spritesheet-36.json"
+    },
+    {
+      "index": 36,
+      "frameStart": 180,
+      "frameEnd": 180,
+      "image": "spritesheet-37.png",
+      "data": "spritesheet-37.json"
     }
   ]
 }

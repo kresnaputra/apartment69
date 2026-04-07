@@ -1,0 +1,135 @@
+{
+  "frames": {
+    "frame_0135": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 480,
+        "h": 1177
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 596,
+        "y": 354,
+        "w": 480,
+        "h": 1177
+      },
+      "sourceSize": {
+        "w": 1788,
+        "h": 1788
+      },
+      "duration": 20
+    },
+    "frame_0136": {
+      "frame": {
+        "x": 480,
+        "y": 0,
+        "w": 480,
+        "h": 1177
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 596,
+        "y": 354,
+        "w": 480,
+        "h": 1177
+      },
+      "sourceSize": {
+        "w": 1788,
+        "h": 1788
+      },
+      "duration": 20
+    },
+    "frame_0137": {
+      "frame": {
+        "x": 960,
+        "y": 0,
+        "w": 480,
+        "h": 1176
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 596,
+        "y": 354,
+        "w": 480,
+        "h": 1176
+      },
+      "sourceSize": {
+        "w": 1788,
+        "h": 1788
+      },
+      "duration": 20
+    },
+    "frame_0138": {
+      "frame": {
+        "x": 1440,
+        "y": 0,
+        "w": 480,
+        "h": 1176
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 596,
+        "y": 354,
+        "w": 480,
+        "h": 1176
+      },
+      "sourceSize": {
+        "w": 1788,
+        "h": 1788
+      },
+      "duration": 20
+    },
+    "frame_0139": {
+      "frame": {
+        "x": 1920,
+        "y": 0,
+        "w": 480,
+        "h": 1175
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 596,
+        "y": 355,
+        "w": 480,
+        "h": 1175
+      },
+      "sourceSize": {
+        "w": 1788,
+        "h": 1788
+      },
+      "duration": 20
+    }
+  },
+  "animations": {
+    "animation": [
+      "frame_0135",
+      "frame_0136",
+      "frame_0137",
+      "frame_0138",
+      "frame_0139"
+    ]
+  },
+  "meta": {
+    "app": "SpineBones",
+    "version": "1.0",
+    "image": "spritesheet-28.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2400,
+      "h": 1177
+    },
+    "scale": "1",
+    "frameSize": {
+      "w": 1788,
+      "h": 1788
+    },
+    "fps": 50,
+    "frameCount": 5
+  }
+}
