@@ -1,8 +1,7 @@
-import normalManifest from "@/character/elena/normal/spritesheets-manifest.json?url";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const elenaBundleRegistry = {
-  "elena-normal": normalManifest,
+  "elena-normal": "/characters/elena/normal/spritesheets-manifest.json",
 } as const;
 
 export const elenaCharacter: CharacterDefinition = {

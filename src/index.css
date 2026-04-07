@@ -19,6 +19,7 @@
 html,
 body,
 #root {
+  height: 100%;
   min-height: 100%;
 }
 
@@ -38,7 +39,8 @@ textarea {
 
 .vn-root {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background-color: var(--bg);
   background-size: cover;
@@ -57,7 +59,8 @@ textarea {
 
 .vn-stage {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
 }
 
 .vn-lighting {
@@ -762,6 +765,7 @@ textarea {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  min-height: 100dvh;
   padding: 3rem 2rem;
   gap: 3rem;
 }

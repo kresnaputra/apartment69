@@ -1,8 +1,7 @@
-import normalManifest from "@/character/arka/normal/spritesheets-manifest.json?url";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const arkaBundleRegistry = {
-  "arka-normal": normalManifest,
+  "arka-normal": "/characters/arka/normal/spritesheets-manifest.json",
 } as const;
 
 export const arkaCharacter: CharacterDefinition = {

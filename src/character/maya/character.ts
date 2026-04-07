@@ -1,8 +1,7 @@
-import normalManifest from "@/character/maya/normal/spritesheets-manifest.json?url";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const mayaBundleRegistry = {
-  "maya-normal": normalManifest,
+  "maya-normal": "/characters/maya/normal/spritesheets-manifest.json",
 } as const;
 
 export const mayaCharacter: CharacterDefinition = {
@@ -20,8 +19,8 @@ export const mayaCharacter: CharacterDefinition = {
   defaultMoveDuration: 520,
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.72,
-  defaultY: -100,
-  defaultScale: 2,
+  defaultY: -200,
+  defaultScale: 2.5,
   defaultOpacity: 0.96,
   defaultFrame: 0,
   defaultFps: 24,

@@ -78,7 +78,7 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
 
   return (
     <div
-      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 h-[92vh] w-[min(46vw,620px)] min-w-[300px] max-w-full overflow-hidden`}
+      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 w-[min(46vw,620px)] min-w-[300px] max-w-full overflow-hidden`}
       style={spriteStyle}
     >
       <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />

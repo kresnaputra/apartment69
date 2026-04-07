@@ -1,18 +1,31 @@
 # Visual Novel Engine
 
-Visual novel engine berbasis `React 19 + TypeScript + Vite + Zustand + Tailwind CSS v4 + Bun` dengan pendekatan ala Ren'Py: layar langsung menjadi scene VN, dialog box, pilihan, dan karakter tampil dari script TypeScript.
+Visual novel engine berbasis `React 19 + TypeScript + Vite + Zustand + Tailwind CSS v4 + Bun + Tauri` dengan pendekatan ala Ren'Py: layar langsung menjadi scene VN, dialog box, pilihan, dan karakter tampil dari script TypeScript.
+
+**Now available as a native desktop app using Tauri!** See [TAURI.md](./TAURI.md) for desktop app setup and instructions.
 
 ## Jalankan
 
+### Web Version
 ```bash
 bun install
 bun run dev
 ```
 
+### Desktop App (Tauri)
+```bash
+bun install
+bun run tauri:dev
+```
+
 Build production:
 
 ```bash
+# Web build
 bun run build
+
+# Desktop app build
+bun run tauri:build
 ```
 
 ## Fitur Saat Ini
