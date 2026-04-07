@@ -1,4 +1,4 @@
-import { type CSSProperties, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, memo, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
@@ -19,11 +19,12 @@ type CharacterSpriteProps = {
   isDimmed: boolean;
 };
 
-const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) => {
+const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps) => {
   const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frame = useDeferredValue(character.frame);
   const [viewport, setViewport] = useState({ width: 520, height: 880 });
+  const resizeTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();
@@ -39,14 +40,27 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0];
       if (!entry) return;
-      setViewport({
-        width: Math.max(1, Math.round(entry.contentRect.width)),
-        height: Math.max(1, Math.round(entry.contentRect.height)),
+
+      if (resizeTimeoutRef.current !== null) {
+        window.cancelAnimationFrame(resizeTimeoutRef.current);
+      }
+
+      resizeTimeoutRef.current = window.requestAnimationFrame(() => {
+        setViewport({
+          width: Math.max(1, Math.round(entry.contentRect.width)),
+          height: Math.max(1, Math.round(entry.contentRect.height)),
+        });
+        resizeTimeoutRef.current = null;
       });
     });
 
     observer.observe(canvas);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (resizeTimeoutRef.current !== null) {
+        window.cancelAnimationFrame(resizeTimeoutRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -84,7 +98,7 @@ const CharacterSprite = ({ bundle, character, isDimmed }: CharacterSpriteProps) 
       <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
     </div>
   );
-};
+});
 
 const App = () => {
   const [phase, setPhase] = useState<"menu" | "story">("menu");
