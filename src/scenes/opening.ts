@@ -1,22 +1,22 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import { menu, moveTo, narrate, say, scene, show } from "@/scenes/scriptTypes";
+import {
+  bg,
+  jump,
+  narrate,
+  parallax,
+} from "@/scenes/scriptTypes";
+import skyUrl from "@/background/sky.png";
+import apartementUrl from "@/background/apartement.png";
 
 export const openingScene: VisualNovelCommand[] = [
-  scene(
-    "radial-gradient(circle at top, rgba(255,169,122,0.36), transparent 34%), linear-gradient(180deg, #291323 0%, #12172f 52%, #071018 100%)",
-    "Stasiun Senja",
+  bg(skyUrl, "Stasiun Senja", {
+    parallaxLayers: [parallax(apartementUrl, 30, "ltr", { xOffset: -0.1 })],
+  }),
+  narrate(
+    "Lentera Apartments. It's definitely not as grand as the name suggests, but the deposit here was cheap enough to keep me afloat for a few months. I just need a quiet place, somewhere far from the city's constant noise, and more importantly... a place where nobody cares who I really am.",
   ),
-  narrate("Peron itu nyaris kosong. Hanya suara rel yang mendingin dan seseorang yang menunggumu di bawah lampu terakhir."),
-  show("arka-main", "arka", "neutral", { position: "left", enterFrom: "left" }),
-  show("maya-main", "maya", "calm", { position: "center", enterFrom: "right", xOffset: 0.06 }),
-  say("maya", "teasing", "Kamu datang juga. Kupikir Arka harus menunggu sendirian lebih lama di sini."),
-  say("arka", "gentle", "Kamu datang juga. Aku sempat berpikir kamu akan membiarkan hari ini lewat begitu saja."),
-  moveTo("maya-main", "center", { duration: 720, easing: "ease-in-out", xOffset: 0.02 }),
-  say("maya", "worried", "Hei, jangan tegang begitu. Kita cuma mau dengar jawabanmu, bukan menghakimimu."),
-  moveTo("arka-main", "left", { duration: 480, easing: "ease-out", xOffset: -0.03 }),
-  say("arka", "serious", "Kalau kita benar-benar mau memulai cerita ini, jawab aku jujur. Kamu datang untuk tinggal, atau hanya mampir sebentar?"),
-  menu("Apa jawabanmu?", [
-    { id: "stay", label: "Aku datang untuk tinggal.", next: "stay-route" },
-    { id: "visit", label: "Aku cuma mampir sebentar.", next: "visit-route" },
-  ]),
+  narrate(
+    "My freelance IT work and my habit of fixing broken gadgets usually mean I prefer being alone. But, it looks like this old building has other plans for me.",
+  ),
+  jump("elevator-meeting"),
 ];

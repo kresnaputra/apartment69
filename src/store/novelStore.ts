@@ -3,12 +3,14 @@ import { characterRegistry } from "@/character";
 import { demoScript } from "@/lib/runtime/dialogueScript";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import type {
+  ActiveMinigame,
   CharacterDefinition,
   CharacterEnterFrom,
   CharacterInstance,
   CharacterStagePosition,
   ChoiceOption,
   DialogueEntry,
+  ParallaxLayer,
   VisualNovelCommand,
   VisualNovelScript,
 } from "@/types/novel";
@@ -16,12 +18,14 @@ import type {
 type NovelStore = {
   bundles: Record<string, LoadedSpritesheetBundle>;
   background: string;
+  parallaxLayers: ParallaxLayer[];
   location: string;
   speaker: string | null;
   activeCharacterId: string | null;
   sceneTransitionDuration: number;
   sceneTransitionToken: number;
   pendingSceneContinuation: boolean;
+  activeMinigame: ActiveMinigame | null;
   line: string;
   choices: ChoiceOption[];
   choicePrompt: string;
@@ -36,6 +40,7 @@ type NovelStore = {
   startStory: () => void;
   advance: () => void;
   choose: (nextLabel: string) => void;
+  completeMinigame: () => void;
   tickCharacters: () => void;
 };
 
@@ -43,12 +48,14 @@ const script: VisualNovelScript = demoScript;
 
 const emptyState = {
   background: "linear-gradient(180deg, #080b12 0%, #04050a 100%)",
+  parallaxLayers: [] as ParallaxLayer[],
   location: "",
   speaker: null,
   activeCharacterId: null,
   sceneTransitionDuration: 720,
   sceneTransitionToken: 0,
   pendingSceneContinuation: false,
+  activeMinigame: null,
   line: "",
   choices: [] as ChoiceOption[],
   choicePrompt: "",
@@ -144,12 +151,14 @@ const normalizeCharacter = (
 const runScriptUntilPause = (state: NovelStore) => {
   const nextState: Partial<NovelStore> = {
     background: state.background,
+    parallaxLayers: state.parallaxLayers,
     location: state.location,
     speaker: state.speaker,
     activeCharacterId: state.activeCharacterId,
     sceneTransitionDuration: state.sceneTransitionDuration,
     sceneTransitionToken: state.sceneTransitionToken,
     pendingSceneContinuation: state.pendingSceneContinuation,
+    activeMinigame: state.activeMinigame,
     line: state.line,
     choices: [],
     choicePrompt: "",
@@ -175,6 +184,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     switch (command.type) {
       case "scene":
         nextState.background = command.background;
+        nextState.parallaxLayers = command.parallaxLayers ?? [];
         nextState.location = command.location ?? "";
         nextState.sceneTransitionDuration = command.transitionDuration ?? 720;
         nextState.sceneTransitionToken = (nextState.sceneTransitionToken ?? 0) + 1;
@@ -227,6 +237,21 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.currentLabel = command.target;
         nextState.currentIndex = 0;
         break;
+
+      case "minigame":
+        nextState.speaker = null;
+        nextState.activeCharacterId = null;
+        nextState.pendingSceneContinuation = false;
+        nextState.activeMinigame = {
+          id: command.minigameId,
+          startedAt: Date.now(),
+        };
+        nextState.line = "";
+        nextState.choices = [];
+        nextState.choicePrompt = "";
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        nextState.ready = true;
+        return nextState;
 
       case "say":
         nextState.speaker =
@@ -324,6 +349,10 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
         return state;
       }
 
+      if (state.activeMinigame) {
+        return state;
+      }
+
       return runScriptUntilPause({
         ...state,
         pendingSceneContinuation: false,
@@ -337,6 +366,7 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
         ...state,
         currentLabel: nextLabel,
         currentIndex: 0,
+        activeMinigame: null,
         speaker: null,
         line: "",
         choices: [],
@@ -344,6 +374,20 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
         ready: false,
       }),
     ),
+
+  completeMinigame: () =>
+    set((state) => {
+      if (!state.activeMinigame) {
+        return state;
+      }
+
+      return runScriptUntilPause({
+        ...state,
+        activeMinigame: null,
+        pendingSceneContinuation: false,
+        ready: false,
+      });
+    }),
 
   tickCharacters: () =>
     set((state) => {

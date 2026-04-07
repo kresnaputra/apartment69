@@ -315,6 +315,237 @@ textarea {
   line-height: 1.7;
 }
 
+.vn-minigame-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(255, 223, 147, 0.18), transparent 30%),
+    rgba(4, 7, 12, 0.62);
+  backdrop-filter: blur(8px);
+}
+
+.vn-minigame-card {
+  position: relative;
+  width: min(520px, 92vw);
+  border-radius: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(145deg, rgba(115, 127, 142, 0.28), rgba(22, 28, 38, 0.86) 18%, rgba(7, 10, 16, 0.96) 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 24%);
+  box-shadow:
+    0 32px 90px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -20px 40px rgba(0, 0, 0, 0.34);
+  overflow: hidden;
+}
+
+.vn-minigame-stage {
+  min-height: 620px;
+}
+
+.vn-minigame-stage canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.vn-minigame-loading {
+  position: absolute;
+  inset: auto 0 20px 0;
+  text-align: center;
+  color: rgba(241, 245, 255, 0.9);
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vn-minigame-fallback {
+  display: grid;
+  gap: 1.2rem;
+  padding: 2.2rem;
+}
+
+.vn-minigame-plate {
+  position: absolute;
+  inset: 18px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.vn-minigame-plate span {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.5), rgba(132, 145, 160, 0.32) 45%, rgba(27, 33, 41, 0.9) 100%);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.22);
+}
+
+.vn-minigame-plate span:nth-child(1) {
+  top: 16px;
+  left: 16px;
+}
+
+.vn-minigame-plate span:nth-child(2) {
+  top: 16px;
+  right: 16px;
+}
+
+.vn-minigame-plate span:nth-child(3) {
+  bottom: 16px;
+  left: 16px;
+}
+
+.vn-minigame-plate span:nth-child(4) {
+  right: 16px;
+  bottom: 16px;
+}
+
+.vn-minigame-fallback-kicker {
+  color: rgba(199, 208, 220, 0.72);
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.vn-minigame-fallback-title {
+  color: #f4f3ef;
+  font-size: clamp(2.4rem, 5vw, 3.3rem);
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.vn-minigame-fallback-copy {
+  max-width: 28rem;
+  margin: 0 auto;
+  color: rgba(194, 202, 214, 0.88);
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.vn-minigame-indicator-wrap {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: center;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.vn-minigame-indicator-label {
+  color: rgba(190, 198, 208, 0.66);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.vn-minigame-fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+
+.vn-minigame-button {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: none;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 34%),
+    linear-gradient(160deg, #5d6774, #2b3440 58%, #1b222c);
+  color: #edf2f8;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -10px 22px rgba(0, 0, 0, 0.26),
+    0 10px 24px rgba(0, 0, 0, 0.22);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    filter 160ms ease;
+}
+
+.vn-minigame-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -10px 22px rgba(0, 0, 0, 0.24),
+    0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
+.vn-minigame-button:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.vn-minigame-button-face {
+  display: grid;
+  place-items: center;
+  width: calc(100% - 18px);
+  height: calc(100% - 18px);
+  margin: 9px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(circle at 50% 24%, rgba(255, 255, 255, 0.12), transparent 44%),
+    linear-gradient(180deg, rgba(15, 20, 28, 0.2), rgba(255, 255, 255, 0.02));
+  font-size: 2rem;
+  font-weight: 600;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.vn-minigame-button-active {
+  background:
+    linear-gradient(180deg, rgba(255, 249, 206, 0.24), rgba(255, 255, 255, 0) 34%),
+    linear-gradient(160deg, #ffd77f, #c99628 60%, #8a6519);
+  color: #1b1711;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -8px 18px rgba(105, 68, 8, 0.28),
+    0 0 0 1px rgba(255, 230, 154, 0.36),
+    0 0 24px rgba(255, 208, 96, 0.2),
+    0 12px 28px rgba(0, 0, 0, 0.26);
+}
+
+.vn-minigame-button-small {
+  aspect-ratio: auto;
+  min-height: 5.6rem;
+}
+
+.vn-minigame-button-small .vn-minigame-button-face {
+  font-size: 0.92rem;
+  letter-spacing: 0.12em;
+}
+
+.vn-minigame-indicator {
+  min-width: min(16rem, 100%);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255, 217, 123, 0.12), transparent 55%),
+    linear-gradient(180deg, #121820, #090c12);
+  border: 1px solid rgba(255, 214, 133, 0.16);
+  color: #ffd977;
+  padding: 1rem 1.8rem;
+  text-align: center;
+  font-family: "Courier New", monospace;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 24px rgba(255, 208, 88, 0.08);
+}
+
 @keyframes vn-enter-left {
   from {
     opacity: 0;
@@ -337,6 +568,30 @@ textarea {
     opacity: 1;
     transform: translateX(-50%) scale(var(--vn-scale));
   }
+}
+
+@keyframes vn-parallax-ltr {
+  0%   { transform: translateX(-8%); }
+  100% { transform: translateX(8%); }
+}
+
+@keyframes vn-parallax-rtl {
+  0%   { transform: translateX(8%); }
+  100% { transform: translateX(-8%); }
+}
+
+.vn-parallax-layer {
+  position: absolute;
+  top: 0;
+  left: -8%;
+  width: 116%;
+  height: 100%;
+  background-size: cover;
+  background-position: center bottom;
+  pointer-events: none;
+  animation-timing-function: linear;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
 }
 
 @keyframes vn-scene-fade {

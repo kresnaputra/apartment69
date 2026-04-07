@@ -13,6 +13,13 @@ export type ChoiceOption = {
   next: string;
 };
 
+export type MinigameId = "elevator-button";
+
+export type ActiveMinigame = {
+  id: MinigameId;
+  startedAt: number;
+};
+
 export type CharacterStagePosition = "left" | "center" | "right";
 export type CharacterEnterFrom = "left" | "right" | "none";
 export type CharacterMoveEasing =
@@ -23,11 +30,21 @@ export type CharacterMoveEasing =
   | "ease-in-out"
   | `cubic-bezier(${string})`;
 
+export type ParallaxLayer = {
+  url: string;
+  speed?: number; // pan cycle duration in seconds, default 20
+  direction?: "ltr" | "rtl"; // default "ltr"
+  opacity?: number;
+  xOffset?: number; // horizontal offset as a fraction of viewport width, e.g. 0.1 = 10%
+  yOffset?: number; // vertical offset as a fraction of viewport height, e.g. -0.1 = -10%
+};
+
 export type SceneCommand = {
   type: "scene";
   background: string;
   location?: string;
   transitionDuration?: number;
+  parallaxLayers?: ParallaxLayer[];
 };
 
 export type ShowCharacterCommand = {
@@ -85,6 +102,11 @@ export type JumpCommand = {
   target: string;
 };
 
+export type MinigameCommand = {
+  type: "minigame";
+  minigameId: MinigameId;
+};
+
 export type VisualNovelCommand =
   | SceneCommand
   | ShowCharacterCommand
@@ -92,7 +114,8 @@ export type VisualNovelCommand =
   | MoveCharacterCommand
   | SayCommand
   | MenuCommand
-  | JumpCommand;
+  | JumpCommand
+  | MinigameCommand;
 
 export type VisualNovelScript = {
   startLabel: string;

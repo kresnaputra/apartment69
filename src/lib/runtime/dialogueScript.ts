@@ -1,3 +1,4 @@
+import { elevatorMeetingScene } from "@/scenes/elevatorMeeting";
 import { epilogueScene } from "@/scenes/epilogue";
 import { openingScene } from "@/scenes/opening";
 import { stayRouteScene } from "@/scenes/stayRoute";
@@ -8,6 +9,7 @@ export const demoScript: VisualNovelScript = {
   startLabel: "opening",
   labels: {
     opening: openingScene,
+    "elevator-meeting": elevatorMeetingScene,
     "stay-route": stayRouteScene,
     "visit-route": visitRouteScene,
     epilogue: epilogueScene,
