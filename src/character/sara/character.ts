@@ -1,7 +1,7 @@
 import type { CharacterDefinition } from "@/types/novel";
 
 export const saraBundleRegistry = {
-  "sara-normal": "/characters/sara/spritesheets-manifest.json",
+  "sara-normal": "/characters/sara/normal/spritesheets-manifest.json",
 } as const;
 
 export const saraCharacter: CharacterDefinition = {

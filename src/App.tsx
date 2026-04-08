@@ -12,7 +12,7 @@ import type { CharacterInstance } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 
 const TEXT_SPEED = 18;
-const CHARACTER_TICK_FPS = 60;
+const CHARACTER_TICK_FPS = 24;
 const CHARACTER_ENTER_DURATION_MS = 520;
 const CHARACTER_FADE_ENTER_DURATION_MS = 820;
 

@@ -5,21 +5,21 @@
         "x": 0,
         "y": 0,
         "w": 541,
-        "h": 1331
+        "h": 1338
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 687,
-        "y": 411,
+        "y": 410,
         "w": 541,
-        "h": 1331
+        "h": 1338
       },
       "sourceSize": {
         "w": 2048,
         "h": 2048
       },
-      "duration": 20
+      "duration": 42
     }
   },
   "animations": {
@@ -34,14 +34,14 @@
     "format": "RGBA8888",
     "size": {
       "w": 541,
-      "h": 1331
+      "h": 1338
     },
     "scale": "1",
     "frameSize": {
       "w": 2048,
       "h": 2048
     },
-    "fps": 50,
+    "fps": 24,
     "frameCount": 1
   }
 }

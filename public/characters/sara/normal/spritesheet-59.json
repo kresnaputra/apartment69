@@ -1,0 +1,47 @@
+{
+  "frames": {
+    "frame_0058": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 706,
+        "h": 1440
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 546,
+        "y": 438,
+        "w": 706,
+        "h": 1440
+      },
+      "sourceSize": {
+        "w": 2048,
+        "h": 2048
+      },
+      "duration": 42
+    }
+  },
+  "animations": {
+    "animation": [
+      "frame_0058"
+    ]
+  },
+  "meta": {
+    "app": "SpineBones",
+    "version": "1.0",
+    "image": "spritesheet-59.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 706,
+      "h": 1440
+    },
+    "scale": "1",
+    "frameSize": {
+      "w": 2048,
+      "h": 2048
+    },
+    "fps": 24,
+    "frameCount": 1
+  }
+}
