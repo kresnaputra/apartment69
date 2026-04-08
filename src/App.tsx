@@ -28,6 +28,17 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   const resizeTimeoutRef = useRef<number | null>(null);
   const windowResizeTimeoutRef = useRef<number | null>(null);
 
+  // Match canvas backing resolution to the visual scale so enlarged characters stay crisp.
+  const getResponsiveScale = () => {
+    if (windowWidth < 640) return 0.65; // Mobile
+    if (windowWidth < 1024) return 0.8; // Tablet
+    if (windowWidth < 1280) return 0.9; // Small desktop
+    return 1; // Full desktop
+  };
+
+  const responsiveScale = character.scale * getResponsiveScale();
+  const renderResolutionScale = Math.max(1, responsiveScale);
+
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();
 
@@ -87,26 +98,16 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     const renderer = rendererRef.current;
     if (!renderer) return;
 
-    renderer.resize(viewport.width, viewport.height);
+    renderer.resize(viewport.width, viewport.height, renderResolutionScale);
     renderer.render({
       bundle,
       frame,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, frame, viewport.height, viewport.width]);
+  }, [bundle, frame, renderResolutionScale, viewport.height, viewport.width]);
 
   if (!character.visible) return null;
-
-  // Responsive scale multiplier based on viewport width
-  const getResponsiveScale = () => {
-    if (windowWidth < 640) return 0.65; // Mobile
-    if (windowWidth < 1024) return 0.8; // Tablet
-    if (windowWidth < 1280) return 0.9; // Small desktop
-    return 1; // Full desktop
-  };
-
-  const responsiveScale = character.scale * getResponsiveScale();
 
   const spriteStyle = {
     left: `calc(${character.x * 100}% + ${character.xOffset * 100}%)`,

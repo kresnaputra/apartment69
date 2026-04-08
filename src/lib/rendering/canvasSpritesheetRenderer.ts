@@ -19,15 +19,15 @@ export class CanvasSpritesheetRenderer {
     }
   }
 
-  resize(width: number, height: number) {
+  resize(width: number, height: number, resolutionScale = 1) {
     if (!this.canvas || !this.ctx || width <= 0 || height <= 0) return;
 
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
-    this.canvas.width = Math.round(width * dpr);
-    this.canvas.height = Math.round(height * dpr);
+    const pixelRatio = Math.max(1, window.devicePixelRatio || 1) * Math.max(1, resolutionScale);
+    this.canvas.width = Math.round(width * pixelRatio);
+    this.canvas.height = Math.round(height * pixelRatio);
     this.canvas.style.width = `${width}px`;
     this.canvas.style.height = `${height}px`;
-    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     this.ctx.imageSmoothingEnabled = true;
     this.ctx.imageSmoothingQuality = "high";
   }
