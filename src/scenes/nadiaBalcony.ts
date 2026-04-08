@@ -95,6 +95,7 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
   ),
   say("nadia", "neutral", "Alright, I'll save it."),
   narrate("Maybe next time I'll contact her."),
+  jump("sara-hallway"),
 ];
 
 export const nadiaAdviceRefuseScene: VisualNovelCommand[] = [
@@ -104,4 +105,5 @@ export const nadiaAdviceRefuseScene: VisualNovelCommand[] = [
     "I don't really understand electrical stuff. Try contacting the apartment staff.",
   ),
   say("nadia", "neutral", "Alright, I'll give it a try."),
+  jump("sara-hallway"),
 ];

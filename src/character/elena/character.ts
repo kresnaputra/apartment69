@@ -14,7 +14,7 @@ export const elenaCharacter: CharacterDefinition = {
   defaultEmotion: "neutral",
   defaultPosition: "left",
   defaultEnterFrom: "right",
-  defaultXOffset: 0.04,
+  defaultXOffset: 0.08,
   defaultYOffset: 0,
   defaultMoveDuration: 520,
   defaultMoveEasing: "ease-in-out",

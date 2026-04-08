@@ -15,18 +15,17 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
   bg(frontOfficeUrl, "Lentera Apartments - Front Office"),
   hide("maya-elevator"),
   hide("arka-elevator"),
+  narrate(
+    "The elevator doors slide open. Arka steps into the hallway just as a sharp voice cuts through the silence.",
+  ),
   show("arka-hallway", "arka", "neutral", {
     position: "left",
     enterFrom: "left",
   }),
   show("elena-hallway", "elena", "neutral", {
-    position: "right",
+    position: "center",
     enterFrom: "right",
-    xOffset: -0.2,
   }),
-  narrate(
-    "The elevator doors slide open. Arka steps into the hallway just as a sharp voice cuts through the silence.",
-  ),
   say(
     "elena",
     "neutral",

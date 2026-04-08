@@ -11,6 +11,11 @@ import {
   nadiaBalconyScene,
 } from "@/scenes/nadiaBalcony";
 import { openingScene } from "@/scenes/opening";
+import {
+  saraHallwayScene,
+  saraHelpScene,
+  saraRefuseScene,
+} from "@/scenes/saraHallway";
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
@@ -28,6 +33,9 @@ export const demoScript: VisualNovelScript = {
     "nadia-balcony": nadiaBalconyScene,
     "nadia-advice-help": nadiaAdviceHelpScene,
     "nadia-advice-refuse": nadiaAdviceRefuseScene,
+    "sara-hallway": saraHallwayScene,
+    "sara-help": saraHelpScene,
+    "sara-refuse": saraRefuseScene,
     epilogue: epilogueScene,
   },
 };
