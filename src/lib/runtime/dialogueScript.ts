@@ -3,7 +3,11 @@ import {
   helpElenaScene,
   ignoreElenaScene,
 } from "@/scenes/elenaEncounter";
-import { elevatorMeetingScene } from "@/scenes/elevatorMeeting";
+import {
+  acceptMayaNumberScene,
+  declineMayaNumberScene,
+  elevatorMeetingScene,
+} from "@/scenes/elevatorMeeting";
 import { epilogueScene } from "@/scenes/epilogue";
 import {
   nadiaAdviceHelpScene,
@@ -21,10 +25,12 @@ import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "elena-encounter",
+  startLabel: "elevator-meeting",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,
+    "accept-maya-number": acceptMayaNumberScene,
+    "decline-maya-number": declineMayaNumberScene,
     "elena-encounter": elenaEncounterScene,
     "help-elena": helpElenaScene,
     "ignore-elena": ignoreElenaScene,

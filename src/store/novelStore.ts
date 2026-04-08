@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { characterRegistry } from "@/character";
 import { demoScript } from "@/lib/runtime/dialogueScript";
+import { unknownSpeakerIds } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import type {
   ActiveMinigame,
@@ -79,6 +80,15 @@ const createHistoryEntry = (speaker: string | null, text: string): DialogueEntry
   speaker,
   text,
 });
+
+const UNKNOWN_SPEAKER_SET = new Set<string>(unknownSpeakerIds);
+
+const resolveSpeakerName = (speaker: string | null | undefined) => {
+  if (!speaker) return null;
+  if (UNKNOWN_SPEAKER_SET.has(speaker)) return "???";
+
+  return characterRegistry[speaker as keyof typeof characterRegistry]?.displayName ?? speaker;
+};
 
 const moveCharacter = (
   current: CharacterInstance,
@@ -254,11 +264,9 @@ const runScriptUntilPause = (state: NovelStore) => {
         return nextState;
 
       case "say":
-        nextState.speaker =
-          command.speaker && characterRegistry[command.speaker as keyof typeof characterRegistry]
-            ? characterRegistry[command.speaker as keyof typeof characterRegistry].displayName
-            : command.speaker ?? null;
-        nextState.activeCharacterId = command.speaker ?? null;
+        nextState.speaker = resolveSpeakerName(command.speaker);
+        nextState.activeCharacterId =
+          command.speaker && !UNKNOWN_SPEAKER_SET.has(command.speaker) ? command.speaker : null;
         nextState.pendingSceneContinuation = false;
         nextState.line = command.text;
         nextState.choices = [];
@@ -266,16 +274,11 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.history = [
           ...(nextState.history ?? []),
           {
-            ...createHistoryEntry(
-              command.speaker && characterRegistry[command.speaker as keyof typeof characterRegistry]
-                ? characterRegistry[command.speaker as keyof typeof characterRegistry].displayName
-                : command.speaker ?? null,
-              command.text,
-            ),
+            ...createHistoryEntry(resolveSpeakerName(command.speaker), command.text),
             emotion: command.emotion ?? null,
           },
         ];
-        if (command.speaker) {
+        if (command.speaker && !UNKNOWN_SPEAKER_SET.has(command.speaker)) {
           const activeCharacter = Object.entries(nextState.characters ?? {}).find(
             ([, value]) => value.characterId === command.speaker,
           );

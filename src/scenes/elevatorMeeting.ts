@@ -1,54 +1,68 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import { bg, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
+import {
+  bg,
+  jump,
+  menu,
+  minigame,
+  narrate,
+  say,
+  show,
+} from "@/scenes/scriptTypes";
 import elevator from "@/background/elevator.png";
 
 export const elevatorMeetingScene: VisualNovelCommand[] = [
   bg(elevator, "Lentera Apartments - Elevator"),
-  narrate(
-    "Inside a slow, slightly creaking elevator, Arka stands in the corner, leaning his shoulder against the wall and holding onto his backpack strap.",
-  ),
   show("arka-elevator", "arka", "neutral", {
     position: "left",
   }),
-  narrate(
-    "He reaches toward the old control panel and presses the button for the 3rd floor.",
-  ),
+  say("unknown", "worried", "Don’t close the elevator yet…! "),
   minigame("elevator-button"),
+  say(
+    "unknown",
+    "worried",
+    "(catching her breath) That was close… almost missed it…",
+  ),
   narrate(
-    "The doors slide open on the 2nd floor, and a girl with shoulder-length hair rushes in while clutching a stack of heavy medical textbooks to her chest.",
+    "(glances at her from under his bangs, then looks back at the elevator door, expression neutral)",
   ),
   show("maya-elevator", "maya", "neutral", {
     position: "center",
-    enterFrom: "right",
+    enterFrom: "fade",
     xOffset: 0.04,
   }),
-  say("maya", "worried", "Almost missed it... please don't get stuck now..."),
-  narrate(
-    "Arka briefly glances at her from under his bangs, then returns his gaze to the elevator door with the same unreadable expression.",
-  ),
   say(
-    "maya",
-    "surprised",
-    "Wait... You're Arka, right? From the Engineering department at the University?",
+    "unknown",
+    "worried",
+    "Wait… you’re Arka, right? From the Engineering department?",
   ),
-  say("arka", "surprised", "Yeah. Do I know you?"),
+  say("arka", "neutral", "Yeah. Do I know you?"),
   say(
     "maya",
     "worried",
-    "I'm Maya. From Med school... I see you a lot at the corner of the library. You always sit at the same table every afternoon. You... live here too?",
+    "I’m Maya. From the Medical Faculty… I see you a lot in the library corner. You always sit at the same table every afternoon. You… live here too?",
   ),
-  say("arka", "neutral", "Just moved in today. 3rd floor."),
-  say(
-    "maya",
-    "surprised",
-    "No way! What a coincidence. I'm on the 3rd floor too, Unit 301.",
-  ),
+  say("arka", "neutral", "Just moved in today. Third floor."),
   say(
     "maya",
     "calm",
-    "If you ever need info about the campus or places to eat nearby, just ask. Here... take my number. Just in case there's any apartment business.",
+    "No way, what a coincidence! I’m on the third floor too, Unit 301. If you need anything about campus or good places to eat around here, just ask. Here… take my number. Just in case you need something about the apartment.",
   ),
-  narrate("Maya hands over her phone with slightly trembling hands."),
-  say("arka", "gentle", "Sure. Let me know if you need anything, Maya."),
+  menu("Your choice?", [
+    { id: "accept-maya-number", label: "ACCEPT", next: "accept-maya-number" },
+    {
+      id: "decline-maya-number",
+      label: "DECLINE",
+      next: "decline-maya-number",
+    },
+  ]),
+];
+
+export const acceptMayaNumberScene: VisualNovelCommand[] = [
+  say("maya", "calm", "Thanks, Arka… I’ll text you later, okay?"),
+  jump("elena-encounter"),
+];
+
+export const declineMayaNumberScene: VisualNovelCommand[] = [
+  say("maya", "calm", "Ah… sorry if I made you uncomfortable…"),
   jump("elena-encounter"),
 ];

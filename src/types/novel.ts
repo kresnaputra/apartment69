@@ -1,5 +1,10 @@
 import type { AnyCharacterEmotion, CharacterId } from "@/character/catalog";
 
+export const unknownSpeakerIds = ["unknown", "uknokwn"] as const;
+
+export type UnknownSpeakerId = (typeof unknownSpeakerIds)[number];
+export type SpeakerId = CharacterId | UnknownSpeakerId;
+
 export type DialogueEntry = {
   id: string;
   speaker: string | null;

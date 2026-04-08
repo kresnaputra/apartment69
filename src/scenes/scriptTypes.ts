@@ -1,4 +1,4 @@
-import type { CharacterEmotion, CharacterId } from "@/character/catalog";
+import type { AnyCharacterEmotion, CharacterEmotion, CharacterId } from "@/character/catalog";
 import type {
   ChoiceOption,
   HideCharacterCommand,
@@ -7,6 +7,7 @@ import type {
   ParallaxLayer,
   SayCommand,
   SceneCommand,
+  SpeakerId,
   ShowCharacterCommand,
   VisualNovelCommand,
 } from "@/types/novel";
@@ -74,16 +75,28 @@ export const narrate = (text: string, speaker?: string): SayCommand => ({
   text,
 });
 
-export const say = <TCharacterId extends CharacterId>(
+export function say<TCharacterId extends CharacterId>(
   characterId: TCharacterId,
   emotion: CharacterEmotion<TCharacterId>,
   text: string,
-): SayCommand => ({
-  type: "say",
-  speaker: characterId,
-  emotion,
-  text,
-});
+): SayCommand;
+export function say(
+  characterId: SpeakerId,
+  emotion: AnyCharacterEmotion,
+  text: string,
+): SayCommand;
+export function say(
+  characterId: SpeakerId,
+  emotion: AnyCharacterEmotion,
+  text: string,
+): SayCommand {
+  return {
+    type: "say",
+    speaker: characterId,
+    emotion,
+    text,
+  };
+}
 
 export const menu = (prompt: string, options: ChoiceOption[]): VisualNovelCommand => ({
   type: "menu",
