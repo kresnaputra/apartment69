@@ -21,7 +21,7 @@ export type ActiveMinigame = {
 };
 
 export type CharacterStagePosition = "left" | "center" | "right";
-export type CharacterEnterFrom = "left" | "right" | "none";
+export type CharacterEnterFrom = "left" | "right" | "fade" | "none";
 export type CharacterMoveEasing =
   | "linear"
   | "ease"

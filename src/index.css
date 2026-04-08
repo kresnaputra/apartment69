@@ -128,6 +128,12 @@ textarea {
   animation-fill-mode: both;
 }
 
+.vn-enter-fade {
+  animation-name: vn-enter-fade;
+  animation-timing-function: ease;
+  animation-fill-mode: both;
+}
+
 .vn-enter-none {
   animation: none;
 }
@@ -634,6 +640,18 @@ textarea {
   from {
     opacity: 0;
     transform: translateX(calc(-50% + 100vw)) scale(calc(var(--vn-scale) * 0.96));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(var(--vn-scale));
+  }
+}
+
+@keyframes vn-enter-fade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(calc(var(--vn-scale) * 0.985));
   }
 
   to {

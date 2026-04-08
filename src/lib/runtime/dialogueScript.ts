@@ -21,7 +21,7 @@ import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "opening",
+  startLabel: "elena-encounter",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,

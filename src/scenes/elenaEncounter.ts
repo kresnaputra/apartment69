@@ -18,20 +18,16 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
   narrate(
     "The elevator doors slide open. Arka steps into the hallway just as a sharp voice cuts through the silence.",
   ),
-  show("arka-hallway", "arka", "neutral", {
-    position: "left",
-    enterFrom: "left",
-  }),
-  show("elena-hallway", "elena", "neutral", {
-    position: "center",
-    enterFrom: "right",
-  }),
   say(
     "elena",
     "neutral",
     "It's been three days. Three days, and all I keep hearing is 'tomorrow.' I do not pay this rent just to listen to dripping water every night.",
   ),
   say("arka", "surprised", "What is that noise?"),
+  show("arka-hallway", "arka", "neutral", {
+    position: "left",
+    enterFrom: "left",
+  }),
   narrate(
     "I'm sorry, Ms. Elena... the technician is tied up with another project right now...",
     "Staff",
@@ -40,6 +36,10 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     "Elena lets out a sharp breath, then turns abruptly. She mutters to herself as she walks past Arka.",
   ),
   say("elena", "neutral", "Incompetent."),
+  show("elena-hallway", "elena", "neutral", {
+    position: "center",
+    enterFrom: "fade",
+  }),
   say(
     "elena",
     "neutral",

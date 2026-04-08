@@ -12,6 +12,8 @@ import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 
 const TEXT_SPEED = 18;
 const CHARACTER_TICK_FPS = 60;
+const CHARACTER_ENTER_DURATION_MS = 520;
+const CHARACTER_FADE_ENTER_DURATION_MS = 820;
 
 type CharacterSpriteProps = {
   bundle: LoadedSpritesheetBundle;
@@ -131,7 +133,7 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     opacity: character.opacity,
     transform: "translateX(-50%) scale(var(--vn-scale))",
     transformOrigin: "bottom center",
-    animationDuration: "520ms",
+    animationDuration: `${character.enterFrom === "fade" ? CHARACTER_FADE_ENTER_DURATION_MS : CHARACTER_ENTER_DURATION_MS}ms`,
     transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity 220ms ease, transform 300ms ease`,
     "--vn-scale": String(responsiveScale),
     width: `${characterWidth}px`,
