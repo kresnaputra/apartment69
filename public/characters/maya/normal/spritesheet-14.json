@@ -5,15 +5,15 @@
         "x": 0,
         "y": 0,
         "w": 485,
-        "h": 1186
+        "h": 1188
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 593,
-        "y": 350,
+        "y": 348,
         "w": 485,
-        "h": 1186
+        "h": 1188
       },
       "sourceSize": {
         "w": 1788,
@@ -26,15 +26,15 @@
         "x": 485,
         "y": 0,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 593,
-        "y": 350,
+        "y": 348,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "sourceSize": {
         "w": 1788,
@@ -47,15 +47,15 @@
         "x": 970,
         "y": 0,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 593,
-        "y": 350,
+        "y": 348,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "sourceSize": {
         "w": 1788,
@@ -67,16 +67,16 @@
       "frame": {
         "x": 1455,
         "y": 0,
-        "w": 484,
-        "h": 1187
+        "w": 486,
+        "h": 1189
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 593,
-        "y": 350,
-        "w": 484,
-        "h": 1187
+        "x": 592,
+        "y": 348,
+        "w": 486,
+        "h": 1189
       },
       "sourceSize": {
         "w": 1788,
@@ -86,18 +86,18 @@
     },
     "frame_0069": {
       "frame": {
-        "x": 1939,
+        "x": 1941,
         "y": 0,
-        "w": 485,
-        "h": 1187
+        "w": 486,
+        "h": 1189
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 593,
-        "y": 350,
-        "w": 485,
-        "h": 1187
+        "x": 592,
+        "y": 348,
+        "w": 486,
+        "h": 1189
       },
       "sourceSize": {
         "w": 1788,
@@ -121,8 +121,8 @@
     "image": "spritesheet-14.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2424,
-      "h": 1187
+      "w": 2427,
+      "h": 1189
     },
     "scale": "1",
     "frameSize": {

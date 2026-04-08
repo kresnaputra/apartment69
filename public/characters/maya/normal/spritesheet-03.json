@@ -11,7 +11,7 @@
       "trimmed": true,
       "spriteSourceSize": {
         "x": 599,
-        "y": 360,
+        "y": 359,
         "w": 474,
         "h": 1162
       },
@@ -26,15 +26,15 @@
         "x": 474,
         "y": 0,
         "w": 474,
-        "h": 1162
+        "h": 1163
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 599,
-        "y": 360,
+        "y": 358,
         "w": 474,
-        "h": 1162
+        "h": 1163
       },
       "sourceSize": {
         "w": 1788,
@@ -47,15 +47,15 @@
         "x": 948,
         "y": 0,
         "w": 474,
-        "h": 1162
+        "h": 1164
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 599,
-        "y": 360,
+        "y": 358,
         "w": 474,
-        "h": 1162
+        "h": 1164
       },
       "sourceSize": {
         "w": 1788,
@@ -67,16 +67,16 @@
       "frame": {
         "x": 1422,
         "y": 0,
-        "w": 474,
-        "h": 1162
+        "w": 475,
+        "h": 1164
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 599,
-        "y": 360,
-        "w": 474,
-        "h": 1162
+        "x": 598,
+        "y": 358,
+        "w": 475,
+        "h": 1164
       },
       "sourceSize": {
         "w": 1788,
@@ -86,18 +86,18 @@
     },
     "frame_0014": {
       "frame": {
-        "x": 1896,
+        "x": 1897,
         "y": 0,
-        "w": 474,
-        "h": 1163
+        "w": 475,
+        "h": 1164
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 599,
-        "y": 360,
-        "w": 474,
-        "h": 1163
+        "x": 598,
+        "y": 358,
+        "w": 475,
+        "h": 1164
       },
       "sourceSize": {
         "w": 1788,
@@ -121,8 +121,8 @@
     "image": "spritesheet-03.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2370,
-      "h": 1163
+      "w": 2372,
+      "h": 1164
     },
     "scale": "1",
     "frameSize": {

@@ -5,15 +5,15 @@
         "x": 0,
         "y": 0,
         "w": 489,
-        "h": 1195
+        "h": 1196
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 591,
-        "y": 347,
+        "y": 345,
         "w": 489,
-        "h": 1195
+        "h": 1196
       },
       "sourceSize": {
         "w": 1788,
@@ -26,15 +26,15 @@
         "x": 489,
         "y": 0,
         "w": 489,
-        "h": 1195
+        "h": 1196
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 591,
-        "y": 347,
+        "y": 345,
         "w": 489,
-        "h": 1195
+        "h": 1196
       },
       "sourceSize": {
         "w": 1788,
@@ -47,15 +47,15 @@
         "x": 978,
         "y": 0,
         "w": 489,
-        "h": 1194
+        "h": 1196
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 591,
-        "y": 347,
+        "y": 345,
         "w": 489,
-        "h": 1194
+        "h": 1196
       },
       "sourceSize": {
         "w": 1788,
@@ -67,16 +67,16 @@
       "frame": {
         "x": 1467,
         "y": 0,
-        "w": 488,
-        "h": 1194
+        "w": 489,
+        "h": 1196
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 591,
-        "y": 347,
-        "w": 488,
-        "h": 1194
+        "y": 345,
+        "w": 489,
+        "h": 1196
       },
       "sourceSize": {
         "w": 1788,
@@ -86,18 +86,18 @@
     },
     "frame_0099": {
       "frame": {
-        "x": 1955,
+        "x": 1956,
         "y": 0,
         "w": 487,
-        "h": 1194
+        "h": 1195
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 592,
-        "y": 347,
+        "y": 345,
         "w": 487,
-        "h": 1194
+        "h": 1195
       },
       "sourceSize": {
         "w": 1788,
@@ -121,8 +121,8 @@
     "image": "spritesheet-20.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2442,
-      "h": 1195
+      "w": 2443,
+      "h": 1196
     },
     "scale": "1",
     "frameSize": {

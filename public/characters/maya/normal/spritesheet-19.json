@@ -4,16 +4,16 @@
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 489,
-        "h": 1197
+        "w": 490,
+        "h": 1199
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 591,
-        "y": 346,
-        "w": 489,
-        "h": 1197
+        "x": 590,
+        "y": 344,
+        "w": 490,
+        "h": 1199
       },
       "sourceSize": {
         "w": 1788,
@@ -23,18 +23,18 @@
     },
     "frame_0091": {
       "frame": {
-        "x": 489,
+        "x": 490,
         "y": 0,
-        "w": 489,
-        "h": 1197
+        "w": 490,
+        "h": 1198
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 591,
-        "y": 346,
-        "w": 489,
-        "h": 1197
+        "x": 590,
+        "y": 344,
+        "w": 490,
+        "h": 1198
       },
       "sourceSize": {
         "w": 1788,
@@ -44,18 +44,18 @@
     },
     "frame_0092": {
       "frame": {
-        "x": 978,
+        "x": 980,
         "y": 0,
-        "w": 489,
-        "h": 1197
+        "w": 490,
+        "h": 1198
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 591,
-        "y": 346,
-        "w": 489,
-        "h": 1197
+        "x": 590,
+        "y": 344,
+        "w": 490,
+        "h": 1198
       },
       "sourceSize": {
         "w": 1788,
@@ -65,18 +65,18 @@
     },
     "frame_0093": {
       "frame": {
-        "x": 1467,
+        "x": 1470,
         "y": 0,
-        "w": 489,
-        "h": 1196
+        "w": 490,
+        "h": 1198
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 591,
-        "y": 346,
-        "w": 489,
-        "h": 1196
+        "x": 590,
+        "y": 344,
+        "w": 490,
+        "h": 1198
       },
       "sourceSize": {
         "w": 1788,
@@ -86,18 +86,18 @@
     },
     "frame_0094": {
       "frame": {
-        "x": 1956,
+        "x": 1960,
         "y": 0,
         "w": 489,
-        "h": 1196
+        "h": 1197
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 591,
-        "y": 346,
+        "y": 345,
         "w": 489,
-        "h": 1196
+        "h": 1197
       },
       "sourceSize": {
         "w": 1788,
@@ -121,8 +121,8 @@
     "image": "spritesheet-19.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2445,
-      "h": 1197
+      "w": 2449,
+      "h": 1199
     },
     "scale": "1",
     "frameSize": {

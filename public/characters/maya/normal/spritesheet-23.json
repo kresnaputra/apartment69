@@ -5,15 +5,15 @@
         "x": 0,
         "y": 0,
         "w": 485,
-        "h": 1189
+        "h": 1190
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 593,
-        "y": 349,
+        "y": 347,
         "w": 485,
-        "h": 1189
+        "h": 1190
       },
       "sourceSize": {
         "w": 1788,
@@ -25,16 +25,16 @@
       "frame": {
         "x": 485,
         "y": 0,
-        "w": 485,
-        "h": 1187
+        "w": 486,
+        "h": 1189
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 593,
-        "y": 350,
-        "w": 485,
-        "h": 1187
+        "x": 592,
+        "y": 348,
+        "w": 486,
+        "h": 1189
       },
       "sourceSize": {
         "w": 1788,
@@ -44,18 +44,18 @@
     },
     "frame_0112": {
       "frame": {
-        "x": 970,
+        "x": 971,
         "y": 0,
-        "w": 484,
-        "h": 1187
+        "w": 486,
+        "h": 1189
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 593,
-        "y": 350,
-        "w": 484,
-        "h": 1187
+        "x": 592,
+        "y": 348,
+        "w": 486,
+        "h": 1189
       },
       "sourceSize": {
         "w": 1788,
@@ -65,18 +65,18 @@
     },
     "frame_0113": {
       "frame": {
-        "x": 1454,
+        "x": 1457,
         "y": 0,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 593,
-        "y": 350,
+        "y": 348,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "sourceSize": {
         "w": 1788,
@@ -86,18 +86,18 @@
     },
     "frame_0114": {
       "frame": {
-        "x": 1939,
+        "x": 1942,
         "y": 0,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 593,
-        "y": 350,
+        "y": 348,
         "w": 485,
-        "h": 1187
+        "h": 1188
       },
       "sourceSize": {
         "w": 1788,
@@ -121,8 +121,8 @@
     "image": "spritesheet-23.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2424,
-      "h": 1189
+      "w": 2427,
+      "h": 1190
     },
     "scale": "1",
     "frameSize": {

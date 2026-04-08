@@ -4,16 +4,16 @@
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 476,
-        "h": 1168
+        "w": 477,
+        "h": 1169
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 598,
-        "y": 358,
-        "w": 476,
-        "h": 1168
+        "x": 597,
+        "y": 356,
+        "w": 477,
+        "h": 1169
       },
       "sourceSize": {
         "w": 1788,
@@ -23,17 +23,17 @@
     },
     "frame_0026": {
       "frame": {
-        "x": 476,
+        "x": 477,
         "y": 0,
-        "w": 476,
+        "w": 477,
         "h": 1169
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 598,
-        "y": 357,
-        "w": 476,
+        "x": 597,
+        "y": 356,
+        "w": 477,
         "h": 1169
       },
       "sourceSize": {
@@ -44,18 +44,18 @@
     },
     "frame_0027": {
       "frame": {
-        "x": 952,
+        "x": 954,
         "y": 0,
-        "w": 476,
-        "h": 1169
+        "w": 477,
+        "h": 1171
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 598,
-        "y": 357,
-        "w": 476,
-        "h": 1169
+        "x": 597,
+        "y": 355,
+        "w": 477,
+        "h": 1171
       },
       "sourceSize": {
         "w": 1788,
@@ -65,18 +65,18 @@
     },
     "frame_0028": {
       "frame": {
-        "x": 1428,
+        "x": 1431,
         "y": 0,
-        "w": 477,
-        "h": 1169
+        "w": 478,
+        "h": 1171
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 597,
-        "y": 357,
-        "w": 477,
-        "h": 1169
+        "y": 355,
+        "w": 478,
+        "h": 1171
       },
       "sourceSize": {
         "w": 1788,
@@ -86,18 +86,18 @@
     },
     "frame_0029": {
       "frame": {
-        "x": 1905,
+        "x": 1909,
         "y": 0,
         "w": 477,
-        "h": 1170
+        "h": 1171
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 597,
-        "y": 357,
+        "y": 355,
         "w": 477,
-        "h": 1170
+        "h": 1171
       },
       "sourceSize": {
         "w": 1788,
@@ -121,8 +121,8 @@
     "image": "spritesheet-06.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2382,
-      "h": 1170
+      "w": 2386,
+      "h": 1171
     },
     "scale": "1",
     "frameSize": {

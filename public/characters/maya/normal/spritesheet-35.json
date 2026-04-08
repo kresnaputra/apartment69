@@ -11,7 +11,7 @@
       "trimmed": true,
       "spriteSourceSize": {
         "x": 599,
-        "y": 360,
+        "y": 359,
         "w": 474,
         "h": 1162
       },
@@ -25,16 +25,16 @@
       "frame": {
         "x": 474,
         "y": 0,
-        "w": 473,
-        "h": 1160
+        "w": 474,
+        "h": 1162
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 600,
-        "y": 361,
-        "w": 473,
-        "h": 1160
+        "x": 599,
+        "y": 359,
+        "w": 474,
+        "h": 1162
       },
       "sourceSize": {
         "w": 1788,
@@ -44,18 +44,18 @@
     },
     "frame_0172": {
       "frame": {
-        "x": 947,
+        "x": 948,
         "y": 0,
-        "w": 472,
-        "h": 1160
+        "w": 473,
+        "h": 1162
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 600,
-        "y": 361,
-        "w": 472,
-        "h": 1160
+        "x": 599,
+        "y": 359,
+        "w": 473,
+        "h": 1162
       },
       "sourceSize": {
         "w": 1788,
@@ -65,18 +65,18 @@
     },
     "frame_0173": {
       "frame": {
-        "x": 1419,
+        "x": 1421,
         "y": 0,
         "w": 472,
-        "h": 1160
+        "h": 1161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 600,
-        "y": 361,
+        "y": 359,
         "w": 472,
-        "h": 1160
+        "h": 1161
       },
       "sourceSize": {
         "w": 1788,
@@ -86,18 +86,18 @@
     },
     "frame_0174": {
       "frame": {
-        "x": 1891,
+        "x": 1893,
         "y": 0,
         "w": 472,
-        "h": 1159
+        "h": 1161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 600,
-        "y": 361,
+        "y": 359,
         "w": 472,
-        "h": 1159
+        "h": 1161
       },
       "sourceSize": {
         "w": 1788,
@@ -121,7 +121,7 @@
     "image": "spritesheet-35.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2363,
+      "w": 2365,
       "h": 1162
     },
     "scale": "1",
