@@ -7,6 +7,7 @@ import { characterBundleRegistry } from "@/character";
 import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { useNovelStore } from "@/store/novelStore";
+import { unknownSpeakerIds } from "@/types/novel";
 import type { CharacterInstance } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 
@@ -399,7 +400,12 @@ const App = () => {
             renderCharacters.map((character) => {
               const bundle = bundles[character.bundleId];
               if (!bundle) return null;
-              const isDimmed = activeCharacterId !== null && activeCharacterId !== character.characterId;
+              const isUnknownSpeaker =
+                activeCharacterId !== null &&
+                unknownSpeakerIds.includes(activeCharacterId as (typeof unknownSpeakerIds)[number]);
+              const isDimmed = isUnknownSpeaker
+                ? character.characterId === "arka"
+                : activeCharacterId !== null && activeCharacterId !== character.characterId;
               return (
                 <CharacterSprite
                   key={`${character.id}-${character.entryVersion}`}

@@ -265,8 +265,7 @@ const runScriptUntilPause = (state: NovelStore) => {
 
       case "say":
         nextState.speaker = resolveSpeakerName(command.speaker);
-        nextState.activeCharacterId =
-          command.speaker && !UNKNOWN_SPEAKER_SET.has(command.speaker) ? command.speaker : null;
+        nextState.activeCharacterId = command.speaker ?? null;
         nextState.pendingSceneContinuation = false;
         nextState.line = command.text;
         nextState.choices = [];

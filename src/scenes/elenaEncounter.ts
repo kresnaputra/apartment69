@@ -19,31 +19,32 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     "The elevator doors slide open. Arka steps into the hallway just as a sharp voice cuts through the silence.",
   ),
   say(
-    "elena",
+    "unknown",
     "neutral",
-    "It's been three days. Three days, and all I keep hearing is 'tomorrow.' I do not pay this rent just to listen to dripping water every night.",
+    "It’s been three days! Three days that pipe’s been leaking, and all I get is ‘tomorrow’? I’m not paying rent just to listen to dripping water every damn night!",
   ),
-  say("arka", "surprised", "What is that noise?"),
   show("arka-hallway", "arka", "neutral", {
     position: "left",
     enterFrom: "left",
   }),
+  say("arka", "surprised", "What’s that noise…?"),
   narrate(
-    "I'm sorry, Ms. Elena... the technician is tied up with another project right now...",
+    "Sorry, Miss… the technician’s tied up with another project…",
     "Staff",
   ),
-  narrate(
-    "Elena lets out a sharp breath, then turns abruptly. She mutters to herself as she walks past Arka.",
-  ),
-  say("elena", "neutral", "Incompetent."),
   show("elena-hallway", "elena", "neutral", {
     position: "center",
     enterFrom: "fade",
   }),
+  narrate(
+    "(lets out a sharp breath, suddenly turning around)",
+    "???",
+  ),
+  say("unknown", "neutral", "Unbelievable."),
   say(
-    "elena",
+    "unknown",
     "neutral",
-    "How am I supposed to focus on grading papers with that constant noise...",
+    "How am I supposed to focus on grading these assignments with that constant noise…",
   ),
   menu("What should Arka do?", [
     { id: "help-elena", label: "HELP", next: "help-elena" },
@@ -52,47 +53,42 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
 ];
 
 export const ignoreElenaScene: VisualNovelCommand[] = [
-  say("arka", "serious", "I should stay out of other people's problems."),
+  say("arka", "serious", "Better not get involved in other people’s problems…"),
   jump("epilogue"),
 ];
 
 export const helpElenaScene: VisualNovelCommand[] = [
-  narrate("Arka falls into step beside her at an easy pace."),
-  say("arka", "gentle", "I can take a look at the pipe, if you want."),
+  narrate("(walking casually beside her)"),
+  say("arka", "gentle", "I could take a look at the pipe, if you want."),
   narrate(
-    "Elena stops mid-step and turns toward him with a sharp, assessing stare, studying him from head to toe.",
+    "(stops mid-step, turns to Arka with a sharp gaze, scanning him from head to toe)",
   ),
   say(
-    "elena",
+    "unknown",
     "neutral",
-    "Who are you? New staff? You're not wearing a uniform.",
+    "Who are you? New staff? You’re not in uniform.",
   ),
   say(
     "arka",
     "neutral",
-    "Just a new tenant. I am more used to fixing things myself than waiting for someone else to do it.",
+    "Just moved in. But I’m used to fixing things myself instead of waiting around.",
   ),
   narrate(
-    "She watches him in silence for a moment, her expression skeptical and unreadable.",
+    "(pauses, studying him with a skeptical expression)",
   ),
+  say(
+    "unknown",
+    "neutral",
+    "You sound confident. But can you actually do it? I don’t want my unit ending up worse than it already is.",
+  ),
+  say("arka", "serious", "Up to you. Offer’s only good right now."),
   say(
     "elena",
     "neutral",
-    "You sound confident. But can you actually do it? I don't want my unit in worse shape than it already is.",
-  ),
-  say("arka", "serious", "Up to you. The offer only stands right now."),
-  narrate(
-    "Elena exhales slowly, as if forcing herself to accept the situation.",
-  ),
-  say(
-    "elena",
-    "neutral",
-    "Fine. I don't have another option. Find me in Room 303. Come tonight if you're serious. And do not make me wait.",
+    "…Fine. I don’t really have a choice. Name’s Elena. Find me in Unit 303. Come by tonight if you’re serious. Don’t keep me waiting.",
   ),
   narrate(
     "That evening, Arka crouches in front of the cabinet under Elena's sink and examines the leaking joint.",
   ),
-  minigame("pipe-connection"),
-  narrate("The dripping stops."),
   jump("nadia-balcony"),
 ];
