@@ -1,9 +1,9 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { bg, hide, jump, menu, narrate, say, show } from "@/scenes/scriptTypes";
-import apartement from "@/background/apartement.png";
+import hallway from "@/background/hallway.png";
 
 export const saraHallwayScene: VisualNovelCommand[] = [
-  bg(apartement, "Lentera Apartments - 3rd Floor Hallway"),
+  bg(hallway, "Lentera Apartments - 3rd Floor Hallway"),
   hide("nadia-balcony"),
   hide("arka-balcony"),
   show("arka-hallway", "arka", "neutral", {

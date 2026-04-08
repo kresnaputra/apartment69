@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import mainMenuBg from "@/background/main-menu.png";
 
 type MainMenuProps = {
   onStart: () => void;
@@ -28,7 +29,7 @@ export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
 
   return (
     <div className={`vn-menu-root ${visible ? "vn-menu-visible" : ""} ${exiting ? "vn-menu-exiting" : ""}`}>
-      <div className="vn-menu-bg" />
+      <div className="vn-menu-bg" style={{ backgroundImage: `url(${mainMenuBg})` }} />
       <div className="vn-menu-noise" />
 
       <div className="vn-menu-orb vn-menu-orb-1" />
