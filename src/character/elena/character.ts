@@ -21,7 +21,7 @@ export const elenaCharacter: CharacterDefinition = {
   defaultX: 0.28,
   defaultY: -100,
   defaultScale: 2,
-  defaultOpacity: 0.96,
+  defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,
   defaultLoop: true,

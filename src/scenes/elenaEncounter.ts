@@ -14,7 +14,6 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     position: "right",
     enterFrom: "right",
     xOffset: -0.15,
-    yOffset:  10,
   }),
   narrate("The elevator doors slide open. Arka steps into the hallway just as a sharp voice cuts through the silence."),
   say(

@@ -21,7 +21,7 @@ export const mayaCharacter: CharacterDefinition = {
   defaultX: 0,
   defaultY: -200,
   defaultScale: 2.5,
-  defaultOpacity: 0.96,
+  defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,
   defaultLoop: true,

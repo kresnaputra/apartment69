@@ -1,118 +1,30 @@
 {
   "frames": {
-    "frame_0170": {
+    "frame_0034": {
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 474,
-        "h": 1162
+        "w": 547,
+        "h": 1344
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 599,
-        "y": 359,
-        "w": 474,
-        "h": 1162
+        "x": 684,
+        "y": 406,
+        "w": 547,
+        "h": 1344
       },
       "sourceSize": {
-        "w": 1788,
-        "h": 1788
-      },
-      "duration": 20
-    },
-    "frame_0171": {
-      "frame": {
-        "x": 474,
-        "y": 0,
-        "w": 474,
-        "h": 1162
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 599,
-        "y": 359,
-        "w": 474,
-        "h": 1162
-      },
-      "sourceSize": {
-        "w": 1788,
-        "h": 1788
-      },
-      "duration": 20
-    },
-    "frame_0172": {
-      "frame": {
-        "x": 948,
-        "y": 0,
-        "w": 473,
-        "h": 1162
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 599,
-        "y": 359,
-        "w": 473,
-        "h": 1162
-      },
-      "sourceSize": {
-        "w": 1788,
-        "h": 1788
-      },
-      "duration": 20
-    },
-    "frame_0173": {
-      "frame": {
-        "x": 1421,
-        "y": 0,
-        "w": 472,
-        "h": 1161
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 600,
-        "y": 359,
-        "w": 472,
-        "h": 1161
-      },
-      "sourceSize": {
-        "w": 1788,
-        "h": 1788
-      },
-      "duration": 20
-    },
-    "frame_0174": {
-      "frame": {
-        "x": 1893,
-        "y": 0,
-        "w": 472,
-        "h": 1161
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 600,
-        "y": 359,
-        "w": 472,
-        "h": 1161
-      },
-      "sourceSize": {
-        "w": 1788,
-        "h": 1788
+        "w": 2048,
+        "h": 2048
       },
       "duration": 20
     }
   },
   "animations": {
     "animation": [
-      "frame_0170",
-      "frame_0171",
-      "frame_0172",
-      "frame_0173",
-      "frame_0174"
+      "frame_0034"
     ]
   },
   "meta": {
@@ -121,15 +33,15 @@
     "image": "spritesheet-35.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2365,
-      "h": 1162
+      "w": 547,
+      "h": 1344
     },
     "scale": "1",
     "frameSize": {
-      "w": 1788,
-      "h": 1788
+      "w": 2048,
+      "h": 2048
     },
     "fps": 50,
-    "frameCount": 5
+    "frameCount": 1
   }
 }
