@@ -19,7 +19,7 @@ export const nadiaCharacter: CharacterDefinition = {
   defaultMoveDuration: 520,
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.0,
-  defaultY: -100,
+  defaultY: -150,
   defaultScale: 2,
   defaultOpacity: 0.96,
   defaultFrame: 0,

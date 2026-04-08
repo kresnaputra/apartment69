@@ -1,7 +1,15 @@
-import { elenaEncounterScene, helpElenaScene, ignoreElenaScene } from "@/scenes/elenaEncounter";
+import {
+  elenaEncounterScene,
+  helpElenaScene,
+  ignoreElenaScene,
+} from "@/scenes/elenaEncounter";
 import { elevatorMeetingScene } from "@/scenes/elevatorMeeting";
 import { epilogueScene } from "@/scenes/epilogue";
-import { nadiaAdviceHelpScene, nadiaAdviceRefuseScene, nadiaBalconyScene } from "@/scenes/nadiaBalcony";
+import {
+  nadiaAdviceHelpScene,
+  nadiaAdviceRefuseScene,
+  nadiaBalconyScene,
+} from "@/scenes/nadiaBalcony";
 import { openingScene } from "@/scenes/opening";
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";

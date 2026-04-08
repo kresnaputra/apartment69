@@ -21,23 +21,35 @@ type CharacterSpriteProps = {
 
 const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps) => {
   const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frame = useDeferredValue(character.frame);
   const [viewport, setViewport] = useState({ width: 520, height: 880 });
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1280);
+  const [windowSize, setWindowSize] = useState(() => ({
+    width: typeof window !== "undefined" ? window.innerWidth : 1280,
+    height: typeof window !== "undefined" ? window.innerHeight : 720,
+  }));
   const resizeTimeoutRef = useRef<number | null>(null);
   const windowResizeTimeoutRef = useRef<number | null>(null);
 
-  // Match canvas backing resolution to the visual scale so enlarged characters stay crisp.
   const getResponsiveScale = () => {
-    if (windowWidth < 640) return 0.65; // Mobile
-    if (windowWidth < 1024) return 0.8; // Tablet
-    if (windowWidth < 1280) return 0.9; // Small desktop
-    return 1; // Full desktop
+    const { width, height } = windowSize;
+
+    if (width < 640 || height < 640) return 0.62;
+    if (width < 1024 || height < 760) return 0.76;
+    if (width < 1280 || height < 860) return 0.88;
+    return 1;
   };
 
   const responsiveScale = character.scale * getResponsiveScale();
   const renderResolutionScale = Math.max(1, responsiveScale);
+  const frameAspectRatio = bundle.frameSize.h > 0 ? bundle.frameSize.w / bundle.frameSize.h : 0.6;
+  const reservedUiHeight = windowSize.width < 900 ? 220 : 250;
+  const maxCharacterHeight = Math.max(280, windowSize.height - reservedUiHeight);
+  const maxCharacterWidthFromHeight = maxCharacterHeight * frameAspectRatio;
+  const preferredCharacterWidth = Math.min(windowSize.width * 0.46, 620, maxCharacterWidthFromHeight);
+  const characterWidth = Math.max(180, preferredCharacterWidth);
+  const characterHeight = Math.max(240, Math.min(maxCharacterHeight, characterWidth / frameAspectRatio));
 
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();
@@ -47,7 +59,10 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
         window.cancelAnimationFrame(windowResizeTimeoutRef.current);
       }
       windowResizeTimeoutRef.current = window.requestAnimationFrame(() => {
-        setWindowWidth(window.innerWidth);
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
         windowResizeTimeoutRef.current = null;
       });
     };
@@ -63,8 +78,9 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    const container = containerRef.current;
     const renderer = rendererRef.current;
-    if (!canvas || !renderer) return;
+    if (!canvas || !container || !renderer) return;
 
     renderer.attach(canvas);
 
@@ -85,7 +101,7 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
       });
     });
 
-    observer.observe(canvas);
+    observer.observe(container);
     return () => {
       observer.disconnect();
       if (resizeTimeoutRef.current !== null) {
@@ -118,12 +134,16 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     animationDuration: "520ms",
     transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity 220ms ease, transform 300ms ease`,
     "--vn-scale": String(responsiveScale),
+    width: `${characterWidth}px`,
+    height: `${characterHeight}px`,
+    maxWidth: "100%",
     visibility: "visible" as const,
   } as CSSProperties;
 
   return (
     <div
-      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 w-[min(46vw,620px)] min-w-[300px] max-w-full overflow-hidden`}
+      ref={containerRef}
+      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 overflow-hidden`}
       style={spriteStyle}
     >
       <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
