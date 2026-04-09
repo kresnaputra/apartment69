@@ -413,9 +413,11 @@ const App = () => {
               const isUnknownSpeaker =
                 activeCharacterId !== null &&
                 unknownSpeakerIds.includes(activeCharacterId as (typeof unknownSpeakerIds)[number]);
-              const isDimmed = isUnknownSpeaker
-                ? character.characterId === "arka"
-                : activeCharacterId !== null && activeCharacterId !== character.characterId;
+              const isDimmed = isNarration
+                ? true
+                : isUnknownSpeaker
+                  ? character.characterId === "arka"
+                  : activeCharacterId !== null && activeCharacterId !== character.characterId;
               return (
                 <CharacterSprite
                   key={`${character.id}-${character.entryVersion}`}
