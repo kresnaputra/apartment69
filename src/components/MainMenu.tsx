@@ -7,9 +7,10 @@ type MainMenuProps = {
 };
 
 const MENU_ITEMS = [
-  { id: "start", label: "Mulai Cerita", primary: true },
-  { id: "continue", label: "Lanjutkan", primary: false, disabled: true },
-  { id: "config", label: "Pengaturan", primary: false, disabled: true },
+  { id: "start", label: "Start", primary: true },
+  { id: "continue", label: "Lanjut", primary: false, disabled: true },
+  { id: "gallery", label: "Gallery", primary: false, disabled: true },
+  { id: "settings", label: "Setting", primary: false, disabled: true },
 ] as const;
 
 export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
@@ -30,17 +31,15 @@ export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
   return (
     <div className={`vn-menu-root ${visible ? "vn-menu-visible" : ""} ${exiting ? "vn-menu-exiting" : ""}`}>
       <div className="vn-menu-bg" style={{ backgroundImage: `url(${mainMenuBg})` }} />
-      <div className="vn-menu-noise" />
-
-      <div className="vn-menu-orb vn-menu-orb-1" />
-      <div className="vn-menu-orb vn-menu-orb-2" />
-      <div className="vn-menu-orb vn-menu-orb-3" />
+      <div className="vn-menu-overlay" />
 
       <div className="vn-menu-layout">
         <header className="vn-menu-header">
-          <p className="vn-menu-eyebrow">Visual Novel</p>
-          <h1 className="vn-menu-title">Ruang di Antara Kita</h1>
-          <p className="vn-menu-subtitle">Stasiun Senja &mdash; sebuah cerita tentang pilihan dan kehadiran</p>
+          <h1 className="vn-menu-title">
+            <span className="vn-menu-title-main">APARTEMEN</span>
+            <span className="vn-menu-title-num">69</span>
+          </h1>
+          <p className="vn-menu-subtitle">The Helpful Neighbor</p>
         </header>
 
         <nav className="vn-menu-nav">
