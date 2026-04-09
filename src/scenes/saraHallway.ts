@@ -14,14 +14,15 @@ export const saraHallwayScene: VisualNovelCommand[] = [
     "Who is that? Judging by the way she carries herself, she is clearly not a resident of this floor. The third floor is usually for standard units, not suites.",
   ),
   show("sara-hallway", "sara", "neutral", {
-    position: "right",
+    position: "center",
     enterFrom: "right",
-    xOffset: 0.02,
+    xOffset: 0.03,
   }),
   say(
     "sara",
     "neutral",
     "This corridor is much quieter than I imagined. Player, right? The new resident in Unit 302.",
+    { hideName: true },
   ),
   say(
     "arka",
@@ -46,15 +47,15 @@ export const saraHallwayScene: VisualNovelCommand[] = [
     "neutral",
     "Maybe. The automation system in my unit is out of sync with the central hub. Building maintenance says it will take three days because they need approval from the main vendor. I think you could do it in thirty minutes.",
   ),
-  menu("Apa yang akan kamu lakukan?", [
+  menu("So, what do you wanna do?", [
     {
       id: "help-sara",
-      label: "MEMBANTU",
+      label: "Help her",
       next: "sara-help",
     },
     {
       id: "refuse-sara",
-      label: "MENOLAK",
+      label: "Turn her down",
       next: "sara-refuse",
     },
   ]),
@@ -82,7 +83,6 @@ export const saraHelpScene: VisualNovelCommand[] = [
   narrate(
     "It looks like starting tomorrow, life in this apartment is not going to be as flat as I imagined.",
   ),
-  jump("epilogue"),
 ];
 
 export const saraRefuseScene: VisualNovelCommand[] = [
@@ -118,5 +118,4 @@ export const saraRefuseScene: VisualNovelCommand[] = [
   narrate(
     "It looks like starting tomorrow, life in this apartment is not going to be as flat as I imagined.",
   ),
-  jump("epilogue"),
 ];

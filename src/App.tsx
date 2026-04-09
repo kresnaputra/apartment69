@@ -12,9 +12,15 @@ import type { CharacterInstance } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 
 const TEXT_SPEED = 18;
-const CHARACTER_TICK_FPS = 24;
+const CHARACTER_TICK_FPS = 40;
 const CHARACTER_ENTER_DURATION_MS = 520;
 const CHARACTER_FADE_ENTER_DURATION_MS = 820;
+const VIRTUAL_STAGE_WIDTH = 1366;
+const VIRTUAL_STAGE_HEIGHT = 768;
+const VIRTUAL_CHARACTER_WIDTH = 270;
+const VIRTUAL_CHARACTER_HEIGHT = 470;
+const CHARACTER_MAX_STAGE_HEIGHT_RATIO = 0.78;
+const CHARACTER_MIN_STAGE_HEIGHT_RATIO = 0.58;
 
 type CharacterSpriteProps = {
   bundle: LoadedSpritesheetBundle;
@@ -35,24 +41,28 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   const resizeTimeoutRef = useRef<number | null>(null);
   const windowResizeTimeoutRef = useRef<number | null>(null);
 
-  const getResponsiveScale = () => {
-    const { width, height } = windowSize;
-
-    if (width < 640 || height < 640) return 0.62;
-    if (width < 1024 || height < 760) return 0.76;
-    if (width < 1280 || height < 860) return 0.88;
-    return 1;
-  };
-
-  const responsiveScale = character.scale * getResponsiveScale();
-  const renderResolutionScale = Math.max(1, responsiveScale);
+  const virtualStageScale = Math.min(
+    windowSize.width / VIRTUAL_STAGE_WIDTH,
+    windowSize.height / VIRTUAL_STAGE_HEIGHT,
+  );
+  const clampedStageScale = Math.max(0.56, Math.min(0.92, virtualStageScale));
   const frameAspectRatio = bundle.frameSize.h > 0 ? bundle.frameSize.w / bundle.frameSize.h : 0.6;
-  const reservedUiHeight = windowSize.width < 900 ? 220 : 250;
-  const maxCharacterHeight = Math.max(280, windowSize.height - reservedUiHeight);
-  const maxCharacterWidthFromHeight = maxCharacterHeight * frameAspectRatio;
-  const preferredCharacterWidth = Math.min(windowSize.width * 0.46, 620, maxCharacterWidthFromHeight);
-  const characterWidth = Math.max(180, preferredCharacterWidth);
-  const characterHeight = Math.max(240, Math.min(maxCharacterHeight, characterWidth / frameAspectRatio));
+  const reservedUiHeight = windowSize.width < 900 ? 240 : 280;
+  const playableStageHeight = Math.max(320, windowSize.height - reservedUiHeight);
+  const maxCharacterHeightFromStage = Math.round(playableStageHeight * CHARACTER_MAX_STAGE_HEIGHT_RATIO);
+  const minCharacterHeightFromStage = Math.round(playableStageHeight * CHARACTER_MIN_STAGE_HEIGHT_RATIO);
+  const virtualCharacterHeight = Math.round(VIRTUAL_CHARACTER_HEIGHT * clampedStageScale);
+  const desiredCharacterHeight = Math.min(maxCharacterHeightFromStage, virtualCharacterHeight);
+  const characterHeight = Math.max(240, minCharacterHeightFromStage, desiredCharacterHeight);
+  const widthFromHeight = Math.round(characterHeight * frameAspectRatio);
+  const virtualCharacterWidth = Math.round(VIRTUAL_CHARACTER_WIDTH * clampedStageScale);
+  const maxCharacterWidthFromStage = Math.round(windowSize.width * 0.34);
+  const characterWidth = Math.max(
+    170,
+    Math.min(maxCharacterWidthFromStage, Math.max(virtualCharacterWidth, widthFromHeight)),
+  );
+  const responsiveScale = character.scale;
+  const renderResolutionScale = Math.max(1, responsiveScale * clampedStageScale);
 
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();

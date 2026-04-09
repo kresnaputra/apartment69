@@ -12,6 +12,10 @@ import type {
   VisualNovelCommand,
 } from "@/types/novel";
 
+type SayOptions = {
+  hideName?: boolean;
+};
+
 export const scene = (background: string, location?: string, transitionDuration?: number): SceneCommand => ({
   type: "scene",
   background,
@@ -79,22 +83,26 @@ export function say<TCharacterId extends CharacterId>(
   characterId: TCharacterId,
   emotion: CharacterEmotion<TCharacterId>,
   text: string,
+  options?: SayOptions,
 ): SayCommand;
 export function say(
   characterId: SpeakerId,
   emotion: AnyCharacterEmotion,
   text: string,
+  options?: SayOptions,
 ): SayCommand;
 export function say(
   characterId: SpeakerId,
   emotion: AnyCharacterEmotion,
   text: string,
+  options?: SayOptions,
 ): SayCommand {
   return {
     type: "say",
     speaker: characterId,
     emotion,
     text,
+    hideName: options?.hideName,
   };
 }
 

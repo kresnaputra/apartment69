@@ -2,12 +2,14 @@ import type { CharacterDefinition } from "@/types/novel";
 
 export const nadiaBundleRegistry = {
   "nadia-normal": "/characters/nadia/normal/spritesheets-manifest.json",
+  "nadia-talk": "/characters/nadia/talk/spritesheets-manifest.json",
 } as const;
 
 export const nadiaCharacter: CharacterDefinition = {
   id: "nadia",
   displayName: "Nadia",
   defaultBundleId: "nadia-normal",
+  talkingBundleId: "nadia-talk",
   bundleIdByEmotion: {
     neutral: "nadia-normal",
   },
@@ -20,7 +22,7 @@ export const nadiaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.0,
   defaultY: -150,
-  defaultScale: 2,
+  defaultScale: 2.4,
   defaultOpacity: 0.96,
   defaultFrame: 0,
   defaultFps: 24,

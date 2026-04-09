@@ -15,12 +15,13 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
   show("arka-elevator", "arka", "neutral", {
     position: "left",
   }),
-  say("unknown", "worried", "Don’t close the elevator yet…! "),
+  say("maya", "worried", "Don’t close the elevator yet…! ", { hideName: true }),
   minigame("elevator-button"),
   say(
-    "unknown",
+    "maya",
     "worried",
     "(catching her breath) That was close… almost missed it…",
+    { hideName: true },
   ),
   narrate(
     "(glances at her from under his bangs, then looks back at the elevator door, expression neutral)",
@@ -31,9 +32,10 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     xOffset: 0.04,
   }),
   say(
-    "unknown",
+    "maya",
     "worried",
     "Wait… you’re Arka, right? From the Engineering department?",
+    { hideName: true },
   ),
   say("arka", "neutral", "Yeah. Do I know you?"),
   say(

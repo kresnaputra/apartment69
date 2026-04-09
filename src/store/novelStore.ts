@@ -83,11 +83,70 @@ const createHistoryEntry = (speaker: string | null, text: string): DialogueEntry
 
 const UNKNOWN_SPEAKER_SET = new Set<string>(unknownSpeakerIds);
 
-const resolveSpeakerName = (speaker: string | null | undefined) => {
+const resolveSpeakerName = (speaker: string | null | undefined, hideName = false) => {
+  if (hideName) return "???";
   if (!speaker) return null;
   if (UNKNOWN_SPEAKER_SET.has(speaker)) return "???";
 
   return characterRegistry[speaker as keyof typeof characterRegistry]?.displayName ?? speaker;
+};
+
+const resolveBundleId = (
+  definition: CharacterDefinition | undefined,
+  emotion: CharacterInstance["emotion"],
+  isTalking = false,
+  fallbackBundleId?: string,
+) => {
+  if (isTalking && definition?.talkingBundleId) return definition.talkingBundleId;
+  if (!definition) return fallbackBundleId ?? "unknown-bundle";
+
+  return (
+    (emotion ? definition.bundleIdByEmotion?.[emotion] : undefined) ??
+    definition.defaultBundleId ??
+    fallbackBundleId ??
+    "unknown-bundle"
+  );
+};
+
+const syncTalkingBundles = (
+  characters: Record<string, CharacterInstance> | undefined,
+  bundles: Record<string, LoadedSpritesheetBundle> | undefined,
+  activeSpeakerId: string | null | undefined,
+) => {
+  if (!characters) return characters;
+
+  return Object.fromEntries(
+    Object.entries(characters).map(([id, character]) => {
+      const definition = characterRegistry[character.characterId];
+      const nextBundleId = resolveBundleId(
+        definition,
+        character.emotion,
+        character.characterId === activeSpeakerId,
+        character.bundleId,
+      );
+
+      if (nextBundleId === character.bundleId) {
+        return [id, character];
+      }
+
+      const currentTotalFrames = Math.max(1, bundles?.[character.bundleId]?.totalFrames ?? 1);
+      const nextTotalFrames = Math.max(1, bundles?.[nextBundleId]?.totalFrames ?? 1);
+      const progress = currentTotalFrames > 1 ? character.frame / currentTotalFrames : 0;
+      const nextFrame = Math.min(
+        nextTotalFrames - 1,
+        Math.max(0, Math.round(progress * (nextTotalFrames - 1))),
+      );
+
+      return [
+        id,
+        {
+          ...character,
+          bundleId: nextBundleId,
+          frame: nextFrame,
+        },
+      ];
+    }),
+  ) as Record<string, CharacterInstance>;
 };
 
 const moveCharacter = (
@@ -125,7 +184,7 @@ const normalizeCharacter = (
   const enterFrom: CharacterEnterFrom = command.enterFrom ?? definition.defaultEnterFrom ?? "none";
   const xOffset = command.xOffset ?? current?.xOffset ?? definition.defaultXOffset ?? 0;
   const yOffset = command.yOffset ?? current?.yOffset ?? definition.defaultYOffset ?? 0;
-  const bundleId = (emotion ? definition.bundleIdByEmotion?.[emotion] : undefined) ?? definition.defaultBundleId;
+  const bundleId = resolveBundleId(definition, emotion) ?? definition.defaultBundleId;
   const resolvedX =
     command.x ??
     (command.position ? positionToX(position) : undefined) ??
@@ -251,6 +310,7 @@ const runScriptUntilPause = (state: NovelStore) => {
       case "minigame":
         nextState.speaker = null;
         nextState.activeCharacterId = null;
+        nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
         nextState.pendingSceneContinuation = false;
         nextState.activeMinigame = {
           id: command.minigameId,
@@ -264,7 +324,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         return nextState;
 
       case "say":
-        nextState.speaker = resolveSpeakerName(command.speaker);
+        nextState.speaker = resolveSpeakerName(command.speaker, command.hideName);
         nextState.activeCharacterId = command.speaker ?? null;
         nextState.pendingSceneContinuation = false;
         nextState.line = command.text;
@@ -273,7 +333,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.history = [
           ...(nextState.history ?? []),
           {
-            ...createHistoryEntry(resolveSpeakerName(command.speaker), command.text),
+            ...createHistoryEntry(resolveSpeakerName(command.speaker, command.hideName), command.text),
             emotion: command.emotion ?? null,
           },
         ];
@@ -285,10 +345,7 @@ const runScriptUntilPause = (state: NovelStore) => {
             const [id, value] = activeCharacter;
             const definition = characterRegistry[command.speaker as keyof typeof characterRegistry];
             const nextEmotion = command.emotion ?? value.emotion;
-            const nextBundleId =
-              (nextEmotion ? definition?.bundleIdByEmotion?.[nextEmotion] : undefined) ??
-              definition?.defaultBundleId ??
-              value.bundleId;
+            const nextBundleId = resolveBundleId(definition, nextEmotion, true, value.bundleId);
             nextState.characters = {
               ...nextState.characters,
               [id]: {
@@ -299,6 +356,11 @@ const runScriptUntilPause = (state: NovelStore) => {
             };
           }
         }
+        nextState.characters = syncTalkingBundles(
+          nextState.characters,
+          state.bundles,
+          nextState.activeCharacterId,
+        );
         nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
         nextState.ready = true;
         return nextState;
@@ -306,6 +368,7 @@ const runScriptUntilPause = (state: NovelStore) => {
       case "menu":
         nextState.speaker = null;
         nextState.activeCharacterId = null;
+        nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
         nextState.pendingSceneContinuation = false;
         nextState.line = command.prompt ?? "";
         nextState.choicePrompt = command.prompt ?? "";

@@ -19,9 +19,10 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     "The elevator doors slide open. Arka steps into the hallway just as a sharp voice cuts through the silence.",
   ),
   say(
-    "unknown",
+    "elena",
     "neutral",
     "It’s been three days! Three days that pipe’s been leaking, and all I get is ‘tomorrow’? I’m not paying rent just to listen to dripping water every damn night!",
+    { hideName: true },
   ),
   show("arka-hallway", "arka", "neutral", {
     position: "left",
@@ -40,11 +41,12 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     "(lets out a sharp breath, suddenly turning around)",
     "???",
   ),
-  say("unknown", "neutral", "Unbelievable."),
+  say("elena", "neutral", "Unbelievable.", { hideName: true }),
   say(
-    "unknown",
+    "elena",
     "neutral",
     "How am I supposed to focus on grading these assignments with that constant noise…",
+    { hideName: true },
   ),
   menu("What should Arka do?", [
     { id: "help-elena", label: "HELP", next: "help-elena" },
@@ -64,9 +66,10 @@ export const helpElenaScene: VisualNovelCommand[] = [
     "(stops mid-step, turns to Arka with a sharp gaze, scanning him from head to toe)",
   ),
   say(
-    "unknown",
+    "elena",
     "neutral",
     "Who are you? New staff? You’re not in uniform.",
+    { hideName: true },
   ),
   say(
     "arka",
@@ -77,9 +80,10 @@ export const helpElenaScene: VisualNovelCommand[] = [
     "(pauses, studying him with a skeptical expression)",
   ),
   say(
-    "unknown",
+    "elena",
     "neutral",
     "You sound confident. But can you actually do it? I don’t want my unit ending up worse than it already is.",
+    { hideName: true },
   ),
   say("arka", "serious", "Up to you. Offer’s only good right now."),
   say(

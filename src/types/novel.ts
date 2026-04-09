@@ -94,6 +94,7 @@ export type SayCommand = {
   speaker?: string | null;
   text: string;
   emotion?: AnyCharacterEmotion | null;
+  hideName?: boolean;
 };
 
 export type MenuCommand = {
@@ -155,6 +156,7 @@ export type CharacterDefinition = {
   displayName: string;
   defaultBundleId: string;
   bundleIdByEmotion?: Partial<Record<AnyCharacterEmotion, string>>;
+  talkingBundleId?: string;
   defaultEmotion?: AnyCharacterEmotion;
   defaultPosition?: CharacterStagePosition;
   defaultEnterFrom?: CharacterEnterFrom;
