@@ -21,7 +21,7 @@ export const saraHallwayScene: VisualNovelCommand[] = [
   say(
     "sara",
     "neutral",
-    "This corridor is much quieter than I imagined. Player, right? The new resident in Unit 302.",
+    "This corridor is much quieter than I imagined. Womanizer, right? The new resident in Unit 302.",
     { hideName: true },
   ),
   say(
@@ -70,7 +70,7 @@ export const saraHelpScene: VisualNovelCommand[] = [
   say(
     "sara",
     "neutral",
-    "A wise choice. I don't need guarantees, Player. I only need someone I can rely on when I call.",
+    "A wise choice. I don't need guarantees, Womanizer. I only need someone I can rely on when I call.",
   ),
   say(
     "sara",
@@ -105,7 +105,7 @@ export const saraRefuseScene: VisualNovelCommand[] = [
   say(
     "sara",
     "neutral",
-    "A wise choice. I don't need guarantees, Player. I only need someone I can rely on when I call.",
+    "A wise choice. I don't need guarantees, Womanizer. I only need someone I can rely on when I call.",
   ),
   say(
     "sara",
