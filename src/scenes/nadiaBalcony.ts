@@ -31,7 +31,7 @@ export const nadiaBalconyScene: VisualNovelCommand[] = [
     { hideName: true },
   ),
   narrate(
-    "(leans over the railing, looking down at the first-floor balcony where a girl in a crop top is shaking a dead ring light)",
+    "(leans over the railing, looking up at the third-floor balcony where a girl in a crop top is shaking a dead ring light)",
   ),
   cutScene(nadiaVideo),
   show("nadia-balcony", "nadia", "neutral", {
