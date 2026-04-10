@@ -4,7 +4,6 @@ import {
   hide,
   jump,
   menu,
-  minigame,
   narrate,
   say,
   show,

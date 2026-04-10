@@ -1,6 +1,7 @@
 import type { AnyCharacterEmotion, CharacterEmotion, CharacterId } from "@/character/catalog";
 import type {
   ChoiceOption,
+  CutSceneCommand,
   HideCharacterCommand,
   MinigameId,
   MoveCharacterCommand,
@@ -131,4 +132,13 @@ export const jump = (target: string): VisualNovelCommand => ({
 export const minigame = (minigameId: MinigameId): VisualNovelCommand => ({
   type: "minigame",
   minigameId,
+});
+
+/**
+ * Plays a fullscreen cut scene video. Script execution resumes automatically when the video ends.
+ * @param src - Vite-imported video URL (e.g. `import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url"`)
+ */
+export const cutScene = (src: string): CutSceneCommand => ({
+  type: "cutScene",
+  src,
 });

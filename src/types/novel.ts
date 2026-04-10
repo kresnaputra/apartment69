@@ -20,6 +20,10 @@ export type ChoiceOption = {
 
 export type MinigameId = "elevator-button" | "pipe-connection";
 
+export type ActiveCutScene = {
+  src: string;
+};
+
 export type ActiveMinigame = {
   id: MinigameId;
   startedAt: number;
@@ -113,6 +117,11 @@ export type MinigameCommand = {
   minigameId: MinigameId;
 };
 
+export type CutSceneCommand = {
+  type: "cutScene";
+  src: string;
+};
+
 export type VisualNovelCommand =
   | SceneCommand
   | ShowCharacterCommand
@@ -121,7 +130,8 @@ export type VisualNovelCommand =
   | SayCommand
   | MenuCommand
   | JumpCommand
-  | MinigameCommand;
+  | MinigameCommand
+  | CutSceneCommand;
 
 export type VisualNovelScript = {
   startLabel: string;

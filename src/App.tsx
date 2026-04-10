@@ -1,4 +1,4 @@
-import { type CSSProperties, memo, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, memo, useCallback, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
@@ -12,6 +12,7 @@ import type { CharacterInstance } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 
 const TEXT_SPEED = 18;
+const CUTSCENE_FADE_MS = 2000;
 const CHARACTER_TICK_FPS = 40;
 const CHARACTER_ENTER_DURATION_MS = 520;
 const CHARACTER_FADE_ENTER_DURATION_MS = 820;
@@ -164,6 +165,63 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   );
 });
 
+const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => void }) => {
+  const [visible, setVisible] = useState(false);
+  const [fadingOut, setFadingOut] = useState(false);
+  const completedRef = useRef(false);
+
+  useEffect(() => {
+    // Double RAF ensures the initial opacity:0 is painted before transitioning in
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setVisible(true));
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const handleExit = useCallback(() => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    setFadingOut(true);
+    window.setTimeout(onComplete, CUTSCENE_FADE_MS);
+  }, [onComplete]);
+
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key !== " " && e.key !== "Enter") return;
+      e.preventDefault();
+      handleExit();
+    };
+    window.addEventListener("keydown", onKeydown);
+    return () => window.removeEventListener("keydown", onKeydown);
+  }, [handleExit]);
+
+  return (
+    <div
+      onClick={handleExit}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 100,
+        background: "#000",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: fadingOut || !visible ? 0 : 1,
+        transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
+        cursor: "pointer",
+      }}
+    >
+      <video
+        key={src}
+        src={src}
+        autoPlay
+        playsInline
+        style={{ width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }}
+      />
+    </div>
+  );
+};
+
 const App = () => {
   const [phase, setPhase] = useState<"menu" | "story">("menu");
   const [bundlesReady, setBundlesReady] = useState(false);
@@ -178,6 +236,7 @@ const App = () => {
   const sceneTransitionToken = useNovelStore((state) => state.sceneTransitionToken);
   const pendingSceneContinuation = useNovelStore((state) => state.pendingSceneContinuation);
   const activeMinigame = useNovelStore((state) => state.activeMinigame);
+  const activeCutScene = useNovelStore((state) => state.activeCutScene);
   const line = useNovelStore((state) => state.line);
   const choices = useNovelStore((state) => state.choices);
   const statusMessage = useNovelStore((state) => state.statusMessage);
@@ -188,6 +247,7 @@ const App = () => {
   const advance = useNovelStore((state) => state.advance);
   const choose = useNovelStore((state) => state.choose);
   const completeMinigame = useNovelStore((state) => state.completeMinigame);
+  const completeCutScene = useNovelStore((state) => state.completeCutScene);
   const tickCharacters = useNovelStore((state) => state.tickCharacters);
 
   const [revealedCount, setRevealedCount] = useState(0);
@@ -484,6 +544,10 @@ const App = () => {
           <ElevatorButtonMinigame onComplete={completeMinigame} />
         ) : activeMinigame?.id === "pipe-connection" ? (
           <PipeConnectionMinigame onComplete={completeMinigame} />
+        ) : null}
+
+        {activeCutScene ? (
+          <CutSceneOverlay src={activeCutScene.src} onComplete={completeCutScene} />
         ) : null}
 
         {bundleList.length === 0 ? (

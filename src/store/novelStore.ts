@@ -4,6 +4,7 @@ import { demoScript } from "@/lib/runtime/dialogueScript";
 import { unknownSpeakerIds } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import type {
+  ActiveCutScene,
   ActiveMinigame,
   CharacterDefinition,
   CharacterEnterFrom,
@@ -27,6 +28,7 @@ type NovelStore = {
   sceneTransitionToken: number;
   pendingSceneContinuation: boolean;
   activeMinigame: ActiveMinigame | null;
+  activeCutScene: ActiveCutScene | null;
   line: string;
   choices: ChoiceOption[];
   choicePrompt: string;
@@ -42,6 +44,7 @@ type NovelStore = {
   advance: () => void;
   choose: (nextLabel: string) => void;
   completeMinigame: () => void;
+  completeCutScene: () => void;
   tickCharacters: () => void;
 };
 
@@ -57,6 +60,7 @@ const emptyState = {
   sceneTransitionToken: 0,
   pendingSceneContinuation: false,
   activeMinigame: null,
+  activeCutScene: null,
   line: "",
   choices: [] as ChoiceOption[],
   choicePrompt: "",
@@ -228,6 +232,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     sceneTransitionToken: state.sceneTransitionToken,
     pendingSceneContinuation: state.pendingSceneContinuation,
     activeMinigame: state.activeMinigame,
+    activeCutScene: state.activeCutScene,
     line: state.line,
     choices: [],
     choicePrompt: "",
@@ -316,6 +321,19 @@ const runScriptUntilPause = (state: NovelStore) => {
           id: command.minigameId,
           startedAt: Date.now(),
         };
+        nextState.line = "";
+        nextState.choices = [];
+        nextState.choicePrompt = "";
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        nextState.ready = true;
+        return nextState;
+
+      case "cutScene":
+        nextState.speaker = null;
+        nextState.activeCharacterId = null;
+        nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
+        nextState.pendingSceneContinuation = false;
+        nextState.activeCutScene = { src: command.src };
         nextState.line = "";
         nextState.choices = [];
         nextState.choicePrompt = "";
@@ -418,6 +436,10 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
         return state;
       }
 
+      if (state.activeCutScene) {
+        return state;
+      }
+
       return runScriptUntilPause({
         ...state,
         pendingSceneContinuation: false,
@@ -449,6 +471,20 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
       return runScriptUntilPause({
         ...state,
         activeMinigame: null,
+        pendingSceneContinuation: false,
+        ready: false,
+      });
+    }),
+
+  completeCutScene: () =>
+    set((state) => {
+      if (!state.activeCutScene) {
+        return state;
+      }
+
+      return runScriptUntilPause({
+        ...state,
+        activeCutScene: null,
         pendingSceneContinuation: false,
         ready: false,
       });

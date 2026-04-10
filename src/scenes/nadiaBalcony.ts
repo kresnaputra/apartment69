@@ -8,8 +8,10 @@ import {
   say,
   show,
   moveTo,
+  cutScene,
 } from "@/scenes/scriptTypes";
 import balcony from "@/background/balcony.png";
+import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url";
 
 export const nadiaBalconyScene: VisualNovelCommand[] = [
   bg(balcony, "Lentera Apartments - Balcony"),
@@ -31,6 +33,7 @@ export const nadiaBalconyScene: VisualNovelCommand[] = [
   narrate(
     "(leans over the railing, looking down at the first-floor balcony where a girl in a crop top is shaking a dead ring light)",
   ),
+  cutScene(nadiaVideo),
   show("nadia-balcony", "nadia", "neutral", {
     position: "center",
     enterFrom: "right",
