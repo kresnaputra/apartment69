@@ -50,10 +50,10 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     "No way, what a coincidence! I’m on the third floor too, Unit 301. If you need anything about campus or good places to eat around here, just ask. Here… take my number. Just in case you need something about the apartment.",
   ),
   menu("Your choice?", [
-    { id: "accept-maya-number", label: "ACCEPT", next: "accept-maya-number" },
+    { id: "accept-maya-number", label: "Accept", next: "accept-maya-number" },
     {
       id: "decline-maya-number",
-      label: "DECLINE",
+      label: "Decline",
       next: "decline-maya-number",
     },
   ]),

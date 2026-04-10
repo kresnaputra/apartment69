@@ -75,7 +75,7 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
   show("nadia-balcony", "nadia", "neutral", {
     position: "center",
     enterFrom: "right",
-    xOffset: 0.01,
+    xOffset: -0.04,
   }),
   say(
     "nadia",

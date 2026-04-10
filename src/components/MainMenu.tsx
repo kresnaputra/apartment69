@@ -8,7 +8,7 @@ type MainMenuProps = {
 
 const MENU_ITEMS = [
   { id: "start", label: "Start", primary: true },
-  { id: "continue", label: "Lanjut", primary: false, disabled: true },
+  { id: "continue", label: "Continue", primary: false, disabled: true },
   { id: "gallery", label: "Gallery", primary: false, disabled: true },
   { id: "settings", label: "Setting", primary: false, disabled: true },
 ] as const;
@@ -36,7 +36,7 @@ export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
       <div className="vn-menu-layout">
         <header className="vn-menu-header">
           <h1 className="vn-menu-title">
-            <span className="vn-menu-title-main">APARTEMEN</span>
+            <span className="vn-menu-title-main">APARTMENTS</span>
             <span className="vn-menu-title-num">69</span>
           </h1>
           <p className="vn-menu-subtitle">The Helpful Neighbor</p>
@@ -52,7 +52,7 @@ export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
               onClick={item.id === "start" ? handleStart : undefined}
             >
               {item.id === "start" && !isReady ? (
-                <span className="vn-menu-btn-loading">Memuat<span className="vn-menu-dots" /></span>
+                <span className="vn-menu-btn-loading">Loading<span className="vn-menu-dots" /></span>
               ) : (
                 item.label
               )}

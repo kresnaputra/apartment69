@@ -48,8 +48,8 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     { hideName: true },
   ),
   menu("What should Arka do?", [
-    { id: "help-elena", label: "HELP", next: "help-elena" },
-    { id: "ignore-elena", label: "IGNORE", next: "ignore-elena" },
+    { id: "help-elena", label: "Help", next: "help-elena" },
+    { id: "ignore-elena", label: "Ignore", next: "ignore-elena" },
   ]),
 ];
 
