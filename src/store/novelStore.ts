@@ -41,6 +41,7 @@ type NovelStore = {
   currentIndex: number;
   statusMessage: string;
   ready: boolean;
+  isEnded: boolean;
   registerBundle: (id: string, bundle: LoadedSpritesheetBundle) => void;
   setStatusMessage: (message: string) => void;
   startStory: () => void;
@@ -74,6 +75,7 @@ const emptyState = {
   currentLabel: script.startLabel,
   currentIndex: 0,
   ready: false,
+  isEnded: false,
 };
 
 const MAX_STEPS_PER_PASS = 100;
@@ -252,6 +254,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     currentLabel: state.currentLabel,
     currentIndex: state.currentIndex,
     ready: state.ready,
+    isEnded: false,
   };
 
   let safety = 0;
@@ -263,6 +266,7 @@ const runScriptUntilPause = (state: NovelStore) => {
 
     if (!command) {
       nextState.ready = true;
+      nextState.isEnded = true;
       return nextState;
     }
 
@@ -446,7 +450,7 @@ const runScriptUntilPause = (state: NovelStore) => {
   return nextState;
 };
 
-export const useNovelStore = create<NovelStore>((set, get) => ({
+export const useNovelStore = create<NovelStore>((set) => ({
   bundles: {},
   ...emptyState,
   statusMessage: "Memuat cerita...",

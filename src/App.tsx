@@ -276,6 +276,7 @@ const App = () => {
   const completeMinigame = useNovelStore((state) => state.completeMinigame);
   const completeCutScene = useNovelStore((state) => state.completeCutScene);
   const tickCharacters = useNovelStore((state) => state.tickCharacters);
+  const isEnded = useNovelStore((state) => state.isEnded);
 
   const [revealedCount, setRevealedCount] = useState(0);
   const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
@@ -410,6 +411,11 @@ const App = () => {
       if (activeMinigame) return;
       if (choices.length > 0) return;
 
+      if (isEnded) {
+        setPhase("menu");
+        return;
+      }
+
       if (isTyping) {
         setRevealedCount(line.length);
         return;
@@ -427,7 +433,7 @@ const App = () => {
 
     window.addEventListener("keydown", handleKeydown);
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [activeMinigame, advance, choices.length, isSceneTransitioning, isTyping, line.length]);
+  }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, line.length]);
 
   const handleStartStory = () => {
     startStory();
@@ -456,6 +462,10 @@ const App = () => {
           }
           if (activeMinigame) return;
           if (choices.length > 0) return;
+          if (isEnded) {
+            setPhase("menu");
+            return;
+          }
           if (isTyping) {
             setRevealedCount(line.length);
             return;

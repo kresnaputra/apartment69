@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
 
 type MainMenuMobileProps = {
@@ -19,6 +20,10 @@ export const MainMenuMobile = ({ onStart, isReady }: MainMenuMobileProps) => {
     if (!isReady) return;
     setExiting(true);
     window.setTimeout(() => onStart(), 640);
+  };
+
+  const handleExit = () => {
+    void getCurrentWindow().close();
   };
 
   return (
@@ -109,6 +114,16 @@ export const MainMenuMobile = ({ onStart, isReady }: MainMenuMobileProps) => {
             style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" }}
           >
             Setting
+          </button>
+
+          {/* Exit */}
+          <button
+            type="button"
+            onClick={handleExit}
+            className="w-full rounded-full bg-[rgba(12,14,20,0.68)] text-white/90 border border-white/25 backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+            style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" }}
+          >
+            Exit
           </button>
         </div>
       </div>

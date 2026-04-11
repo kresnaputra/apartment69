@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
 
 type MainMenuProps = {
@@ -11,6 +12,7 @@ const MENU_ITEMS = [
   { id: "continue", label: "Continue", primary: false, disabled: true },
   { id: "gallery", label: "Gallery", primary: false, disabled: true },
   { id: "settings", label: "Setting", primary: false, disabled: true },
+  { id: "exit", label: "Exit", primary: false },
 ] as const;
 
 export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
@@ -26,6 +28,10 @@ export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
     if (!isReady) return;
     setExiting(true);
     window.setTimeout(() => onStart(), 640);
+  };
+
+  const handleExit = () => {
+    void getCurrentWindow().close();
   };
 
   return (
@@ -49,7 +55,7 @@ export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
               type="button"
               disabled={"disabled" in item ? item.disabled : false}
               className={`vn-menu-btn ${item.primary ? "vn-menu-btn-primary" : "vn-menu-btn-secondary"}`}
-              onClick={item.id === "start" ? handleStart : undefined}
+              onClick={item.id === "start" ? handleStart : item.id === "exit" ? handleExit : undefined}
             >
               {item.id === "start" && !isReady ? (
                 <span className="vn-menu-btn-loading">Loading<span className="vn-menu-dots" /></span>
