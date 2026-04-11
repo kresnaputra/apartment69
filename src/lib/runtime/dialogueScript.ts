@@ -20,7 +20,13 @@ import {
   saraHelpScene,
   saraRefuseScene,
 } from "@/scenes/saraHallway";
-import { bedroomDay1Scene } from "@/scenes/bedroomDay1";
+import {
+  bedroomDay1ElenaScene,
+  bedroomDay1MayaScene,
+  bedroomDay1NadiaScene,
+  bedroomDay1SaraScene,
+  bedroomDay1Scene,
+} from "@/scenes/bedroomDay1";
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
@@ -44,6 +50,10 @@ export const demoScript: VisualNovelScript = {
     "sara-help": saraHelpScene,
     "sara-refuse": saraRefuseScene,
     "bedroom-day1": bedroomDay1Scene,
+    "bedroom-day1-maya": bedroomDay1MayaScene,
+    "bedroom-day1-elena": bedroomDay1ElenaScene,
+    "bedroom-day1-nadia": bedroomDay1NadiaScene,
+    "bedroom-day1-sara": bedroomDay1SaraScene,
     epilogue: epilogueScene,
   },
 };

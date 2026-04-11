@@ -18,7 +18,7 @@ export type ChoiceOption = {
   next: string;
 };
 
-export type MinigameId = "elevator-button" | "pipe-connection";
+export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts";
 
 export type ActiveCutScene = {
   src: string;
@@ -103,6 +103,12 @@ export type SayCommand = {
   hideName?: boolean;
 };
 
+export type CenteredTextCommand = {
+  type: "centeredText";
+  text: string;
+  size?: "hero" | "sub";
+};
+
 export type MenuCommand = {
   type: "menu";
   prompt?: string;
@@ -130,6 +136,7 @@ export type VisualNovelCommand =
   | HideCharacterCommand
   | MoveCharacterCommand
   | SayCommand
+  | CenteredTextCommand
   | MenuCommand
   | JumpCommand
   | MinigameCommand

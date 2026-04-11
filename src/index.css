@@ -197,6 +197,56 @@ textarea {
   color: rgba(232, 214, 194, 0.8);
 }
 
+.vn-centered-text-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 34;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  transition: opacity 160ms ease;
+}
+
+.vn-centered-text-box {
+  width: min(44rem, calc(100vw - 4rem));
+  text-align: center;
+}
+
+.vn-centered-text-line {
+  white-space: pre-wrap;
+}
+
+.vn-centered-text-line-hero {
+  font-size: clamp(2rem, 4.6vw, 4.4rem);
+  line-height: 1.14;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(247, 243, 236, 0.98);
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.32),
+    0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+.vn-centered-text-line-sub {
+  font-size: clamp(1rem, 1.85vw, 1.6rem);
+  line-height: 1.35;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(232, 223, 211, 0.8);
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.3),
+    0 12px 28px rgba(0, 0, 0, 0.42);
+}
+
+.vn-centered-text-hint {
+  margin-top: 1.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232, 214, 194, 0.72);
+}
+
 .vn-dialogue-hidden {
   opacity: 0;
   pointer-events: none;

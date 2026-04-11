@@ -3,6 +3,8 @@ import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMin
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorButtonMinigameMobile";
 import { PipeConnectionMinigameMobile } from "@/components/minigames/PipeConnectionMinigameMobile";
+import { SmartphoneContactMinigame } from "@/components/minigames/SmartphoneContactMinigame";
+import { SmartphoneContactMinigameMobile } from "@/components/minigames/SmartphoneContactMinigameMobile";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { MainMenu } from "@/components/MainMenu";
 import { MainMenuMobile } from "@/components/MainMenuMobile";
@@ -253,6 +255,7 @@ const App = () => {
   const background = useNovelStore((state) => state.background);
   const parallaxLayers = useNovelStore((state) => state.parallaxLayers);
   const location = useNovelStore((state) => state.location);
+  const textPresentation = useNovelStore((state) => state.textPresentation);
   const speaker = useNovelStore((state) => state.speaker);
   const activeCharacterId = useNovelStore((state) => state.activeCharacterId);
   const sceneTransitionDuration = useNovelStore((state) => state.sceneTransitionDuration);
@@ -261,6 +264,7 @@ const App = () => {
   const activeMinigame = useNovelStore((state) => state.activeMinigame);
   const activeCutScene = useNovelStore((state) => state.activeCutScene);
   const line = useNovelStore((state) => state.line);
+  const lineSize = useNovelStore((state) => state.lineSize);
   const choices = useNovelStore((state) => state.choices);
   const statusMessage = useNovelStore((state) => state.statusMessage);
   const characters = useNovelStore((state) => state.characters);
@@ -281,7 +285,8 @@ const App = () => {
   const suppressAdvanceOnceRef = useRef(false);
   const visibleLine = line.slice(0, revealedCount);
   const isTyping = revealedCount < line.length;
-  const isNarration = speaker === null && choices.length === 0 && Boolean(line);
+  const isNarration = textPresentation === "narration" && choices.length === 0 && Boolean(line);
+  const isCenteredText = textPresentation === "centered" && choices.length === 0 && Boolean(line);
 
   useEffect(() => {
     audioRef.current = new NovelAudioEngine();
@@ -526,7 +531,16 @@ const App = () => {
           )}
         </div>
 
-        {activeMinigame ? null : isNarration ? (
+        {activeMinigame ? null : isCenteredText ? (
+          <div className={`vn-centered-text-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+            <div className="vn-centered-text-box">
+              <div className={`vn-centered-text-line vn-centered-text-line-${lineSize}`}>{visibleLine}</div>
+              <div className="vn-centered-text-hint">
+                {isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}
+              </div>
+            </div>
+          </div>
+        ) : isNarration ? (
           isMobile ? (
             <NarratorMobile
               visibleLine={visibleLine}
@@ -602,6 +616,10 @@ const App = () => {
           isMobile
             ? <PipeConnectionMinigameMobile onComplete={completeMinigame} />
             : <PipeConnectionMinigame onComplete={completeMinigame} />
+        ) : activeMinigame?.id === "smartphone-contacts" ? (
+          isMobile
+            ? <SmartphoneContactMinigameMobile onSelect={choose} />
+            : <SmartphoneContactMinigame onSelect={choose} />
         ) : null}
 
         {activeCutScene ? (

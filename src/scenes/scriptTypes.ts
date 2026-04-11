@@ -1,5 +1,6 @@
 import type { AnyCharacterEmotion, CharacterEmotion, CharacterId } from "@/character/catalog";
 import type {
+  CenteredTextCommand,
   CharacterHideTransition,
   ChoiceOption,
   CutSceneCommand,
@@ -16,6 +17,10 @@ import type {
 
 type SayOptions = {
   hideName?: boolean;
+};
+
+type CenteredTextOptions = {
+  size?: "hero" | "sub";
 };
 
 export const scene = (background: string, location?: string, transitionDuration?: number): SceneCommand => ({
@@ -83,6 +88,12 @@ export const narrate = (text: string, speaker?: string): SayCommand => ({
   type: "say",
   speaker: speaker ?? null,
   text,
+});
+
+export const centeredText = (text: string, options?: CenteredTextOptions): CenteredTextCommand => ({
+  type: "centeredText",
+  text,
+  size: options?.size,
 });
 
 export function say<TCharacterId extends CharacterId>(

@@ -23,6 +23,7 @@ type NovelStore = {
   background: string;
   parallaxLayers: ParallaxLayer[];
   location: string;
+  textPresentation: "dialogue" | "narration" | "centered";
   speaker: string | null;
   activeCharacterId: string | null;
   sceneTransitionDuration: number;
@@ -31,6 +32,7 @@ type NovelStore = {
   activeMinigame: ActiveMinigame | null;
   activeCutScene: ActiveCutScene | null;
   line: string;
+  lineSize: "hero" | "sub";
   choices: ChoiceOption[];
   choicePrompt: string;
   history: DialogueEntry[];
@@ -55,6 +57,7 @@ const emptyState = {
   background: "linear-gradient(180deg, #080b12 0%, #04050a 100%)",
   parallaxLayers: [] as ParallaxLayer[],
   location: "",
+  textPresentation: "dialogue" as const,
   speaker: null,
   activeCharacterId: null,
   sceneTransitionDuration: 720,
@@ -63,6 +66,7 @@ const emptyState = {
   activeMinigame: null,
   activeCutScene: null,
   line: "",
+  lineSize: "hero" as const,
   choices: [] as ChoiceOption[],
   choicePrompt: "",
   history: [] as DialogueEntry[],
@@ -231,6 +235,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     background: state.background,
     parallaxLayers: state.parallaxLayers,
     location: state.location,
+    textPresentation: state.textPresentation,
     speaker: state.speaker,
     activeCharacterId: state.activeCharacterId,
     sceneTransitionDuration: state.sceneTransitionDuration,
@@ -239,6 +244,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     activeMinigame: state.activeMinigame,
     activeCutScene: state.activeCutScene,
     line: state.line,
+    lineSize: state.lineSize,
     choices: [],
     choicePrompt: "",
     history: state.history,
@@ -333,6 +339,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         break;
 
       case "minigame":
+        nextState.textPresentation = "dialogue";
         nextState.speaker = null;
         nextState.activeCharacterId = null;
         nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
@@ -349,6 +356,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         return nextState;
 
       case "cutScene":
+        nextState.textPresentation = "dialogue";
         nextState.speaker = null;
         nextState.activeCharacterId = null;
         nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
@@ -361,11 +369,27 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.ready = true;
         return nextState;
 
+      case "centeredText":
+        nextState.textPresentation = "centered";
+        nextState.speaker = null;
+        nextState.activeCharacterId = null;
+        nextState.pendingSceneContinuation = false;
+        nextState.line = command.text;
+        nextState.lineSize = command.size ?? "hero";
+        nextState.choices = [];
+        nextState.choicePrompt = "";
+        nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        nextState.ready = true;
+        return nextState;
+
       case "say":
+        nextState.textPresentation = command.speaker === null || command.speaker === undefined ? "narration" : "dialogue";
         nextState.speaker = resolveSpeakerName(command.speaker, command.hideName);
         nextState.activeCharacterId = command.speaker ?? null;
         nextState.pendingSceneContinuation = false;
         nextState.line = command.text;
+        nextState.lineSize = "sub";
         nextState.choices = [];
         nextState.choicePrompt = "";
         nextState.history = [
@@ -404,11 +428,13 @@ const runScriptUntilPause = (state: NovelStore) => {
         return nextState;
 
       case "menu":
+        nextState.textPresentation = "dialogue";
         nextState.speaker = null;
         nextState.activeCharacterId = null;
         nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
         nextState.pendingSceneContinuation = false;
         nextState.line = command.prompt ?? "";
+        nextState.lineSize = "sub";
         nextState.choicePrompt = command.prompt ?? "";
         nextState.choices = command.options;
         nextState.ready = true;
