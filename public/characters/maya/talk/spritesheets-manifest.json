@@ -2,7 +2,7 @@
   "app": "SpineBones",
   "version": "1.0",
   "totalFrames": 61,
-  "fps": 40,
+  "fps": 50,
   "sheets": [
     {
       "index": 0,

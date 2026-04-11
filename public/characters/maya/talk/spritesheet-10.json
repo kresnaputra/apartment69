@@ -4,22 +4,22 @@
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 542,
-        "h": 1328
+        "w": 649,
+        "h": 1610
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 688,
-        "y": 415,
-        "w": 542,
-        "h": 1328
+        "x": 731,
+        "y": 280,
+        "w": 649,
+        "h": 1610
       },
       "sourceSize": {
         "w": 2048,
         "h": 2048
       },
-      "duration": 25
+      "duration": 20
     }
   },
   "animations": {
@@ -33,15 +33,15 @@
     "image": "spritesheet-10.png",
     "format": "RGBA8888",
     "size": {
-      "w": 542,
-      "h": 1328
+      "w": 649,
+      "h": 1610
     },
     "scale": "1",
     "frameSize": {
       "w": 2048,
       "h": 2048
     },
-    "fps": 40,
+    "fps": 50,
     "frameCount": 1
   }
 }
