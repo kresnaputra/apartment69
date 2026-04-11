@@ -1,8 +1,8 @@
 import type { CharacterDefinition } from "@/types/novel";
 
 export const mayaBundleRegistry = {
-  "maya-normal": "/characters/maya/normal/spritesheets-manifest.json",
-  "maya-talk": "/characters/maya/talk/spritesheets-manifest.json",
+  "maya-talk": "/characters/maya/normal/spritesheets-manifest.json",
+  "maya-normal": "/characters/maya/talk/spritesheets-manifest.json",
 } as const;
 
 export const mayaCharacter: CharacterDefinition = {
