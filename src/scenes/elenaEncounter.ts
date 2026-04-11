@@ -55,7 +55,7 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
 
 export const ignoreElenaScene: VisualNovelCommand[] = [
   say("arka", "serious", "Better not get involved in other people’s problems…"),
-  jump("epilogue"),
+  jump("nadia-balcony"),
 ];
 
 export const helpElenaScene: VisualNovelCommand[] = [

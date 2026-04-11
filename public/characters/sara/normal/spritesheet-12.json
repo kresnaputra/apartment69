@@ -4,16 +4,16 @@
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 711,
-        "h": 1465
+        "w": 688,
+        "h": 1494
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 531,
-        "y": 420,
-        "w": 711,
-        "h": 1465
+        "x": 582,
+        "y": 427,
+        "w": 688,
+        "h": 1494
       },
       "sourceSize": {
         "w": 2048,
@@ -33,8 +33,8 @@
     "image": "spritesheet-12.png",
     "format": "RGBA8888",
     "size": {
-      "w": 711,
-      "h": 1465
+      "w": 688,
+      "h": 1494
     },
     "scale": "1",
     "frameSize": {

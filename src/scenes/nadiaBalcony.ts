@@ -10,11 +10,11 @@ import {
   moveTo,
   cutScene,
 } from "@/scenes/scriptTypes";
-import balcony from "@/background/balcony.png";
+import bedroom from "@/background/bedroom-afteroon.png";
 import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url";
 
 export const nadiaBalconyScene: VisualNovelCommand[] = [
-  bg(balcony, "Lentera Apartments - Balcony"),
+  bg(bedroom, "Lentera Apartments - Bedroom"),
   hide("elena-hallway"),
   hide("arka-hallway"),
   narrate(

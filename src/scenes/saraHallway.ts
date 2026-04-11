@@ -16,7 +16,7 @@ export const saraHallwayScene: VisualNovelCommand[] = [
   show("sara-hallway", "sara", "neutral", {
     position: "center",
     enterFrom: "right",
-    xOffset: 0.03,
+    xOffset: 0.0,
   }),
   say(
     "sara",
