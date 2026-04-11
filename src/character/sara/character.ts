@@ -22,7 +22,7 @@ export const saraCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.0,
   defaultY: -150,
-  defaultScale: 2.4,
+  defaultScale: 2.8,
   defaultOpacity: 0.96,
   defaultFrame: 0,
   defaultFps: 24,
