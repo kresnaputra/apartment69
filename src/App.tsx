@@ -22,6 +22,7 @@ const CUTSCENE_FADE_MS = 2000;
 const CHARACTER_TICK_FPS = 40;
 const CHARACTER_ENTER_DURATION_MS = 520;
 const CHARACTER_FADE_ENTER_DURATION_MS = 820;
+const CHARACTER_FADE_AWAY_DURATION_MS = 420;
 const VIRTUAL_STAGE_WIDTH = 1366;
 const VIRTUAL_STAGE_HEIGHT = 768;
 const VIRTUAL_CHARACTER_WIDTH = 270;
@@ -40,6 +41,7 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const frame = useDeferredValue(character.frame);
+  const [displayOpacity, setDisplayOpacity] = useState(character.opacity);
   const [viewport, setViewport] = useState({ width: 520, height: 880 });
   const [windowSize, setWindowSize] = useState(() => ({
     width: typeof window !== "undefined" ? window.innerWidth : 1280,
@@ -143,16 +145,30 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     });
   }, [bundle, frame, renderResolutionScale, viewport.height, viewport.width]);
 
-  if (!character.visible) return null;
+  useEffect(() => {
+    if (character.isExiting) {
+      setDisplayOpacity(character.opacity);
+      const raf = window.requestAnimationFrame(() => {
+        setDisplayOpacity(0);
+      });
+      return () => window.cancelAnimationFrame(raf);
+    }
+
+    setDisplayOpacity(character.opacity);
+    return undefined;
+  }, [character.isExiting, character.opacity, character.entryVersion]);
+
+  if (!character.visible && !character.isExiting) return null;
 
   const spriteStyle = {
     left: `calc(${character.x * 100}% + ${character.xOffset * 100}%)`,
     bottom: `calc(${character.y}px - ${character.yOffset}px)`,
-    opacity: character.opacity,
+    opacity: displayOpacity,
     transform: "translateX(-50%) scale(var(--vn-scale))",
     transformOrigin: "bottom center",
     animationDuration: `${character.enterFrom === "fade" ? CHARACTER_FADE_ENTER_DURATION_MS : CHARACTER_ENTER_DURATION_MS}ms`,
-    transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity 220ms ease, transform 300ms ease`,
+    animationName: character.isExiting ? "none" : undefined,
+    transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity ${character.hideTransition === "fadeAway" ? CHARACTER_FADE_AWAY_DURATION_MS : 220}ms ease, transform 300ms ease`,
     "--vn-scale": String(responsiveScale),
     width: `${characterWidth}px`,
     height: `${characterHeight}px`,
@@ -415,7 +431,7 @@ const App = () => {
 
   const bundleList = Object.values(bundles);
   const renderCharacters = Object.values(characters)
-    .filter((character) => character.visible)
+    .filter((character) => character.visible || character.isExiting)
     .sort((left, right) => left.y - right.y);
 
   return (

@@ -31,6 +31,7 @@ export type ActiveMinigame = {
 
 export type CharacterStagePosition = "left" | "center" | "right";
 export type CharacterEnterFrom = "left" | "right" | "fade" | "none";
+export type CharacterHideTransition = "fadeAway" | "none";
 export type CharacterMoveEasing =
   | "linear"
   | "ease"
@@ -77,6 +78,7 @@ export type ShowCharacterCommand = {
 export type HideCharacterCommand = {
   type: "hideCharacter";
   id: string;
+  transition?: CharacterHideTransition;
 };
 
 export type MoveCharacterCommand = {
@@ -159,6 +161,9 @@ export type CharacterInstance = {
   fps: number;
   loop: boolean;
   visible: boolean;
+  isExiting: boolean;
+  hideTransition: CharacterHideTransition;
+  hideStartedAt: number | null;
 };
 
 export type CharacterDefinition = {

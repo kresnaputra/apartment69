@@ -1,5 +1,5 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import { bg, hide, jump, menu, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, menu, narrate, say, show } from "@/scenes/scriptTypes";
 import hallway from "@/background/hallway.png";
 
 export const saraHallwayScene: VisualNovelCommand[] = [
@@ -77,11 +77,9 @@ export const saraHelpScene: VisualNovelCommand[] = [
     "neutral",
     "Don't take too long checking your schedule. The view from up there is much better than it is down here. I'll be waiting.",
   ),
+  hide("sara-hallway", "fadeAway"),
   narrate(
     "The private elevator opens. Sarah steps inside and disappears behind the tightly sealed silver doors. Arka remains alone in the corridor, with a trace of her perfume still lingering in the air.",
-  ),
-  narrate(
-    "It looks like starting tomorrow, life in this apartment is not going to be as flat as I imagined.",
   ),
 ];
 
@@ -112,10 +110,8 @@ export const saraRefuseScene: VisualNovelCommand[] = [
     "neutral",
     "Don't take too long checking your schedule. The view from up there is much better than it is down here. I'll be waiting.",
   ),
+  hide("sara-hallway", "fadeAway"),
   narrate(
     "The private elevator opens. Sarah steps inside and disappears behind the tightly sealed silver doors. Arka remains alone in the corridor, with a trace of her perfume still lingering in the air.",
-  ),
-  narrate(
-    "It looks like starting tomorrow, life in this apartment is not going to be as flat as I imagined.",
   ),
 ];

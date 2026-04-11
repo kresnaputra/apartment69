@@ -73,6 +73,7 @@ const emptyState = {
 };
 
 const MAX_STEPS_PER_PASS = 100;
+const CHARACTER_FADE_AWAY_DURATION_MS = 420;
 
 const positionToX = (position: CharacterStagePosition) => {
   if (position === "left") return isMobile ? 0.15 : 0.25;
@@ -219,6 +220,9 @@ const normalizeCharacter = (
     fps: command.fps ?? current?.fps ?? definition.defaultFps ?? 24,
     loop: command.loop ?? current?.loop ?? definition.defaultLoop ?? true,
     visible: true,
+    isExiting: false,
+    hideTransition: "none",
+    hideStartedAt: null,
   };
 };
 
@@ -287,9 +291,24 @@ const runScriptUntilPause = (state: NovelStore) => {
       case "hideCharacter": {
         const current = nextState.characters?.[command.id];
         if (current) {
+          const transition = command.transition ?? "none";
           nextState.characters = {
             ...nextState.characters,
-            [command.id]: { ...current, visible: false },
+            [command.id]: transition === "fadeAway"
+              ? {
+                  ...current,
+                  visible: true,
+                  isExiting: true,
+                  hideTransition: transition,
+                  hideStartedAt: Date.now(),
+                }
+              : {
+                  ...current,
+                  visible: false,
+                  isExiting: false,
+                  hideTransition: "none",
+                  hideStartedAt: null,
+                },
           };
         }
         nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
@@ -493,9 +512,29 @@ export const useNovelStore = create<NovelStore>((set, get) => ({
 
   tickCharacters: () =>
     set((state) => {
+      const now = Date.now();
       const nextCharacters = Object.fromEntries(
         Object.entries(state.characters).map(([id, character]) => {
           const bundle = state.bundles[character.bundleId];
+          const isFadeAwayFinished =
+            character.isExiting &&
+            character.hideTransition === "fadeAway" &&
+            character.hideStartedAt !== null &&
+            now - character.hideStartedAt >= CHARACTER_FADE_AWAY_DURATION_MS;
+
+          if (isFadeAwayFinished) {
+            return [
+              id,
+              {
+                ...character,
+                visible: false,
+                isExiting: false,
+                hideTransition: "none",
+                hideStartedAt: null,
+              },
+            ];
+          }
+
           if (!bundle || !character.visible) {
             return [id, character];
           }

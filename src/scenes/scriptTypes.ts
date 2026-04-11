@@ -1,5 +1,6 @@
 import type { AnyCharacterEmotion, CharacterEmotion, CharacterId } from "@/character/catalog";
 import type {
+  CharacterHideTransition,
   ChoiceOption,
   CutSceneCommand,
   HideCharacterCommand,
@@ -69,9 +70,13 @@ export const show = <TCharacterId extends CharacterId>(
   ...overrides,
 });
 
-export const hide = (id: string): HideCharacterCommand => ({
+export const hide = (
+  id: string,
+  transition: CharacterHideTransition = "none",
+): HideCharacterCommand => ({
   type: "hideCharacter",
   id,
+  transition,
 });
 
 export const narrate = (text: string, speaker?: string): SayCommand => ({
