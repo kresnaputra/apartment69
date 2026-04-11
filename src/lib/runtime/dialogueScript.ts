@@ -20,12 +20,13 @@ import {
   saraHelpScene,
   saraRefuseScene,
 } from "@/scenes/saraHallway";
+import { bedroomDay1Scene } from "@/scenes/bedroomDay1";
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "sara-hallway",
+  startLabel: "opening",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,
@@ -42,6 +43,7 @@ export const demoScript: VisualNovelScript = {
     "sara-hallway": saraHallwayScene,
     "sara-help": saraHelpScene,
     "sara-refuse": saraRefuseScene,
+    "bedroom-day1": bedroomDay1Scene,
     epilogue: epilogueScene,
   },
 };
