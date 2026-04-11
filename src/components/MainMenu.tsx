@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
+import rainCityMusic from "@/music/rain-city.mp3";
+import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 
 type MainMenuProps = {
   onStart: () => void;
@@ -18,6 +20,15 @@ const MENU_ITEMS = [
 export const MainMenu = ({ onStart, isReady }: MainMenuProps) => {
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
+  const bgMusicRef = useRef<BackgroundMusic | null>(null);
+
+  useEffect(() => {
+    bgMusicRef.current = new BackgroundMusic();
+    bgMusicRef.current.play(rainCityMusic, 0.4);
+    return () => {
+      bgMusicRef.current?.dispose();
+    };
+  }, []);
 
   useEffect(() => {
     const t = window.setTimeout(() => setVisible(true), 80);

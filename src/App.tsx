@@ -14,10 +14,12 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { characterBundleRegistry } from "@/character";
 import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
+import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { useNovelStore } from "@/store/novelStore";
 import { unknownSpeakerIds } from "@/types/novel";
 import type { CharacterInstance } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
+import gameplayMusic from "@/music/gameplay.mp3";
 
 const TEXT_SPEED = 18;
 const CUTSCENE_FADE_MS = 2000;
@@ -250,6 +252,7 @@ const App = () => {
   const isMobile = useIsMobile();
   const [phase, setPhase] = useState<"menu" | "story">("menu");
   const [bundlesReady, setBundlesReady] = useState(false);
+  const bgMusicRef = useRef<BackgroundMusic | null>(null);
 
   const bundles = useNovelStore((state) => state.bundles);
   const background = useNovelStore((state) => state.background);
@@ -291,10 +294,20 @@ const App = () => {
 
   useEffect(() => {
     audioRef.current = new NovelAudioEngine();
+    bgMusicRef.current = new BackgroundMusic();
     return () => {
       audioRef.current?.dispose();
+      bgMusicRef.current?.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    if (phase === "story") {
+      bgMusicRef.current?.play(gameplayMusic, 0.4);
+    } else {
+      bgMusicRef.current?.stop();
+    }
+  }, [phase]);
 
   useEffect(() => {
     let cancelled = false;
