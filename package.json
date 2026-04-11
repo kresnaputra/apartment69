@@ -9,9 +9,15 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "tauri build",
+    "build:android": "CAPACITOR_BUILD=1 tsc --noEmit && CAPACITOR_BUILD=1 vite build",
+    "cap:sync": "bun run build:android && cap sync android",
+    "cap:open": "cap open android",
+    "cap:run": "cap run android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
     "jszip": "^3.10.1",
     "pixi.js": "^8.17.1",
     "react": "^19.2.4",
@@ -19,6 +25,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.3.0",
     "@tailwindcss/vite": "^4.2.2",
     "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/cli": "^2.10.1",

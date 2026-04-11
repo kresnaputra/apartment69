@@ -1,8 +1,14 @@
 import { type CSSProperties, memo, useCallback, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
+import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorButtonMinigameMobile";
+import { PipeConnectionMinigameMobile } from "@/components/minigames/PipeConnectionMinigameMobile";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { MainMenu } from "@/components/MainMenu";
+import { MainMenuMobile } from "@/components/MainMenuMobile";
+import { NarratorMobile } from "@/components/NarratorMobile";
+import { DialogueMobile } from "@/components/DialogueMobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { characterBundleRegistry } from "@/character";
 import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
@@ -223,6 +229,7 @@ const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => v
 };
 
 const App = () => {
+  const isMobile = useIsMobile();
   const [phase, setPhase] = useState<"menu" | "story">("menu");
   const [bundlesReady, setBundlesReady] = useState(false);
 
@@ -414,7 +421,9 @@ const App = () => {
   return (
     <>
       {phase === "menu" && (
-        <MainMenu onStart={handleStartStory} isReady={bundlesReady} />
+        isMobile
+          ? <MainMenuMobile onStart={handleStartStory} isReady={bundlesReady} />
+          : <MainMenu onStart={handleStartStory} isReady={bundlesReady} />
       )}
       <main
         className="vn-root"
@@ -488,62 +497,95 @@ const App = () => {
               );
             })}
 
-          <div className="vn-caption">
-            <div className="vn-location">{location || " "}</div>
-          </div>
+          {isMobile ? (
+            <div className="absolute top-3 right-3 z-20">
+              <div className="border border-white/10 bg-[rgba(11,10,18,0.36)] backdrop-blur-[14px] rounded-full px-3 py-1.5 text-[0.6rem] tracking-[0.32em] uppercase text-[#ccb9a9]">
+                {location || "\u00a0"}
+              </div>
+            </div>
+          ) : (
+            <div className="vn-caption">
+              <div className="vn-location">{location || " "}</div>
+            </div>
+          )}
         </div>
 
         {activeMinigame ? null : isNarration ? (
-          <div className={`vn-narrator-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
-            <div className="vn-narrator-box">
-              <div className="vn-narrator-line">{visibleLine}</div>
-              <div className="vn-narrator-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
+          isMobile ? (
+            <NarratorMobile
+              visibleLine={visibleLine}
+              isTyping={isTyping}
+              isSceneTransitioning={isSceneTransitioning}
+            />
+          ) : (
+            <div className={`vn-narrator-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+              <div className="vn-narrator-box">
+                <div className="vn-narrator-line">{visibleLine}</div>
+                <div className="vn-narrator-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
+              </div>
             </div>
-          </div>
+          )
         ) : (
-          <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
-            <div className="vn-dialogue-box">
-              {speaker ? <div className="vn-speaker">{speaker}</div> : null}
-              <div className="vn-line">{line ? visibleLine : ""}</div>
+          isMobile ? (
+            <DialogueMobile
+              speaker={speaker}
+              visibleLine={visibleLine}
+              line={line}
+              isTyping={isTyping}
+              isSceneTransitioning={isSceneTransitioning}
+              choices={choices}
+              onChoose={choose}
+              onSuppressAdvance={() => { suppressAdvanceOnceRef.current = true; }}
+            />
+          ) : (
+            <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+              <div className="vn-dialogue-box">
+                {speaker ? <div className="vn-speaker">{speaker}</div> : null}
+                <div className="vn-line">{line ? visibleLine : ""}</div>
 
-              {choices.length > 0 ? (
-                <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
-                  {choices.map((choice) => (
-                    <button
-                      key={choice.id}
-                      className="vn-choice"
-                      type="button"
-                      onClick={() => {
-                        suppressAdvanceOnceRef.current = true;
-                        choose(choice.next);
-                      }}
-                    >
-                      {choice.label}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="vn-dialogue-bar">
-                  <div className="vn-controls" aria-hidden="true">
-                    <span className="vn-control">Log</span>
-                    <span className="vn-control">Auto</span>
-                    <span className="vn-control">Skip</span>
-                    <span className="vn-control">Save</span>
-                    <span className="vn-control">Load</span>
-                    <span className="vn-control">Config</span>
-                    <span className="vn-control">Quit</span>
+                {choices.length > 0 ? (
+                  <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
+                    {choices.map((choice) => (
+                      <button
+                        key={choice.id}
+                        className="vn-choice"
+                        type="button"
+                        onClick={() => {
+                          suppressAdvanceOnceRef.current = true;
+                          choose(choice.next);
+                        }}
+                      >
+                        {choice.label}
+                      </button>
+                    ))}
                   </div>
-                  <div className="vn-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
-                </div>
-              )}
+                ) : (
+                  <div className="vn-dialogue-bar">
+                    <div className="vn-controls" aria-hidden="true">
+                      <span className="vn-control">Log</span>
+                      <span className="vn-control">Auto</span>
+                      <span className="vn-control">Skip</span>
+                      <span className="vn-control">Save</span>
+                      <span className="vn-control">Load</span>
+                      <span className="vn-control">Config</span>
+                      <span className="vn-control">Quit</span>
+                    </div>
+                    <div className="vn-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          )
         )}
 
         {activeMinigame?.id === "elevator-button" ? (
-          <ElevatorButtonMinigame onComplete={completeMinigame} />
+          isMobile
+            ? <ElevatorButtonMinigameMobile onComplete={completeMinigame} />
+            : <ElevatorButtonMinigame onComplete={completeMinigame} />
         ) : activeMinigame?.id === "pipe-connection" ? (
-          <PipeConnectionMinigame onComplete={completeMinigame} />
+          isMobile
+            ? <PipeConnectionMinigameMobile onComplete={completeMinigame} />
+            : <PipeConnectionMinigame onComplete={completeMinigame} />
         ) : null}
 
         {activeCutScene ? (

@@ -16,6 +16,7 @@ import type {
   VisualNovelCommand,
   VisualNovelScript,
 } from "@/types/novel";
+import { isMobile } from "pixi.js";
 
 type NovelStore = {
   bundles: Record<string, LoadedSpritesheetBundle>;
@@ -74,8 +75,8 @@ const emptyState = {
 const MAX_STEPS_PER_PASS = 100;
 
 const positionToX = (position: CharacterStagePosition) => {
-  if (position === "left") return 0.25;
-  if (position === "right") return 0.75;
+  if (position === "left") return isMobile ? 0.15 : 0.25;
+  if (position === "right") return isMobile ? 0.85 : 0.75;
   return 0.5;
 };
 

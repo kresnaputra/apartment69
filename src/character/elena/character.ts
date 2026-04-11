@@ -22,7 +22,7 @@ export const elenaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0,
   defaultY: -150,
-  defaultScale: 2.4,
+  defaultScale: 1,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,
