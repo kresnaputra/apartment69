@@ -1,4 +1,5 @@
 import type { CharacterDefinition } from "@/types/novel";
+import { isMobile } from "pixi.js";
 
 export const elenaBundleRegistry = {
   "elena-normal": "/characters/elena/normal/spritesheets-manifest.json",
@@ -22,7 +23,7 @@ export const elenaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0,
   defaultY: -150,
-  defaultScale: 2.4,
+  defaultScale: isMobile ? 2.3 : 2.4,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,
