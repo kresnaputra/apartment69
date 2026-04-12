@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Visual Novel Engine",
+  "productName": "Apartment 69",
   "version": "0.1.0",
-  "identifier": "com.visualnovel.engine",
+  "identifier": "com.apartment69.vne",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",

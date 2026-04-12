@@ -3,21 +3,41 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
 import rainCityMusic from "@/music/rain-city.mp3";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
+import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
+import type { SaveSlot } from "@/lib/runtime/saveSlots";
 
 type MainMenuMobileProps = {
   onStart: () => void;
+  onLoad: (slot: SaveSlot) => void;
+  slots: (SaveSlot | null)[];
   isReady: boolean;
 };
 
-export const MainMenuMobile = ({ onStart, isReady }: MainMenuMobileProps) => {
+export const MainMenuMobile = ({ onStart, onLoad, slots, isReady }: MainMenuMobileProps) => {
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
+  const [showLoadSlots, setShowLoadSlots] = useState(false);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
 
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
     bgMusicRef.current.play(rainCityMusic, 0.4);
+
+    // Android WebView blocks audio until a user gesture. Retry on first touch/click.
+    let unlocked = false;
+    const unlock = () => {
+      if (unlocked) return;
+      unlocked = true;
+      bgMusicRef.current?.resumeAfterUnlock();
+      document.removeEventListener("touchstart", unlock, true);
+      document.removeEventListener("click", unlock, true);
+    };
+    document.addEventListener("touchstart", unlock, true);
+    document.addEventListener("click", unlock, true);
+
     return () => {
+      document.removeEventListener("touchstart", unlock, true);
+      document.removeEventListener("click", unlock, true);
       bgMusicRef.current?.dispose();
     };
   }, []);
@@ -33,9 +53,22 @@ export const MainMenuMobile = ({ onStart, isReady }: MainMenuMobileProps) => {
     window.setTimeout(() => onStart(), 640);
   };
 
+  const handleLoadSlot = (index: number) => {
+    const slot = slots[index];
+    if (!slot) return;
+    setExiting(true);
+    window.setTimeout(() => onLoad(slot), 640);
+  };
+
+
   const handleExit = () => {
     void getCurrentWindow().close();
   };
+
+  const btnBase = "w-full rounded-full backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 transition-all duration-200 border";
+  const btnActive = `${btnBase} bg-[rgba(12,14,20,0.68)] text-white/90 border-white/25 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer`;
+  const btnDisabled = `${btnBase} bg-[rgba(12,14,20,0.68)] text-white/90 border-white/25 opacity-55 cursor-default`;
+  const fontStyle = { fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" };
 
   return (
     <div
@@ -85,7 +118,7 @@ export const MainMenuMobile = ({ onStart, isReady }: MainMenuMobileProps) => {
             disabled={!isReady}
             onClick={handleStart}
             className="w-full rounded-full bg-white text-[#1a1a1a] font-semibold tracking-[0.03em] py-3 px-6 transition-all duration-200 disabled:opacity-55 enabled:hover:-translate-y-0.5 enabled:hover:shadow-[0_6px_24px_rgba(255,255,255,0.18)] enabled:active:translate-y-0 cursor-pointer disabled:cursor-default"
-            style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" }}
+            style={fontStyle}
           >
             {!isReady ? (
               <span className="inline-flex items-center gap-1">
@@ -97,43 +130,28 @@ export const MainMenuMobile = ({ onStart, isReady }: MainMenuMobileProps) => {
             )}
           </button>
 
-          {/* Continue */}
+          {/* Load */}
           <button
             type="button"
-            disabled
-            className="w-full rounded-full bg-[rgba(12,14,20,0.68)] text-white/90 border border-white/25 backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 opacity-55 cursor-default transition-all duration-200"
-            style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" }}
+            onClick={() => setShowLoadSlots(true)}
+            className={btnActive}
+            style={fontStyle}
           >
-            Continue
+            Load
           </button>
 
           {/* Gallery */}
-          <button
-            type="button"
-            disabled
-            className="w-full rounded-full bg-[rgba(12,14,20,0.68)] text-white/90 border border-white/25 backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 opacity-55 cursor-default transition-all duration-200"
-            style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" }}
-          >
+          <button type="button" disabled className={btnDisabled} style={fontStyle}>
             Gallery
           </button>
 
           {/* Setting */}
-          <button
-            type="button"
-            disabled
-            className="w-full rounded-full bg-[rgba(12,14,20,0.68)] text-white/90 border border-white/25 backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 opacity-55 cursor-default transition-all duration-200"
-            style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" }}
-          >
+          <button type="button" disabled className={btnDisabled} style={fontStyle}>
             Setting
           </button>
 
           {/* Exit */}
-          <button
-            type="button"
-            onClick={handleExit}
-            className="w-full rounded-full bg-[rgba(12,14,20,0.68)] text-white/90 border border-white/25 backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-            style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" }}
-          >
+          <button type="button" onClick={handleExit} className={btnActive} style={fontStyle}>
             Exit
           </button>
         </div>
@@ -146,6 +164,16 @@ export const MainMenuMobile = ({ onStart, isReady }: MainMenuMobileProps) => {
       >
         © 2025 &nbsp;·&nbsp; Visual Novel Engine
       </span>
+
+      {/* Load slot picker */}
+      {showLoadSlots && (
+        <SaveSlotOverlay
+          mode="load"
+          slots={slots}
+          onSelect={handleLoadSlot}
+          onClose={() => setShowLoadSlots(false)}
+        />
+      )}
     </div>
   );
 };

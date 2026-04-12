@@ -45,6 +45,8 @@ type NovelStore = {
   registerBundle: (id: string, bundle: LoadedSpritesheetBundle) => void;
   setStatusMessage: (message: string) => void;
   startStory: () => void;
+  clearScene: () => void;
+  loadFromSave: (label: string, index: number, background: string, location: string, characters: Record<string, CharacterInstance>) => void;
   advance: () => void;
   choose: (nextLabel: string) => void;
   completeMinigame: () => void;
@@ -466,6 +468,17 @@ export const useNovelStore = create<NovelStore>((set) => ({
 
   setStatusMessage: (message) => set({ statusMessage: message }),
 
+  clearScene: () =>
+    set({
+      characters: {},
+      line: "",
+      speaker: null,
+      activeCharacterId: null,
+      choices: [],
+      activeMinigame: null,
+      activeCutScene: null,
+    }),
+
   startStory: () =>
     set((state) =>
       runScriptUntilPause({
@@ -473,6 +486,21 @@ export const useNovelStore = create<NovelStore>((set) => ({
         ...emptyState,
         bundles: state.bundles,
         statusMessage: state.statusMessage,
+      }),
+    ),
+
+  loadFromSave: (label, index, background, location, characters) =>
+    set((state) =>
+      runScriptUntilPause({
+        ...state,
+        ...emptyState,
+        bundles: state.bundles,
+        statusMessage: state.statusMessage,
+        currentLabel: label,
+        currentIndex: index,
+        background,
+        location,
+        characters,
       }),
     ),
 

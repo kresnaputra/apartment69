@@ -9,6 +9,13 @@ type DialogueMobileProps = {
   choices: Choice[];
   onChoose: (next: string) => void;
   onSuppressAdvance: () => void;
+  isAuto?: boolean;
+  onAuto?: () => void;
+  onSkip?: () => void;
+  onLog?: () => void;
+  onSave?: () => void;
+  onConfig?: () => void;
+  onExit?: () => void;
 };
 
 export const DialogueMobile = ({
@@ -20,6 +27,13 @@ export const DialogueMobile = ({
   choices,
   onChoose,
   onSuppressAdvance,
+  isAuto = false,
+  onAuto,
+  onSkip,
+  onLog,
+  onSave,
+  onConfig,
+  onExit,
 }: DialogueMobileProps) => (
   <div
     className={`absolute left-0 right-0 bottom-2 z-30 w-[58vw] mx-auto pointer-events-none transition-opacity duration-[160ms] ${isSceneTransitioning ? "opacity-0" : "opacity-100"}`}
@@ -62,14 +76,36 @@ export const DialogueMobile = ({
         </div>
       ) : (
         <div className="flex items-center justify-between gap-2 mt-2">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/80 pointer-events-auto">
-            {["Log", "Auto", "Skip", "Save", "Load", "Config", "Quit"].map((label) => (
-              <span key={label} className="text-[0.65rem] tracking-[0.02em]">{label}</span>
-            ))}
-          </div>
           <span className="text-[0.62rem] tracking-[0.02em] text-[#ccb9a9] shrink-0">
             {isTyping ? "Tap to skip" : "Tap to continue"}
           </span>
+          <div
+            className="flex gap-1 pointer-events-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {[
+              { label: "Auto", handler: onAuto, active: isAuto },
+              { label: "Skip", handler: onSkip, active: false },
+              { label: "Log", handler: onLog, active: false },
+              { label: "Save", handler: onSave, active: false },
+              { label: "Config", handler: onConfig, active: false },
+              { label: "Exit", handler: onExit, active: false },
+            ].map(({ label, handler, active }) => (
+              <button
+                key={label}
+                type="button"
+                onClick={handler}
+                className={[
+                  "rounded px-2 py-1 text-[0.6rem] tracking-[0.02em] border backdrop-blur-sm transition-all duration-150 active:scale-95",
+                  active
+                    ? "text-[#d2a456] border-[rgba(210,164,86,0.4)] bg-[rgba(210,164,86,0.12)]"
+                    : "text-white/65 border-white/15 bg-[rgba(10,8,13,0.45)] hover:text-white/90 hover:border-white/30",
+                ].join(" ")}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

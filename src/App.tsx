@@ -10,6 +10,11 @@ import { MainMenu } from "@/components/MainMenu";
 import { MainMenuMobile } from "@/components/MainMenuMobile";
 import { NarratorMobile } from "@/components/NarratorMobile";
 import { DialogueMobile } from "@/components/DialogueMobile";
+import { LogOverlay } from "@/components/LogOverlay";
+import { ConfigOverlay } from "@/components/ConfigOverlay";
+import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
+import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
+import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { characterBundleRegistry } from "@/character";
 import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
@@ -279,11 +284,24 @@ const App = () => {
   const completeMinigame = useNovelStore((state) => state.completeMinigame);
   const completeCutScene = useNovelStore((state) => state.completeCutScene);
   const tickCharacters = useNovelStore((state) => state.tickCharacters);
+  const clearScene = useNovelStore((state) => state.clearScene);
+  const loadFromSave = useNovelStore((state) => state.loadFromSave);
   const isEnded = useNovelStore((state) => state.isEnded);
+
+  const history = useNovelStore((state) => state.history);
+  const currentLabel = useNovelStore((state) => state.currentLabel);
+  const currentIndex = useNovelStore((state) => state.currentIndex);
 
   const [revealedCount, setRevealedCount] = useState(0);
   const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
   const [isSceneTransitioning, setIsSceneTransitioning] = useState(false);
+  const [isAuto, setIsAuto] = useState(false);
+  const [showLog, setShowLog] = useState(false);
+  const [showConfig, setShowConfig] = useState(false);
+  const [showSaveSlots, setShowSaveSlots] = useState(false);
+  const [bgVolume, setBgVolume] = useState(0.4);
+  const [saveToast, setSaveToast] = useState(false);
+  const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
   const audioRef = useRef<NovelAudioEngine | null>(null);
   const previousSceneTransitionTokenRef = useRef<number | null>(null);
   const suppressAdvanceOnceRef = useRef(false);
@@ -429,6 +447,13 @@ const App = () => {
     return () => window.clearInterval(timer);
   }, [line]);
 
+  // Auto-advance: when enabled, advance to the next line 1.5s after text finishes typing.
+  useEffect(() => {
+    if (!isAuto || isTyping || choices.length > 0 || isSceneTransitioning || isEnded) return;
+    const timer = window.setTimeout(() => { advance(); }, 1500);
+    return () => window.clearTimeout(timer);
+  }, [isAuto, isTyping, choices.length, isSceneTransitioning, isEnded, advance, line]);
+
   useEffect(() => {
     let animationFrame = 0;
     let lastTick = performance.now();
@@ -457,6 +482,7 @@ const App = () => {
       if (choices.length > 0) return;
 
       if (isEnded) {
+        clearScene();
         setPhase("menu");
         return;
       }
@@ -476,13 +502,58 @@ const App = () => {
       handleAdvance();
     };
 
+    const handleContextMenu = (event: MouseEvent) => event.preventDefault();
+
     window.addEventListener("keydown", handleKeydown);
-    return () => window.removeEventListener("keydown", handleKeydown);
+    window.addEventListener("contextmenu", handleContextMenu);
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+      window.removeEventListener("contextmenu", handleContextMenu);
+    };
   }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, line.length]);
 
   const handleStartStory = () => {
     startStory();
     setPhase("story");
+  };
+
+  const handleAuto = () => setIsAuto((prev) => !prev);
+
+  const handleSkip = () => {
+    if (isTyping) {
+      setRevealedCount(line.length);
+    } else {
+      advance();
+    }
+  };
+
+  const handleSaveToSlot = (slotIndex: number) => {
+    const slot: SaveSlot = {
+      currentLabel,
+      // currentIndex is already past the say command; step back to re-display it on load
+      currentIndex: Math.max(0, currentIndex - 1),
+      background,
+      location,
+      speaker,
+      preview: line.slice(0, 80),
+      savedAt: Date.now(),
+      characters,
+    };
+    writeSlot(slotIndex, slot);
+    setSlots(readAllSlots());
+    setShowSaveSlots(false);
+    setSaveToast(true);
+    window.setTimeout(() => setSaveToast(false), 2000);
+  };
+
+  const handleLoadFromMenu = (slot: SaveSlot) => {
+    loadFromSave(slot.currentLabel, slot.currentIndex, slot.background, slot.location, slot.characters ?? {});
+    setPhase("story");
+  };
+
+  const handleBgVolumeChange = (value: number) => {
+    setBgVolume(value);
+    bgMusicRef.current?.setVolume(value);
   };
 
   const bundleList = Object.values(bundles);
@@ -494,8 +565,8 @@ const App = () => {
     <>
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile onStart={handleStartStory} isReady={bundlesReady} />
-          : <MainMenu onStart={handleStartStory} isReady={bundlesReady} />
+          ? <MainMenuMobile onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
+          : <MainMenu onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
       )}
       <main
         className="vn-root"
@@ -621,6 +692,13 @@ const App = () => {
               choices={choices}
               onChoose={choose}
               onSuppressAdvance={() => { suppressAdvanceOnceRef.current = true; }}
+              isAuto={isAuto}
+              onAuto={handleAuto}
+              onSkip={handleSkip}
+              onLog={() => setShowLog(true)}
+              onSave={() => setShowSaveSlots(true)}
+              onConfig={() => setShowConfig(true)}
+              onExit={() => { clearScene(); setPhase("menu"); }}
             />
           ) : (
             <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
@@ -646,14 +724,25 @@ const App = () => {
                   </div>
                 ) : (
                   <div className="vn-dialogue-bar">
-                    <div className="vn-controls" aria-hidden="true">
-                      <span className="vn-control">Log</span>
-                      <span className="vn-control">Auto</span>
-                      <span className="vn-control">Skip</span>
-                      <span className="vn-control">Save</span>
-                      <span className="vn-control">Load</span>
-                      <span className="vn-control">Config</span>
-                      <span className="vn-control">Quit</span>
+                    <div className="vn-controls" onClick={(e) => e.stopPropagation()}>
+                      {([
+                        { label: "Log", onClick: () => setShowLog(true) },
+                        { label: "Auto", onClick: handleAuto, active: isAuto },
+                        { label: "Skip", onClick: handleSkip },
+                        { label: "Save", onClick: () => setShowSaveSlots(true) },
+                        { label: "Config", onClick: () => setShowConfig(true) },
+                        { label: "Exit", onClick: () => { clearScene(); setPhase("menu"); } },
+                      ] as { label: string; onClick: () => void; active?: boolean }[]).map(({ label, onClick, active }) => (
+                        <button
+                          key={label}
+                          type="button"
+                          className="vn-control"
+                          style={active ? { color: "#d2a456" } : undefined}
+                          onClick={onClick}
+                        >
+                          {label}
+                        </button>
+                      ))}
                     </div>
                     <div className="vn-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
                   </div>
@@ -689,6 +778,34 @@ const App = () => {
             </div>
           </div>
         ) : null}
+
+        {showLog && (
+          <LogOverlay history={history} onClose={() => setShowLog(false)} />
+        )}
+
+        {showConfig && (
+          <ConfigOverlay
+            bgVolume={bgVolume}
+            onBgVolumeChange={handleBgVolumeChange}
+            onClose={() => setShowConfig(false)}
+          />
+        )}
+
+        {showSaveSlots && (
+          <SaveSlotOverlay
+            mode="save"
+            slots={slots}
+            onSelect={handleSaveToSlot}
+            onClose={() => setShowSaveSlots(false)}
+          />
+        )}
+
+        {saveToast && (
+          <div className="fixed bottom-[12vh] left-1/2 -translate-x-1/2 z-50 pointer-events-none px-4 py-2 rounded-full text-[0.7rem] text-white/80 tracking-[0.04em]"
+            style={{ background: "rgba(5,6,12,0.85)", backdropFilter: "blur(6px)" }}>
+            Saved!
+          </div>
+        )}
       </main>
     </>
   );
