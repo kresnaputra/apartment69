@@ -301,6 +301,38 @@ const App = () => {
     };
   }, []);
 
+  // Android WebView blocks audio until a user gesture. On first interaction,
+  // resume an AudioContext to unlock the audio subsystem, then retry any
+  // pending background music that was blocked by autoplay policy.
+  useEffect(() => {
+    let unlocked = false;
+
+    const unlock = () => {
+      if (unlocked) return;
+      unlocked = true;
+
+      try {
+        const ctx = new AudioContext();
+        void ctx.resume().then(() => ctx.close());
+      } catch {
+        // AudioContext not supported — ignore
+      }
+
+      bgMusicRef.current?.resumeAfterUnlock();
+
+      document.removeEventListener("touchstart", unlock, true);
+      document.removeEventListener("click", unlock, true);
+    };
+
+    document.addEventListener("touchstart", unlock, true);
+    document.addEventListener("click", unlock, true);
+
+    return () => {
+      document.removeEventListener("touchstart", unlock, true);
+      document.removeEventListener("click", unlock, true);
+    };
+  }, []);
+
   useEffect(() => {
     if (phase === "story") {
       bgMusicRef.current?.play(gameplayMusic, 0.4);
