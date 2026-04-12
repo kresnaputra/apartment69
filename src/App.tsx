@@ -291,6 +291,7 @@ const App = () => {
   const history = useNovelStore((state) => state.history);
   const currentLabel = useNovelStore((state) => state.currentLabel);
   const currentIndex = useNovelStore((state) => state.currentIndex);
+  const flags = useNovelStore((state) => state.flags);
 
   const [revealedCount, setRevealedCount] = useState(0);
   const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
@@ -538,6 +539,7 @@ const App = () => {
       preview: line.slice(0, 80),
       savedAt: Date.now(),
       characters,
+      flags,
     };
     writeSlot(slotIndex, slot);
     setSlots(readAllSlots());
@@ -547,7 +549,14 @@ const App = () => {
   };
 
   const handleLoadFromMenu = (slot: SaveSlot) => {
-    loadFromSave(slot.currentLabel, slot.currentIndex, slot.background, slot.location, slot.characters ?? {});
+    loadFromSave(
+      slot.currentLabel,
+      slot.currentIndex,
+      slot.background,
+      slot.location,
+      slot.characters ?? {},
+      slot.flags ?? {},
+    );
     setPhase("story");
   };
 

@@ -30,6 +30,8 @@ import {
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
+import { day2BedroomScene } from "@/scenes/day2-bedroom";
+import { day2HallwayScene } from "@/scenes/day2-hallway";
 
 export const demoScript: VisualNovelScript = {
   startLabel: "opening",
@@ -54,6 +56,8 @@ export const demoScript: VisualNovelScript = {
     "bedroom-day1-elena": bedroomDay1ElenaScene,
     "bedroom-day1-nadia": bedroomDay1NadiaScene,
     "bedroom-day1-sara": bedroomDay1SaraScene,
+    "day2-bedroom": day2BedroomScene,
+    "day2-hallway": day2HallwayScene,
     epilogue: epilogueScene,
   },
 };

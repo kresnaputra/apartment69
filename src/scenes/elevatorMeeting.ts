@@ -6,6 +6,7 @@ import {
   minigame,
   narrate,
   say,
+  setFlag,
   show,
 } from "@/scenes/scriptTypes";
 import elevator from "@/background/elevator.png";
@@ -59,11 +60,13 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
 ];
 
 export const acceptMayaNumberScene: VisualNovelCommand[] = [
+  setFlag("mayaAcceptedNumber", true),
   say("maya", "calm", "Thanks, Arka… I’ll text you later, okay?"),
   jump("elena-encounter"),
 ];
 
 export const declineMayaNumberScene: VisualNovelCommand[] = [
+  setFlag("mayaAcceptedNumber", false),
   say("maya", "calm", "Ah… sorry if I made you uncomfortable…"),
   jump("elena-encounter"),
 ];

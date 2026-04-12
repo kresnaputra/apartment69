@@ -18,6 +18,9 @@ export type ChoiceOption = {
   next: string;
 };
 
+export type FlagValue = boolean | number | string | null;
+export type FlagMap = Record<string, FlagValue>;
+
 export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts";
 
 export type ActiveCutScene = {
@@ -120,6 +123,25 @@ export type JumpCommand = {
   target: string;
 };
 
+export type SetFlagCommand = {
+  type: "setFlag";
+  name: string;
+  value: FlagValue;
+};
+
+export type ClearFlagCommand = {
+  type: "clearFlag";
+  name: string;
+};
+
+export type JumpIfCommand = {
+  type: "jumpIf";
+  name: string;
+  value?: FlagValue;
+  target: string;
+  elseTarget?: string;
+};
+
 export type MinigameCommand = {
   type: "minigame";
   minigameId: MinigameId;
@@ -139,6 +161,9 @@ export type VisualNovelCommand =
   | CenteredTextCommand
   | MenuCommand
   | JumpCommand
+  | SetFlagCommand
+  | ClearFlagCommand
+  | JumpIfCommand
   | MinigameCommand
   | CutSceneCommand;
 

@@ -1,4 +1,4 @@
-import type { CharacterInstance } from "@/types/novel";
+import type { CharacterInstance, FlagMap } from "@/types/novel";
 
 export type SaveSlot = {
   currentLabel: string;
@@ -9,6 +9,7 @@ export type SaveSlot = {
   preview: string;
   savedAt: number;
   characters: Record<string, CharacterInstance>;
+  flags?: FlagMap;
 };
 
 export const SLOT_COUNT = 3;

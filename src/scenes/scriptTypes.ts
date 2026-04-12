@@ -2,14 +2,18 @@ import type { AnyCharacterEmotion, CharacterEmotion, CharacterId } from "@/chara
 import type {
   CenteredTextCommand,
   CharacterHideTransition,
+  ClearFlagCommand,
   ChoiceOption,
   CutSceneCommand,
+  FlagValue,
   HideCharacterCommand,
+  JumpIfCommand,
   MinigameId,
   MoveCharacterCommand,
   ParallaxLayer,
   SayCommand,
   SceneCommand,
+  SetFlagCommand,
   SpeakerId,
   ShowCharacterCommand,
   VisualNovelCommand,
@@ -143,6 +147,29 @@ export const moveTo = (
 export const jump = (target: string): VisualNovelCommand => ({
   type: "jump",
   target,
+});
+
+export const setFlag = (name: string, value: FlagValue): SetFlagCommand => ({
+  type: "setFlag",
+  name,
+  value,
+});
+
+export const clearFlag = (name: string): ClearFlagCommand => ({
+  type: "clearFlag",
+  name,
+});
+
+export const jumpIf = (
+  name: string,
+  target: string,
+  options?: { value?: FlagValue; elseTarget?: string },
+): JumpIfCommand => ({
+  type: "jumpIf",
+  name,
+  target,
+  value: options?.value,
+  elseTarget: options?.elseTarget,
 });
 
 export const minigame = (minigameId: MinigameId): VisualNovelCommand => ({

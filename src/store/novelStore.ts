@@ -12,6 +12,7 @@ import type {
   CharacterStagePosition,
   ChoiceOption,
   DialogueEntry,
+  FlagMap,
   ParallaxLayer,
   VisualNovelCommand,
   VisualNovelScript,
@@ -35,6 +36,7 @@ type NovelStore = {
   lineSize: "hero" | "sub";
   choices: ChoiceOption[];
   choicePrompt: string;
+  flags: FlagMap;
   history: DialogueEntry[];
   characters: Record<string, CharacterInstance>;
   currentLabel: string;
@@ -46,7 +48,14 @@ type NovelStore = {
   setStatusMessage: (message: string) => void;
   startStory: () => void;
   clearScene: () => void;
-  loadFromSave: (label: string, index: number, background: string, location: string, characters: Record<string, CharacterInstance>) => void;
+  loadFromSave: (
+    label: string,
+    index: number,
+    background: string,
+    location: string,
+    characters: Record<string, CharacterInstance>,
+    flags?: FlagMap,
+  ) => void;
   advance: () => void;
   choose: (nextLabel: string) => void;
   completeMinigame: () => void;
@@ -72,6 +81,7 @@ const emptyState = {
   lineSize: "hero" as const,
   choices: [] as ChoiceOption[],
   choicePrompt: "",
+  flags: {} as FlagMap,
   history: [] as DialogueEntry[],
   characters: {} as Record<string, CharacterInstance>,
   currentLabel: script.startLabel,
@@ -96,6 +106,15 @@ const createHistoryEntry = (speaker: string | null, text: string): DialogueEntry
 });
 
 const UNKNOWN_SPEAKER_SET = new Set<string>(unknownSpeakerIds);
+
+const flagMatches = (flags: FlagMap | undefined, name: string, expected?: FlagMap[string]) => {
+  const current = flags?.[name];
+  if (expected === undefined) {
+    return Boolean(current);
+  }
+
+  return current === expected;
+};
 
 const resolveSpeakerName = (speaker: string | null | undefined, hideName = false) => {
   if (hideName) return "???";
@@ -251,6 +270,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     lineSize: state.lineSize,
     choices: [],
     choicePrompt: "",
+    flags: state.flags,
     history: state.history,
     characters: state.characters,
     currentLabel: state.currentLabel,
@@ -343,6 +363,33 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.currentLabel = command.target;
         nextState.currentIndex = 0;
         break;
+
+      case "setFlag":
+        nextState.flags = {
+          ...nextState.flags,
+          [command.name]: command.value,
+        };
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        break;
+
+      case "clearFlag": {
+        const nextFlags = { ...(nextState.flags ?? {}) };
+        delete nextFlags[command.name];
+        nextState.flags = nextFlags;
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        break;
+      }
+
+      case "jumpIf": {
+        const matched = flagMatches(nextState.flags, command.name, command.value);
+        nextState.currentLabel = matched
+          ? command.target
+          : (command.elseTarget ?? nextState.currentLabel ?? script.startLabel);
+        nextState.currentIndex = matched
+          ? 0
+          : (command.elseTarget ? 0 : (nextState.currentIndex ?? 0) + 1);
+        break;
+      }
 
       case "minigame":
         nextState.textPresentation = "dialogue";
@@ -489,7 +536,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       }),
     ),
 
-  loadFromSave: (label, index, background, location, characters) =>
+  loadFromSave: (label, index, background, location, characters, flags) =>
     set((state) =>
       runScriptUntilPause({
         ...state,
@@ -501,6 +548,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
         background,
         location,
         characters,
+        flags: flags ?? {},
       }),
     ),
 
