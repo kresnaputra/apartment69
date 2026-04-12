@@ -2,9 +2,21 @@ import { smartphoneContactOptions } from "@/components/minigames/smartphoneConta
 
 type SmartphoneContactMinigameProps = {
   onSelect: (nextLabel: string) => void;
+  showSleepOption?: boolean;
+  sleepOptionNext?: string;
+  disabledContacts?: string[];
 };
 
-export const SmartphoneContactMinigame = ({ onSelect }: SmartphoneContactMinigameProps) => {
+export const SmartphoneContactMinigame = ({ onSelect, showSleepOption = false, sleepOptionNext = "epilogue", disabledContacts = [] }: SmartphoneContactMinigameProps) => {
+  const visibleOptions = smartphoneContactOptions
+    .filter((option) => option.id !== "sleep" || showSleepOption)
+    .map((option) => {
+      const isDisabled = disabledContacts.includes(option.id) || option.disabled;
+      if (option.id === "sleep") {
+        return { ...option, next: sleepOptionNext, disabled: isDisabled };
+      }
+      return { ...option, disabled: isDisabled };
+    });
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
@@ -154,18 +166,24 @@ export const SmartphoneContactMinigame = ({ onSelect }: SmartphoneContactMinigam
 
           {/* Contact list */}
           <div className="flex flex-col overflow-y-auto flex-1 px-3 pt-3 pb-3 gap-2">
-            {smartphoneContactOptions.map((option) => (
+            {visibleOptions.map((option) => (
               <button
                 key={option.id}
                 type="button"
-                onClick={() => onSelect(option.next)}
+                onClick={() => !option.disabled && onSelect(option.next)}
+                disabled={option.disabled}
                 className="group flex items-center gap-3 text-left transition-all duration-150 active:scale-[0.98]"
                 style={{
                   borderRadius: 18,
                   padding: "11px 14px",
-                  background: `linear-gradient(135deg, ${option.accent}1a 0%, rgba(255,255,255,0.03) 100%)`,
-                  border: `1px solid ${option.accent}28`,
+                  background: option.disabled
+                    ? "rgba(255,255,255,0.03)"
+                    : `linear-gradient(135deg, ${option.accent}1a 0%, rgba(255,255,255,0.03) 100%)`,
+                  border: option.disabled ? "1px solid rgba(255,255,255,0.08)" : `1px solid ${option.accent}28`,
                   boxShadow: `0 1px 0 rgba(255,255,255,0.05) inset`,
+                  opacity: option.disabled ? 0.4 : 1,
+                  cursor: option.disabled ? "not-allowed" : "pointer",
+                  filter: option.disabled ? "grayscale(0.5)" : "none",
                 }}
               >
                 {/* Avatar */}
@@ -174,19 +192,27 @@ export const SmartphoneContactMinigame = ({ onSelect }: SmartphoneContactMinigam
                     width: 42,
                     height: 42,
                     borderRadius: 14,
-                    background: `linear-gradient(135deg, ${option.accent}55, ${option.accent}22)`,
-                    border: `1.5px solid ${option.accent}50`,
+                    background: option.disabled
+                      ? "rgba(255,255,255,0.08)"
+                      : `linear-gradient(135deg, ${option.accent}55, ${option.accent}22)`,
+                    border: option.disabled ? "1.5px solid rgba(255,255,255,0.1)" : `1.5px solid ${option.accent}50`,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     flexShrink: 0,
                     fontSize: 16,
                     fontWeight: 700,
-                    color: option.accent,
+                    color: option.disabled ? "rgba(255,255,255,0.4)" : option.accent,
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  {option.name[0]}
+                  {option.icon ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={option.icon} />
+                    </svg>
+                  ) : (
+                    option.name[0]
+                  )}
                 </div>
 
                 {/* Text */}
@@ -202,7 +228,7 @@ export const SmartphoneContactMinigame = ({ onSelect }: SmartphoneContactMinigam
                   height="12"
                   viewBox="0 0 7 12"
                   fill="none"
-                  style={{ flexShrink: 0, opacity: 0.35, transition: "opacity 0.15s" }}
+                  style={{ flexShrink: 0, opacity: option.disabled ? 0.15 : 0.35, transition: "opacity 0.15s" }}
                   className="group-hover:opacity-70"
                 >
                   <path d="M1 1l5 5-5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

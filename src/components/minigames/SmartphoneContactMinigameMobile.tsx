@@ -2,11 +2,26 @@ import { smartphoneContactOptions } from "@/components/minigames/smartphoneConta
 
 type SmartphoneContactMinigameMobileProps = {
   onSelect: (nextLabel: string) => void;
+  showSleepOption?: boolean;
+  sleepOptionNext?: string;
+  disabledContacts?: string[];
 };
 
 export const SmartphoneContactMinigameMobile = ({
   onSelect,
+  showSleepOption = false,
+  sleepOptionNext = "epilogue",
+  disabledContacts = [],
 }: SmartphoneContactMinigameMobileProps) => {
+  const visibleOptions = smartphoneContactOptions
+    .filter((option) => option.id !== "sleep" || showSleepOption)
+    .map((option) => {
+      const isDisabled = disabledContacts.includes(option.id) || option.disabled;
+      if (option.id === "sleep") {
+        return { ...option, next: sleepOptionNext, disabled: isDisabled };
+      }
+      return { ...option, disabled: isDisabled };
+    });
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center"
@@ -197,18 +212,24 @@ export const SmartphoneContactMinigameMobile = ({
           className="flex flex-col overflow-y-auto px-3 pt-2.5 gap-1.5"
           style={{ paddingBottom: 8, flex: 1, minHeight: 0 }}
         >
-          {smartphoneContactOptions.map((option) => (
+          {visibleOptions.map((option) => (
             <button
               key={option.id}
               type="button"
-              onClick={() => onSelect(option.next)}
+              onClick={() => !option.disabled && onSelect(option.next)}
+              disabled={option.disabled}
               className="flex items-center gap-3 text-left transition-all duration-150 active:scale-[0.98]"
               style={{
                 borderRadius: 14,
                 padding: "9px 12px",
-                background: `linear-gradient(135deg, ${option.accent}18 0%, rgba(255,255,255,0.025) 100%)`,
-                border: `1px solid ${option.accent}24`,
+                background: option.disabled
+                  ? "rgba(255,255,255,0.025)"
+                  : `linear-gradient(135deg, ${option.accent}18 0%, rgba(255,255,255,0.025) 100%)`,
+                border: option.disabled ? "1px solid rgba(255,255,255,0.08)" : `1px solid ${option.accent}24`,
                 boxShadow: `inset 0 1px 0 rgba(255,255,255,0.05)`,
+                opacity: option.disabled ? 0.4 : 1,
+                cursor: option.disabled ? "not-allowed" : "pointer",
+                filter: option.disabled ? "grayscale(0.5)" : "none",
               }}
             >
               {/* Avatar */}
@@ -217,19 +238,27 @@ export const SmartphoneContactMinigameMobile = ({
                   width: 36,
                   height: 36,
                   borderRadius: 11,
-                  background: `linear-gradient(135deg, ${option.accent}50, ${option.accent}1a)`,
-                  border: `1.5px solid ${option.accent}44`,
+                  background: option.disabled
+                    ? "rgba(255,255,255,0.08)"
+                    : `linear-gradient(135deg, ${option.accent}50, ${option.accent}1a)`,
+                  border: option.disabled ? "1.5px solid rgba(255,255,255,0.1)" : `1.5px solid ${option.accent}44`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   flexShrink: 0,
                   fontSize: 14,
                   fontWeight: 700,
-                  color: option.accent,
+                  color: option.disabled ? "rgba(255,255,255,0.4)" : option.accent,
                   letterSpacing: "-0.02em",
                 }}
               >
-                {option.name[0]}
+                {option.icon ? (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={option.icon} />
+                  </svg>
+                ) : (
+                  option.name[0]
+                )}
               </div>
 
               {/* Text */}
@@ -252,7 +281,7 @@ export const SmartphoneContactMinigameMobile = ({
                 height="12"
                 viewBox="0 0 7 12"
                 fill="none"
-                style={{ flexShrink: 0, opacity: 0.3 }}
+                style={{ flexShrink: 0, opacity: option.disabled ? 0.15 : 0.3 }}
               >
                 <path
                   d="M1 1l5 5-5 5"

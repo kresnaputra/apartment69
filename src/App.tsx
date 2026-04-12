@@ -5,6 +5,7 @@ import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorBut
 import { PipeConnectionMinigameMobile } from "@/components/minigames/PipeConnectionMinigameMobile";
 import { SmartphoneContactMinigame } from "@/components/minigames/SmartphoneContactMinigame";
 import { SmartphoneContactMinigameMobile } from "@/components/minigames/SmartphoneContactMinigameMobile";
+import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { MainMenu } from "@/components/MainMenu";
 import { MainMenuMobile } from "@/components/MainMenuMobile";
@@ -771,8 +772,20 @@ const App = () => {
             : <PipeConnectionMinigame onComplete={completeMinigame} />
         ) : activeMinigame?.id === "smartphone-contacts" ? (
           isMobile
-            ? <SmartphoneContactMinigameMobile onSelect={choose} />
-            : <SmartphoneContactMinigame onSelect={choose} />
+            ? <SmartphoneContactMinigameMobile 
+                onSelect={choose} 
+                showSleepOption={activeMinigame.options?.showSleepOption as boolean}
+                sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
+                disabledContacts={activeMinigame.options?.disabledContacts as string[]}
+              />
+            : <SmartphoneContactMinigame 
+                onSelect={choose} 
+                showSleepOption={activeMinigame.options?.showSleepOption as boolean}
+                sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
+                disabledContacts={activeMinigame.options?.disabledContacts as string[]}
+              />
+        ) : activeMinigame?.id === "laptop-cleanup" ? (
+          <LaptopCleanupMinigame onComplete={completeMinigame} />
         ) : null}
 
         {activeCutScene ? (

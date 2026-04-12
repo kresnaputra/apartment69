@@ -172,9 +172,10 @@ export const jumpIf = (
   elseTarget: options?.elseTarget,
 });
 
-export const minigame = (minigameId: MinigameId): VisualNovelCommand => ({
+export const minigame = (minigameId: MinigameId, options?: Record<string, unknown>): VisualNovelCommand => ({
   type: "minigame",
   minigameId,
+  options,
 });
 
 /**

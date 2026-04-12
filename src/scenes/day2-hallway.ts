@@ -1,5 +1,5 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import { bg, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, narrate, say, show } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 
 export const day2HallwayScene: VisualNovelCommand[] = [
@@ -33,4 +33,14 @@ export const day2HallwayScene: VisualNovelCommand[] = [
   narrate(
     "From inside Maya's room, the laptop fan is screaming like a machine that's been running way past its limit.",
   ),
+  say("arka", "serious", "Is that your laptop? Sounds like it's about to explode."),
+  say(
+    "maya",
+    "worried",
+    "(Long sigh) Yeah... it's been super slow since last night. Opening a Word doc takes five minutes. I'm scared my assignment file is gonna get corrupted.",
+  ),
+  say("arka", "gentle", "Let me take a quick look."),
+  hide("maya-day2-hallway"),
+  hide("arka-day2-hallway"),
+  jump("day2-maya-bedroom"),
 ];

@@ -30,11 +30,15 @@ import {
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
+import { day1ComplateScene } from "@/scenes/day1-complate";
 import { day2BedroomScene } from "@/scenes/day2-bedroom";
+import { day2FreeTimeScene } from "@/scenes/day2-free-time";
 import { day2HallwayScene } from "@/scenes/day2-hallway";
+import { day2MayaBedroomScene } from "@/scenes/day2-maya-bedroom";
+import { day2ComplateScene } from "@/scenes/day2-complate";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "opening",
+  startLabel: "bedroom-day1",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,
@@ -56,8 +60,12 @@ export const demoScript: VisualNovelScript = {
     "bedroom-day1-elena": bedroomDay1ElenaScene,
     "bedroom-day1-nadia": bedroomDay1NadiaScene,
     "bedroom-day1-sara": bedroomDay1SaraScene,
+    "day1-complate": day1ComplateScene,
     "day2-bedroom": day2BedroomScene,
     "day2-hallway": day2HallwayScene,
+    "day2-maya-bedroom": day2MayaBedroomScene,
+    "day2-free-time": day2FreeTimeScene,
+    "day2-complate": day2ComplateScene,
     epilogue: epilogueScene,
   },
 };

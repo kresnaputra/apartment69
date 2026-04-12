@@ -21,7 +21,7 @@ export type ChoiceOption = {
 export type FlagValue = boolean | number | string | null;
 export type FlagMap = Record<string, FlagValue>;
 
-export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts";
+export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts" | "laptop-cleanup";
 
 export type ActiveCutScene = {
   src: string;
@@ -30,6 +30,7 @@ export type ActiveCutScene = {
 export type ActiveMinigame = {
   id: MinigameId;
   startedAt: number;
+  options?: Record<string, unknown>;
 };
 
 export type CharacterStagePosition = "left" | "center" | "right";
@@ -145,6 +146,7 @@ export type JumpIfCommand = {
 export type MinigameCommand = {
   type: "minigame";
   minigameId: MinigameId;
+  options?: Record<string, unknown>;
 };
 
 export type CutSceneCommand = {

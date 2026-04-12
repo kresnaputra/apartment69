@@ -400,6 +400,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.activeMinigame = {
           id: command.minigameId,
           startedAt: Date.now(),
+          options: command.options,
         };
         nextState.line = "";
         nextState.choices = [];

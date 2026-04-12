@@ -34,7 +34,8 @@ export const bedroomDay1MayaScene: VisualNovelCommand[] = [
     "Maya first. She looked one bad day away from completely crashing out. I'd better check in on her before campus gets even rougher.",
   ),
   narrate("Arka locks his phone, drops it beside the pillow, and sets Maya at the top of tomorrow's list."),
-  jump("epilogue"),
+  hide("arka-bedroom"),
+  jump("day1-complate"),
 ];
 
 export const bedroomDay1ElenaScene: VisualNovelCommand[] = [
@@ -44,7 +45,8 @@ export const bedroomDay1ElenaScene: VisualNovelCommand[] = [
     "Elena first. She's intense, sure, but that leak clearly wasn't the only thing messing with her. Might as well deal with the hardest one early.",
   ),
   narrate("Arka stares at the dark ceiling for a second, already bracing himself for Elena's attitude tomorrow."),
-  jump("epilogue"),
+  hide("arka-bedroom"),
+  jump("day2-bedroom"),
 ];
 
 export const bedroomDay1NadiaScene: VisualNovelCommand[] = [
@@ -54,7 +56,8 @@ export const bedroomDay1NadiaScene: VisualNovelCommand[] = [
     "Nadia first. She's loud, chaotic, and somehow impossible to ignore. If I leave that much energy unattended, something's definitely gonna blow up.",
   ),
   narrate("Arka snorts to himself, sets Nadia as the first name to check on, then tosses the phone aside."),
-  jump("epilogue"),
+  hide("arka-bedroom"),
+  jump("day2-bedroom"),
 ];
 
 export const bedroomDay1SaraScene: VisualNovelCommand[] = [
@@ -64,5 +67,6 @@ export const bedroomDay1SaraScene: VisualNovelCommand[] = [
     "Sarah first. People like her don't really ask twice, and if I keep a penthouse request hanging, she's definitely gonna call me out on it.",
   ),
   narrate("Arka puts the phone down and lets out a slow breath. Tomorrow already sounds like a lot."),
-  jump("epilogue"),
+  hide("arka-bedroom"),
+  jump("day2-bedroom"),
 ];
