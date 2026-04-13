@@ -118,23 +118,29 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
   say(
     "arka",
     "gentle",
-    "It's okay if you need to cry first. Totally normal to be stressed like this. You don't have to hold it in around me.",
+    "It's okay if you need to cry first, Maya. Totally normal to be stressed when you're constantly under pressure like that. You don't have to hold it in around me.",
   ),
 
   narrate(
-    "(Maya's eyes well up again. She doesn't say anything for a moment, then just... lets it out. Arka stays quiet, giving her space.)",
+    "(Hearing that, Maya finally can't hold it in anymore and cries. Arka steps closer, gently patting her shoulder and letting her calm down on her own. No poetic words, just being there for someone who needs support.)",
   ),
 
   say(
     "maya",
     "worried",
-    "(sniffling) Thanks... I didn't realize how much I needed to hear that. Everyone always expects me to just... handle it.",
+    "(After calming down a bit, wiping her eyes again) Thanks, Arka. Sorry for being all emotional this early in the morning.",
   ),
 
   say(
     "arka",
     "gentle",
-    "You don't have to be strong all the time. Not with me, at least.",
+    "Relax. Better to let it out than let it eat you up inside. Go wash your face. I'm heading to campus. If you need anything, just text me.",
+  ),
+
+  say(
+    "maya",
+    "calm",
+    "(Nods softly) Yeah. Be careful out there.",
   ),
 
   narrate(
