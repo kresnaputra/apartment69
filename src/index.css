@@ -45,9 +45,15 @@ textarea {
   height: 100dvh;
   overflow: hidden;
   background-color: var(--bg);
+  user-select: none;
+}
+
+.vn-background {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
-  user-select: none;
+  will-change: transform;
 }
 
 .vn-vignette {
@@ -757,6 +763,15 @@ textarea {
 
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes vn-bg-zoom-pan {
+  from {
+    transform: scale(1) translate(0, 0);
+  }
+  to {
+    transform: scale(var(--vn-bg-zoom, 1.2)) translate(var(--vn-bg-pan-x, 10%), var(--vn-bg-pan-y, 0));
   }
 }
 

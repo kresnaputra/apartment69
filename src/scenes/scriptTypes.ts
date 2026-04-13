@@ -38,18 +38,28 @@ export const scene = (background: string, location?: string, transitionDuration?
  * Creates a scene command with an image-based background and optional parallax layers.
  * @param imageUrl - Vite-imported image URL for the base background
  * @param location - Optional location name shown in the caption
- * @param options - parallaxLayers, transitionDuration
+ * @param options - parallaxLayers, transitionDuration, backgroundAnimation
  */
 export const bg = (
   imageUrl: string,
   location?: string,
-  options?: { parallaxLayers?: ParallaxLayer[]; transitionDuration?: number },
+  options?: {
+    parallaxLayers?: ParallaxLayer[];
+    transitionDuration?: number;
+    backgroundAnimation?: {
+      zoom?: number;
+      panX?: number;
+      panY?: number;
+      duration?: number;
+    };
+  },
 ): SceneCommand => ({
   type: "scene",
   background: `url(${imageUrl})`,
   location,
   parallaxLayers: options?.parallaxLayers,
   transitionDuration: options?.transitionDuration,
+  backgroundAnimation: options?.backgroundAnimation,
 });
 
 /**

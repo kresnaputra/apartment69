@@ -23,6 +23,12 @@ type NovelStore = {
   bundles: Record<string, LoadedSpritesheetBundle>;
   background: string;
   parallaxLayers: ParallaxLayer[];
+  backgroundAnimation: {
+    zoom?: number;
+    panX?: number;
+    panY?: number;
+    duration?: number;
+  } | null;
   location: string;
   textPresentation: "dialogue" | "narration" | "centered";
   speaker: string | null;
@@ -68,6 +74,12 @@ const script: VisualNovelScript = demoScript;
 const emptyState = {
   background: "linear-gradient(180deg, #080b12 0%, #04050a 100%)",
   parallaxLayers: [] as ParallaxLayer[],
+  backgroundAnimation: null as {
+    zoom?: number;
+    panX?: number;
+    panY?: number;
+    duration?: number;
+  } | null,
   location: "",
   textPresentation: "dialogue" as const,
   speaker: null,
@@ -296,6 +308,7 @@ const runScriptUntilPause = (state: NovelStore) => {
       case "scene":
         nextState.background = command.background;
         nextState.parallaxLayers = command.parallaxLayers ?? [];
+        nextState.backgroundAnimation = command.backgroundAnimation ?? null;
         nextState.location = command.location ?? "";
         nextState.sceneTransitionDuration = command.transitionDuration ?? 720;
         nextState.sceneTransitionToken = (nextState.sceneTransitionToken ?? 0) + 1;

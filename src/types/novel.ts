@@ -59,6 +59,12 @@ export type SceneCommand = {
   location?: string;
   transitionDuration?: number;
   parallaxLayers?: ParallaxLayer[];
+  backgroundAnimation?: {
+    zoom?: number;
+    panX?: number;
+    panY?: number;
+    duration?: number;
+  };
 };
 
 export type ShowCharacterCommand = {

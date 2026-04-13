@@ -1,14 +1,5 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import {
-  bg,
-  narrate,
-  say,
-  show,
-  hide,
-  jump,
-  menu,
-  setFlag,
-} from "@/scenes/scriptTypes";
+import { bg, narrate, say, show, menu, setFlag } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 
@@ -137,11 +128,7 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
     "Relax. Better to let it out than let it eat you up inside. Go wash your face. I'm heading to campus. If you need anything, just text me.",
   ),
 
-  say(
-    "maya",
-    "calm",
-    "(Nods softly) Yeah. Be careful out there.",
-  ),
+  say("maya", "calm", "(Nods softly) Yeah. Be careful out there."),
 
   narrate(
     "(Effect: Maya feels safer and not judged, emotional closeness increases.)",

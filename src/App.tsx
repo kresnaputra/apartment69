@@ -263,6 +263,7 @@ const App = () => {
   const bundles = useNovelStore((state) => state.bundles);
   const background = useNovelStore((state) => state.background);
   const parallaxLayers = useNovelStore((state) => state.parallaxLayers);
+  const backgroundAnimation = useNovelStore((state) => state.backgroundAnimation);
   const location = useNovelStore((state) => state.location);
   const textPresentation = useNovelStore((state) => state.textPresentation);
   const speaker = useNovelStore((state) => state.speaker);
@@ -580,7 +581,7 @@ const App = () => {
       )}
       <main
         className="vn-root"
-        style={{ visibility: phase === "story" ? "visible" : "hidden", backgroundImage: background }}
+        style={{ visibility: phase === "story" ? "visible" : "hidden" }}
         onClick={() => {
           if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
             suppressAdvanceOnceRef.current = false;
@@ -599,6 +600,20 @@ const App = () => {
           advance();
         }}
       >
+        <div
+          className="vn-background"
+          style={{
+            backgroundImage: background,
+            ...(backgroundAnimation && {
+              animation: `vn-bg-zoom-pan ${backgroundAnimation.duration ?? 8}s ease-in-out forwards`,
+            }),
+            ...(backgroundAnimation && ({
+              "--vn-bg-zoom": backgroundAnimation.zoom ?? 1.2,
+              "--vn-bg-pan-x": `${backgroundAnimation.panX ?? 10}%`,
+              "--vn-bg-pan-y": `${backgroundAnimation.panY ?? 0}%`,
+            } as CSSProperties)),
+          }}
+        />
         <div className="vn-vignette" />
         <div className="vn-stage">
           <div className="vn-lighting" />
