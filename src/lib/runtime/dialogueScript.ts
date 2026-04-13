@@ -36,9 +36,10 @@ import { day2FreeTimeScene } from "@/scenes/day2-free-time";
 import { day2HallwayScene } from "@/scenes/day2-hallway";
 import { day2MayaBedroomScene } from "@/scenes/day2-maya-bedroom";
 import { day2ComplateScene } from "@/scenes/day2-complate";
+import { mayaPhoneCallScene, mayaPhoneCallLogicalScene, mayaPhoneCallEmpathyScene } from "@/scenes/day3-mayaPhoneCall";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "opening",
+  startLabel: "day3-maya-phone-call",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,
@@ -66,6 +67,9 @@ export const demoScript: VisualNovelScript = {
     "day2-maya-bedroom": day2MayaBedroomScene,
     "day2-free-time": day2FreeTimeScene,
     "day2-complate": day2ComplateScene,
+    "day3-maya-phone-call": mayaPhoneCallScene,
+    "maya-phone-call-logical": mayaPhoneCallLogicalScene,
+    "maya-phone-call-empathy": mayaPhoneCallEmpathyScene,
     epilogue: epilogueScene,
   },
 };
