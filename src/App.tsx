@@ -18,6 +18,7 @@ import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { characterBundleRegistry } from "@/character";
+import type { SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
 import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
@@ -792,12 +793,18 @@ const App = () => {
                 showSleepOption={activeMinigame.options?.showSleepOption as boolean}
                 sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
                 disabledContacts={activeMinigame.options?.disabledContacts as string[]}
+                title={activeMinigame.options?.title as string}
+                subtitle={activeMinigame.options?.subtitle as string}
+                contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
               />
             : <SmartphoneContactMinigame 
                 onSelect={choose} 
                 showSleepOption={activeMinigame.options?.showSleepOption as boolean}
                 sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
                 disabledContacts={activeMinigame.options?.disabledContacts as string[]}
+                title={activeMinigame.options?.title as string}
+                subtitle={activeMinigame.options?.subtitle as string}
+                contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
               />
         ) : activeMinigame?.id === "laptop-cleanup" ? (
           <LaptopCleanupMinigame onComplete={completeMinigame} />

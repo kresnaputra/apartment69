@@ -1,22 +1,30 @@
-import { smartphoneContactOptions } from "@/components/minigames/smartphoneContacts";
+import { resolveSmartphoneContactOptions, type SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
 
 type SmartphoneContactMinigameProps = {
   onSelect: (nextLabel: string) => void;
   showSleepOption?: boolean;
   sleepOptionNext?: string;
   disabledContacts?: string[];
+  title?: string;
+  subtitle?: string;
+  contactOverrides?: SmartphoneContactOverrides;
 };
 
-export const SmartphoneContactMinigame = ({ onSelect, showSleepOption = false, sleepOptionNext = "epilogue", disabledContacts = [] }: SmartphoneContactMinigameProps) => {
-  const visibleOptions = smartphoneContactOptions
-    .filter((option) => option.id !== "sleep" || showSleepOption)
-    .map((option) => {
-      const isDisabled = disabledContacts.includes(option.id) || option.disabled;
-      if (option.id === "sleep") {
-        return { ...option, next: sleepOptionNext, disabled: isDisabled };
-      }
-      return { ...option, disabled: isDisabled };
-    });
+export const SmartphoneContactMinigame = ({
+  onSelect,
+  showSleepOption = false,
+  sleepOptionNext = "epilogue",
+  disabledContacts = [],
+  title = "Who will you text first?",
+  subtitle = "You can't run into everyone at once. Pick one contact to prioritize first.",
+  contactOverrides = {},
+}: SmartphoneContactMinigameProps) => {
+  const visibleOptions = resolveSmartphoneContactOptions({
+    showSleepOption,
+    sleepOptionNext,
+    disabledContacts,
+    overrides: contactOverrides,
+  });
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
@@ -157,10 +165,10 @@ export const SmartphoneContactMinigame = ({ onSelect, showSleepOption = false, s
               Messages
             </div>
             <div style={{ marginTop: 2, fontSize: 22, fontWeight: 700, letterSpacing: "-0.03em", color: "#fff" }}>
-              Who will you text first?
+              {title}
             </div>
             <div style={{ marginTop: 4, fontSize: 12.5, color: "rgba(255,255,255,0.52)", lineHeight: 1.5 }}>
-              You can't run into everyone at once. Pick one contact to prioritize first.
+              {subtitle}
             </div>
           </div>
 
@@ -219,6 +227,16 @@ export const SmartphoneContactMinigame = ({ onSelect, showSleepOption = false, s
                 <div className="flex-1 min-w-0">
                   <div style={{ fontSize: 14.5, fontWeight: 600, color: "#fff", letterSpacing: "-0.02em" }}>
                     {option.name}
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 3,
+                      fontSize: 11.5,
+                      lineHeight: 1.45,
+                      color: option.disabled ? "rgba(255,255,255,0.32)" : "rgba(255,255,255,0.58)",
+                    }}
+                  >
+                    {option.blurb}
                   </div>
                 </div>
 

@@ -5,8 +5,10 @@ import {
   say,
   show,
   menu,
+  jump,
   setFlag,
   cutScene,
+  hide,
 } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
@@ -115,6 +117,9 @@ export const mayaPhoneCallLogicalScene: VisualNovelCommand[] = [
   ),
 
   setFlag("maya-love", 1),
+  hide("maya-bedroom"),
+  hide("arka-hallway"),
+  jump("day3-route-selection"),
 ];
 
 export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
@@ -147,4 +152,7 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
   ),
 
   setFlag("maya-love", 2),
+  hide("maya-bedroom"),
+  hide("arka-hallway"),
+  jump("day3-route-selection"),
 ];

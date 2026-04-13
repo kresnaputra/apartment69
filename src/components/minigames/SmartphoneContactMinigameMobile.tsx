@@ -1,10 +1,13 @@
-import { smartphoneContactOptions } from "@/components/minigames/smartphoneContacts";
+import { resolveSmartphoneContactOptions, type SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
 
 type SmartphoneContactMinigameMobileProps = {
   onSelect: (nextLabel: string) => void;
   showSleepOption?: boolean;
   sleepOptionNext?: string;
   disabledContacts?: string[];
+  title?: string;
+  subtitle?: string;
+  contactOverrides?: SmartphoneContactOverrides;
 };
 
 export const SmartphoneContactMinigameMobile = ({
@@ -12,16 +15,16 @@ export const SmartphoneContactMinigameMobile = ({
   showSleepOption = false,
   sleepOptionNext = "epilogue",
   disabledContacts = [],
+  title = "Who will you text first?",
+  subtitle = "You can't run into everyone at once. Pick one contact to prioritize first.",
+  contactOverrides = {},
 }: SmartphoneContactMinigameMobileProps) => {
-  const visibleOptions = smartphoneContactOptions
-    .filter((option) => option.id !== "sleep" || showSleepOption)
-    .map((option) => {
-      const isDisabled = disabledContacts.includes(option.id) || option.disabled;
-      if (option.id === "sleep") {
-        return { ...option, next: sleepOptionNext, disabled: isDisabled };
-      }
-      return { ...option, disabled: isDisabled };
-    });
+  const visibleOptions = resolveSmartphoneContactOptions({
+    showSleepOption,
+    sleepOptionNext,
+    disabledContacts,
+    overrides: contactOverrides,
+  });
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center"
@@ -192,7 +195,7 @@ export const SmartphoneContactMinigameMobile = ({
               lineHeight: 1.2,
             }}
           >
-            Who will you text first?
+            {title}
           </div>
           <div
             style={{
@@ -202,8 +205,7 @@ export const SmartphoneContactMinigameMobile = ({
               lineHeight: 1.4,
             }}
           >
-            You can't run into everyone at once. Pick one contact to prioritize
-            first.
+            {subtitle}
           </div>
         </div>
 
@@ -272,6 +274,16 @@ export const SmartphoneContactMinigameMobile = ({
                   }}
                 >
                   {option.name}
+                </div>
+                <div
+                  style={{
+                    marginTop: 2,
+                    fontSize: 10.5,
+                    lineHeight: 1.4,
+                    color: option.disabled ? "rgba(255,255,255,0.32)" : "rgba(255,255,255,0.54)",
+                  }}
+                >
+                  {option.blurb}
                 </div>
               </div>
 
