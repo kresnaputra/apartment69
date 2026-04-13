@@ -15,27 +15,22 @@ import mayaBedroomUrl from "@/background/maya-bedroom.png";
 export const mayaPhoneCallScene: VisualNovelCommand[] = [
   bg(hallwayUrl, "Apartment 69 - Hallway"),
 
-  // Arka's internal monologue
   narrate(
     "Arka (thinking): \"Dude, I was literally about to head out to campus when I heard some commotion coming from Maya's room. Her door's cracked open a bit.\"",
   ),
 
-  // Father's voice (voiceover)
   narrate(
     "Voice on phone: \"...Dad doesn't wanna hear excuses about broken laptops or whatever. You're there to study! If you bomb that anatomy exam next week, just pack your bags and come home. No more college for you.\"",
   ),
 
-  // Maya's response
   narrate(
     "Maya: (voice shaking) \"Y-yes, Dad... I get it. I'll try harder. I'm sorry...\"",
   ),
 
-  // Phone hang up, crying
   narrate(
     "(Click. The line goes dead. Silence for a sec, then... muffled sobbing. Arka just stands there in the hallway, processing what he heard before finally giving the door a soft knock.)",
   ),
 
-  // Arka's internal monologue
   narrate(
     "Arka (thinking): \"Damn, no wonder she's so stressed out. Her dad's pressure is insane. Feels wrong to just dip and pretend I didn't hear all that.\"",
   ),
@@ -53,7 +48,6 @@ export const mayaPhoneCallScene: VisualNovelCommand[] = [
     enterFrom: "fade",
   }),
 
-  // Maya wipes her eyes, trying to play it cool
   narrate(
     "(Maya looks startled, quickly wiping her eyes with her sleeve. She's standing in the middle of her messy room, trying to smile even though her eyes are all red.)",
   ),
@@ -90,7 +84,6 @@ export const mayaPhoneCallScene: VisualNovelCommand[] = [
   ]),
 ];
 
-// Logical Approach Branch
 export const mayaPhoneCallLogicalScene: VisualNovelCommand[] = [
   say(
     "arka",
@@ -121,7 +114,6 @@ export const mayaPhoneCallLogicalScene: VisualNovelCommand[] = [
   setFlag("maya-love", 1),
 ];
 
-// Empathy Approach Branch
 export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
   say(
     "arka",
