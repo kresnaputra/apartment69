@@ -211,6 +211,7 @@ export type CharacterDefinition = {
   displayName: string;
   defaultBundleId: string;
   bundleIdByEmotion?: Partial<Record<AnyCharacterEmotion, string>>;
+  talkingBundleIdByEmotion?: Partial<Record<AnyCharacterEmotion, string>>;
   talkingBundleId?: string;
   defaultEmotion?: AnyCharacterEmotion;
   defaultPosition?: CharacterStagePosition;

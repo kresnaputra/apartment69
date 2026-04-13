@@ -142,8 +142,16 @@ const resolveBundleId = (
   isTalking = false,
   fallbackBundleId?: string,
 ) => {
-  if (isTalking && definition?.talkingBundleId) return definition.talkingBundleId;
   if (!definition) return fallbackBundleId ?? "unknown-bundle";
+
+  if (isTalking) {
+    const emotionTalkingBundleId = emotion
+      ? definition.talkingBundleIdByEmotion?.[emotion]
+      : undefined;
+
+    if (emotionTalkingBundleId) return emotionTalkingBundleId;
+    if (definition.talkingBundleId) return definition.talkingBundleId;
+  }
 
   return (
     (emotion ? definition.bundleIdByEmotion?.[emotion] : undefined) ??

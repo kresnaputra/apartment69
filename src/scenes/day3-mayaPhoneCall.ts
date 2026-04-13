@@ -55,7 +55,7 @@ export const mayaPhoneCallScene: VisualNovelCommand[] = [
 
   say(
     "maya",
-    "worried",
+    "sad",
     "Oh, Arka. You haven't left yet? Sorry, I forgot to shut the door all the way.",
   ),
 
@@ -69,7 +69,7 @@ export const mayaPhoneCallScene: VisualNovelCommand[] = [
 
   say(
     "maya",
-    "calm",
+    "sad",
     "Yeah, basically. He just wants me to graduate med school with perfect grades. Sometimes it's exhausting, like I'm just expected to be some studying robot.",
   ),
 
@@ -100,7 +100,7 @@ export const mayaPhoneCallLogicalScene: VisualNovelCommand[] = [
 
   say(
     "maya",
-    "calm",
+    "neutral",
     "You're... kinda right. I've been running on fumes. Maybe I do need to actually rest instead of cramming 24/7.",
   ),
 
@@ -130,7 +130,7 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
 
   say(
     "maya",
-    "worried",
+    "sad",
     "(After calming down a bit, wiping her eyes again) Thanks, Arka. Sorry for being all emotional this early in the morning.",
   ),
 
@@ -140,7 +140,7 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
     "Relax. Better to let it out than let it eat you up inside. Go wash your face. I'm heading to campus. If you need anything, just text me.",
   ),
 
-  say("maya", "calm", "(Nods softly) Yeah. Be careful out there."),
+  say("maya", "blush", "(Nods softly) Yeah. Be careful out there."),
 
   narrate(
     "(Effect: Maya feels safer and not judged, emotional closeness increases.)",
