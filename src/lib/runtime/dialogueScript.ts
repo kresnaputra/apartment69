@@ -38,7 +38,7 @@ import { day2MayaBedroomScene } from "@/scenes/day2-maya-bedroom";
 import { day2ComplateScene } from "@/scenes/day2-complate";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "bedroom-day1",
+  startLabel: "opening",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,
