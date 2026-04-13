@@ -1,7 +1,16 @@
 import type { VisualNovelCommand } from "@/types/novel";
-import { bg, narrate, say, show, menu, setFlag } from "@/scenes/scriptTypes";
+import {
+  bg,
+  narrate,
+  say,
+  show,
+  menu,
+  setFlag,
+  cutScene,
+} from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
+import mayaPhoneCallVideo from "@/cut-scene/cutscene-maya-room.webm?url";
 
 export const mayaPhoneCallScene: VisualNovelCommand[] = [
   bg(hallwayUrl, "Apartment 69 - Hallway"),
@@ -33,21 +42,24 @@ export const mayaPhoneCallScene: VisualNovelCommand[] = [
 
   say("arka", "gentle", "Maya? Uh, sorry... your door's kinda open."),
 
-  bg(mayaBedroomUrl, "Apartment 69 - Maya's Bedroom"),
-  show("maya-bedroom", "maya", "worried", {
-    position: "center",
-    enterFrom: "fade",
-  }),
+  cutScene(mayaPhoneCallVideo),
 
   narrate(
     "(Maya looks startled, quickly wiping her eyes with her sleeve. She's standing in the middle of her messy room, trying to smile even though her eyes are all red.)",
   ),
+
+  show("maya-bedroom", "maya", "worried", {
+    position: "center",
+    enterFrom: "fade",
+  }),
 
   say(
     "maya",
     "worried",
     "Oh, Arka. You haven't left yet? Sorry, I forgot to shut the door all the way.",
   ),
+
+  bg(mayaBedroomUrl, "Apartment 69 - Maya's Bedroom"),
 
   say(
     "arka",
