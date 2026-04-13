@@ -46,7 +46,7 @@ import {
 import { day3ComplateScene } from "@/scenes/day3-complate";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "day3-maya-phone-call",
+  startLabel: "opening",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,
