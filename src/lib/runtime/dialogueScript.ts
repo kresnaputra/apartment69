@@ -39,7 +39,7 @@ import { day2ComplateScene } from "@/scenes/day2-complate";
 import { mayaPhoneCallScene, mayaPhoneCallLogicalScene, mayaPhoneCallEmpathyScene } from "@/scenes/day3-mayaPhoneCall";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "day3-maya-phone-call",
+  startLabel: "opening",
   labels: {
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,
