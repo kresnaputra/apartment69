@@ -2,48 +2,48 @@ import {
   elenaEncounterScene,
   helpElenaScene,
   ignoreElenaScene,
-} from "@/scenes/elenaEncounter";
+} from "@/scenes/day1/elenaEncounter";
 import {
   acceptMayaNumberScene,
   declineMayaNumberScene,
   elevatorMeetingScene,
-} from "@/scenes/elevatorMeeting";
+} from "@/scenes/day1/elevatorMeeting";
 import { epilogueScene } from "@/scenes/epilogue";
 import {
   nadiaAdviceHelpScene,
   nadiaAdviceRefuseScene,
   nadiaBalconyScene,
-} from "@/scenes/nadiaBalcony";
-import { openingScene } from "@/scenes/opening";
+} from "@/scenes/day1/nadiaBalcony";
+import { openingScene } from "@/scenes/day1/opening";
 import {
   saraHallwayScene,
   saraHelpScene,
   saraRefuseScene,
-} from "@/scenes/saraHallway";
+} from "@/scenes/day1/saraHallway";
 import {
   bedroomDay1ElenaScene,
   bedroomDay1MayaScene,
   bedroomDay1NadiaScene,
   bedroomDay1SaraScene,
   bedroomDay1Scene,
-} from "@/scenes/bedroomDay1";
+} from "@/scenes/day1/bedroomDay1";
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
 import type { VisualNovelScript } from "@/types/novel";
-import { day1ComplateScene } from "@/scenes/day1-complate";
-import { day2BedroomScene } from "@/scenes/day2-bedroom";
-import { day2FreeTimeScene } from "@/scenes/day2-free-time";
-import { day2HallwayScene } from "@/scenes/day2-hallway";
-import { day2MayaBedroomScene } from "@/scenes/day2-maya-bedroom";
-import { day2ComplateScene } from "@/scenes/day2-complate";
-import { mayaPhoneCallScene, mayaPhoneCallLogicalScene, mayaPhoneCallEmpathyScene } from "@/scenes/day3-mayaPhoneCall";
+import { day1ComplateScene } from "@/scenes/day1/day1-complate";
+import { day2BedroomScene } from "@/scenes/day2/day2-bedroom";
+import { day2FreeTimeScene } from "@/scenes/day2/day2-free-time";
+import { day2HallwayScene } from "@/scenes/day2/day2-hallway";
+import { day2MayaBedroomScene } from "@/scenes/day2/day2-maya-bedroom";
+import { day2ComplateScene } from "@/scenes/day2/day2-complate";
+import { mayaPhoneCallScene, mayaPhoneCallLogicalScene, mayaPhoneCallEmpathyScene } from "@/scenes/day3/day3-mayaPhoneCall";
 import {
   day3RouteSelectionScene,
   day3Slot2ElenaScene,
   day3Slot2NadiaScene,
   day3Slot2SarahScene,
-} from "@/scenes/day3-route-selection";
-import { day3ComplateScene } from "@/scenes/day3-complate";
+} from "@/scenes/day3/day3-route-selection";
+import { day3ComplateScene } from "@/scenes/day3/day3-complate";
 
 export const demoScript: VisualNovelScript = {
   startLabel: "opening",
