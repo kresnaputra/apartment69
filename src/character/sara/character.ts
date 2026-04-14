@@ -1,5 +1,5 @@
 import type { CharacterDefinition } from "@/types/novel";
-import { isMobile } from "pixi.js";
+import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 export const saraBundleRegistry = {
   "sara-normal": "/characters/sara/normal/spritesheets-manifest.json",
@@ -23,7 +23,7 @@ export const saraCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.0,
   defaultY: -150,
-  defaultScale: isMobile ? 2.8 : 2.4,
+  defaultScale: isMobileDevice() ? 2.5 : 2.8,
   defaultOpacity: 0.96,
   defaultFrame: 0,
   defaultFps: 24,

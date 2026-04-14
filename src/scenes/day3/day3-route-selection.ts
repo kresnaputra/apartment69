@@ -9,10 +9,10 @@ import {
   setFlag,
   show,
 } from "@/scenes/scriptTypes";
-import apartmentFrontUrl from "@/background/apartment-front.png";
+import universityUrl from "@/background/university.png";
 
 export const day3RouteSelectionScene: VisualNovelCommand[] = [
-  bg(apartmentFrontUrl, "Campus Parking Area - 16:00"),
+  bg(universityUrl, "Campus Parking Area - 16:00"),
   show("arka-campus", "arka", "neutral", {
     position: "left",
     enterFrom: "fade",

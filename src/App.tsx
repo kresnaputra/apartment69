@@ -201,6 +201,7 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
 const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => void }) => {
   const [visible, setVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
   const completedRef = useRef(false);
 
   useEffect(() => {
@@ -212,11 +213,11 @@ const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => v
   }, []);
 
   const handleExit = useCallback(() => {
-    if (completedRef.current) return;
+    if (completedRef.current || !videoEnded) return;
     completedRef.current = true;
     setFadingOut(true);
     window.setTimeout(onComplete, CUTSCENE_FADE_MS);
-  }, [onComplete]);
+  }, [onComplete, videoEnded]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
@@ -241,7 +242,7 @@ const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => v
         justifyContent: "center",
         opacity: fadingOut || !visible ? 0 : 1,
         transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
-        cursor: "pointer",
+        cursor: videoEnded ? "pointer" : "default",
       }}
     >
       <video
@@ -249,6 +250,7 @@ const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => v
         src={src}
         autoPlay
         playsInline
+        onEnded={() => setVideoEnded(true)}
         style={{ width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }}
       />
     </div>

@@ -1,3 +1,4 @@
+import { isMobileDevice } from "@/lib/utils/deviceDetection";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const mayaBundleRegistry = {
@@ -32,7 +33,7 @@ export const mayaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0,
   defaultY: -250,
-  defaultScale: 2.8,
+  defaultScale: isMobileDevice() ? 2.6 : 2.8,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,

@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
-
-// Treat as mobile when the shorter viewport dimension is under 600px
-// (covers phones in both portrait and landscape).
-const MOBILE_MAX = 600;
-
-function check() {
-  return Math.min(window.innerWidth, window.innerHeight) < MOBILE_MAX;
-}
+import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 export function useIsMobile(): boolean {
-  const [mobile, setMobile] = useState(check);
+  const [mobile, setMobile] = useState(isMobileDevice);
 
   useEffect(() => {
-    const handler = () => setMobile(check());
+    const handler = () => setMobile(isMobileDevice());
     window.addEventListener("resize", handler);
     window.addEventListener("orientationchange", handler);
     return () => {

@@ -17,7 +17,7 @@ import type {
   VisualNovelCommand,
   VisualNovelScript,
 } from "@/types/novel";
-import { isMobile } from "pixi.js";
+import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 type NovelStore = {
   bundles: Record<string, LoadedSpritesheetBundle>;
@@ -106,8 +106,8 @@ const MAX_STEPS_PER_PASS = 100;
 const CHARACTER_FADE_AWAY_DURATION_MS = 420;
 
 const positionToX = (position: CharacterStagePosition) => {
-  if (position === "left") return isMobile ? 0.15 : 0.25;
-  if (position === "right") return isMobile ? 0.85 : 0.75;
+  if (position === "left") return isMobileDevice() ? 0.15 : 0.25;
+  if (position === "right") return isMobileDevice() ? 0.85 : 0.75;
   return 0.5;
 };
 
