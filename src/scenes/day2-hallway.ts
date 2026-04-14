@@ -15,7 +15,7 @@ export const day2HallwayScene: VisualNovelCommand[] = [
     position: "center",
     enterFrom: "fade",
   }),
-  say("maya", "surprised", "Arka...? What's up this early?"),
+  say("maya", "sad", "Arka...? What's up this early?"),
   say(
     "arka",
     "gentle",

@@ -273,6 +273,19 @@ const normalizeCharacter = (
   };
 };
 
+const findActiveCharacterEntry = (
+  characters: Record<string, CharacterInstance> | undefined,
+  speakerId: string,
+) => Object.entries(characters ?? {})
+  .filter(([, value]) => value.characterId === speakerId)
+  .sort(([, left], [, right]) => {
+    const leftScore = (left.visible ? 2 : 0) + (left.isExiting ? 0 : 1);
+    const rightScore = (right.visible ? 2 : 0) + (right.isExiting ? 0 : 1);
+
+    if (leftScore !== rightScore) return rightScore - leftScore;
+    return right.entryVersion - left.entryVersion;
+  })[0];
+
 const runScriptUntilPause = (state: NovelStore) => {
   const nextState: Partial<NovelStore> = {
     background: state.background,
@@ -475,9 +488,7 @@ const runScriptUntilPause = (state: NovelStore) => {
           },
         ];
         if (command.speaker && !UNKNOWN_SPEAKER_SET.has(command.speaker)) {
-          const activeCharacter = Object.entries(nextState.characters ?? {}).find(
-            ([, value]) => value.characterId === command.speaker,
-          );
+          const activeCharacter = findActiveCharacterEntry(nextState.characters, command.speaker);
           if (activeCharacter) {
             const [id, value] = activeCharacter;
             const definition = characterRegistry[command.speaker as keyof typeof characterRegistry];
