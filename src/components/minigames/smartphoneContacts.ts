@@ -54,7 +54,7 @@ export const smartphoneContactOptions: SmartphoneContactOption[] = [
     blurb: "Wrap things up early and move on to tomorrow.",
     next: "epilogue",
     disabled: false,
-    icon: "M6 3h12M8 1v4M16 1v4M5 8h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Zm2 5h4m6 4-5 5-2-2",
+    icon: "M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2Zm0 16H5V10h14v10Zm0-12H5V6h14v2Zm-7 5h5v5h-5Z",
   },
 ];
 
