@@ -14,7 +14,7 @@ export const arkaCharacter: CharacterDefinition = {
   defaultEmotion: "neutral",
   defaultPosition: "left",
   defaultEnterFrom: "left",
-  defaultXOffset: -0.05,
+  defaultXOffset: -0.1,
   defaultYOffset: 0,
   defaultMoveDuration: 420,
   defaultMoveEasing: "ease-in-out",
