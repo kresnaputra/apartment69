@@ -51,7 +51,7 @@ import {
 } from "@/scenes/day4/day4-maya-collapse";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "opening",
+  startLabel: "day4-maya-collapse",
   labels: {
     // Day 1
     opening: openingScene,

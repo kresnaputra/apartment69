@@ -4,8 +4,8 @@ import {
   bg,
   cutScene,
   hide,
-  jump,
   menu,
+  minigame,
   narrate,
   say,
   scene,
@@ -292,6 +292,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
     }),
     "arka",
   ),
+  minigame("email-compose"),
   bg(
     mayaBedroomUrl,
     tx({

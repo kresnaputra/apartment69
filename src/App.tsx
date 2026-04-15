@@ -6,6 +6,7 @@ import { PipeConnectionMinigameMobile } from "@/components/minigames/PipeConnect
 import { SmartphoneContactMinigame } from "@/components/minigames/SmartphoneContactMinigame";
 import { SmartphoneContactMinigameMobile } from "@/components/minigames/SmartphoneContactMinigameMobile";
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
+import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { MainMenu } from "@/components/MainMenu";
 import { MainMenuMobile } from "@/components/MainMenuMobile";
@@ -870,6 +871,8 @@ const App = () => {
               />
         ) : activeMinigame?.id === "laptop-cleanup" ? (
           <LaptopCleanupMinigame onComplete={completeMinigame} />
+        ) : activeMinigame?.id === "email-compose" ? (
+          <EmailComposeMinigame onComplete={completeMinigame} />
         ) : null}
 
         {activeCutScene ? (
