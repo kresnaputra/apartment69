@@ -1,32 +1,67 @@
+import { languageOptions, uiText, type LanguageCode } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
 import rainCityMusic from "@/music/rain-city.mp3";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
+import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 
 type MainMenuProps = {
+  bgVolume: number;
+  labels: {
+    close: string;
+    exit: string;
+    gallery: string;
+    load: string;
+    loading: string;
+    mainMenuSettings: string;
+    language: string;
+    settings: string;
+    slot: string;
+    start: string;
+    subtitle: string;
+    volumeBgm: string;
+  };
+  language: LanguageCode;
+  onLanguageChange: (language: LanguageCode) => void;
+  onBgVolumeChange: (value: number) => void;
   onStart: () => void;
   onLoad: (slot: SaveSlot) => void;
   slots: (SaveSlot | null)[];
   isReady: boolean;
 };
 
-export const MainMenu = ({ onStart, onLoad, slots, isReady }: MainMenuProps) => {
+export const MainMenu = ({
+  bgVolume,
+  labels,
+  language,
+  onLanguageChange,
+  onBgVolumeChange,
+  onStart,
+  onLoad,
+  slots,
+  isReady,
+}: MainMenuProps) => {
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [showLoadSlots, setShowLoadSlots] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
 
 
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
-    bgMusicRef.current.play(rainCityMusic, 0.4);
+    bgMusicRef.current.play(rainCityMusic, bgVolume);
     return () => {
       bgMusicRef.current?.dispose();
     };
-  }, []);
+  }, [bgVolume]);
+
+  useEffect(() => {
+    bgMusicRef.current?.setVolume(bgVolume);
+  }, [bgVolume]);
 
   useEffect(() => {
     const t = window.setTimeout(() => setVisible(true), 80);
@@ -62,7 +97,7 @@ export const MainMenu = ({ onStart, onLoad, slots, isReady }: MainMenuProps) => 
             <span className="vn-menu-title-main">APARTMENTS</span>
             <span className="vn-menu-title-num">69</span>
           </h1>
-          <p className="vn-menu-subtitle">The Helpful Neighbor</p>
+          <p className="vn-menu-subtitle">{labels.subtitle}</p>
         </header>
 
         <nav className="vn-menu-nav">
@@ -74,9 +109,9 @@ export const MainMenu = ({ onStart, onLoad, slots, isReady }: MainMenuProps) => 
             onClick={handleStart}
           >
             {!isReady ? (
-              <span className="vn-menu-btn-loading">Loading<span className="vn-menu-dots" /></span>
+              <span className="vn-menu-btn-loading">{labels.loading}<span className="vn-menu-dots" /></span>
             ) : (
-              "Start"
+              labels.start
             )}
           </button>
 
@@ -86,22 +121,22 @@ export const MainMenu = ({ onStart, onLoad, slots, isReady }: MainMenuProps) => 
             className="vn-menu-btn vn-menu-btn-secondary"
             onClick={() => setShowLoadSlots(true)}
           >
-            Load
+            {labels.load}
           </button>
 
           {/* Gallery */}
           <button type="button" disabled className="vn-menu-btn vn-menu-btn-secondary">
-            Gallery
+            {labels.gallery}
           </button>
 
           {/* Setting */}
-          <button type="button" disabled className="vn-menu-btn vn-menu-btn-secondary">
-            Setting
+          <button type="button" className="vn-menu-btn vn-menu-btn-secondary" onClick={() => setShowSettings(true)}>
+            {labels.settings}
           </button>
 
           {/* Exit */}
           <button type="button" className="vn-menu-btn vn-menu-btn-secondary" onClick={handleExit}>
-            Exit
+            {labels.exit}
           </button>
         </nav>
 
@@ -112,10 +147,30 @@ export const MainMenu = ({ onStart, onLoad, slots, isReady }: MainMenuProps) => 
 
       {showLoadSlots && (
         <SaveSlotOverlay
+          emptyLabel={uiText.emptySlot}
+          language={language}
           mode="load"
+          modeLabel={labels.load}
+          slotLabel={labels.slot}
           slots={slots}
+          unknownSceneLabel={uiText.unknownScene}
           onSelect={handleLoadSlot}
           onClose={() => setShowLoadSlots(false)}
+        />
+      )}
+
+      {showSettings && (
+        <MainMenuSettingsOverlay
+          bgVolume={bgVolume}
+          bgVolumeLabel={labels.volumeBgm}
+          closeLabel={labels.close}
+          language={language}
+          languageLabel={labels.language}
+          languageOptions={languageOptions}
+          onLanguageChange={onLanguageChange}
+          onBgVolumeChange={onBgVolumeChange}
+          onClose={() => setShowSettings(false)}
+          title={labels.mainMenuSettings}
         />
       )}
     </div>

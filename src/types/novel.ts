@@ -1,4 +1,5 @@
 import type { AnyCharacterEmotion, CharacterId } from "@/character/catalog";
+import type { LocalizedText } from "@/lib/i18n";
 
 export const unknownSpeakerIds = ["unknown", "uknokwn"] as const;
 
@@ -8,13 +9,13 @@ export type SpeakerId = CharacterId | UnknownSpeakerId;
 export type DialogueEntry = {
   id: string;
   speaker: string | null;
-  text: string;
+  text: LocalizedText;
   emotion?: AnyCharacterEmotion | null;
 };
 
 export type ChoiceOption = {
   id: string;
-  label: string;
+  label: LocalizedText;
   next: string;
 };
 
@@ -56,7 +57,7 @@ export type ParallaxLayer = {
 export type SceneCommand = {
   type: "scene";
   background: string;
-  location?: string;
+  location?: LocalizedText;
   transitionDuration?: number;
   parallaxLayers?: ParallaxLayer[];
   backgroundAnimation?: {
@@ -108,20 +109,20 @@ export type MoveCharacterCommand = {
 export type SayCommand = {
   type: "say";
   speaker?: string | null;
-  text: string;
+  text: LocalizedText;
   emotion?: AnyCharacterEmotion | null;
   hideName?: boolean;
 };
 
 export type CenteredTextCommand = {
   type: "centeredText";
-  text: string;
+  text: LocalizedText;
   size?: "hero" | "sub";
 };
 
 export type MenuCommand = {
   type: "menu";
-  prompt?: string;
+  prompt?: LocalizedText;
   options: ChoiceOption[];
 };
 

@@ -1,7 +1,18 @@
 type Choice = { id: string; label: string; next: string };
+type ControlLabels = {
+  auto: string;
+  config: string;
+  exit: string;
+  log: string;
+  save: string;
+  skip: string;
+};
 
 type DialogueMobileProps = {
+  controlLabels: ControlLabels;
+  continueHint: string;
   speaker: string | null;
+  finishHint: string;
   visibleLine: string;
   line: string;
   isTyping: boolean;
@@ -19,7 +30,10 @@ type DialogueMobileProps = {
 };
 
 export const DialogueMobile = ({
+  controlLabels,
+  continueHint,
   speaker,
+  finishHint,
   visibleLine,
   line,
   isTyping,
@@ -77,19 +91,19 @@ export const DialogueMobile = ({
       ) : (
         <div className="flex items-center justify-between gap-2 mt-2">
           <span className="text-[0.62rem] tracking-[0.02em] text-[#ccb9a9] shrink-0">
-            {isTyping ? "Tap to skip" : "Tap to continue"}
+            {isTyping ? finishHint : continueHint}
           </span>
           <div
             className="flex gap-1 pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {[
-              { label: "Auto", handler: onAuto, active: isAuto },
-              { label: "Skip", handler: onSkip, active: false },
-              { label: "Log", handler: onLog, active: false },
-              { label: "Save", handler: onSave, active: false },
-              { label: "Config", handler: onConfig, active: false },
-              { label: "Exit", handler: onExit, active: false },
+              { label: controlLabels.auto, handler: onAuto, active: isAuto },
+              { label: controlLabels.skip, handler: onSkip, active: false },
+              { label: controlLabels.log, handler: onLog, active: false },
+              { label: controlLabels.save, handler: onSave, active: false },
+              { label: controlLabels.config, handler: onConfig, active: false },
+              { label: controlLabels.exit, handler: onExit, active: false },
             ].map(({ label, handler, active }) => (
               <button
                 key={label}

@@ -1,12 +1,16 @@
 import { useEffect, useRef } from "react";
+import { resolveText, type LanguageCode } from "@/lib/i18n";
 import type { DialogueEntry } from "@/types/novel";
 
 type LogOverlayProps = {
   history: DialogueEntry[];
+  emptyLabel: string;
+  title: string;
+  language: LanguageCode;
   onClose: () => void;
 };
 
-export const LogOverlay = ({ history, onClose }: LogOverlayProps) => {
+export const LogOverlay = ({ history, emptyLabel, title, language, onClose }: LogOverlayProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,7 +31,7 @@ export const LogOverlay = ({ history, onClose }: LogOverlayProps) => {
           className="sticky top-0 flex items-center justify-between px-4 py-2.5 border-b border-white/10"
           style={{ background: "rgba(5,6,12,0.97)" }}
         >
-          <span className="text-white/50 text-[0.62rem] tracking-[0.08em] uppercase">Log</span>
+          <span className="text-white/50 text-[0.62rem] tracking-[0.08em] uppercase">{title}</span>
           <button
             type="button"
             onClick={onClose}
@@ -39,7 +43,7 @@ export const LogOverlay = ({ history, onClose }: LogOverlayProps) => {
 
         <div className="px-4 py-3 flex flex-col gap-3">
           {history.length === 0 ? (
-            <p className="text-white/30 text-[0.72rem] text-center py-4">Belum ada percakapan.</p>
+            <p className="text-white/30 text-[0.72rem] text-center py-4">{emptyLabel}</p>
           ) : (
             history.map((entry) => (
               <div key={entry.id} className="text-left">
@@ -48,7 +52,7 @@ export const LogOverlay = ({ history, onClose }: LogOverlayProps) => {
                     {entry.speaker}
                   </div>
                 )}
-                <p className="m-0 text-white/75 text-[0.74rem] leading-[1.55]">{entry.text}</p>
+                <p className="m-0 text-white/75 text-[0.74rem] leading-[1.55]">{resolveText(entry.text, language)}</p>
               </div>
             ))
           )}

@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { characterRegistry } from "@/character";
+import type { LocalizedText } from "@/lib/i18n";
+import { uiText } from "@/lib/i18n";
 import { demoScript } from "@/lib/runtime/dialogueScript";
 import { unknownSpeakerIds } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
@@ -29,7 +31,7 @@ type NovelStore = {
     panY?: number;
     duration?: number;
   } | null;
-  location: string;
+  location: LocalizedText;
   textPresentation: "dialogue" | "narration" | "centered";
   speaker: string | null;
   activeCharacterId: string | null;
@@ -38,27 +40,27 @@ type NovelStore = {
   pendingSceneContinuation: boolean;
   activeMinigame: ActiveMinigame | null;
   activeCutScene: ActiveCutScene | null;
-  line: string;
+  line: LocalizedText;
   lineSize: "hero" | "sub";
   choices: ChoiceOption[];
-  choicePrompt: string;
+  choicePrompt: LocalizedText;
   flags: FlagMap;
   history: DialogueEntry[];
   characters: Record<string, CharacterInstance>;
   currentLabel: string;
   currentIndex: number;
-  statusMessage: string;
+  statusMessage: LocalizedText;
   ready: boolean;
   isEnded: boolean;
   registerBundle: (id: string, bundle: LoadedSpritesheetBundle) => void;
-  setStatusMessage: (message: string) => void;
+  setStatusMessage: (message: LocalizedText) => void;
   startStory: () => void;
   clearScene: () => void;
   loadFromSave: (
     label: string,
     index: number,
     background: string,
-    location: string,
+    location: LocalizedText,
     characters: Record<string, CharacterInstance>,
     flags?: FlagMap,
   ) => void;
@@ -111,7 +113,7 @@ const positionToX = (position: CharacterStagePosition) => {
   return 0.5;
 };
 
-const createHistoryEntry = (speaker: string | null, text: string): DialogueEntry => ({
+const createHistoryEntry = (speaker: string | null, text: LocalizedText): DialogueEntry => ({
   id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
   speaker,
   text,
@@ -535,7 +537,7 @@ const runScriptUntilPause = (state: NovelStore) => {
 export const useNovelStore = create<NovelStore>((set) => ({
   bundles: {},
   ...emptyState,
-  statusMessage: "Memuat cerita...",
+  statusMessage: uiText.storyLoading,
 
   registerBundle: (id, bundle) =>
     set((state) => ({
@@ -543,7 +545,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
         ...state.bundles,
         [id]: bundle,
       },
-      statusMessage: "Karakter siap ditampilkan.",
+      statusMessage: uiText.charactersReady,
     })),
 
   setStatusMessage: (message) => set({ statusMessage: message }),

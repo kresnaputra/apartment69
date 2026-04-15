@@ -1,27 +1,58 @@
+import { languageOptions, uiText, type LanguageCode } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
 import rainCityMusic from "@/music/rain-city.mp3";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
+import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 
 type MainMenuMobileProps = {
+  bgVolume: number;
+  labels: {
+    close: string;
+    exit: string;
+    gallery: string;
+    load: string;
+    loading: string;
+    mainMenuSettings: string;
+    language: string;
+    settings: string;
+    slot: string;
+    start: string;
+    subtitle: string;
+    volumeBgm: string;
+  };
+  language: LanguageCode;
+  onLanguageChange: (language: LanguageCode) => void;
+  onBgVolumeChange: (value: number) => void;
   onStart: () => void;
   onLoad: (slot: SaveSlot) => void;
   slots: (SaveSlot | null)[];
   isReady: boolean;
 };
 
-export const MainMenuMobile = ({ onStart, onLoad, slots, isReady }: MainMenuMobileProps) => {
+export const MainMenuMobile = ({
+  bgVolume,
+  labels,
+  language,
+  onLanguageChange,
+  onBgVolumeChange,
+  onStart,
+  onLoad,
+  slots,
+  isReady,
+}: MainMenuMobileProps) => {
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [showLoadSlots, setShowLoadSlots] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
 
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
-    bgMusicRef.current.play(rainCityMusic, 0.4);
+    bgMusicRef.current.play(rainCityMusic, bgVolume);
 
     // Android WebView blocks audio until a user gesture. Retry on first touch/click.
     let unlocked = false;
@@ -40,7 +71,11 @@ export const MainMenuMobile = ({ onStart, onLoad, slots, isReady }: MainMenuMobi
       document.removeEventListener("click", unlock, true);
       bgMusicRef.current?.dispose();
     };
-  }, []);
+  }, [bgVolume]);
+
+  useEffect(() => {
+    bgMusicRef.current?.setVolume(bgVolume);
+  }, [bgVolume]);
 
   useEffect(() => {
     const t = window.setTimeout(() => setVisible(true), 80);
@@ -106,7 +141,7 @@ export const MainMenuMobile = ({ onStart, onLoad, slots, isReady }: MainMenuMobi
             className="m-0 text-white/88 tracking-[0.1em]"
             style={{ fontFamily: '"Mr De Haviland", cursive', fontSize: "clamp(1.4rem, 3.5vw, 2.6rem)" }}
           >
-            The Helpful Neighbor
+            {labels.subtitle}
           </p>
         </div>
 
@@ -122,11 +157,11 @@ export const MainMenuMobile = ({ onStart, onLoad, slots, isReady }: MainMenuMobi
           >
             {!isReady ? (
               <span className="inline-flex items-center gap-1">
-                Loading
+                {labels.loading}
                 <span className="inline-block overflow-hidden align-bottom w-[1.2em]" style={{ animation: "vn-menu-ellipsis 1.4s steps(4,end) infinite" }}>...</span>
               </span>
             ) : (
-              "Start"
+              labels.start
             )}
           </button>
 
@@ -137,22 +172,22 @@ export const MainMenuMobile = ({ onStart, onLoad, slots, isReady }: MainMenuMobi
             className={btnActive}
             style={fontStyle}
           >
-            Load
+            {labels.load}
           </button>
 
           {/* Gallery */}
           <button type="button" disabled className={btnDisabled} style={fontStyle}>
-            Gallery
+            {labels.gallery}
           </button>
 
           {/* Setting */}
-          <button type="button" disabled className={btnDisabled} style={fontStyle}>
-            Setting
+          <button type="button" onClick={() => setShowSettings(true)} className={btnActive} style={fontStyle}>
+            {labels.settings}
           </button>
 
           {/* Exit */}
           <button type="button" onClick={handleExit} className={btnActive} style={fontStyle}>
-            Exit
+            {labels.exit}
           </button>
         </div>
       </div>
@@ -168,10 +203,30 @@ export const MainMenuMobile = ({ onStart, onLoad, slots, isReady }: MainMenuMobi
       {/* Load slot picker */}
       {showLoadSlots && (
         <SaveSlotOverlay
+          emptyLabel={uiText.emptySlot}
+          language={language}
           mode="load"
+          modeLabel={labels.load}
+          slotLabel={labels.slot}
           slots={slots}
+          unknownSceneLabel={uiText.unknownScene}
           onSelect={handleLoadSlot}
           onClose={() => setShowLoadSlots(false)}
+        />
+      )}
+
+      {showSettings && (
+        <MainMenuSettingsOverlay
+          bgVolume={bgVolume}
+          bgVolumeLabel={labels.volumeBgm}
+          closeLabel={labels.close}
+          language={language}
+          languageLabel={labels.language}
+          languageOptions={languageOptions}
+          onLanguageChange={onLanguageChange}
+          onBgVolumeChange={onBgVolumeChange}
+          onClose={() => setShowSettings(false)}
+          title={labels.mainMenuSettings}
         />
       )}
     </div>

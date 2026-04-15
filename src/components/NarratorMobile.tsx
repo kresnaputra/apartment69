@@ -1,10 +1,18 @@
 type NarratorMobileProps = {
+  continueHint: string;
+  finishHint: string;
   visibleLine: string;
   isTyping: boolean;
   isSceneTransitioning: boolean;
 };
 
-export const NarratorMobile = ({ visibleLine, isTyping, isSceneTransitioning }: NarratorMobileProps) => (
+export const NarratorMobile = ({
+  continueHint,
+  finishHint,
+  visibleLine,
+  isTyping,
+  isSceneTransitioning,
+}: NarratorMobileProps) => (
   <div
     className={`absolute inset-0 z-30 flex items-center justify-start px-5 pb-10 pt-8 pointer-events-none transition-opacity duration-[160ms] ${isSceneTransitioning ? "opacity-0" : "opacity-100"}`}
   >
@@ -19,7 +27,7 @@ export const NarratorMobile = ({ visibleLine, isTyping, isSceneTransitioning }: 
         {visibleLine}
       </p>
       <p className="mt-2 m-0 text-[0.6rem] tracking-[0.16em] uppercase text-[rgba(232,214,194,0.75)]">
-        {isTyping ? "Tap to skip" : "Tap to continue"}
+        {isTyping ? finishHint : continueHint}
       </p>
     </div>
   </div>

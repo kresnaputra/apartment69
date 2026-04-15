@@ -14,6 +14,7 @@ import { DialogueMobile } from "@/components/DialogueMobile";
 import { LogOverlay } from "@/components/LogOverlay";
 import { ConfigOverlay } from "@/components/ConfigOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
+import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, uiText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -305,16 +306,61 @@ const App = () => {
   const [showLog, setShowLog] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [showSaveSlots, setShowSaveSlots] = useState(false);
+  const [language, setLanguage] = useState<LanguageCode>(() => {
+    if (typeof window === "undefined") return DEFAULT_LANGUAGE;
+    const saved = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    return saved && languageOptions.some((option) => option.code === saved)
+      ? saved as LanguageCode
+      : DEFAULT_LANGUAGE;
+  });
   const [bgVolume, setBgVolume] = useState(0.4);
   const [saveToast, setSaveToast] = useState(false);
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
   const audioRef = useRef<NovelAudioEngine | null>(null);
   const previousSceneTransitionTokenRef = useRef<number | null>(null);
   const suppressAdvanceOnceRef = useRef(false);
-  const visibleLine = line.slice(0, revealedCount);
-  const isTyping = revealedCount < line.length;
-  const isNarration = textPresentation === "narration" && choices.length === 0 && Boolean(line);
-  const isCenteredText = textPresentation === "centered" && choices.length === 0 && Boolean(line);
+  const resolvedLine = resolveText(line, language);
+  const resolvedLocation = resolveText(location, language);
+  const resolvedStatusMessage = resolveText(statusMessage, language);
+  const visibleLine = resolvedLine.slice(0, revealedCount);
+  const isTyping = revealedCount < resolvedLine.length;
+  const isNarration = textPresentation === "narration" && choices.length === 0 && Boolean(resolvedLine);
+  const isCenteredText = textPresentation === "centered" && choices.length === 0 && Boolean(resolvedLine);
+  const resolvedChoices = choices.map((choice) => ({
+    ...choice,
+    label: resolveText(choice.label, language),
+  }));
+  const labels = {
+    auto: resolveText(uiText.auto, language),
+    clickToContinue: resolveText(uiText.clickToContinue, language),
+    clickToFinish: resolveText(uiText.clickToFinish, language),
+    close: resolveText(uiText.close, language),
+    config: resolveText(uiText.config, language),
+    emptySlot: resolveText(uiText.emptySlot, language),
+    exit: resolveText(uiText.exit, language),
+    gallery: resolveText(uiText.gallery, language),
+    language: resolveText(uiText.language, language),
+    load: resolveText(uiText.load, language),
+    loading: resolveText(uiText.loading, language),
+    log: resolveText(uiText.log, language),
+    mainMenuSettings: resolveText(uiText.mainMenuSettings, language),
+    noConversation: resolveText(uiText.noConversation, language),
+    save: resolveText(uiText.save, language),
+    saved: resolveText(uiText.saved, language),
+    settings: resolveText(uiText.settings, language),
+    skip: resolveText(uiText.skip, language),
+    slot: resolveText(uiText.slot, language),
+    start: resolveText(uiText.start, language),
+    subtitle: resolveText(uiText.titleSubtitle, language),
+    tapToContinue: resolveText(uiText.tapToContinue, language),
+    tapToSkip: resolveText(uiText.tapToSkip, language),
+    unknownScene: resolveText(uiText.unknownScene, language),
+    volumeBgm: resolveText(uiText.volumeBgm, language),
+  };
+
+  useEffect(() => {
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+  }, [language]);
 
   useEffect(() => {
     audioRef.current = new NovelAudioEngine();
@@ -370,7 +416,7 @@ const App = () => {
 
     const load = async () => {
       try {
-        setStatusMessage("Memuat bundle karakter...");
+        setStatusMessage(uiText.bundlesLoading);
         const bundleEntries = Object.entries(characterBundleRegistry);
 
         const loadedBundles = await Promise.all(
@@ -435,14 +481,14 @@ const App = () => {
 
   useLayoutEffect(() => {
     setRevealedCount(0);
-  }, [line]);
+  }, [resolvedLine]);
 
   useEffect(() => {
-    if (!line) return;
+    if (!resolvedLine) return;
 
     const timer = window.setInterval(() => {
       setRevealedCount((current) => {
-        if (current >= line.length) {
+        if (current >= resolvedLine.length) {
           window.clearInterval(timer);
           return current;
         }
@@ -451,14 +497,14 @@ const App = () => {
     }, TEXT_SPEED);
 
     return () => window.clearInterval(timer);
-  }, [line]);
+  }, [resolvedLine]);
 
   // Auto-advance: when enabled, advance to the next line 1.5s after text finishes typing.
   useEffect(() => {
     if (!isAuto || isTyping || choices.length > 0 || isSceneTransitioning || isEnded) return;
     const timer = window.setTimeout(() => { advance(); }, 1500);
     return () => window.clearTimeout(timer);
-  }, [isAuto, isTyping, choices.length, isSceneTransitioning, isEnded, advance, line]);
+  }, [isAuto, isTyping, choices.length, isSceneTransitioning, isEnded, advance, resolvedLine]);
 
   useEffect(() => {
     let animationFrame = 0;
@@ -494,7 +540,7 @@ const App = () => {
       }
 
       if (isTyping) {
-        setRevealedCount(line.length);
+        setRevealedCount(resolvedLine.length);
         return;
       }
 
@@ -516,7 +562,7 @@ const App = () => {
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("contextmenu", handleContextMenu);
     };
-  }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, line.length]);
+  }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, resolvedLine.length]);
 
   const handleStartStory = () => {
     startStory();
@@ -527,7 +573,7 @@ const App = () => {
 
   const handleSkip = () => {
     if (isTyping) {
-      setRevealedCount(line.length);
+      setRevealedCount(resolvedLine.length);
     } else {
       advance();
     }
@@ -539,9 +585,9 @@ const App = () => {
       // currentIndex is already past the say command; step back to re-display it on load
       currentIndex: Math.max(0, currentIndex - 1),
       background,
-      location,
+      location: resolvedLocation,
       speaker,
-      preview: line.slice(0, 80),
+      preview: resolvedLine.slice(0, 80),
       savedAt: Date.now(),
       characters,
       flags,
@@ -579,8 +625,8 @@ const App = () => {
     <>
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
-          : <MainMenu onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
+          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} language={language} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
+          : <MainMenu bgVolume={bgVolume} labels={labels} language={language} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
       )}
       <main
         className="vn-root"
@@ -597,7 +643,7 @@ const App = () => {
             return;
           }
           if (isTyping) {
-            setRevealedCount(line.length);
+            setRevealedCount(resolvedLine.length);
             return;
           }
           advance();
@@ -675,12 +721,12 @@ const App = () => {
           {isMobile ? (
             <div className="absolute top-3 right-3 z-20">
               <div className="border border-white/10 bg-[rgba(11,10,18,0.36)] backdrop-blur-[14px] rounded-full px-3 py-1.5 text-[0.6rem] tracking-[0.32em] uppercase text-[#ccb9a9]">
-                {location || "\u00a0"}
+                {resolvedLocation || "\u00a0"}
               </div>
             </div>
           ) : (
             <div className="vn-caption">
-              <div className="vn-location">{location || " "}</div>
+              <div className="vn-location">{resolvedLocation || " "}</div>
             </div>
           )}
         </div>
@@ -690,13 +736,15 @@ const App = () => {
             <div className="vn-centered-text-box">
               <div className={`vn-centered-text-line vn-centered-text-line-${lineSize}`}>{visibleLine}</div>
               <div className="vn-centered-text-hint">
-                {isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}
+                {isTyping ? labels.clickToFinish : labels.clickToContinue}
               </div>
             </div>
           </div>
         ) : isNarration ? (
           isMobile ? (
             <NarratorMobile
+              continueHint={labels.tapToContinue}
+              finishHint={labels.tapToSkip}
               visibleLine={visibleLine}
               isTyping={isTyping}
               isSceneTransitioning={isSceneTransitioning}
@@ -705,19 +753,29 @@ const App = () => {
             <div className={`vn-narrator-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
               <div className="vn-narrator-box">
                 <div className="vn-narrator-line">{visibleLine}</div>
-                <div className="vn-narrator-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
+                <div className="vn-narrator-hint">{isTyping ? labels.clickToFinish : labels.clickToContinue}</div>
               </div>
             </div>
           )
         ) : (
           isMobile ? (
             <DialogueMobile
+              controlLabels={{
+                auto: labels.auto,
+                config: labels.config,
+                exit: labels.exit,
+                log: labels.log,
+                save: labels.save,
+                skip: labels.skip,
+              }}
+              continueHint={labels.tapToContinue}
+              finishHint={labels.tapToSkip}
               speaker={speaker}
               visibleLine={visibleLine}
-              line={line}
+              line={resolvedLine}
               isTyping={isTyping}
               isSceneTransitioning={isSceneTransitioning}
-              choices={choices}
+              choices={resolvedChoices}
               onChoose={choose}
               onSuppressAdvance={() => { suppressAdvanceOnceRef.current = true; }}
               isAuto={isAuto}
@@ -732,11 +790,11 @@ const App = () => {
             <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
               <div className="vn-dialogue-box">
                 {speaker ? <div className="vn-speaker">{speaker}</div> : null}
-                <div className="vn-line">{line ? visibleLine : ""}</div>
+                <div className="vn-line">{resolvedLine ? visibleLine : ""}</div>
 
-                {choices.length > 0 ? (
+                {resolvedChoices.length > 0 ? (
                   <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
-                    {choices.map((choice) => (
+                    {resolvedChoices.map((choice) => (
                       <button
                         key={choice.id}
                         className="vn-choice"
@@ -754,12 +812,12 @@ const App = () => {
                   <div className="vn-dialogue-bar">
                     <div className="vn-controls" onClick={(e) => e.stopPropagation()}>
                       {([
-                        { label: "Log", onClick: () => setShowLog(true) },
-                        { label: "Auto", onClick: handleAuto, active: isAuto },
-                        { label: "Skip", onClick: handleSkip },
-                        { label: "Save", onClick: () => setShowSaveSlots(true) },
-                        { label: "Config", onClick: () => setShowConfig(true) },
-                        { label: "Exit", onClick: () => { clearScene(); setPhase("menu"); } },
+                        { label: labels.log, onClick: () => setShowLog(true) },
+                        { label: labels.auto, onClick: handleAuto, active: isAuto },
+                        { label: labels.skip, onClick: handleSkip },
+                        { label: labels.save, onClick: () => setShowSaveSlots(true) },
+                        { label: labels.config, onClick: () => setShowConfig(true) },
+                        { label: labels.exit, onClick: () => { clearScene(); setPhase("menu"); } },
                       ] as { label: string; onClick: () => void; active?: boolean }[]).map(({ label, onClick, active }) => (
                         <button
                           key={label}
@@ -772,7 +830,7 @@ const App = () => {
                         </button>
                       ))}
                     </div>
-                    <div className="vn-hint">{isTyping ? "Click to finish the text" : "Click / Space / Enter to continue"}</div>
+                    <div className="vn-hint">{isTyping ? labels.clickToFinish : labels.clickToContinue}</div>
                   </div>
                 )}
               </div>
@@ -792,20 +850,22 @@ const App = () => {
           isMobile
             ? <SmartphoneContactMinigameMobile 
                 onSelect={choose} 
+                language={language}
                 showSleepOption={activeMinigame.options?.showSleepOption as boolean}
                 sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
                 disabledContacts={activeMinigame.options?.disabledContacts as string[]}
-                title={activeMinigame.options?.title as string}
-                subtitle={activeMinigame.options?.subtitle as string}
+                title={activeMinigame.options?.title as LocalizedText}
+                subtitle={activeMinigame.options?.subtitle as LocalizedText}
                 contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
               />
             : <SmartphoneContactMinigame 
                 onSelect={choose} 
+                language={language}
                 showSleepOption={activeMinigame.options?.showSleepOption as boolean}
                 sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
                 disabledContacts={activeMinigame.options?.disabledContacts as string[]}
-                title={activeMinigame.options?.title as string}
-                subtitle={activeMinigame.options?.subtitle as string}
+                title={activeMinigame.options?.title as LocalizedText}
+                subtitle={activeMinigame.options?.subtitle as LocalizedText}
                 contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
               />
         ) : activeMinigame?.id === "laptop-cleanup" ? (
@@ -820,39 +880,57 @@ const App = () => {
           <div className="vn-loading">
             <div className="vn-loading-card">
               <p className="vn-loading-label">Loading</p>
-              <p className="vn-loading-text">{statusMessage}</p>
+              <p className="vn-loading-text">{resolvedStatusMessage}</p>
             </div>
           </div>
         ) : null}
 
-        {showLog && (
-          <LogOverlay history={history} onClose={() => setShowLog(false)} />
-        )}
-
-        {showConfig && (
-          <ConfigOverlay
-            bgVolume={bgVolume}
-            onBgVolumeChange={handleBgVolumeChange}
-            onClose={() => setShowConfig(false)}
-          />
-        )}
-
-        {showSaveSlots && (
-          <SaveSlotOverlay
-            mode="save"
-            slots={slots}
-            onSelect={handleSaveToSlot}
-            onClose={() => setShowSaveSlots(false)}
-          />
-        )}
-
-        {saveToast && (
-          <div className="fixed bottom-[12vh] left-1/2 -translate-x-1/2 z-50 pointer-events-none px-4 py-2 rounded-full text-[0.7rem] text-white/80 tracking-[0.04em]"
-            style={{ background: "rgba(5,6,12,0.85)", backdropFilter: "blur(6px)" }}>
-            Saved!
-          </div>
-        )}
       </main>
+
+      {showLog && (
+        <LogOverlay
+          emptyLabel={labels.noConversation}
+          history={history}
+          language={language}
+          title={labels.log}
+          onClose={() => setShowLog(false)}
+        />
+      )}
+
+      {showConfig && (
+        <ConfigOverlay
+          bgVolume={bgVolume}
+          bgVolumeLabel={labels.volumeBgm}
+          configLabel={labels.config}
+          language={language}
+          languageLabel={labels.language}
+          languageOptions={languageOptions}
+          onLanguageChange={setLanguage}
+          onBgVolumeChange={handleBgVolumeChange}
+          onClose={() => setShowConfig(false)}
+        />
+      )}
+
+      {showSaveSlots && (
+        <SaveSlotOverlay
+          emptyLabel={uiText.emptySlot}
+          language={language}
+          mode="save"
+          modeLabel={labels.save}
+          slotLabel={labels.slot}
+          slots={slots}
+          unknownSceneLabel={uiText.unknownScene}
+          onSelect={handleSaveToSlot}
+          onClose={() => setShowSaveSlots(false)}
+        />
+      )}
+
+      {saveToast && (
+        <div className="fixed bottom-[12vh] left-1/2 -translate-x-1/2 z-50 pointer-events-none px-4 py-2 rounded-full text-[0.7rem] text-white/80 tracking-[0.04em]"
+          style={{ background: "rgba(5,6,12,0.85)", backdropFilter: "blur(6px)" }}>
+          {labels.saved}
+        </div>
+      )}
     </>
   );
 };

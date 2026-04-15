@@ -44,6 +44,11 @@ import {
   day3Slot2SarahScene,
 } from "@/scenes/day3/day3-route-selection";
 import { day3ComplateScene } from "@/scenes/day3/day3-complate";
+import {
+  day4MayaBadEndingScene,
+  day4MayaCollapseScene,
+  day4MayaForceRestScene,
+} from "@/scenes/day4/day4-maya-collapse";
 
 export const demoScript: VisualNovelScript = {
   startLabel: "opening",
@@ -85,6 +90,10 @@ export const demoScript: VisualNovelScript = {
     "day3-slot2-nadia": day3Slot2NadiaScene,
     "day3-slot2-sarah": day3Slot2SarahScene,
     "day3-complete": day3ComplateScene,
+    // Day 4
+    "day4-maya-collapse": day4MayaCollapseScene,
+    "day4-maya-bad-ending": day4MayaBadEndingScene,
+    "day4-maya-force-rest": day4MayaForceRestScene,
     epilogue: epilogueScene,
   },
 };

@@ -1,4 +1,5 @@
 import type { AnyCharacterEmotion, CharacterEmotion, CharacterId } from "@/character/catalog";
+import type { LocalizedText } from "@/lib/i18n";
 import type {
   CenteredTextCommand,
   CharacterHideTransition,
@@ -27,7 +28,7 @@ type CenteredTextOptions = {
   size?: "hero" | "sub";
 };
 
-export const scene = (background: string, location?: string, transitionDuration?: number): SceneCommand => ({
+export const scene = (background: string, location?: LocalizedText, transitionDuration?: number): SceneCommand => ({
   type: "scene",
   background,
   location,
@@ -42,7 +43,7 @@ export const scene = (background: string, location?: string, transitionDuration?
  */
 export const bg = (
   imageUrl: string,
-  location?: string,
+  location?: LocalizedText,
   options?: {
     parallaxLayers?: ParallaxLayer[];
     transitionDuration?: number;
@@ -98,13 +99,13 @@ export const hide = (
   transition,
 });
 
-export const narrate = (text: string, speaker?: string): SayCommand => ({
+export const narrate = (text: LocalizedText, speaker?: string): SayCommand => ({
   type: "say",
   speaker: speaker ?? null,
   text,
 });
 
-export const centeredText = (text: string, options?: CenteredTextOptions): CenteredTextCommand => ({
+export const centeredText = (text: LocalizedText, options?: CenteredTextOptions): CenteredTextCommand => ({
   type: "centeredText",
   text,
   size: options?.size,
@@ -113,19 +114,19 @@ export const centeredText = (text: string, options?: CenteredTextOptions): Cente
 export function say<TCharacterId extends CharacterId>(
   characterId: TCharacterId,
   emotion: CharacterEmotion<TCharacterId>,
-  text: string,
+  text: LocalizedText,
   options?: SayOptions,
 ): SayCommand;
 export function say(
   characterId: SpeakerId,
   emotion: AnyCharacterEmotion,
-  text: string,
+  text: LocalizedText,
   options?: SayOptions,
 ): SayCommand;
 export function say(
   characterId: SpeakerId,
   emotion: AnyCharacterEmotion,
-  text: string,
+  text: LocalizedText,
   options?: SayOptions,
 ): SayCommand {
   return {
@@ -137,7 +138,7 @@ export function say(
   };
 }
 
-export const menu = (prompt: string, options: ChoiceOption[]): VisualNovelCommand => ({
+export const menu = (prompt: LocalizedText, options: ChoiceOption[]): VisualNovelCommand => ({
   type: "menu",
   prompt,
   options,

@@ -1,30 +1,55 @@
+import type { LanguageCode, LocalizedText } from "@/lib/i18n";
+import { resolveText } from "@/lib/i18n";
 import { resolveSmartphoneContactOptions, type SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
 
 type SmartphoneContactMinigameMobileProps = {
   onSelect: (nextLabel: string) => void;
+  language: LanguageCode;
   showSleepOption?: boolean;
   sleepOptionNext?: string;
   disabledContacts?: string[];
-  title?: string;
-  subtitle?: string;
+  title?: LocalizedText;
+  subtitle?: LocalizedText;
+  appLabel?: LocalizedText;
   contactOverrides?: SmartphoneContactOverrides;
 };
 
 export const SmartphoneContactMinigameMobile = ({
   onSelect,
+  language,
   showSleepOption = false,
   sleepOptionNext = "epilogue",
   disabledContacts = [],
-  title = "Who will you text first?",
-  subtitle = "You can't run into everyone at once. Pick one contact to prioritize first.",
+  title = {
+    id: "Siapa yang mau kamu chat dulu?",
+    en: "Who will you text first?",
+    ja: "最初に誰へ連絡する？",
+    ko: "누구에게 먼저 연락할까?",
+  },
+  subtitle = {
+    id: "Kamu nggak mungkin ketemu semua orang sekaligus. Pilih satu kontak yang mau diprioritaskan dulu.",
+    en: "You can't run into everyone at once. Pick one contact to prioritize first.",
+    ja: "全員に一度に会うのは無理だ。まず優先する相手を一人選ぼう。",
+    ko: "한 번에 모두를 만날 수는 없다. 먼저 우선할 한 명을 고르자.",
+  },
+  appLabel = {
+    id: "Pesan",
+    en: "Messages",
+    ja: "メッセージ",
+    ko: "메시지",
+  },
   contactOverrides = {},
 }: SmartphoneContactMinigameMobileProps) => {
   const visibleOptions = resolveSmartphoneContactOptions({
+    language,
     showSleepOption,
     sleepOptionNext,
     disabledContacts,
     overrides: contactOverrides,
   });
+  const resolvedTitle = resolveText(title, language);
+  const resolvedSubtitle = resolveText(subtitle, language);
+  const resolvedAppLabel = resolveText(appLabel, language);
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center"
@@ -183,7 +208,7 @@ export const SmartphoneContactMinigameMobile = ({
               fontWeight: 500,
             }}
           >
-            Messages
+            {resolvedAppLabel}
           </div>
           <div
             style={{
@@ -195,7 +220,7 @@ export const SmartphoneContactMinigameMobile = ({
               lineHeight: 1.2,
             }}
           >
-            {title}
+            {resolvedTitle}
           </div>
           <div
             style={{
@@ -205,7 +230,7 @@ export const SmartphoneContactMinigameMobile = ({
               lineHeight: 1.4,
             }}
           >
-            {subtitle}
+            {resolvedSubtitle}
           </div>
         </div>
 

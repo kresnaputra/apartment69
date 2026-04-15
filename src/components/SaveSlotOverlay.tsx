@@ -1,20 +1,37 @@
+import { getDateLocale, resolveText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { SLOT_COUNT } from "@/lib/runtime/saveSlots";
 
 type SaveSlotOverlayProps = {
+  emptyLabel: LocalizedText;
+  language: LanguageCode;
   mode: "save" | "load";
+  modeLabel: string;
+  slotLabel: string;
   slots: (SaveSlot | null)[];
+  unknownSceneLabel: LocalizedText;
   onSelect: (index: number) => void;
   onClose: () => void;
 };
 
-const formatDate = (ts: number) => {
+const formatDate = (ts: number, language: LanguageCode) => {
   const d = new Date(ts);
-  return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" })
-    + " " + d.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+  const locale = getDateLocale(language);
+  return d.toLocaleDateString(locale, { day: "2-digit", month: "short", year: "numeric" })
+    + " " + d.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
 };
 
-export const SaveSlotOverlay = ({ mode, slots, onSelect, onClose }: SaveSlotOverlayProps) => (
+export const SaveSlotOverlay = ({
+  emptyLabel,
+  language,
+  mode,
+  modeLabel,
+  slotLabel,
+  slots,
+  unknownSceneLabel,
+  onSelect,
+  onClose,
+}: SaveSlotOverlayProps) => (
   <div
     className="fixed inset-0 z-50 flex items-end justify-center pointer-events-auto"
     onClick={onClose}
@@ -26,7 +43,7 @@ export const SaveSlotOverlay = ({ mode, slots, onSelect, onClose }: SaveSlotOver
     >
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10">
         <span className="text-white/50 text-[0.62rem] tracking-[0.08em] uppercase">
-          {mode === "save" ? "Save" : "Load"}
+          {modeLabel}
         </span>
         <button
           type="button"
@@ -58,19 +75,19 @@ export const SaveSlotOverlay = ({ mode, slots, onSelect, onClose }: SaveSlotOver
             >
               <div className="flex items-center justify-between gap-2 mb-1">
                 <span className="text-white/40 text-[0.58rem] tracking-[0.06em] uppercase">
-                  Slot {i + 1}
+                  {slotLabel} {i + 1}
                 </span>
                 {!isEmpty && (
-                  <span className="text-white/30 text-[0.56rem]">{formatDate(slot.savedAt)}</span>
+                  <span className="text-white/30 text-[0.56rem]">{formatDate(slot.savedAt, language)}</span>
                 )}
               </div>
 
               {isEmpty ? (
-                <p className="m-0 text-white/25 text-[0.68rem] italic">— Empty —</p>
+                <p className="m-0 text-white/25 text-[0.68rem] italic">{resolveText(emptyLabel, language)}</p>
               ) : (
                 <>
                   <p className="m-0 text-white/70 text-[0.72rem] font-medium mb-0.5 truncate">
-                    {slot.location || "Unknown Scene"}
+                    {slot.location || resolveText(unknownSceneLabel, language)}
                   </p>
                   {slot.speaker && (
                     <p className="m-0 text-[#d2a456] text-[0.62rem] italic mb-0.5">{slot.speaker}</p>
