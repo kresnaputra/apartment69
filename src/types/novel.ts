@@ -26,6 +26,7 @@ export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-con
 
 export type ActiveCutScene = {
   src: string;
+  loop?: boolean;
 };
 
 export type ActiveMinigame = {
@@ -159,6 +160,7 @@ export type MinigameCommand = {
 export type CutSceneCommand = {
   type: "cutScene";
   src: string;
+  loop?: boolean;
 };
 
 export type VisualNovelCommand =

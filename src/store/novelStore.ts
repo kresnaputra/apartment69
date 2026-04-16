@@ -451,7 +451,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.activeCharacterId = null;
         nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
         nextState.pendingSceneContinuation = false;
-        nextState.activeCutScene = { src: command.src };
+        nextState.activeCutScene = { src: command.src, loop: command.loop };
         nextState.line = "";
         nextState.choices = [];
         nextState.choicePrompt = "";

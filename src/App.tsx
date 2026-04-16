@@ -31,7 +31,7 @@ import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import gameplayMusic from "@/music/gameplay.mp3";
 
 const TEXT_SPEED = 18;
-const CUTSCENE_FADE_MS = 2000;
+const CUTSCENE_FADE_MS = 600;
 const CHARACTER_TICK_FPS = 40;
 const CHARACTER_ENTER_DURATION_MS = 520;
 const CHARACTER_FADE_ENTER_DURATION_MS = 820;
@@ -200,7 +200,7 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   );
 });
 
-const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => void }) => {
+const CutSceneOverlay = ({ src, loop, onComplete }: { src: string; loop?: boolean; onComplete: () => void }) => {
   const [visible, setVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
@@ -215,11 +215,13 @@ const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => v
   }, []);
 
   const handleExit = useCallback(() => {
-    if (completedRef.current || !videoEnded) return;
+    if (completedRef.current) return;
+    // Allow exit if video ended OR if loop is enabled
+    if (!videoEnded && !loop) return;
     completedRef.current = true;
     setFadingOut(true);
     window.setTimeout(onComplete, CUTSCENE_FADE_MS);
-  }, [onComplete, videoEnded]);
+  }, [onComplete, videoEnded, loop]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
@@ -242,9 +244,7 @@ const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => v
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        opacity: fadingOut || !visible ? 0 : 1,
-        transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
-        cursor: videoEnded ? "pointer" : "default",
+        cursor: videoEnded || loop ? "pointer" : "default",
       }}
     >
       <video
@@ -252,8 +252,16 @@ const CutSceneOverlay = ({ src, onComplete }: { src: string; onComplete: () => v
         src={src}
         autoPlay
         playsInline
+        loop={loop}
         onEnded={() => setVideoEnded(true)}
-        style={{ width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          pointerEvents: "none",
+          opacity: fadingOut || !visible ? 0 : 1,
+          transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
+        }}
       />
     </div>
   );
@@ -876,7 +884,12 @@ const App = () => {
         ) : null}
 
         {activeCutScene ? (
-          <CutSceneOverlay src={activeCutScene.src} onComplete={completeCutScene} />
+          <CutSceneOverlay
+            key={`${activeCutScene.src}:${activeCutScene.loop ? "loop" : "once"}`}
+            src={activeCutScene.src}
+            loop={activeCutScene.loop}
+            onComplete={completeCutScene}
+          />
         ) : null}
 
         {bundleList.length === 0 ? (

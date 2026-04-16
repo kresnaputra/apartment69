@@ -14,7 +14,8 @@ import {
 } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
-import mayaRoomCutsceneUrl from "@/cut-scene/cutscene-maya-room.webm?url";
+import mayaBed1 from "@/cut-scene/maya-bed-1.webm?url";
+import mayaBed2 from "@/cut-scene/maya-bed-2.webm?url";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
   bg(hallwayUrl, tx({
@@ -125,8 +126,8 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
     {
       id: "let-her-go",
       label: tx({
-        id: "TURUTI KEMAUANNYA",
-        en: "LET HER GO",
+        id: "Turuti kemauannya",
+        en: "Let her go",
         ja: "彼女の意思を優先する",
         ko: "마야 뜻대로 보내준다",
       }),
@@ -135,8 +136,8 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
     {
       id: "force-her-rest",
       label: tx({
-        id: "PAKSA DIA ISTIRAHAT",
-        en: "FORCE HER TO REST",
+        id: "Paksa dia istirahat",
+        en: "Force her to rest",
         ja: "無理やり休ませる",
         ko: "억지로라도 쉬게 한다",
       }),
@@ -203,7 +204,6 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
   ),
   hide("maya-day4-hallway"),
   hide("arka-day4-hallway"),
-  cutScene(mayaRoomCutsceneUrl),
   bg(
     mayaBedroomUrl,
     tx({
@@ -420,8 +420,8 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
     "arka",
     "gentle",
     tx({
-      id: "Sama-sama. Buburnya dimakan dulu selagi masih hangat, habis itu minum obat. Besok pagi pasti badanmu lebih enak.",
-      en: "You're welcome. Eat the porridge while it's still warm, then take your medicine. You'll feel better by tomorrow morning.",
+      id: "Santai saja. Buburnya dimakan dulu selagi masih hangat, habis itu minum obat. Besok pagi pasti badanmu lebih enak.",
+      en: "No worries. Eat the porridge while it's still warm, then take your medicine. You'll feel better by tomorrow morning.",
       ja: "どういたしまして。おかゆ、まだ温かいうちに食べて、それから薬を飲め。明日の朝にはもっと楽になってるはずだ。",
       ko: "천만에. 죽 아직 따뜻할 때 먹고 약도 마셔. 내일 아침이면 훨씬 괜찮아질 거야.",
     }),
@@ -454,7 +454,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "sad",
+    "blush",
     tx({
       id: "Arka... jangan pergi, bisa?",
       en: "Arka... can you stay?",
@@ -474,7 +474,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "sad",
+    "blush",
     tx({
       id: "Aku... takut. Kalau aku sendirian malam ini, aku pasti kepikiran Papa lagi. Aku takut besok pagi dia nelepon terus marah-marah. Tolong... temani aku malam ini. Di sini.",
       en: "I'm... scared. If I'm alone tonight, I'm just gonna start thinking about my dad again. I'm scared he'll call tomorrow morning and start yelling at me. Please... stay with me tonight. Here.",
@@ -525,4 +525,6 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ko: "마야는 아르카를 붙잡아 그대로 침대 쪽으로 끌어당긴다.",
     }),
   ),
+  cutScene(mayaBed1, true),
+  cutScene(mayaBed2, true),
 ];
