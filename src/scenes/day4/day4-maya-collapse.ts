@@ -14,6 +14,7 @@ import {
 } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
+import mayaBedroomNightUrl from "@/background/maya-bedroom-night.png";
 import mayaBed1 from "@/cut-scene/maya-bed-1.webm?url";
 import mayaBed2 from "@/cut-scene/maya-bed-2.webm?url";
 import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
@@ -295,7 +296,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
   ),
   minigame("email-compose"),
   bg(
-    mayaBedroomUrl,
+    mayaBedroomNightUrl,
     tx({
       id: "Unit 301 - Kamar Maya - 21:00",
       en: "Unit 301 - Maya's Room - 21:00",
