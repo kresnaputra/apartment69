@@ -4,6 +4,7 @@ import {
   bg,
   cutScene,
   hide,
+  jump,
   menu,
   minigame,
   narrate,
@@ -18,6 +19,7 @@ import mayaBedroomNightUrl from "@/background/maya-bedroom-night.png";
 import mayaBed1 from "@/cut-scene/maya-bed-1.webm?url";
 import mayaBed2 from "@/cut-scene/maya-bed-2.webm?url";
 import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
   bg(hallwayUrl, tx({
@@ -66,6 +68,7 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
       ja: "うん…解剖学の試験が二時からなの。今出ないと遅れちゃう。",
       ko: "응... 해부학 시험이 두 시야. 지금 안 나가면 늦어.",
     }),
+    { voice: mayaDay1To4Voices[17] },
   ),
   narrate(
     tx({
@@ -94,6 +97,7 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
       ja: "無理だよ、アルカ。これ受けなかったら、お父さん本当に私を家に連れ戻す。徹夜で勉強したんだもん…きっと大丈夫。",
       ko: "안 돼, 아르카. 이번 시험 못 보면 아빠가 진짜 날 집으로 데려갈 거야. 밤새 공부했단 말이야... 나 할 수 있어.",
     }),
+    { voice: mayaDay1To4Voices[18] },
   ),
   narrate(
     tx({
@@ -118,6 +122,7 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
       ja: "アルカ…お願い…行かなきゃ…",
       ko: "아르카... 제발... 가야 해...",
     }),
+    { voice: mayaDay1To4Voices[19] },
   ),
   menu(tx({
     id: "APA TINDAKAN ARKA SEKARANG?",
@@ -185,6 +190,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ja: "でも、お父さんが…試験が…",
       ko: "하지만 아빠가... 시험이...",
     }),
+    { voice: mayaDay1To4Voices[20] },
   ),
   narrate(
     tx({
@@ -240,6 +246,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ja: "ごめん…また失敗しちゃった…",
       ko: "미안... 또 망쳤어...",
     }),
+    { voice: mayaDay1To4Voices[21] },
   ),
   say(
     "arka",
@@ -345,6 +352,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ja: "アルカ…？",
       ko: "아르카...?",
     }),
+    { voice: mayaDay1To4Voices[22] },
   ),
   narrate(
     tx({
@@ -373,6 +381,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ja: "だいぶ楽になった。もうさっきほど熱くないし。あなた…ずっとここにいたの？",
       ko: "훨씬 나아졌어. 몸도 아까처럼 뜨겁지 않아. 너... 계속 여기 있었어?",
     }),
+    { voice: mayaDay1To4Voices[23] },
   ),
   narrate(
     tx({
@@ -417,6 +426,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ja: "もう、何て言えばいいかもわからない。あのとき止めてくれなかったら…たぶん途中で倒れてた。本当にありがとう、アルカ。",
       ko: "무슨 말을 해야 할지도 모르겠어. 오늘 오후에 네가 날 막지 않았으면... 가는 길에 쓰러졌을 거야. 정말 고마워, 아르카.",
     }),
+    { voice: mayaDay1To4Voices[24] },
   ),
   say(
     "arka",
@@ -463,6 +473,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ja: "アルカ…行かないで、だめ？",
       ko: "아르카... 가지 말아줄래?",
     }),
+    { voice: mayaDay1To4Voices[25] },
   ),
   say(
     "arka",
@@ -483,6 +494,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ja: "私…怖いの。今夜ひとりだったら、またお父さんのことばっかり考えちゃう。明日の朝、電話してきて怒鳴られるのも怖い。お願い…今夜だけ、ここにいて。",
       ko: "나... 무서워. 오늘 밤 혼자 있으면 또 아빠 생각만 할 것 같아. 내일 아침 전화해서 또 화낼까 봐 무서워. 부탁이야... 오늘 밤만 여기 있어줘.",
     }),
+    { voice: mayaDay1To4Voices[26] },
   ),
   narrate(
     tx({
@@ -530,4 +542,5 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
   cutScene(mayaBed1, true),
   cutScene(mayaBed2, true),
   cutScene(mayaBed3, true),
+  jump("day5-maya-morning"),
 ];

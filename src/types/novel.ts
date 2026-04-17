@@ -113,6 +113,7 @@ export type SayCommand = {
   text: LocalizedText;
   emotion?: AnyCharacterEmotion | null;
   hideName?: boolean;
+  voice?: string;
 };
 
 export type CenteredTextCommand = {

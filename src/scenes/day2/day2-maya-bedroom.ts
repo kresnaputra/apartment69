@@ -2,6 +2,7 @@ import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
 import { bg, hide, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
 import mayaBedroom from "@/background/maya-bedroom.png";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day2MayaBedroomScene: VisualNovelCommand[] = [
   bg(mayaBedroom, tx({
@@ -62,6 +63,7 @@ export const day2MayaBedroomScene: VisualNovelCommand[] = [
       ja: "わ…ほんとに動く。昨夜からこれのせいで泣きそうだったんだよ。ほんとにありがと、アルカ。",
       ko: "와... 진짜 다시 잘 돌아간다. 어젯밤부터 이것 때문에 울 뻔했어. 정말 고마워, 아르카.",
     }),
+    { voice: mayaDay1To4Voices[10] },
   ),
   narrate(tx({
     id: "Arka berdiri dari kursi.",
@@ -88,6 +90,7 @@ export const day2MayaBedroomScene: VisualNovelCommand[] = [
       ja: "うん、終わったらちゃんと寝るって約束する。",
       ko: "응, 이거 끝나면 꼭 잘게.",
     }),
+    { voice: mayaDay1To4Voices[11] },
   ),
   hide("arka-day2-bedroom"),
   hide("maya-day2-bedroom"),

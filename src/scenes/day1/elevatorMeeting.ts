@@ -11,6 +11,7 @@ import {
   show,
 } from "@/scenes/scriptTypes";
 import elevator from "@/background/elevator.png";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const elevatorMeetingScene: VisualNovelCommand[] = [
   bg(elevator, tx({
@@ -27,7 +28,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     en: "Don’t close the elevator yet…! ",
     ja: "エレベーター閉めないで…！",
     ko: "엘리베이터 닫지 마요...!",
-  }), { hideName: true }),
+  }), { hideName: true, voice: mayaDay1To4Voices[0] }),
   minigame("elevator-button"),
   say(
     "maya",
@@ -38,7 +39,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
       ja: "（息を整えながら）危なかった…もう少しで乗り遅れるところだった…",
       ko: "(숨을 고르며) 큰일 날 뻔했네... 거의 놓칠 뻔했어...",
     }),
-    { hideName: true },
+    { hideName: true, voice: mayaDay1To4Voices[1] },
   ),
   narrate(
     tx({
@@ -61,7 +62,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
       ja: "待って…君ってアルカでしょ？ 工学部の。",
       ko: "잠깐... 너 아르카 맞지? 공대 다니는.",
     }),
-    { hideName: true },
+    { hideName: true, voice: mayaDay1To4Voices[2] },
   ),
   say("arka", "neutral", tx({
     id: "Iya. Kita kenal?",
@@ -78,6 +79,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
       ja: "私、マヤ。医学部なの…図書館の隅でよく君を見かけるよ。毎日の午後、いつも同じ席に座ってるでしょ。君も…ここに住んでるの？",
       ko: "나 마야야. 의대 다녀... 도서관 구석 자리에서 너 자주 봤어. 매일 오후마다 늘 같은 자리에 앉아 있잖아. 너도... 여기 살아?",
     }),
+    { voice: mayaDay1To4Voices[3] },
   ),
   say("arka", "neutral", tx({
     id: "Baru pindah hari ini. Lantai tiga.",
@@ -94,6 +96,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
       ja: "うそ、すごい偶然！ 私も三階、301号室なの。学校のことでも、この辺の美味しいお店でも、何かあったら聞いて。ほら…連絡先、渡しとく。アパートのことで何かあった時のために。",
       ko: "진짜? 완전 우연이다! 나도 3층 301호야. 학교 얘기든 근처 맛집이든 궁금한 거 있으면 물어봐. 여기... 내 번호 저장해 둬. 아파트 일로 뭐 필요할 수도 있으니까.",
     }),
+    { voice: mayaDay1To4Voices[4] },
   ),
   menu(tx({
     id: "Pilihanmu?",
@@ -117,7 +120,7 @@ export const acceptMayaNumberScene: VisualNovelCommand[] = [
     en: "Thanks, Arka… I’ll text you later, okay?",
     ja: "ありがと、アルカ…あとでメッセージするね。いい？",
     ko: "고마워, 아르카... 나중에 연락할게, 알았지?",
-  })),
+  }), { voice: mayaDay1To4Voices[5] }),
   jump("elena-encounter"),
 ];
 
@@ -128,6 +131,6 @@ export const declineMayaNumberScene: VisualNovelCommand[] = [
     en: "Ah… sorry if I made you uncomfortable…",
     ja: "あ…ごめんね、嫌な感じにさせちゃったなら…",
     ko: "아... 내가 불편하게 했다면 미안해...",
-  })),
+  }), { voice: mayaDay1To4Voices[6] }),
   jump("elena-encounter"),
 ];

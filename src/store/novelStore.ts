@@ -40,6 +40,7 @@ type NovelStore = {
   pendingSceneContinuation: boolean;
   activeMinigame: ActiveMinigame | null;
   activeCutScene: ActiveCutScene | null;
+  activeVoice: string | null;
   line: LocalizedText;
   lineSize: "hero" | "sub";
   choices: ChoiceOption[];
@@ -91,6 +92,7 @@ const emptyState = {
   pendingSceneContinuation: false,
   activeMinigame: null,
   activeCutScene: null,
+  activeVoice: null,
   line: "",
   lineSize: "hero" as const,
   choices: [] as ChoiceOption[],
@@ -301,6 +303,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     pendingSceneContinuation: state.pendingSceneContinuation,
     activeMinigame: state.activeMinigame,
     activeCutScene: state.activeCutScene,
+    activeVoice: state.activeVoice,
     line: state.line,
     lineSize: state.lineSize,
     choices: [],
@@ -438,6 +441,7 @@ const runScriptUntilPause = (state: NovelStore) => {
           startedAt: Date.now(),
           options: command.options,
         };
+        nextState.activeVoice = null;
         nextState.line = "";
         nextState.choices = [];
         nextState.choicePrompt = "";
@@ -452,6 +456,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
         nextState.pendingSceneContinuation = false;
         nextState.activeCutScene = { src: command.src, loop: command.loop };
+        nextState.activeVoice = null;
         nextState.line = "";
         nextState.choices = [];
         nextState.choicePrompt = "";
@@ -464,6 +469,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.speaker = null;
         nextState.activeCharacterId = null;
         nextState.pendingSceneContinuation = false;
+        nextState.activeVoice = null;
         nextState.line = command.text;
         nextState.lineSize = command.size ?? "hero";
         nextState.choices = [];
@@ -478,6 +484,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.speaker = resolveSpeakerName(command.speaker, command.hideName);
         nextState.activeCharacterId = command.speaker ?? null;
         nextState.pendingSceneContinuation = false;
+        nextState.activeVoice = command.voice ?? null;
         nextState.line = command.text;
         nextState.lineSize = "sub";
         nextState.choices = [];
@@ -521,6 +528,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.activeCharacterId = null;
         nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
         nextState.pendingSceneContinuation = false;
+        nextState.activeVoice = null;
         nextState.line = command.prompt ?? "";
         nextState.lineSize = "sub";
         nextState.choicePrompt = command.prompt ?? "";
@@ -559,6 +567,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       choices: [],
       activeMinigame: null,
       activeCutScene: null,
+      activeVoice: null,
     }),
 
   startStory: () =>
@@ -603,6 +612,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
 
       return runScriptUntilPause({
         ...state,
+        activeVoice: null,
         pendingSceneContinuation: false,
         ready: false,
       });
@@ -619,6 +629,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
         line: "",
         choices: [],
         choicePrompt: "",
+        activeVoice: null,
         ready: false,
       }),
     ),
@@ -632,6 +643,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       return runScriptUntilPause({
         ...state,
         activeMinigame: null,
+        activeVoice: null,
         pendingSceneContinuation: false,
         ready: false,
       });
@@ -646,6 +658,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       return runScriptUntilPause({
         ...state,
         activeCutScene: null,
+        activeVoice: null,
         pendingSceneContinuation: false,
         ready: false,
       });

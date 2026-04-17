@@ -14,6 +14,7 @@ import {
 import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import mayaPhoneCallVideo from "@/cut-scene/cutscene-maya-room.webm?url";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const mayaPhoneCallScene: VisualNovelCommand[] = [
   bg(
@@ -114,6 +115,7 @@ export const mayaPhoneCallScene: VisualNovelCommand[] = [
       ja: "あ、アルカ。まだ出てなかったんだ。ごめん、ドアちゃんと閉めるの忘れてた。",
       ko: "아, 아르카. 아직 안 나갔어? 미안, 문을 제대로 안 닫았네.",
     }),
+    { voice: mayaDay1To4Voices[12] },
   ),
 
   bg(
@@ -146,6 +148,7 @@ export const mayaPhoneCallScene: VisualNovelCommand[] = [
       ja: "うん、だいたいそんな感じ。お父さんは私に医学部を完璧な成績で卒業してほしいの。たまに本当にしんどい。勉強する機械としてしか見られてないみたいで。",
       ko: "응, 거의 그래. 아빠는 내가 의대를 완벽한 성적으로 졸업하길 바라거든. 가끔은 너무 지쳐. 내가 그냥 공부하는 기계로만 보이는 것 같아.",
     }),
+    { voice: mayaDay1To4Voices[13] },
   ),
 
   menu(tx({
@@ -207,6 +210,7 @@ export const mayaPhoneCallLogicalScene: VisualNovelCommand[] = [
       ja: "あなたの…言う通りかも。もうずっと限界で動いてた。徹夜で詰め込むより、ちゃんと休んだほうがいいのかもしれない。",
       ko: "네 말이... 맞는 것 같아. 나 진짜 한계였던 것 같아. 계속 억지로 공부만 할 게 아니라, 제대로 쉬어야 할지도 몰라.",
     }),
+    { voice: mayaDay1To4Voices[14] },
   ),
 
   say(
@@ -265,6 +269,7 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
       ja: "（少し落ち着いて、もう一度目元を拭いながら）ありがとう、アルカ。朝からこんなとこ見せてごめんね。",
       ko: "(조금 진정한 뒤 다시 눈가를 훔치며) 고마워, 아르카. 아침부터 이런 모습 보여서 미안해.",
     }),
+    { voice: mayaDay1To4Voices[15] },
   ),
 
   say(
@@ -287,6 +292,7 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
       ja: "（小さくうなずく）うん。気をつけてね。",
       ko: "(작게 고개를 끄덕이며) 응. 조심히 가.",
     }),
+    { voice: mayaDay1To4Voices[16] },
   ),
 
   narrate(

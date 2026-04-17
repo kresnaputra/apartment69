@@ -22,6 +22,7 @@ import type {
 
 type SayOptions = {
   hideName?: boolean;
+  voice?: string;
 };
 
 type CenteredTextOptions = {
@@ -135,6 +136,7 @@ export function say(
     emotion,
     text,
     hideName: options?.hideName,
+    voice: options?.voice,
   };
 }
 

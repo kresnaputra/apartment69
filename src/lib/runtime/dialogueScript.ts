@@ -49,6 +49,18 @@ import {
   day4MayaCollapseScene,
   day4MayaForceRestScene,
 } from "@/scenes/day4/day4-maya-collapse";
+import { day5MayaMorningScene, day5LobbyFarewellScene } from "@/scenes/day5/day5-maya-morning";
+import {
+  day6PapaConfrontationScene,
+  day6ProtectiveScene,
+  day6SupportiveScene,
+  day6AftermathScene,
+} from "@/scenes/day6/day6-papa-confrontation";
+import {
+  day7IntroScene,
+  day7DevotedSubmissionScene,
+  day7EternalPromiseScene,
+} from "@/scenes/day7/day7-endings";
 
 export const demoScript: VisualNovelScript = {
   startLabel: "opening",
@@ -94,6 +106,18 @@ export const demoScript: VisualNovelScript = {
     "day4-maya-collapse": day4MayaCollapseScene,
     "day4-maya-bad-ending": day4MayaBadEndingScene,
     "day4-maya-force-rest": day4MayaForceRestScene,
+    // Day 5
+    "day5-maya-morning": day5MayaMorningScene,
+    "day5-lobby-farewell": day5LobbyFarewellScene,
+    // Day 6
+    "day6-papa-confrontation": day6PapaConfrontationScene,
+    "day6-protective": day6ProtectiveScene,
+    "day6-supportive": day6SupportiveScene,
+    "day6-aftermath": day6AftermathScene,
+    // Day 7
+    "day7-intro": day7IntroScene,
+    "day7-devoted-submission": day7DevotedSubmissionScene,
+    "day7-eternal-promise": day7EternalPromiseScene,
     epilogue: epilogueScene,
   },
 };

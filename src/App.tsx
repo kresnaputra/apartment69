@@ -286,6 +286,7 @@ const App = () => {
   const pendingSceneContinuation = useNovelStore((state) => state.pendingSceneContinuation);
   const activeMinigame = useNovelStore((state) => state.activeMinigame);
   const activeCutScene = useNovelStore((state) => state.activeCutScene);
+  const activeVoice = useNovelStore((state) => state.activeVoice);
   const line = useNovelStore((state) => state.line);
   const lineSize = useNovelStore((state) => state.lineSize);
   const choices = useNovelStore((state) => state.choices);
@@ -326,6 +327,7 @@ const App = () => {
   const [saveToast, setSaveToast] = useState(false);
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
   const audioRef = useRef<NovelAudioEngine | null>(null);
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
   const previousSceneTransitionTokenRef = useRef<number | null>(null);
   const suppressAdvanceOnceRef = useRef(false);
   const resolvedLine = resolveText(line, language);
@@ -375,10 +377,41 @@ const App = () => {
     audioRef.current = new NovelAudioEngine();
     bgMusicRef.current = new BackgroundMusic();
     return () => {
+      if (voiceRef.current) {
+        voiceRef.current.pause();
+        voiceRef.current.src = "";
+        voiceRef.current.load();
+        voiceRef.current = null;
+      }
       audioRef.current?.dispose();
       bgMusicRef.current?.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    if (voiceRef.current) {
+      voiceRef.current.pause();
+      voiceRef.current.src = "";
+      voiceRef.current.load();
+      voiceRef.current = null;
+    }
+
+    if (!activeVoice) return;
+
+    const audio = new Audio(activeVoice);
+    audio.preload = "auto";
+    voiceRef.current = audio;
+    void audio.play().catch(() => {});
+
+    return () => {
+      audio.pause();
+      audio.src = "";
+      audio.load();
+      if (voiceRef.current === audio) {
+        voiceRef.current = null;
+      }
+    };
+  }, [activeVoice]);
 
   // Android WebView blocks audio until a user gesture. On first interaction,
   // resume an AudioContext to unlock the audio subsystem, then retry any

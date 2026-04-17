@@ -2,6 +2,7 @@ import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
 import { bg, hide, jump, narrate, say, show } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day2HallwayScene: VisualNovelCommand[] = [
   bg(hallwayUrl, tx({
@@ -31,7 +32,7 @@ export const day2HallwayScene: VisualNovelCommand[] = [
     en: "Arka...? What's up this early?",
     ja: "アルカ…？ こんな朝早くどうしたの？",
     ko: "아르카...? 이렇게 아침부터 무슨 일이야?",
-  })),
+  }), { voice: mayaDay1To4Voices[7] }),
   say(
     "arka",
     "gentle",
@@ -59,6 +60,7 @@ export const day2HallwayScene: VisualNovelCommand[] = [
       ja: "うん…本当に寝てない。お昼までに解剖学のレポート出さなきゃいけなくて。ありがと…最後にちゃんと食べたのいつだったかも覚えてない。",
       ko: "응... 진짜 못 잤어. 정오 전까지 해부학 저널 과제를 내야 하거든. 고마워... 마지막으로 제대로 먹은 게 언제였는지도 기억이 안 나.",
     }),
+    { voice: mayaDay1To4Voices[8] },
   ),
   say("arka", "serious", tx({
     id: "Makan selagi masih hangat. Jangan terlalu maksa diri.",
@@ -89,6 +91,7 @@ export const day2HallwayScene: VisualNovelCommand[] = [
       ja: "（長いため息）うん…昨夜からずっと重くて。Word開くだけで五分かかるし、課題のファイル壊れるんじゃないかって怖い。",
       ko: "(길게 한숨 쉬며) 응... 어젯밤부터 엄청 느려. 워드 파일 하나 여는 데도 5분은 걸려. 과제 파일까지 날아갈까 봐 무서워.",
     }),
+    { voice: mayaDay1To4Voices[9] },
   ),
   say("arka", "gentle", tx({
     id: "Biar aku lihat sebentar.",
