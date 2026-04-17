@@ -13,6 +13,7 @@ import {
 } from "@/scenes/scriptTypes";
 import bedroomUrl from "@/background/bedroom.png";
 import hallwayUrl from "@/background/hallway.png";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day6PapaConfrontationScene: VisualNovelCommand[] = [
   bg(
@@ -44,7 +45,10 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "갑자기 핸드폰이 연달아 진동했다. 마야의 전화는 받기도 전에 끊겼고, 뒤이어 다급한 메시지들이 쏟아졌다.",
     }),
   ),
-  hide("arka-day6"),
+  show("maya-day6-papa-confrontation", "maya", "worried", {
+    position: "center",
+    enterFrom: "fade",
+  }),
   say(
     "maya",
     "worried",
@@ -54,6 +58,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ja: "アルカ助けて",
       ko: "아르카 도와줘",
     }),
+    { voice: mayaDay1To4Voices[33] },
   ),
   say(
     "maya",
@@ -64,6 +69,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ja: "お父さんが下にいる",
       ko: "아빠가 아래 있어",
     }),
+    { voice: mayaDay1To4Voices[34] },
   ),
   say(
     "maya",
@@ -74,6 +80,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ja: "昨日の欠席のことを警備員に聞いてる",
       ko: "어제 내 결석 얘기를 경비원한테 묻고 있어",
     }),
+    { voice: mayaDay1To4Voices[35] },
   ),
   say(
     "maya",
@@ -84,6 +91,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ja: "上に来る",
       ko: "올라오고 있어",
     }),
+    { voice: mayaDay1To4Voices[36] },
   ),
   narrate(
     tx({
@@ -94,6 +102,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
     }),
     "arka",
   ),
+  hide("maya-day6-papa-confrontation", "fadeAway"),
   bg(
     hallwayUrl,
     tx({
@@ -103,10 +112,6 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "301호 앞 복도 - 10:00",
     }),
   ),
-  show("arka-day6-hallway", "arka", "serious", {
-    position: "left",
-    enterFrom: "left",
-  }),
   narrate(
     tx({
       id: "Arka keluar dari unitnya. Tepat saat itu, lift terbuka. Seorang pria paruh baya dengan wajah keras berjalan cepat ke arah Unit 301 dan mulai menggedor pintu dengan kasar.",
@@ -191,6 +196,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ja: "お父さん…昨日は本当につらかったんです。でも追試には絶対出ます…",
       ko: "아빠... 마야 어제 진짜 못 버텼어요. 근데 추가 시험은 꼭 볼게요...",
     }),
+    { voice: mayaDay1To4Voices[37] },
   ),
   narrate(
     tx({
@@ -220,20 +226,20 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       {
         id: "protective",
         label: tx({
-          id: "Pasang badan — ambil alih konflik",
-          en: "Step in — take over the conflict",
-          ja: "身を盾にする — 対立を引き受ける",
-          ko: "앞에 서기 — 갈등을 떠안는다",
+          id: "Pasang badan ambil alih konflik",
+          en: "Step in take over the conflict",
+          ja: "身を盾にする 対立を引き受ける",
+          ko: "앞에 서기 갈등을 떠안는다",
         }),
         next: "day6-protective",
       },
       {
         id: "supportive",
         label: tx({
-          id: "Beri Maya kendali — dorong dia bicara",
-          en: "Give Maya control — push her to speak",
-          ja: "マヤに主導権を渡す — 彼女が話すよう後押しする",
-          ko: "마야에게 주도권 넘기기 — 스스로 말하게 한다",
+          id: "Beri Maya kendali dorong dia bicara",
+          en: "Give Maya control push her to speak",
+          ja: "マヤに主導権を渡す 彼女が話すよう後押しする",
+          ko: "마야에게 주도권 넘기기 스스로 말하게 한다",
         }),
         next: "day6-supportive",
       },
@@ -306,6 +312,7 @@ export const day6ProtectiveScene: VisualNovelCommand[] = [
       ja: "マヤは…マヤはここにいたいです、お父さん。アルカと一緒に。",
       ko: "마야... 마야는 여기 있을 거예요, 아빠. 아르카랑.",
     }),
+    { voice: mayaDay1To4Voices[38] },
   ),
   narrate(
     tx({
@@ -365,6 +372,7 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
       ja: "嫌です、お父さん。",
       ko: "싫어요, 아빠.",
     }),
+    { voice: mayaDay1To4Voices[39] },
   ),
   narrate(
     tx({
@@ -384,6 +392,7 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
       ja: "嫌だと言いました。家には帰りません。ここに残って、自分のやり方でこの大学を卒業します。仕送りをやめるなら、どうぞ。アルバイトを探せばいい。",
       ko: "싫다고 했어요. 집에 안 갈 거예요. 여기 남아서 마야 방식대로 학교 마칠 거예요. 아빠가 지원 끊으실 거면 그러세요. 마야 알바 구할 수 있어요.",
     }),
+    { voice: mayaDay1To4Voices[40] },
   ),
   narrate(
     tx({
@@ -414,6 +423,7 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
 ];
 
 export const day6AftermathScene: VisualNovelCommand[] = [
+  hide("maya-day6-hallway", "fadeAway"),
   bg(
     hallwayUrl,
     tx({
@@ -458,6 +468,7 @@ export const day6AftermathScene: VisualNovelCommand[] = [
       ja: "私…さっきお父さんに言い返したんだ。足がガクガクして止まらない、アルカ。でも、すごく気持ちが楽になった。",
       ko: "나... 방금 아빠한테 맞섰어. 다리가 너무 떨려, 아르카. 근데 너무 시원해.",
     }),
+    { voice: mayaDay1To4Voices[41] },
   ),
   narrate(
     tx({
@@ -521,7 +532,7 @@ export const day6AftermathScene: VisualNovelCommand[] = [
   hide("arka-day6-room"),
   minigame("smartphone-contacts", {
     showSleepOption: true,
-    sleepOptionNext: "day7-intro",
+    sleepOptionNext: "day6-complate",
     disabledContacts: ["maya", "elena", "nadia", "sara"],
     title: {
       id: "Selanjutnya mau ngecek siapa?",

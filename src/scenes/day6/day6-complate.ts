@@ -1,0 +1,15 @@
+import type { VisualNovelCommand } from "@/types/novel";
+import { tx } from "@/lib/i18n";
+import { centeredText, hide, jump, scene } from "@/scenes/scriptTypes";
+
+export const day6ComplateScene: VisualNovelCommand[] = [
+  hide("arka-day6-room"),
+  scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
+  centeredText(tx({
+    id: "HARI 6 SELESAI",
+    en: "DAY 6 COMPLETE",
+    ja: "6日目 終了",
+    ko: "6일차 완료",
+  }), { size: "hero" }),
+  jump("day7-intro"),
+];

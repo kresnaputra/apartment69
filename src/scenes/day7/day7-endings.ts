@@ -11,6 +11,7 @@ import {
   show,
 } from "@/scenes/scriptTypes";
 import bedroomNightUrl from "@/background/bedroom-night.png";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   bg(
@@ -70,6 +71,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
       ja: "アルカ…今日一日ずっと考えてた。お父さんはもう口座を全部止めた。大学も、もうどうでもいい気がして。",
       ko: "아르카... 오늘 하루 종일 다 생각해봤어. 아빠가 계좌를 다 막았어. 학교도 이제 중요하지 않은 것 같아.",
     }),
+    { voice: mayaDay1To4Voices[42] },
   ),
   say(
     "arka",
@@ -98,6 +100,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
       ja: "お父さんのエゴを満たすためだけに必死になって医者になる意味なんてあるの？昨日、私の人生の責任を持つって言ったよね？だから今は…私はあなたのものよ、アルカ。",
       ko: "결국 아빠 자존심 채워주려고 의사가 되려고 지쳐가는 게 무슨 의미야? 어제 내 인생 책임지겠다고 했잖아, 맞지? 이제... 나는 아르카 거야.",
     }),
+    { voice: mayaDay1To4Voices[43] },
   ),
   narrate(
     tx({
@@ -126,6 +129,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
       ja: "それがしたいの。自分のことを考えるのがもう疲れた。あなたの望む何にでもなりたい。私を支配して、アルカ。",
       ko: "그게 내가 원하는 거야. 나 자신을 위해 생각하는 게 너무 지쳤어. 그냥 네가 원하는 무엇이든 되고 싶어. 나를 지배해줘, 아르카.",
     }),
+    { voice: mayaDay1To4Voices[44] },
   ),
   narrate(
     tx({
@@ -207,6 +211,7 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       ja: "ねえ。夕飯もう食べた？",
       ko: "야. 저녁 먹었어?",
     }),
+    { voice: mayaDay1To4Voices[45] },
   ),
   say(
     "arka",
@@ -227,6 +232,7 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       ja: "全部大丈夫だよ。さっき大学に電話して、授業料免除の奨学金を申請した。明日は下のカフェでアルバイトも探す予定。自分の力でちゃんと卒業してみせる。",
       ko: "다 정리됐어. 방금 학교에 전화해서 학비 감면 장학금 신청했어. 그리고 내일 아래 카페에서 알바 자리도 찾아볼 거야. 내 힘으로 끝까지 졸업할 거야.",
     }),
+    { voice: mayaDay1To4Voices[46] },
   ),
   say(
     "arka",
@@ -255,6 +261,7 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       ja: "ありがとう、アルカ。あなたは一度も強制しなかった。ただ、ずっと見失っていた勇気を見つける手助けをしてくれた。今の自分が誇らしい。",
       ko: "고마워, 아르카. 넌 한 번도 강요하지 않았어. 그냥 내가 잃었던 용기를 찾도록 도와줬을 뿐이야. 지금의 내가 자랑스러워.",
     }),
+    { voice: mayaDay1To4Voices[47] },
   ),
   narrate(
     tx({
@@ -281,6 +288,7 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       ja: "大好きだよ、アルカ。絶対にどこにも行かないでね。",
       ko: "사랑해, 아르카. 절대 떠나지 마.",
     }),
+    { voice: mayaDay1To4Voices[48] },
   ),
   say(
     "arka",

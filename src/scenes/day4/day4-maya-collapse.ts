@@ -542,5 +542,5 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
   cutScene(mayaBed1, true),
   cutScene(mayaBed2, true),
   cutScene(mayaBed3, true),
-  jump("day5-maya-morning"),
+  jump("day4-complate"),
 ];

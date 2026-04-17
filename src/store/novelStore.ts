@@ -474,7 +474,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.lineSize = command.size ?? "hero";
         nextState.choices = [];
         nextState.choicePrompt = "";
-        nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
+        nextState.characters = {};
         nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
         nextState.ready = true;
         return nextState;

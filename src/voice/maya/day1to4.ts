@@ -25,6 +25,28 @@ import maya24 from "@/voice/maya/maya 24.mp3";
 import maya25 from "@/voice/maya/maya 25.mp3";
 import maya26 from "@/voice/maya/maya 26.mp3";
 import maya27 from "@/voice/maya/maya 27.mp3";
+import maya28 from "@/voice/maya/maya 28.mp3";
+import maya29 from "@/voice/maya/maya 29.mp3";
+import maya30 from "@/voice/maya/maya 30.mp3";
+import maya31 from "@/voice/maya/maya 31.mp3";
+import maya32 from "@/voice/maya/maya 32.mp3";
+import maya33 from "@/voice/maya/maya 33.mp3";
+import maya34 from "@/voice/maya/maya 34.mp3";
+import maya35 from "@/voice/maya/maya 35.mp3";
+import maya36 from "@/voice/maya/maya 36.mp3";
+import maya37 from "@/voice/maya/maya 37.mp3";
+import maya38 from "@/voice/maya/maya 38.mp3";
+import maya39 from "@/voice/maya/maya 39.mp3";
+import maya40 from "@/voice/maya/maya 40.mp3";
+import maya41 from "@/voice/maya/maya 41.mp3";
+import maya42 from "@/voice/maya/maya 42.mp3";
+import maya43 from "@/voice/maya/maya 43.mp3";
+import maya44 from "@/voice/maya/maya 44.mp3";
+import maya45 from "@/voice/maya/maya 45.mp3";
+import maya46 from "@/voice/maya/maya 46.mp3";
+import maya47 from "@/voice/maya/maya 47.mp3";
+import maya48 from "@/voice/maya/maya 48.mp3";
+import maya49 from "@/voice/maya/maya 49.mp3";
 
 export const mayaDay1To4Voices = [
   maya1,
@@ -54,4 +76,26 @@ export const mayaDay1To4Voices = [
   maya25,
   maya26,
   maya27,
+  maya28,
+  maya29,
+  maya30,
+  maya31,
+  maya32,
+  maya33,
+  maya34,
+  maya35,
+  maya36,
+  maya37,
+  maya38,
+  maya39,
+  maya40,
+  maya41,
+  maya42,
+  maya43,
+  maya44,
+  maya45,
+  maya46,
+  maya47,
+  maya48,
+  maya49,
 ] as const;

@@ -50,20 +50,23 @@ import {
   day4MayaForceRestScene,
 } from "@/scenes/day4/day4-maya-collapse";
 import { day5MayaMorningScene, day5LobbyFarewellScene } from "@/scenes/day5/day5-maya-morning";
+import { day5ComplateScene } from "@/scenes/day5/day5-complate";
 import {
   day6PapaConfrontationScene,
   day6ProtectiveScene,
   day6SupportiveScene,
   day6AftermathScene,
 } from "@/scenes/day6/day6-papa-confrontation";
+import { day6ComplateScene } from "@/scenes/day6/day6-complate";
 import {
   day7IntroScene,
   day7DevotedSubmissionScene,
   day7EternalPromiseScene,
 } from "@/scenes/day7/day7-endings";
+import { day4ComplateScene } from "@/scenes/day4/day4-complate";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "opening",
+  startLabel: "day5-maya-morning",
   labels: {
     // Day 1
     opening: openingScene,
@@ -106,14 +109,17 @@ export const demoScript: VisualNovelScript = {
     "day4-maya-collapse": day4MayaCollapseScene,
     "day4-maya-bad-ending": day4MayaBadEndingScene,
     "day4-maya-force-rest": day4MayaForceRestScene,
+    "day4-complate": day4ComplateScene,
     // Day 5
     "day5-maya-morning": day5MayaMorningScene,
     "day5-lobby-farewell": day5LobbyFarewellScene,
+    "day5-complate": day5ComplateScene,
     // Day 6
     "day6-papa-confrontation": day6PapaConfrontationScene,
     "day6-protective": day6ProtectiveScene,
     "day6-supportive": day6SupportiveScene,
     "day6-aftermath": day6AftermathScene,
+    "day6-complate": day6ComplateScene,
     // Day 7
     "day7-intro": day7IntroScene,
     "day7-devoted-submission": day7DevotedSubmissionScene,

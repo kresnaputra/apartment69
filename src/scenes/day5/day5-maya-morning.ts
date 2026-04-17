@@ -3,6 +3,7 @@ import { tx } from "@/lib/i18n";
 import { bg, hide, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import frontOfficeUrl from "@/background/front-office.png";
+import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day5MayaMorningScene: VisualNovelCommand[] = [
   bg(
@@ -48,6 +49,7 @@ export const day5MayaMorningScene: VisualNovelCommand[] = [
       ja: "もう…アルカ…",
       ko: "어머... 아르카...",
     }),
+    { voice: mayaDay1To4Voices[27] },
   ),
   say(
     "arka",
@@ -68,6 +70,7 @@ export const day5MayaMorningScene: VisualNovelCommand[] = [
       ja: "うん…もう全然熱くない。でも…昨夜のこと思い出したら、もう恥ずかしくて。",
       ko: "응... 이제 열 전혀 없어. 근데... 어, 어젯밤 생각하면 너무 창피해.",
     }),
+    { voice: mayaDay1To4Voices[28] },
   ),
   say(
     "arka",
@@ -88,6 +91,7 @@ export const day5MayaMorningScene: VisualNovelCommand[] = [
       ja: "もう、言わないで！ 熱で半分意識なかったんだから。",
       ko: "야, 그 얘기 꺼내지 마! 나 열 때문에 반쯤 의식 없었잖아.",
     }),
+    { voice: mayaDay1To4Voices[29] },
   ),
   narrate(
     tx({
@@ -107,7 +111,7 @@ export const day5MayaMorningScene: VisualNovelCommand[] = [
       ko: "그럼 나 먼저 내 방 가서 씻고 올게. 너도 씻고, 그다음 아래층에서 아침 먹자.",
     }),
   ),
-  hide("arka-day5-morning"),
+  hide("arka-day5-morning", "fadeAway"),
   say(
     "maya",
     "blush",
@@ -117,6 +121,7 @@ export const day5MayaMorningScene: VisualNovelCommand[] = [
       ja: "うん。ありがとう、アルカ。",
       ko: "응. 고마워, 아르카.",
     }),
+    { voice: mayaDay1To4Voices[30] },
   ),
   jump("day5-lobby-farewell"),
 ];
@@ -159,6 +164,7 @@ export const day5LobbyFarewellScene: VisualNovelCommand[] = [
       ja: "もう大丈夫だよ。診断書を事務局に届けて、図書館に本返すだけ。すぐ終わるから。",
       ko: "이제 괜찮아. 그냥 행정실에 진단서 내고 도서관에 책 반납하는 거야. 금방 끝나.",
     }),
+    { voice: mayaDay1To4Voices[31] },
   ),
   say(
     "arka",
@@ -187,8 +193,9 @@ export const day5LobbyFarewellScene: VisualNovelCommand[] = [
       ja: "じゃあ行ってくるね。夕方にLINEする。",
       ko: "나 먼저 갈게. 오후에 연락할게.",
     }),
+    { voice: mayaDay1To4Voices[32] },
   ),
-  hide("maya-day5-lobby"),
+  hide("maya-day5-lobby", "fadeAway"),
   narrate(
     tx({
       id: "Maya jalan cepat keluar lobi, ninggalin Arka yang masih agak kaget sama keberanian mendadak gadis itu.",
@@ -208,7 +215,7 @@ export const day5LobbyFarewellScene: VisualNovelCommand[] = [
   ),
   minigame("smartphone-contacts", {
     showSleepOption: true,
-    sleepOptionNext: "day6-papa-confrontation",
+    sleepOptionNext: "day5-complate",
     disabledContacts: ["maya", "elena", "nadia", "sara"],
     title: {
       id: "Sisa hari ini mau ngapain?",
