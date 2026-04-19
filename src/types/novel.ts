@@ -28,6 +28,7 @@ export type ActiveCutScene = {
   src: string;
   loop?: boolean;
   narrate?: LocalizedText;
+  showSpeedControl?: boolean;
 };
 
 export type ActiveMinigame = {
@@ -164,6 +165,7 @@ export type CutSceneCommand = {
   src: string;
   loop?: boolean;
   narrate?: LocalizedText;
+  showSpeedControl?: boolean;
 };
 
 export type VisualNovelCommand =

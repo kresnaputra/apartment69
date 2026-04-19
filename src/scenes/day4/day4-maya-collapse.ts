@@ -20,6 +20,7 @@ import mayaBedroomNightUrl from "@/background/maya-bedroom-night.png";
 import mayaBed1 from "@/cut-scene/maya-bed-1.webm?url";
 import mayaBed2 from "@/cut-scene/maya-bed-2.webm?url";
 import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
+import mayaBed4 from "@/cut-scene/maya-bed-4.webm?url";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
@@ -182,24 +183,33 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
   hide("maya-day4-hallway"),
   hide("arka-day4-hallway"),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
-  centeredText(tx({
-    id: "GAME OVER",
-    en: "GAME OVER",
-    ja: "GAME OVER",
-    ko: "GAME OVER",
-  }), { size: "hero" }),
-  centeredText(tx({
-    id: "RUTE MAYA GAGAL",
-    en: "MAYA ROUTE FAILED",
-    ja: "マヤルート失敗",
-    ko: "마야 루트 실패",
-  }), { size: "sub" }),
-  centeredText(tx({
-    id: "Maya pingsan di kampus, dirawat di rumah sakit, lalu dipaksa pulang oleh ayahnya.",
-    en: "Maya collapsed on campus, was taken to the hospital, and was forced to go home by her father.",
-    ja: "マヤは大学で倒れ、病院に運ばれ、その後父親に無理やり連れ帰られた。",
-    ko: "마야는 캠퍼스에서 쓰러져 병원으로 옮겨졌고, 결국 아버지에게 강제로 집으로 끌려갔다.",
-  }), { size: "sub" }),
+  centeredText(
+    tx({
+      id: "GAME OVER",
+      en: "GAME OVER",
+      ja: "GAME OVER",
+      ko: "GAME OVER",
+    }),
+    { size: "hero" },
+  ),
+  centeredText(
+    tx({
+      id: "RUTE MAYA GAGAL",
+      en: "MAYA ROUTE FAILED",
+      ja: "マヤルート失敗",
+      ko: "마야 루트 실패",
+    }),
+    { size: "sub" },
+  ),
+  centeredText(
+    tx({
+      id: "Maya pingsan di kampus, dirawat di rumah sakit, lalu dipaksa pulang oleh ayahnya.",
+      en: "Maya collapsed on campus, was taken to the hospital, and was forced to go home by her father.",
+      ja: "マヤは大学で倒れ、病院に運ばれ、その後父親に無理やり連れ帰られた。",
+      ko: "마야는 캠퍼스에서 쓰러져 병원으로 옮겨졌고, 결국 아버지에게 강제로 집으로 끌려갔다.",
+    }),
+    { size: "sub" },
+  ),
 ];
 
 export const day4MayaForceRestScene: VisualNovelCommand[] = [
@@ -596,11 +606,22 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
     mayaBed3,
     true,
     tx({
+      id: "Di tengah kegelapan malam, pelukan mereka semakin erat. Maya membenamkan wajahnya di dada Arka, merasakan detak jantungnya yang teratur. Suara hujan di luar jendela menjadi latar yang menenangkan untuk malam yang panjang ini.",
+      en: "In the darkness of the night, their embrace grows tighter. Maya buries her face in Arka's chest, feeling his steady heartbeat. The sound of rain outside the window becomes a soothing backdrop for this long night.",
+      ja: "夜の闇の中、二人の抱擁はさらに強くなる。マヤはアルカの胸に顔を埋め、規則正しい鼓動を感じる。窓の外の雨音が、この長い夜の心地よい背景になっていた。",
+      ko: "밤의 어둠 속에서 두 사람의 포옹은 더욱 깊어진다. 마야는 아르카의 가슴에 얼굴을 묻고 그의 고른 심장박동을 느낀다. 창밖의 빗소리가 이 긴 밤의 편안한 배경이 된다.",
+    }),
+  ),
+  cutScene(
+    mayaBed4,
+    true,
+    tx({
       id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
       en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
       ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
       ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
     }),
+    true,
   ),
   jump("day4-complate"),
 ];

@@ -200,15 +200,22 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   );
 });
 
-const CutSceneOverlay = ({ src, loop, narrate, language, onComplete }: { src: string; loop?: boolean; narrate?: LocalizedText; language: LanguageCode; onComplete: () => void }) => {
+const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onComplete }: { src: string; loop?: boolean; narrate?: LocalizedText; showSpeedControl?: boolean; language: LanguageCode; onComplete: () => void }) => {
   const [visible, setVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const [revealedCount, setRevealedCount] = useState(0);
+  const [currentSpeed, setCurrentSpeed] = useState(1);
   const completedRef = useRef(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
   const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
+  const speedOptions = [
+    { label: "Slow", value: 0.75 },
+    { label: "Normal", value: 1 },
+    { label: "Fast", value: 2 },
+  ];
 
   useEffect(() => {
     // Double RAF ensures the initial opacity:0 is painted before transitioning in
@@ -237,6 +244,16 @@ const CutSceneOverlay = ({ src, loop, narrate, language, onComplete }: { src: st
 
     return () => window.clearInterval(timer);
   }, [resolvedNarrate]);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = currentSpeed;
+    }
+  }, [currentSpeed]);
+
+  const handleSpeedChange = (speed: number) => {
+    setCurrentSpeed(speed);
+  };
 
   const handleExit = useCallback(() => {
     if (completedRef.current) return;
@@ -272,6 +289,7 @@ const CutSceneOverlay = ({ src, loop, narrate, language, onComplete }: { src: st
       }}
     >
       <video
+        ref={videoRef}
         key={src}
         src={src}
         autoPlay
@@ -295,6 +313,55 @@ const CutSceneOverlay = ({ src, loop, narrate, language, onComplete }: { src: st
           <div className="vn-narrator-box">
             <div className="vn-narrator-line">{visibleNarrate}</div>
           </div>
+        </div>
+      )}
+      {showSpeedControl && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            position: "absolute",
+            bottom: "60px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            gap: "8px",
+            opacity: fadingOut || !visible ? 0 : 1,
+            transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
+            pointerEvents: "auto",
+          }}
+        >
+          {speedOptions.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => handleSpeedChange(option.value)}
+              style={{
+                padding: "8px 16px",
+                background: currentSpeed === option.value ? "rgba(210, 164, 86, 0.9)" : "rgba(11, 10, 18, 0.85)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "6px",
+                color: currentSpeed === option.value ? "#0b0a12" : "#e8dfd3",
+                fontSize: "0.85rem",
+                fontWeight: currentSpeed === option.value ? "600" : "400",
+                cursor: "pointer",
+                transition: "all 200ms ease",
+              }}
+              onMouseEnter={(e) => {
+                if (currentSpeed !== option.value) {
+                  e.currentTarget.style.background = "rgba(11, 10, 18, 0.95)";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (currentSpeed !== option.value) {
+                  e.currentTarget.style.background = "rgba(11, 10, 18, 0.85)";
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                }
+              }}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
       )}
     </div>
@@ -956,6 +1023,7 @@ const App = () => {
             src={activeCutScene.src}
             loop={activeCutScene.loop}
             narrate={activeCutScene.narrate}
+            showSpeedControl={activeCutScene.showSpeedControl}
             language={language}
             onComplete={completeCutScene}
           />

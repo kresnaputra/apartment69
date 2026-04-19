@@ -196,10 +196,12 @@ export const minigame = (minigameId: MinigameId, options?: Record<string, unknow
  * @param src - Vite-imported video URL (e.g. `import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url"`)
  * @param loop - If true, video will loop until user clicks or presses a button
  * @param narrate - Optional narration text to display during the cutscene
+ * @param showSpeedControl - If true, shows on-screen buttons to change playback speed
  */
-export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText): CutSceneCommand => ({
+export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText, showSpeedControl?: boolean): CutSceneCommand => ({
   type: "cutScene",
   src,
   loop,
   narrate,
+  showSpeedControl,
 });
