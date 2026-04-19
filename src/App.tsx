@@ -200,11 +200,15 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   );
 });
 
-const CutSceneOverlay = ({ src, loop, onComplete }: { src: string; loop?: boolean; onComplete: () => void }) => {
+const CutSceneOverlay = ({ src, loop, narrate, language, onComplete }: { src: string; loop?: boolean; narrate?: LocalizedText; language: LanguageCode; onComplete: () => void }) => {
   const [visible, setVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
+  const [revealedCount, setRevealedCount] = useState(0);
   const completedRef = useRef(false);
+
+  const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
+  const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
 
   useEffect(() => {
     // Double RAF ensures the initial opacity:0 is painted before transitioning in
@@ -213,6 +217,26 @@ const CutSceneOverlay = ({ src, loop, onComplete }: { src: string; loop?: boolea
     });
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  useEffect(() => {
+    setRevealedCount(0);
+  }, [resolvedNarrate]);
+
+  useEffect(() => {
+    if (!resolvedNarrate) return;
+
+    const timer = window.setInterval(() => {
+      setRevealedCount((current) => {
+        if (current >= resolvedNarrate.length) {
+          window.clearInterval(timer);
+          return current;
+        }
+        return current + 1;
+      });
+    }, TEXT_SPEED);
+
+    return () => window.clearInterval(timer);
+  }, [resolvedNarrate]);
 
   const handleExit = useCallback(() => {
     if (completedRef.current) return;
@@ -263,6 +287,16 @@ const CutSceneOverlay = ({ src, loop, onComplete }: { src: string; loop?: boolea
           transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
         }}
       />
+      {visibleNarrate && (
+        <div className="vn-narrator-shell" style={{
+          opacity: fadingOut || !visible ? 0 : 1,
+          transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
+        }}>
+          <div className="vn-narrator-box">
+            <div className="vn-narrator-line">{visibleNarrate}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -921,6 +955,8 @@ const App = () => {
             key={`${activeCutScene.src}:${activeCutScene.loop ? "loop" : "once"}`}
             src={activeCutScene.src}
             loop={activeCutScene.loop}
+            narrate={activeCutScene.narrate}
+            language={language}
             onComplete={completeCutScene}
           />
         ) : null}

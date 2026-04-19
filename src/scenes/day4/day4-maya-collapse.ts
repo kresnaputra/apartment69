@@ -2,6 +2,7 @@ import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
 import {
   bg,
+  centeredText,
   cutScene,
   hide,
   jump,
@@ -22,12 +23,15 @@ import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
-  bg(hallwayUrl, tx({
-    id: "Lorong Depan Unit 301 - 13:00",
-    en: "Outside Unit 301 - 13:00",
-    ja: "301号室前の廊下 - 13:00",
-    ko: "301호 앞 복도 - 13:00",
-  })),
+  bg(
+    hallwayUrl,
+    tx({
+      id: "Lorong Depan Unit 301 - 13:00",
+      en: "Outside Unit 301 - 13:00",
+      ja: "301号室前の廊下 - 13:00",
+      ko: "301호 앞 복도 - 13:00",
+    }),
+  ),
   narrate(
     tx({
       id: "Arka baru mau keluar cari makan siang. Begitu dia membuka pintu unitnya, pintu kamar Maya juga terbuka. Maya keluar dengan ransel berat dan jaket tebal, padahal cuaca siang ini cukup panas.",
@@ -53,12 +57,16 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
     }),
     "arka",
   ),
-  say("arka", "serious", tx({
-    id: "Maya? Mau ke kampus jam segini? Muka kamu pucat banget.",
-    en: "Maya? You're heading to campus now? You look awful.",
-    ja: "マヤ？ 今から大学行くのか？ 顔色ひどいぞ。",
-    ko: "마야? 지금 학교 가려는 거야? 얼굴이 완전 안 좋아 보여.",
-  })),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Maya? Mau ke kampus jam segini? Muka kamu pucat banget.",
+      en: "Maya? You're heading to campus now? You look awful.",
+      ja: "マヤ？ 今から大学行くのか？ 顔色ひどいぞ。",
+      ko: "마야? 지금 학교 가려는 거야? 얼굴이 완전 안 좋아 보여.",
+    }),
+  ),
   say(
     "maya",
     "worried",
@@ -107,12 +115,16 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
       ko: "벽에서 두 걸음도 채 떨어지기 전에 마야의 다리에 힘이 풀린다. 아르카가 재빨리 팔을 잡아주지 않았다면 그대로 바닥에 쓰러졌을 것이다.",
     }),
   ),
-  say("arka", "surprised", tx({
-    id: "Maya! Astaga, badanmu panas banget.",
-    en: "Maya! Jesus, you're burning up.",
-    ja: "マヤ！ うわ、すごい熱いじゃないか。",
-    ko: "마야! 뭐야, 너 몸이 너무 뜨거워.",
-  })),
+  say(
+    "arka",
+    "surprised",
+    tx({
+      id: "Maya! Astaga, badanmu panas banget.",
+      en: "Maya! Jesus, you're burning up.",
+      ja: "マヤ！ うわ、すごい熱いじゃないか。",
+      ko: "마야! 뭐야, 너 몸이 너무 뜨거워.",
+    }),
+  ),
   say(
     "maya",
     "sad",
@@ -124,49 +136,70 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[19] },
   ),
-  menu(tx({
-    id: "APA TINDAKAN ARKA SEKARANG?",
-    en: "WHAT SHOULD ARKA DO NOW?",
-    ja: "ここでアルカはどうする？",
-    ko: "지금 아르카는 어떻게 해야 할까?",
-  }), [
-    {
-      id: "let-her-go",
-      label: tx({
-        id: "Turuti kemauannya",
-        en: "Let her go",
-        ja: "彼女の意思を優先する",
-        ko: "마야 뜻대로 보내준다",
-      }),
-      next: "day4-maya-bad-ending",
-    },
-    {
-      id: "force-her-rest",
-      label: tx({
-        id: "Paksa dia istirahat",
-        en: "Force her to rest",
-        ja: "無理やり休ませる",
-        ko: "억지로라도 쉬게 한다",
-      }),
-      next: "day4-maya-force-rest",
-    },
-  ]),
+  menu(
+    tx({
+      id: "Apa tindakan kamu sekarang?",
+      en: "What should you do now?",
+      ja: "ここであなたはどうする？",
+      ko: "지금 너는 어떻게 해야 할까?",
+    }),
+    [
+      {
+        id: "let-her-go",
+        label: tx({
+          id: "Turuti kemauannya",
+          en: "Let her go",
+          ja: "彼女の意思を優先する",
+          ko: "마야 뜻대로 보내준다",
+        }),
+        next: "day4-maya-bad-ending",
+      },
+      {
+        id: "force-her-rest",
+        label: tx({
+          id: "Paksa dia istirahat",
+          en: "Force her to rest",
+          ja: "無理やり休ませる",
+          ko: "억지로라도 쉬게 한다",
+        }),
+        next: "day4-maya-force-rest",
+      },
+    ],
+  ),
 ];
 
 export const day4MayaBadEndingScene: VisualNovelCommand[] = [
   setFlag("mayaRouteFailed", true),
-  hide("maya-day4-hallway"),
-  hide("arka-day4-hallway"),
   narrate(
     tx({
       id: "Biar aku pesanin kendaraan. Aku antar kamu sampai depan gedungnya.",
-      en: "I'll get you a ride. I'll take you straight to your building.",
+      en: "I'll get you a ride. I'll take you straight to the building.",
       ja: "車を呼ぶ。建物の前まで送るよ。",
       ko: "차 불러줄게. 건물 앞까지 데려다줄게.",
     }),
     "arka",
   ),
+  hide("maya-day4-hallway"),
+  hide("arka-day4-hallway"),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
+  centeredText(tx({
+    id: "GAME OVER",
+    en: "GAME OVER",
+    ja: "GAME OVER",
+    ko: "GAME OVER",
+  }), { size: "hero" }),
+  centeredText(tx({
+    id: "RUTE MAYA GAGAL",
+    en: "MAYA ROUTE FAILED",
+    ja: "マヤルート失敗",
+    ko: "마야 루트 실패",
+  }), { size: "sub" }),
+  centeredText(tx({
+    id: "Maya pingsan di kampus, dirawat di rumah sakit, lalu dipaksa pulang oleh ayahnya.",
+    en: "Maya collapsed on campus, was taken to the hospital, and was forced to go home by her father.",
+    ja: "マヤは大学で倒れ、病院に運ばれ、その後父親に無理やり連れ帰られた。",
+    ko: "마야는 캠퍼스에서 쓰러져 병원으로 옮겨졌고, 결국 아버지에게 강제로 집으로 끌려갔다.",
+  }), { size: "sub" }),
 ];
 
 export const day4MayaForceRestScene: VisualNovelCommand[] = [
@@ -539,8 +572,35 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ko: "마야는 아르카를 붙잡아 그대로 침대 쪽으로 끌어당긴다.",
     }),
   ),
-  cutScene(mayaBed1, true),
-  cutScene(mayaBed2, true),
-  cutScene(mayaBed3, true),
+  cutScene(
+    mayaBed1,
+    true,
+    tx({
+      id: "Maya memeluk Arka dengan erat di kasur. Tubuhnya masih sedikit gemetar, tapi kali ini bukan karena demam. Dia hanya butuh seseorang yang bisa membuatnya merasa aman, dan malam ini orang itu adalah Arka.",
+      en: "Maya hugs Arka tightly on the bed. Her body is still trembling slightly, but this time it's not from the fever. She just needs someone who can make her feel safe, and tonight that person is Arka.",
+      ja: "マヤはベッドでアルカをしっかりと抱きしめる。体はまだ少し震えているが、今度は熱のせいではない。ただ安心できる誰かが必要で、今夜その相手はアルカだった。",
+      ko: "마야는 침대에서 아르카를 꼭 껴안는다. 몸은 아직 조금 떨리지만, 이번엔 열 때문이 아니다. 그저 안심할 수 있는 누군가가 필요했고, 오늘 밤 그 사람은 아르카였다.",
+    }),
+  ),
+  cutScene(
+    mayaBed2,
+    true,
+    tx({
+      id: "Kehangatan tubuh Arka perlahan menenangkan Maya. Napasnya yang tadinya tersendat mulai teratur. Untuk pertama kalinya dalam beberapa hari ini, dia merasa bisa benar-benar beristirahat.",
+      en: "The warmth of Arka's body slowly calms Maya down. Her breathing, which had been uneven, begins to steady. For the first time in days, she feels like she can truly rest.",
+      ja: "アルカの体温がマヤを少しずつ落ち着かせていく。乱れていた呼吸も整い始める。ここ数日で初めて、本当に休めると感じた。",
+      ko: "아르카의 체온이 천천히 마야를 진정시킨다. 불규칙하던 숨결이 점차 고르게 돌아온다. 며칠 만에 처음으로 진정으로 쉴 수 있을 것 같다.",
+    }),
+  ),
+  cutScene(
+    mayaBed3,
+    true,
+    tx({
+      id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
+      en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
+      ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
+      ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
+    }),
+  ),
   jump("day4-complate"),
 ];

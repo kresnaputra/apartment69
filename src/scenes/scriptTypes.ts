@@ -195,9 +195,11 @@ export const minigame = (minigameId: MinigameId, options?: Record<string, unknow
  * Plays a fullscreen cut scene video. Script execution resumes automatically when the video ends.
  * @param src - Vite-imported video URL (e.g. `import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url"`)
  * @param loop - If true, video will loop until user clicks or presses a button
+ * @param narrate - Optional narration text to display during the cutscene
  */
-export const cutScene = (src: string, loop?: boolean): CutSceneCommand => ({
+export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText): CutSceneCommand => ({
   type: "cutScene",
   src,
   loop,
+  narrate,
 });

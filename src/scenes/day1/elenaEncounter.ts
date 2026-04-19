@@ -89,10 +89,10 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     { hideName: true },
   ),
   menu(tx({
-    id: "Apa yang harus Arka lakukan?",
-    en: "What should Arka do?",
-    ja: "アルカはどうする？",
-    ko: "아르카는 어떻게 할까?",
+    id: "Apa yang harus kamu lakukan?",
+    en: "What should you do?",
+    ja: "あなたはどうする？",
+    ko: "너는 어떻게 할까?",
   }), [
     { id: "help-elena", label: tx({ id: "Bantu", en: "Help", ja: "手伝う", ko: "돕는다" }), next: "help-elena" },
     { id: "ignore-elena", label: tx({ id: "Abaikan", en: "Ignore", ja: "無視する", ko: "무시한다" }), next: "ignore-elena" },
