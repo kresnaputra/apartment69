@@ -36,6 +36,7 @@ import gameplayMusic from "@/music/gameplay.mp3";
 
 const TEXT_SPEED = 18;
 const CUTSCENE_FADE_MS = 600;
+const BLACK_SCREEN_FADE_MS = 420;
 const CHARACTER_TICK_FPS = 40;
 const CHARACTER_ENTER_DURATION_MS = 520;
 const CHARACTER_FADE_ENTER_DURATION_MS = 820;
@@ -212,6 +213,7 @@ const CutSceneOverlay = ({
   language,
   allowDirectExit = true,
   speedControlBottom = "60px",
+  continueHint,
   speedLabels,
   onComplete,
 }: {
@@ -222,6 +224,7 @@ const CutSceneOverlay = ({
   language: LanguageCode;
   allowDirectExit?: boolean;
   speedControlBottom?: string;
+  continueHint: string;
   speedLabels: {
     slow: string;
     normal: string;
@@ -349,6 +352,31 @@ const CutSceneOverlay = ({
           </div>
         </div>
       )}
+      {!visibleNarrate && allowDirectExit && (videoEnded || loop) ? (
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            bottom: showSpeedControl ? "128px" : "54px",
+            transform: "translateX(-50%)",
+            padding: "10px 18px",
+            borderRadius: "999px",
+            background: "rgba(8, 7, 12, 0.68)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(12px)",
+            color: "#d8cfc3",
+            fontSize: "0.72rem",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            opacity: fadingOut || !visible ? 0 : 1,
+            transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
+            pointerEvents: "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {continueHint}
+        </div>
+      ) : null}
       {showSpeedControl && (
         <div
           onClick={(e) => e.stopPropagation()}
@@ -472,6 +500,7 @@ const MultiCutSceneOverlay = ({
         language={language}
         allowDirectExit={false}
         speedControlBottom="168px"
+        continueHint=""
         speedLabels={{
           slow: labels.slowPlayback,
           normal: labels.normalPlayback,
@@ -592,6 +621,7 @@ const App = () => {
   const background = useNovelStore((state) => state.background);
   const parallaxLayers = useNovelStore((state) => state.parallaxLayers);
   const backgroundAnimation = useNovelStore((state) => state.backgroundAnimation);
+  const blackScreenState = useNovelStore((state) => state.blackScreen);
   const location = useNovelStore((state) => state.location);
   const textPresentation = useNovelStore((state) => state.textPresentation);
   const speaker = useNovelStore((state) => state.speaker);
@@ -635,6 +665,7 @@ const App = () => {
   const [showLog, setShowLog] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [showSaveSlots, setShowSaveSlots] = useState(false);
+  const [blackScreenVisible, setBlackScreenVisible] = useState(false);
   const [language, setLanguage] = useState<LanguageCode>(() => {
     if (typeof window === "undefined") return DEFAULT_LANGUAGE;
     const saved = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
@@ -882,6 +913,22 @@ const App = () => {
     return () => window.clearInterval(timer);
   }, [resolvedLine]);
 
+  useEffect(() => {
+    if (!blackScreenState?.active) {
+      setBlackScreenVisible(false);
+      return;
+    }
+
+    setBlackScreenVisible(false);
+    const raf = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        setBlackScreenVisible(true);
+      });
+    });
+
+    return () => window.cancelAnimationFrame(raf);
+  }, [blackScreenState?.active, blackScreenState?.background]);
+
   // Auto-advance: when enabled, advance to the next line 1.5s after text finishes typing.
   useEffect(() => {
     if (!isAuto || isTyping || choices.length > 0 || isSceneTransitioning || isEnded) return;
@@ -1114,6 +1161,17 @@ const App = () => {
           )}
         </div>
 
+        {blackScreenState?.active ? (
+          <div
+            className="absolute inset-0 z-20 pointer-events-none"
+            style={{
+              background: blackScreenState.background,
+              opacity: blackScreenVisible ? 1 : 0,
+              transition: `opacity ${BLACK_SCREEN_FADE_MS}ms ease`,
+            }}
+          />
+        ) : null}
+
         {activeMinigame ? null : isCenteredText ? (
           <div className={`vn-centered-text-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
             <div className="vn-centered-text-box">
@@ -1265,6 +1323,7 @@ const App = () => {
             narrate={activeCutScene.narrate}
             showSpeedControl={activeCutScene.showSpeedControl}
             language={language}
+            continueHint={labels.clickToContinue}
             speedLabels={{
               slow: labels.slowPlayback,
               normal: labels.normalPlayback,

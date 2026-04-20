@@ -46,6 +46,11 @@ export type ActiveInterstitial = {
   startedAt: number;
 };
 
+export type BlackScreenState = {
+  active: boolean;
+  background: string;
+};
+
 export type CharacterStagePosition = "left" | "center" | "right";
 export type CharacterEnterFrom = "left" | "right" | "fade" | "none";
 export type CharacterHideTransition = "fadeAway" | "none";
@@ -197,6 +202,12 @@ export type InterstitialCommand = {
   type: "interstitial";
 };
 
+export type BlackScreenCommand = {
+  type: "blackScreen";
+  active: boolean;
+  background?: string;
+};
+
 export type VisualNovelCommand =
   | SceneCommand
   | ShowCharacterCommand
@@ -212,7 +223,8 @@ export type VisualNovelCommand =
   | MinigameCommand
   | CutSceneCommand
   | MultiCutSceneCommand
-  | InterstitialCommand;
+  | InterstitialCommand
+  | BlackScreenCommand;
 
 export type VisualNovelScript = {
   startLabel: string;

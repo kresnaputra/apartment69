@@ -10,6 +10,7 @@ import type {
   ActiveMultiCutScene,
   ActiveInterstitial,
   ActiveMinigame,
+  BlackScreenState,
   CharacterDefinition,
   CharacterEnterFrom,
   CharacterInstance,
@@ -33,6 +34,7 @@ type NovelStore = {
     panY?: number;
     duration?: number;
   } | null;
+  blackScreen: BlackScreenState | null;
   location: LocalizedText;
   textPresentation: "dialogue" | "narration" | "centered";
   speaker: string | null;
@@ -89,6 +91,7 @@ const emptyState = {
     panY?: number;
     duration?: number;
   } | null,
+  blackScreen: null as BlackScreenState | null,
   location: "",
   textPresentation: "dialogue" as const,
   speaker: null,
@@ -302,6 +305,8 @@ const runScriptUntilPause = (state: NovelStore) => {
   const nextState: Partial<NovelStore> = {
     background: state.background,
     parallaxLayers: state.parallaxLayers,
+    backgroundAnimation: state.backgroundAnimation,
+    blackScreen: state.blackScreen,
     location: state.location,
     textPresentation: state.textPresentation,
     speaker: state.speaker,
@@ -345,6 +350,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.background = command.background;
         nextState.parallaxLayers = command.parallaxLayers ?? [];
         nextState.backgroundAnimation = command.backgroundAnimation ?? null;
+        nextState.blackScreen = null;
         nextState.location = command.location ?? "";
         nextState.sceneTransitionDuration = command.transitionDuration ?? 720;
         nextState.sceneTransitionToken = (nextState.sceneTransitionToken ?? 0) + 1;
@@ -514,6 +520,16 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.ready = true;
         return nextState;
 
+      case "blackScreen":
+        nextState.blackScreen = command.active
+          ? {
+              active: true,
+              background: command.background ?? "linear-gradient(180deg, #000000 0%, #050505 100%)",
+            }
+          : null;
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        break;
+
       case "centeredText":
         nextState.textPresentation = "centered";
         nextState.speaker = null;
@@ -614,6 +630,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       line: "",
       speaker: null,
       activeCharacterId: null,
+      blackScreen: null,
       choices: [],
       activeMinigame: null,
       activeCutScene: null,

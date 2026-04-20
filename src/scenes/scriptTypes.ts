@@ -1,6 +1,7 @@
 import type { AnyCharacterEmotion, CharacterEmotion, CharacterId } from "@/character/catalog";
 import type { LocalizedText } from "@/lib/i18n";
 import type {
+  BlackScreenCommand,
   CenteredTextCommand,
   CharacterHideTransition,
   ClearFlagCommand,
@@ -65,6 +66,19 @@ export const bg = (
   parallaxLayers: options?.parallaxLayers,
   transitionDuration: options?.transitionDuration,
   backgroundAnimation: options?.backgroundAnimation,
+});
+
+export const blackScreen = (
+  background = "linear-gradient(180deg, #000000 0%, #050505 100%)",
+): BlackScreenCommand => ({
+  type: "blackScreen",
+  active: true,
+  background,
+});
+
+export const clearBlackScreen = (): BlackScreenCommand => ({
+  type: "blackScreen",
+  active: false,
 });
 
 /**
