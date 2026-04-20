@@ -241,10 +241,10 @@ const CutSceneOverlay = ({
   const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
   const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
   const speedOptions = [
-    { label: speedLabels.slow, value: 0.75 },
-    { label: speedLabels.normal, value: 1 },
-    { label: speedLabels.fast, value: 2 },
-    { label: speedLabels.faster, value: 3 },
+    { label: speedLabels.slow, value: 1 },
+    { label: speedLabels.normal, value: 2 },
+    { label: speedLabels.fast, value: 4 },
+    { label: speedLabels.faster, value: 6 },
   ];
 
   useEffect(() => {
