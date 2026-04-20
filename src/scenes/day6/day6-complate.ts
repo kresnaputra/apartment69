@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { centeredText, hide, jump, scene } from "@/scenes/scriptTypes";
+import { centeredText, hide, interstitial, jump, scene } from "@/scenes/scriptTypes";
 
 export const day6ComplateScene: VisualNovelCommand[] = [
   hide("arka-day6-room"),
@@ -11,5 +11,6 @@ export const day6ComplateScene: VisualNovelCommand[] = [
     ja: "6日目 終了",
     ko: "6일차 완료",
   }), { size: "hero" }),
+  interstitial(),
   jump("day7-intro"),
 ];

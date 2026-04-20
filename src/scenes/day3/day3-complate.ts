@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { centeredText, hide, jump, scene } from "@/scenes/scriptTypes";
+import { centeredText, hide, interstitial, jump, scene } from "@/scenes/scriptTypes";
 
 export const day3ComplateScene: VisualNovelCommand[] = [
   hide("arka-bedroom"),
@@ -11,5 +11,6 @@ export const day3ComplateScene: VisualNovelCommand[] = [
     ja: "3日目 終了",
     ko: "3일차 완료",
   }), { size: "hero" }),
+  interstitial(),
   jump("day4-maya-collapse"),
 ];

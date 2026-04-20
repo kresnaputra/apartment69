@@ -24,6 +24,10 @@ import type { SmartphoneContactOverrides } from "@/components/minigames/smartpho
 import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
+import {
+  initializeAdMob,
+  showDayTransitionInterstitial,
+} from "@/lib/runtime/admob";
 import { useNovelStore } from "@/store/novelStore";
 import { unknownSpeakerIds } from "@/types/novel";
 import type { CharacterInstance } from "@/types/novel";
@@ -387,6 +391,7 @@ const App = () => {
   const pendingSceneContinuation = useNovelStore((state) => state.pendingSceneContinuation);
   const activeMinigame = useNovelStore((state) => state.activeMinigame);
   const activeCutScene = useNovelStore((state) => state.activeCutScene);
+  const activeInterstitial = useNovelStore((state) => state.activeInterstitial);
   const activeVoice = useNovelStore((state) => state.activeVoice);
   const line = useNovelStore((state) => state.line);
   const lineSize = useNovelStore((state) => state.lineSize);
@@ -400,6 +405,7 @@ const App = () => {
   const choose = useNovelStore((state) => state.choose);
   const completeMinigame = useNovelStore((state) => state.completeMinigame);
   const completeCutScene = useNovelStore((state) => state.completeCutScene);
+  const completeInterstitial = useNovelStore((state) => state.completeInterstitial);
   const tickCharacters = useNovelStore((state) => state.tickCharacters);
   const clearScene = useNovelStore((state) => state.clearScene);
   const loadFromSave = useNovelStore((state) => state.loadFromSave);
@@ -513,6 +519,20 @@ const App = () => {
       }
     };
   }, [activeVoice]);
+
+  useEffect(() => {
+    initializeAdMob().catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!activeInterstitial) return;
+
+    showDayTransitionInterstitial()
+      .catch(() => {})
+      .finally(() => {
+        completeInterstitial();
+      });
+  }, [activeInterstitial, completeInterstitial]);
 
   // Android WebView blocks audio until a user gesture. On first interaction,
   // resume an AudioContext to unlock the audio subsystem, then retry any

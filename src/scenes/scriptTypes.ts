@@ -9,6 +9,7 @@ import type {
   FlagValue,
   HideCharacterCommand,
   JumpIfCommand,
+  InterstitialCommand,
   MinigameId,
   MoveCharacterCommand,
   ParallaxLayer,
@@ -204,4 +205,8 @@ export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText, s
   loop,
   narrate,
   showSpeedControl,
+});
+
+export const interstitial = (): InterstitialCommand => ({
+  type: "interstitial",
 });

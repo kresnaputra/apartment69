@@ -7,6 +7,7 @@ import { unknownSpeakerIds } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import type {
   ActiveCutScene,
+  ActiveInterstitial,
   ActiveMinigame,
   CharacterDefinition,
   CharacterEnterFrom,
@@ -40,6 +41,7 @@ type NovelStore = {
   pendingSceneContinuation: boolean;
   activeMinigame: ActiveMinigame | null;
   activeCutScene: ActiveCutScene | null;
+  activeInterstitial: ActiveInterstitial | null;
   activeVoice: string | null;
   line: LocalizedText;
   lineSize: "hero" | "sub";
@@ -69,6 +71,7 @@ type NovelStore = {
   choose: (nextLabel: string) => void;
   completeMinigame: () => void;
   completeCutScene: () => void;
+  completeInterstitial: () => void;
   tickCharacters: () => void;
 };
 
@@ -92,6 +95,7 @@ const emptyState = {
   pendingSceneContinuation: false,
   activeMinigame: null,
   activeCutScene: null,
+  activeInterstitial: null,
   activeVoice: null,
   line: "",
   lineSize: "hero" as const,
@@ -303,6 +307,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     pendingSceneContinuation: state.pendingSceneContinuation,
     activeMinigame: state.activeMinigame,
     activeCutScene: state.activeCutScene,
+    activeInterstitial: state.activeInterstitial,
     activeVoice: state.activeVoice,
     line: state.line,
     lineSize: state.lineSize,
@@ -464,6 +469,21 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.ready = true;
         return nextState;
 
+      case "interstitial":
+        nextState.textPresentation = "dialogue";
+        nextState.speaker = null;
+        nextState.activeCharacterId = null;
+        nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
+        nextState.pendingSceneContinuation = false;
+        nextState.activeInterstitial = { startedAt: Date.now() };
+        nextState.activeVoice = null;
+        nextState.line = "";
+        nextState.choices = [];
+        nextState.choicePrompt = "";
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        nextState.ready = true;
+        return nextState;
+
       case "centeredText":
         nextState.textPresentation = "centered";
         nextState.speaker = null;
@@ -567,6 +587,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       choices: [],
       activeMinigame: null,
       activeCutScene: null,
+      activeInterstitial: null,
       activeVoice: null,
     }),
 
@@ -610,6 +631,10 @@ export const useNovelStore = create<NovelStore>((set) => ({
         return state;
       }
 
+      if (state.activeInterstitial) {
+        return state;
+      }
+
       return runScriptUntilPause({
         ...state,
         activeVoice: null,
@@ -629,6 +654,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
         line: "",
         choices: [],
         choicePrompt: "",
+        activeInterstitial: null,
         activeVoice: null,
         ready: false,
       }),
@@ -643,6 +669,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       return runScriptUntilPause({
         ...state,
         activeMinigame: null,
+        activeInterstitial: null,
         activeVoice: null,
         pendingSceneContinuation: false,
         ready: false,
@@ -658,6 +685,22 @@ export const useNovelStore = create<NovelStore>((set) => ({
       return runScriptUntilPause({
         ...state,
         activeCutScene: null,
+        activeInterstitial: null,
+        activeVoice: null,
+        pendingSceneContinuation: false,
+        ready: false,
+      });
+    }),
+
+  completeInterstitial: () =>
+    set((state) => {
+      if (!state.activeInterstitial) {
+        return state;
+      }
+
+      return runScriptUntilPause({
+        ...state,
+        activeInterstitial: null,
         activeVoice: null,
         pendingSceneContinuation: false,
         ready: false,

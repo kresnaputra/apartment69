@@ -37,6 +37,10 @@ export type ActiveMinigame = {
   options?: Record<string, unknown>;
 };
 
+export type ActiveInterstitial = {
+  startedAt: number;
+};
+
 export type CharacterStagePosition = "left" | "center" | "right";
 export type CharacterEnterFrom = "left" | "right" | "fade" | "none";
 export type CharacterHideTransition = "fadeAway" | "none";
@@ -168,6 +172,10 @@ export type CutSceneCommand = {
   showSpeedControl?: boolean;
 };
 
+export type InterstitialCommand = {
+  type: "interstitial";
+};
+
 export type VisualNovelCommand =
   | SceneCommand
   | ShowCharacterCommand
@@ -181,7 +189,8 @@ export type VisualNovelCommand =
   | ClearFlagCommand
   | JumpIfCommand
   | MinigameCommand
-  | CutSceneCommand;
+  | CutSceneCommand
+  | InterstitialCommand;
 
 export type VisualNovelScript = {
   startLabel: string;
