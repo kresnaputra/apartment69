@@ -30,7 +30,7 @@ import {
 } from "@/lib/runtime/admob";
 import { useNovelStore } from "@/store/novelStore";
 import { unknownSpeakerIds } from "@/types/novel";
-import type { CharacterInstance } from "@/types/novel";
+import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import gameplayMusic from "@/music/gameplay.mp3";
 
@@ -204,7 +204,32 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   );
 });
 
-const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onComplete }: { src: string; loop?: boolean; narrate?: LocalizedText; showSpeedControl?: boolean; language: LanguageCode; onComplete: () => void }) => {
+const CutSceneOverlay = ({
+  src,
+  loop,
+  narrate,
+  showSpeedControl,
+  language,
+  allowDirectExit = true,
+  speedControlBottom = "60px",
+  speedLabels,
+  onComplete,
+}: {
+  src: string;
+  loop?: boolean;
+  narrate?: LocalizedText;
+  showSpeedControl?: boolean;
+  language: LanguageCode;
+  allowDirectExit?: boolean;
+  speedControlBottom?: string;
+  speedLabels: {
+    slow: string;
+    normal: string;
+    fast: string;
+    faster: string;
+  };
+  onComplete: () => void;
+}) => {
   const [visible, setVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
@@ -216,9 +241,10 @@ const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onCom
   const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
   const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
   const speedOptions = [
-    { label: "Slow", value: 0.75 },
-    { label: "Normal", value: 1 },
-    { label: "Fast", value: 2 },
+    { label: speedLabels.slow, value: 0.75 },
+    { label: speedLabels.normal, value: 1 },
+    { label: speedLabels.fast, value: 2 },
+    { label: speedLabels.faster, value: 3 },
   ];
 
   useEffect(() => {
@@ -231,7 +257,9 @@ const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onCom
 
   useEffect(() => {
     setRevealedCount(0);
-  }, [resolvedNarrate]);
+    setVideoEnded(false);
+    setCurrentSpeed(1);
+  }, [resolvedNarrate, src]);
 
   useEffect(() => {
     if (!resolvedNarrate) return;
@@ -262,25 +290,27 @@ const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onCom
   const handleExit = useCallback(() => {
     if (completedRef.current) return;
     // Allow exit if video ended OR if loop is enabled
+    if (!allowDirectExit) return;
     if (!videoEnded && !loop) return;
     completedRef.current = true;
     setFadingOut(true);
     window.setTimeout(onComplete, CUTSCENE_FADE_MS);
-  }, [onComplete, videoEnded, loop]);
+  }, [allowDirectExit, loop, onComplete, videoEnded]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       if (e.key !== " " && e.key !== "Enter") return;
+      if (!allowDirectExit) return;
       e.preventDefault();
       handleExit();
     };
     window.addEventListener("keydown", onKeydown);
     return () => window.removeEventListener("keydown", onKeydown);
-  }, [handleExit]);
+  }, [allowDirectExit, handleExit]);
 
   return (
     <div
-      onClick={handleExit}
+      onClick={allowDirectExit ? handleExit : undefined}
       style={{
         position: "fixed",
         inset: 0,
@@ -289,7 +319,7 @@ const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onCom
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: videoEnded || loop ? "pointer" : "default",
+        cursor: allowDirectExit && (videoEnded || loop) ? "pointer" : "default",
       }}
     >
       <video
@@ -324,7 +354,7 @@ const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onCom
           onClick={(e) => e.stopPropagation()}
           style={{
             position: "absolute",
-            bottom: "60px",
+            bottom: speedControlBottom,
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
@@ -372,6 +402,186 @@ const CutSceneOverlay = ({ src, loop, narrate, showSpeedControl, language, onCom
   );
 };
 
+const MultiCutSceneOverlay = ({
+  selections,
+  initialSelectionId,
+  language,
+  labels,
+  onComplete,
+}: {
+  selections: CutSceneSelection[];
+  initialSelectionId?: string;
+  language: LanguageCode;
+  labels: {
+    fastPlayback: string;
+    fasterPlayback: string;
+    previousScene: string;
+    nextScene: string;
+    continueStory: string;
+    lockedScene: string;
+    normalPlayback: string;
+    slowPlayback: string;
+  };
+  onComplete: () => void;
+}) => {
+  const [selectedSceneId, setSelectedSceneId] = useState<string | null>(initialSelectionId ?? selections[0]?.id ?? null);
+  const enabledSelections = selections.filter((scene) => scene.enabled !== false);
+  const activeSelection = selections.find((scene) => scene.id === selectedSceneId) ?? selections[0];
+  const currentSelectionIndex = enabledSelections.findIndex((scene) => scene.id === activeSelection?.id);
+
+  useEffect(() => {
+    setSelectedSceneId(initialSelectionId ?? selections[0]?.id ?? null);
+  }, [initialSelectionId, selections]);
+
+  const handleSelectScene = useCallback((sceneId: string) => {
+    setSelectedSceneId(sceneId);
+  }, []);
+
+  const handleMoveScene = useCallback((direction: -1 | 1) => {
+    if (enabledSelections.length <= 1 || currentSelectionIndex === -1) return;
+    const nextIndex = (currentSelectionIndex + direction + enabledSelections.length) % enabledSelections.length;
+    handleSelectScene(enabledSelections[nextIndex].id);
+  }, [currentSelectionIndex, enabledSelections, handleSelectScene]);
+
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handleMoveScene(-1);
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleMoveScene(1);
+      }
+    };
+    window.addEventListener("keydown", onKeydown);
+    return () => window.removeEventListener("keydown", onKeydown);
+  }, [handleMoveScene]);
+
+  if (!activeSelection) return null;
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, pointerEvents: "none" }}>
+      <CutSceneOverlay
+        key={activeSelection.id}
+        src={activeSelection.src}
+        loop={activeSelection.loop}
+        narrate={activeSelection.narrate}
+        showSpeedControl={activeSelection.showSpeedControl ?? Boolean(activeSelection.loop)}
+        language={language}
+        allowDirectExit={false}
+        speedControlBottom="168px"
+        speedLabels={{
+          slow: labels.slowPlayback,
+          normal: labels.normalPlayback,
+          fast: labels.fastPlayback,
+          faster: labels.fasterPlayback,
+        }}
+        onComplete={onComplete}
+      />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "absolute",
+          zIndex: 101,
+          left: "50%",
+          bottom: "24px",
+          transform: "translateX(-50%)",
+          display: "grid",
+          gap: "12px",
+          width: "min(92vw, 960px)",
+          padding: "14px",
+          borderRadius: "18px",
+          background: "rgba(8, 7, 12, 0.76)",
+          backdropFilter: "blur(14px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          pointerEvents: "auto",
+        }}
+      >
+        <div style={{ display: "flex", gap: "8px", justifyContent: "space-between", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={() => handleMoveScene(-1)}
+            disabled={enabledSelections.length <= 1}
+            style={{
+              padding: "10px 14px",
+              borderRadius: "10px",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              background: enabledSelections.length <= 1 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
+              color: enabledSelections.length <= 1 ? "rgba(255,255,255,0.45)" : "#f3eadf",
+              cursor: enabledSelections.length <= 1 ? "not-allowed" : "pointer",
+            }}
+          >
+            {labels.previousScene}
+          </button>
+          <button
+            type="button"
+            onClick={onComplete}
+            style={{
+              padding: "10px 16px",
+              borderRadius: "10px",
+              border: "1px solid rgba(210, 164, 86, 0.38)",
+              background: "rgba(210, 164, 86, 0.92)",
+              color: "#140f09",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            {labels.continueStory}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleMoveScene(1)}
+            disabled={enabledSelections.length <= 1}
+            style={{
+              padding: "10px 14px",
+              borderRadius: "10px",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              background: enabledSelections.length <= 1 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
+              color: enabledSelections.length <= 1 ? "rgba(255,255,255,0.45)" : "#f3eadf",
+              cursor: enabledSelections.length <= 1 ? "not-allowed" : "pointer",
+            }}
+          >
+            {labels.nextScene}
+          </button>
+        </div>
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "center" }}>
+          {selections.map((scene) => {
+            const isActive = activeSelection.id === scene.id;
+            const isEnabled = scene.enabled !== false;
+            return (
+              <button
+                key={scene.id}
+                type="button"
+                disabled={!isEnabled}
+                onClick={() => handleSelectScene(scene.id)}
+                style={{
+                  minWidth: "120px",
+                  padding: "10px 14px",
+                  borderRadius: "999px",
+                  border: isActive ? "1px solid rgba(210, 164, 86, 0.52)" : "1px solid rgba(255, 255, 255, 0.1)",
+                  background: !isEnabled
+                    ? "rgba(255, 255, 255, 0.08)"
+                    : isActive
+                      ? "rgba(210, 164, 86, 0.18)"
+                      : "rgba(17, 16, 24, 0.9)",
+                  color: !isEnabled ? "rgba(255,255,255,0.48)" : "#f3eadf",
+                  cursor: !isEnabled ? "not-allowed" : "pointer",
+                  fontWeight: isActive ? 700 : 500,
+                }}
+              >
+                {resolveText(scene.label, language)}
+                {!isEnabled ? ` • ${labels.lockedScene}` : ""}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
   const isMobile = useIsMobile();
   const [phase, setPhase] = useState<"menu" | "story">("menu");
@@ -391,6 +601,7 @@ const App = () => {
   const pendingSceneContinuation = useNovelStore((state) => state.pendingSceneContinuation);
   const activeMinigame = useNovelStore((state) => state.activeMinigame);
   const activeCutScene = useNovelStore((state) => state.activeCutScene);
+  const activeMultiCutScene = useNovelStore((state) => state.activeMultiCutScene);
   const activeInterstitial = useNovelStore((state) => state.activeInterstitial);
   const activeVoice = useNovelStore((state) => state.activeVoice);
   const line = useNovelStore((state) => state.line);
@@ -405,6 +616,7 @@ const App = () => {
   const choose = useNovelStore((state) => state.choose);
   const completeMinigame = useNovelStore((state) => state.completeMinigame);
   const completeCutScene = useNovelStore((state) => state.completeCutScene);
+  const completeMultiCutScene = useNovelStore((state) => state.completeMultiCutScene);
   const completeInterstitial = useNovelStore((state) => state.completeInterstitial);
   const tickCharacters = useNovelStore((state) => state.tickCharacters);
   const clearScene = useNovelStore((state) => state.clearScene);
@@ -454,15 +666,22 @@ const App = () => {
     clickToFinish: resolveText(uiText.clickToFinish, language),
     close: resolveText(uiText.close, language),
     config: resolveText(uiText.config, language),
+    continueStory: resolveText(uiText.continueStory, language),
     emptySlot: resolveText(uiText.emptySlot, language),
     exit: resolveText(uiText.exit, language),
+    fastPlayback: resolveText(uiText.playbackFast, language),
+    fasterPlayback: resolveText(uiText.playbackFaster, language),
     gallery: resolveText(uiText.gallery, language),
     language: resolveText(uiText.language, language),
     load: resolveText(uiText.load, language),
     loading: resolveText(uiText.loading, language),
     log: resolveText(uiText.log, language),
     mainMenuSettings: resolveText(uiText.mainMenuSettings, language),
+    lockedScene: resolveText(uiText.lockedScene, language),
+    nextScene: resolveText(uiText.nextScene, language),
     noConversation: resolveText(uiText.noConversation, language),
+    normalPlayback: resolveText(uiText.playbackNormal, language),
+    previousScene: resolveText(uiText.previousScene, language),
     save: resolveText(uiText.save, language),
     saved: resolveText(uiText.saved, language),
     settings: resolveText(uiText.settings, language),
@@ -470,6 +689,7 @@ const App = () => {
     slot: resolveText(uiText.slot, language),
     start: resolveText(uiText.start, language),
     subtitle: resolveText(uiText.titleSubtitle, language),
+    slowPlayback: resolveText(uiText.playbackSlow, language),
     tapToContinue: resolveText(uiText.tapToContinue, language),
     tapToSkip: resolveText(uiText.tapToSkip, language),
     unknownScene: resolveText(uiText.unknownScene, language),
@@ -1045,7 +1265,33 @@ const App = () => {
             narrate={activeCutScene.narrate}
             showSpeedControl={activeCutScene.showSpeedControl}
             language={language}
+            speedLabels={{
+              slow: labels.slowPlayback,
+              normal: labels.normalPlayback,
+              fast: labels.fastPlayback,
+              faster: labels.fasterPlayback,
+            }}
             onComplete={completeCutScene}
+          />
+        ) : null}
+
+        {activeMultiCutScene ? (
+          <MultiCutSceneOverlay
+            key={activeMultiCutScene.initialSelectionId ?? activeMultiCutScene.selections[0]?.id ?? "multi-cutscene"}
+            selections={activeMultiCutScene.selections}
+            initialSelectionId={activeMultiCutScene.initialSelectionId}
+            language={language}
+            labels={{
+              slowPlayback: labels.slowPlayback,
+              normalPlayback: labels.normalPlayback,
+              fastPlayback: labels.fastPlayback,
+              fasterPlayback: labels.fasterPlayback,
+              previousScene: labels.previousScene,
+              nextScene: labels.nextScene,
+              continueStory: labels.continueStory,
+              lockedScene: labels.lockedScene,
+            }}
+            onComplete={completeMultiCutScene}
           />
         ) : null}
 

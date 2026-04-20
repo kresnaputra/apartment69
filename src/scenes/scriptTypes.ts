@@ -6,12 +6,14 @@ import type {
   ClearFlagCommand,
   ChoiceOption,
   CutSceneCommand,
+  CutSceneSelection,
   FlagValue,
   HideCharacterCommand,
   JumpIfCommand,
   InterstitialCommand,
   MinigameId,
   MoveCharacterCommand,
+  MultiCutSceneCommand,
   ParallaxLayer,
   SayCommand,
   SceneCommand,
@@ -205,6 +207,15 @@ export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText, s
   loop,
   narrate,
   showSpeedControl,
+});
+
+export const multiCutScene = (
+  selections: CutSceneSelection[],
+  initialSelectionId?: string,
+): MultiCutSceneCommand => ({
+  type: "multiCutScene",
+  selections,
+  initialSelectionId,
 });
 
 export const interstitial = (): InterstitialCommand => ({

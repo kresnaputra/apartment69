@@ -7,6 +7,7 @@ import { unknownSpeakerIds } from "@/types/novel";
 import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import type {
   ActiveCutScene,
+  ActiveMultiCutScene,
   ActiveInterstitial,
   ActiveMinigame,
   CharacterDefinition,
@@ -41,6 +42,7 @@ type NovelStore = {
   pendingSceneContinuation: boolean;
   activeMinigame: ActiveMinigame | null;
   activeCutScene: ActiveCutScene | null;
+  activeMultiCutScene: ActiveMultiCutScene | null;
   activeInterstitial: ActiveInterstitial | null;
   activeVoice: string | null;
   line: LocalizedText;
@@ -71,6 +73,7 @@ type NovelStore = {
   choose: (nextLabel: string) => void;
   completeMinigame: () => void;
   completeCutScene: () => void;
+  completeMultiCutScene: () => void;
   completeInterstitial: () => void;
   tickCharacters: () => void;
 };
@@ -95,6 +98,7 @@ const emptyState = {
   pendingSceneContinuation: false,
   activeMinigame: null,
   activeCutScene: null,
+  activeMultiCutScene: null,
   activeInterstitial: null,
   activeVoice: null,
   line: "",
@@ -307,6 +311,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     pendingSceneContinuation: state.pendingSceneContinuation,
     activeMinigame: state.activeMinigame,
     activeCutScene: state.activeCutScene,
+    activeMultiCutScene: state.activeMultiCutScene,
     activeInterstitial: state.activeInterstitial,
     activeVoice: state.activeVoice,
     line: state.line,
@@ -460,7 +465,32 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.activeCharacterId = null;
         nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
         nextState.pendingSceneContinuation = false;
-        nextState.activeCutScene = { src: command.src, loop: command.loop, narrate: command.narrate, showSpeedControl: command.showSpeedControl };
+        nextState.activeCutScene = {
+          src: command.src,
+          loop: command.loop,
+          narrate: command.narrate,
+          showSpeedControl: command.showSpeedControl,
+        };
+        nextState.activeMultiCutScene = null;
+        nextState.activeVoice = null;
+        nextState.line = "";
+        nextState.choices = [];
+        nextState.choicePrompt = "";
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        nextState.ready = true;
+        return nextState;
+
+      case "multiCutScene":
+        nextState.textPresentation = "dialogue";
+        nextState.speaker = null;
+        nextState.activeCharacterId = null;
+        nextState.characters = syncTalkingBundles(nextState.characters, state.bundles, null);
+        nextState.pendingSceneContinuation = false;
+        nextState.activeCutScene = null;
+        nextState.activeMultiCutScene = {
+          selections: command.selections,
+          initialSelectionId: command.initialSelectionId,
+        };
         nextState.activeVoice = null;
         nextState.line = "";
         nextState.choices = [];
@@ -587,6 +617,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       choices: [],
       activeMinigame: null,
       activeCutScene: null,
+      activeMultiCutScene: null,
       activeInterstitial: null,
       activeVoice: null,
     }),
@@ -631,6 +662,10 @@ export const useNovelStore = create<NovelStore>((set) => ({
         return state;
       }
 
+      if (state.activeMultiCutScene) {
+        return state;
+      }
+
       if (state.activeInterstitial) {
         return state;
       }
@@ -650,6 +685,8 @@ export const useNovelStore = create<NovelStore>((set) => ({
         currentLabel: nextLabel,
         currentIndex: 0,
         activeMinigame: null,
+        activeCutScene: null,
+        activeMultiCutScene: null,
         speaker: null,
         line: "",
         choices: [],
@@ -669,6 +706,8 @@ export const useNovelStore = create<NovelStore>((set) => ({
       return runScriptUntilPause({
         ...state,
         activeMinigame: null,
+        activeCutScene: null,
+        activeMultiCutScene: null,
         activeInterstitial: null,
         activeVoice: null,
         pendingSceneContinuation: false,
@@ -685,6 +724,24 @@ export const useNovelStore = create<NovelStore>((set) => ({
       return runScriptUntilPause({
         ...state,
         activeCutScene: null,
+        activeMultiCutScene: null,
+        activeInterstitial: null,
+        activeVoice: null,
+        pendingSceneContinuation: false,
+        ready: false,
+      });
+    }),
+
+  completeMultiCutScene: () =>
+    set((state) => {
+      if (!state.activeMultiCutScene) {
+        return state;
+      }
+
+      return runScriptUntilPause({
+        ...state,
+        activeCutScene: null,
+        activeMultiCutScene: null,
         activeInterstitial: null,
         activeVoice: null,
         pendingSceneContinuation: false,

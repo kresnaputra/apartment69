@@ -31,6 +31,11 @@ export type ActiveCutScene = {
   showSpeedControl?: boolean;
 };
 
+export type ActiveMultiCutScene = {
+  selections: CutSceneSelection[];
+  initialSelectionId?: string;
+};
+
 export type ActiveMinigame = {
   id: MinigameId;
   startedAt: number;
@@ -172,6 +177,22 @@ export type CutSceneCommand = {
   showSpeedControl?: boolean;
 };
 
+export type MultiCutSceneCommand = {
+  type: "multiCutScene";
+  selections: CutSceneSelection[];
+  initialSelectionId?: string;
+};
+
+export type CutSceneSelection = {
+  id: string;
+  label: LocalizedText;
+  src: string;
+  loop?: boolean;
+  narrate?: LocalizedText;
+  showSpeedControl?: boolean;
+  enabled?: boolean;
+};
+
 export type InterstitialCommand = {
   type: "interstitial";
 };
@@ -190,6 +211,7 @@ export type VisualNovelCommand =
   | JumpIfCommand
   | MinigameCommand
   | CutSceneCommand
+  | MultiCutSceneCommand
   | InterstitialCommand;
 
 export type VisualNovelScript = {

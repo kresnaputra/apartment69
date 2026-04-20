@@ -3,16 +3,17 @@ import { tx } from "@/lib/i18n";
 import {
   bg,
   centeredText,
-  cutScene,
   hide,
   jump,
   menu,
+  multiCutScene,
   minigame,
   narrate,
   say,
   scene,
   setFlag,
   show,
+  cutScene,
 } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
@@ -21,6 +22,10 @@ import mayaBed1 from "@/cut-scene/maya-bed-1.webm?url";
 import mayaBed2 from "@/cut-scene/maya-bed-2.webm?url";
 import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
 import mayaBed4 from "@/cut-scene/maya-bed-4.webm?url";
+import mayaBed5 from "@/cut-scene/maya-bed-5.webm?url";
+import mayaBed6 from "@/cut-scene/maya-bed-6.webm?url";
+import mayaBed7 from "@/cut-scene/maya-bed-7.webm?url";
+import mayaBed8 from "@/cut-scene/maya-bed-8.webm?url";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
@@ -596,32 +601,111 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
     mayaBed2,
     true,
     tx({
-      id: "Kehangatan tubuh Arka perlahan menenangkan Maya. Napasnya yang tadinya tersendat mulai teratur. Untuk pertama kalinya dalam beberapa hari ini, dia merasa bisa benar-benar beristirahat.",
-      en: "The warmth of Arka's body slowly calms Maya down. Her breathing, which had been uneven, begins to steady. For the first time in days, she feels like she can truly rest.",
-      ja: "アルカの体温がマヤを少しずつ落ち着かせていく。乱れていた呼吸も整い始める。ここ数日で初めて、本当に休めると感じた。",
-      ko: "아르카의 체온이 천천히 마야를 진정시킨다. 불규칙하던 숨결이 점차 고르게 돌아온다. 며칠 만에 처음으로 진정으로 쉴 수 있을 것 같다.",
+      id: "Maya memeluk Arka dengan erat di kasur. Tubuhnya masih sedikit gemetar, tapi kali ini bukan karena demam. Dia hanya butuh seseorang yang bisa membuatnya merasa aman, dan malam ini orang itu adalah Arka.",
+      en: "Maya hugs Arka tightly on the bed. Her body is still trembling slightly, but this time it's not from the fever. She just needs someone who can make her feel safe, and tonight that person is Arka.",
+      ja: "マヤはベッドでアルカをしっかりと抱きしめる。体はまだ少し震えているが、今度は熱のせいではない。ただ安心できる誰かが必要で、今夜その相手はアルカだった。",
+      ko: "마야는 침대에서 아르카를 꼭 껴안는다. 몸은 아직 조금 떨리지만, 이번엔 열 때문이 아니다. 그저 안심할 수 있는 누군가가 필요했고, 오늘 밤 그 사람은 아르카였다.",
     }),
   ),
   cutScene(
     mayaBed3,
     true,
     tx({
-      id: "Di tengah kegelapan malam, pelukan mereka semakin erat. Maya membenamkan wajahnya di dada Arka, merasakan detak jantungnya yang teratur. Suara hujan di luar jendela menjadi latar yang menenangkan untuk malam yang panjang ini.",
-      en: "In the darkness of the night, their embrace grows tighter. Maya buries her face in Arka's chest, feeling his steady heartbeat. The sound of rain outside the window becomes a soothing backdrop for this long night.",
-      ja: "夜の闇の中、二人の抱擁はさらに強くなる。マヤはアルカの胸に顔を埋め、規則正しい鼓動を感じる。窓の外の雨音が、この長い夜の心地よい背景になっていた。",
-      ko: "밤의 어둠 속에서 두 사람의 포옹은 더욱 깊어진다. 마야는 아르카의 가슴에 얼굴을 묻고 그의 고른 심장박동을 느낀다. 창밖의 빗소리가 이 긴 밤의 편안한 배경이 된다.",
+      id: "Maya memeluk Arka dengan erat di kasur. Tubuhnya masih sedikit gemetar, tapi kali ini bukan karena demam. Dia hanya butuh seseorang yang bisa membuatnya merasa aman, dan malam ini orang itu adalah Arka.",
+      en: "Maya hugs Arka tightly on the bed. Her body is still trembling slightly, but this time it's not from the fever. She just needs someone who can make her feel safe, and tonight that person is Arka.",
+      ja: "マヤはベッドでアルカをしっかりと抱きしめる。体はまだ少し震えているが、今度は熱のせいではない。ただ安心できる誰かが必要で、今夜その相手はアルカだった。",
+      ko: "마야는 침대에서 아르카를 꼭 껴안는다. 몸은 아직 조금 떨리지만, 이번엔 열 때문이 아니다. 그저 안심할 수 있는 누군가가 필요했고, 오늘 밤 그 사람은 아르카였다.",
     }),
   ),
-  cutScene(
-    mayaBed4,
-    true,
-    tx({
-      id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
-      en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
-      ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
-      ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
-    }),
-    true,
+  multiCutScene(
+    [
+      {
+        id: "maya-bed-4",
+        label: tx({
+          id: "Malam Panjang",
+          en: "Long Night",
+          ja: "長い夜",
+          ko: "긴 밤",
+        }),
+        src: mayaBed4,
+        loop: true,
+        narrate: tx({
+          id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
+          en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
+          ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
+          ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
+        }),
+      },
+      {
+        id: "maya-bed-5",
+        label: tx({
+          id: "Malam Panjang",
+          en: "Long Night",
+          ja: "長い夜",
+          ko: "긴 밤",
+        }),
+        src: mayaBed5,
+        loop: false,
+        narrate: tx({
+          id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
+          en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
+          ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
+          ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
+        }),
+      },
+      {
+        id: "maya-bed-6",
+        label: tx({
+          id: "Malam Panjang",
+          en: "Long Night",
+          ja: "長い夜",
+          ko: "긴 밤",
+        }),
+        src: mayaBed6,
+        loop: true,
+        narrate: tx({
+          id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
+          en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
+          ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
+          ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
+        }),
+      },
+      {
+        id: "maya-bed-7",
+        label: tx({
+          id: "Malam Panjang",
+          en: "Long Night",
+          ja: "長い夜",
+          ko: "긴 밤",
+        }),
+        src: mayaBed7,
+        loop: true,
+        narrate: tx({
+          id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
+          en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
+          ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
+          ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
+        }),
+      },
+      {
+        id: "maya-bed-8",
+        label: tx({
+          id: "Malam Panjang",
+          en: "Long Night",
+          ja: "長い夜",
+          ko: "긴 밤",
+        }),
+        src: mayaBed8,
+        loop: false,
+        narrate: tx({
+          id: "Malam itu, di kamar sempit Unit 301, dua orang yang sama-sama terluka saling menghangatkan. Tidak ada kata-kata lagi. Hanya keheningan yang nyaman, dan perasaan bahwa mereka tidak sendirian.",
+          en: "That night, in the cramped room of Unit 301, two wounded souls warm each other. No more words are needed. Just a comfortable silence, and the feeling that they're not alone.",
+          ja: "その夜、301号室の狭い部屋で、傷ついた二人は互いに温め合った。もう言葉はいらない。ただ心地よい静寂と、一人じゃないという実感だけがあった。",
+          ko: "그날 밤, 301호의 좁은 방에서 상처받은 두 사람은 서로를 따뜻하게 감싼다. 더 이상 말은 필요 없다. 편안한 침묵과, 혼자가 아니라는 느낌만이 있을 뿐이다.",
+        }),
+      },
+    ],
+    "maya-bed-3",
   ),
   jump("day4-complate"),
 ];
