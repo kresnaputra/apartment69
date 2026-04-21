@@ -24,10 +24,10 @@ export class CanvasSbnRenderer {
     }
   }
 
-  resize(width: number, height: number) {
+  resize(width: number, height: number, resolutionScale = 1) {
     if (!this.canvas || !this.ctx || width <= 0 || height <= 0) return;
 
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const dpr = Math.max(1, window.devicePixelRatio || 1) * Math.max(1, resolutionScale);
     this.canvas.width = Math.round(width * dpr);
     this.canvas.height = Math.round(height * dpr);
     this.canvas.style.width = `${width}px`;

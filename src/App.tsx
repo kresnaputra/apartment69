@@ -218,6 +218,7 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
   const {
     containerRef,
     spriteStyle,
+    stageScale,
     viewport,
   } = useCharacterStageSizing(character, bundle.preferredAspectRatio);
 
@@ -236,8 +237,8 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer) return;
-    renderer.resize(viewport.width, viewport.height);
-  }, [viewport.height, viewport.width]);
+    renderer.resize(viewport.width, viewport.height, stageScale);
+  }, [stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
     const renderer = rendererRef.current;
