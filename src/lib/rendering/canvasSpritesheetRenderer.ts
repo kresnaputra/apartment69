@@ -36,13 +36,17 @@ export class CanvasSpritesheetRenderer {
     if (!this.canvas || !this.ctx) return;
 
     const { bundle, frame, viewportWidth, viewportHeight } = input;
-    const frameName = bundle.animationFrames[frame];
+    const normalizedFrame = Math.min(
+      bundle.animationFrames.length - 1,
+      Math.max(0, Math.floor(frame)),
+    );
+    const frameName = bundle.animationFrames[normalizedFrame];
     const frameData = bundle.frames[frameName];
     if (!frameData) return;
 
     const activeSheet =
       bundle.sheetSources.find(
-        (sheet) => frame >= sheet.frameStart && frame <= sheet.frameEnd,
+        (sheet) => normalizedFrame >= sheet.frameStart && normalizedFrame <= sheet.frameEnd,
       ) ?? bundle.sheetSources[0];
     if (!activeSheet?.image?.complete) return;
 

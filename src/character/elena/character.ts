@@ -1,9 +1,11 @@
 import type { CharacterDefinition } from "@/types/novel";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
+import elenaDefaultSbnUrl from "@/character/elena/elena-normal.sbn?url";
+import elenaTalkSbnUrl from "@/character/elena/elena-normal-talk.sbn?url";
 
 export const elenaBundleRegistry = {
-  "elena-normal": "/characters/elena/normal/spritesheets-manifest.json",
-  "elena-talk": "/characters/elena/talk/spritesheets-manifest.json",
+  "elena-normal": elenaDefaultSbnUrl,
+  "elena-talk": elenaTalkSbnUrl,
 } as const;
 
 export const elenaCharacter: CharacterDefinition = {
@@ -23,7 +25,7 @@ export const elenaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0,
   defaultY: -150,
-  defaultScale: isMobileDevice() ? 2.2 : 2.4,
+  defaultScale: isMobileDevice() ? 2.6 : 3,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,

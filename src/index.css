@@ -719,11 +719,13 @@ textarea {
 @keyframes vn-enter-fade {
   from {
     opacity: 0;
-    transform: translateX(-50%) scale(calc(var(--vn-scale) * 0.985));
+    filter: blur(12px) brightness(1.15);
+    transform: translateX(-50%) scale(calc(var(--vn-scale) * 0.94));
   }
 
   to {
     opacity: 1;
+    filter: blur(0) brightness(1);
     transform: translateX(-50%) scale(var(--vn-scale));
   }
 }

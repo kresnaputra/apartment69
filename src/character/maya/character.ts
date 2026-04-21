@@ -1,13 +1,25 @@
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 import type { CharacterDefinition } from "@/types/novel";
+import mayaAngrySbnUrl from "@/character/maya/maya-angry.sbn?url";
+import mayaDefaultSbnUrl from "@/character/maya/maya-default.sbn?url";
+import mayaTalkSbnUrl from "@/character/maya/maya-talk.sbn?url";
+import mayaBlushSbnUrl from "@/character/maya/maya-blush.sbn?url";
+import mayaBlushTalkSbnUrl from "@/character/maya/maya-blush-talk.sbn?url";
+import mayaSadSbnUrl from "@/character/maya/maya-sad.sbn?url";
+import mayaSadTalkSbnUrl from "@/character/maya/maya-sad-talk.sbn?url";
+import mayaShockSbnUrl from "@/character/maya/maya-shock.sbn?url";
+import mayaShockTalkSbnUrl from "@/character/maya/maya-shock-talk.sbn?url";
 
 export const mayaBundleRegistry = {
-  "maya-talk": "/characters/maya/normal/spritesheets-manifest.json",
-  "maya-normal": "/characters/maya/talk/spritesheets-manifest.json",
-  "maya-sad": "/characters/maya/sad/spritesheets-manifest.json",
-  "maya-sad-talk": "/characters/maya/sad-talk/spritesheets-manifest.json",
-  "maya-blush": "/characters/maya/blush-talk/spritesheets-manifest.json",
-  "maya-blush-talk": "/characters/maya/blush/spritesheets-manifest.json",
+  "maya-talk": mayaTalkSbnUrl,
+  "maya-normal": mayaDefaultSbnUrl,
+  "maya-sad": mayaSadSbnUrl,
+  "maya-sad-talk": mayaSadTalkSbnUrl,
+  "maya-blush": mayaBlushSbnUrl,
+  "maya-blush-talk": mayaBlushTalkSbnUrl,
+  "maya-angry-sbn": mayaAngrySbnUrl,
+  "maya-shock": mayaShockSbnUrl,
+  "maya-shock-talk": mayaShockTalkSbnUrl,
 } as const;
 
 export const mayaCharacter: CharacterDefinition = {
@@ -18,11 +30,13 @@ export const mayaCharacter: CharacterDefinition = {
   talkingBundleIdByEmotion: {
     sad: "maya-sad-talk",
     blush: "maya-blush-talk",
+    angry: "maya-angry-sbn",
   },
   bundleIdByEmotion: {
     neutral: "maya-normal",
     sad: "maya-sad",
     blush: "maya-blush",
+    angry: "maya-angry-sbn",
   },
   defaultEmotion: "neutral",
   defaultPosition: "right",
@@ -33,7 +47,7 @@ export const mayaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0,
   defaultY: -250,
-  defaultScale: isMobileDevice() ? 2.6 : 2.8,
+  defaultScale: isMobileDevice() ? 2.6 : 3,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,

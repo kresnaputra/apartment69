@@ -1,9 +1,11 @@
 import type { CharacterDefinition } from "@/types/novel";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
+import saraDefaultSbnUrl from "@/character/sara/sara-normal.sbn?url";
+import saraTalkSbnUrl from "@/character/sara/sara-normal-talk.sbn?url";
 
 export const saraBundleRegistry = {
-  "sara-normal": "/characters/sara/normal/spritesheets-manifest.json",
-  "sara-talk": "/characters/sara/talk/spritesheets-manifest.json",
+  "sara-normal": saraDefaultSbnUrl,
+  "sara-talk": saraTalkSbnUrl,
 } as const;
 
 export const saraCharacter: CharacterDefinition = {
@@ -23,7 +25,7 @@ export const saraCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.0,
   defaultY: -150,
-  defaultScale: isMobileDevice() ? 2.5 : 2.8,
+  defaultScale: isMobileDevice() ? 2.6 : 3,
   defaultOpacity: 0.96,
   defaultFrame: 0,
   defaultFps: 24,

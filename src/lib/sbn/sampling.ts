@@ -10,6 +10,10 @@ const DEFAULT_CAMERA: SceneBounds = {
   zoom: 1,
 };
 
+type CachedSceneExtents = Omit<SceneBounds, "zoom">;
+
+const sceneExtentsCache = new WeakMap<SbnProject, CachedSceneExtents>();
+
 const cloneBones = (bones: SbnBone[]): WorldBone[] =>
   bones.map((bone) => ({
     ...bone,
@@ -189,45 +193,58 @@ export const fitCameraToScene = (
     return DEFAULT_CAMERA;
   }
 
-  let minX = Number.POSITIVE_INFINITY;
-  let minY = Number.POSITIVE_INFINITY;
-  let maxX = Number.NEGATIVE_INFINITY;
-  let maxY = Number.NEGATIVE_INFINITY;
+  const cachedExtents = sceneExtentsCache.get(project);
+  let extents = cachedExtents;
 
-  const sampledFrames = new Set([0, Math.max(0, project.duration - 1)]);
-  const step = Math.max(1, Math.floor(project.duration / 12));
+  if (!extents) {
+    let minX = Number.POSITIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
 
-  for (let frame = 0; frame < project.duration; frame += step) {
-    sampledFrames.add(frame);
-  }
+    const sampledFrames = new Set([0, Math.max(0, project.duration - 1)]);
+    const step = Math.max(1, Math.floor(project.duration / 12));
 
-  for (const frame of sampledFrames) {
-    const bones = sampleBonesAtFrame(project, frame);
-    const drawables = resolveSceneDrawables(project, bones);
-
-    for (const { attachment, bone } of drawables) {
-      const bounds = getAttachmentBounds(attachment, bone);
-      minX = Math.min(minX, bounds.minX);
-      minY = Math.min(minY, bounds.minY);
-      maxX = Math.max(maxX, bounds.maxX);
-      maxY = Math.max(maxY, bounds.maxY);
+    for (let frame = 0; frame < project.duration; frame += step) {
+      sampledFrames.add(frame);
     }
+
+    for (const frame of sampledFrames) {
+      const bones = sampleBonesAtFrame(project, frame);
+      const drawables = resolveSceneDrawables(project, bones);
+
+      for (const { attachment, bone } of drawables) {
+        const bounds = getAttachmentBounds(attachment, bone);
+        minX = Math.min(minX, bounds.minX);
+        minY = Math.min(minY, bounds.minY);
+        maxX = Math.max(maxX, bounds.maxX);
+        maxY = Math.max(maxY, bounds.maxY);
+      }
+    }
+
+    if (!Number.isFinite(minX) || maxX <= minX || maxY <= minY) {
+      return DEFAULT_CAMERA;
+    }
+
+    const width = Math.max(1, maxX - minX);
+    const height = Math.max(1, maxY - minY);
+
+    extents = {
+      minX,
+      minY,
+      maxX,
+      maxY,
+      centerX: minX + width / 2,
+      centerY: minY + height / 2,
+    };
+    sceneExtentsCache.set(project, extents);
   }
 
-  if (!Number.isFinite(minX) || maxX <= minX || maxY <= minY) {
-    return DEFAULT_CAMERA;
-  }
-
-  const width = Math.max(1, maxX - minX);
-  const height = Math.max(1, maxY - minY);
+  const width = Math.max(1, extents.maxX - extents.minX);
+  const height = Math.max(1, extents.maxY - extents.minY);
 
   return {
-    minX,
-    minY,
-    maxX,
-    maxY,
-    centerX: minX + width / 2,
-    centerY: minY + height / 2,
+    ...extents,
     zoom: Math.min((viewportWidth * 0.78) / width, (viewportHeight * 0.78) / height),
   };
 };

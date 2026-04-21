@@ -1,4 +1,4 @@
-import { type CSSProperties, memo, useCallback, useDeferredValue, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorButtonMinigameMobile";
@@ -7,7 +7,9 @@ import { SmartphoneContactMinigame } from "@/components/minigames/SmartphoneCont
 import { SmartphoneContactMinigameMobile } from "@/components/minigames/SmartphoneContactMinigameMobile";
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
+import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
+import { loadCharacterBundle } from "@/lib/rendering/loadCharacterBundle";
 import { MainMenu } from "@/components/MainMenu";
 import { MainMenuMobile } from "@/components/MainMenuMobile";
 import { NarratorMobile } from "@/components/NarratorMobile";
@@ -18,10 +20,10 @@ import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, uiText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
+import { fitCameraToScene } from "@/lib/sbn/sampling";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { characterBundleRegistry } from "@/character";
 import type { SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
-import { loadSpritesheetBundle } from "@/lib/rendering/loadSpritesheetBundle";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import {
@@ -29,15 +31,14 @@ import {
   showDayTransitionInterstitial,
 } from "@/lib/runtime/admob";
 import { useNovelStore } from "@/store/novelStore";
+import type { LoadedCharacterBundle } from "@/types/characterBundle";
 import { unknownSpeakerIds } from "@/types/novel";
 import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
-import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import gameplayMusic from "@/music/gameplay.mp3";
 
 const TEXT_SPEED = 18;
 const CUTSCENE_FADE_MS = 600;
 const BLACK_SCREEN_FADE_MS = 420;
-const CHARACTER_TICK_FPS = 40;
 const CHARACTER_ENTER_DURATION_MS = 520;
 const CHARACTER_FADE_ENTER_DURATION_MS = 820;
 const CHARACTER_FADE_AWAY_DURATION_MS = 420;
@@ -49,23 +50,18 @@ const CHARACTER_MAX_STAGE_HEIGHT_RATIO = 0.78;
 const CHARACTER_MIN_STAGE_HEIGHT_RATIO = 0.58;
 
 type CharacterSpriteProps = {
-  bundle: LoadedSpritesheetBundle;
+  bundle: LoadedCharacterBundle;
   character: CharacterInstance;
   isDimmed: boolean;
 };
 
-const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps) => {
-  const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const frame = useDeferredValue(character.frame);
-  const [displayOpacity, setDisplayOpacity] = useState(character.opacity);
-  const [viewport, setViewport] = useState({ width: 520, height: 880 });
+const useCharacterStageSizing = (character: CharacterInstance, aspectRatio: number) => {
   const [windowSize, setWindowSize] = useState(() => ({
     width: typeof window !== "undefined" ? window.innerWidth : 1280,
     height: typeof window !== "undefined" ? window.innerHeight : 720,
   }));
-  const resizeTimeoutRef = useRef<number | null>(null);
+  const [displayOpacity, setDisplayOpacity] = useState(character.opacity);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const windowResizeTimeoutRef = useRef<number | null>(null);
 
   const virtualStageScale = Math.min(
@@ -73,7 +69,7 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     windowSize.height / VIRTUAL_STAGE_HEIGHT,
   );
   const clampedStageScale = Math.max(0.56, Math.min(0.92, virtualStageScale));
-  const frameAspectRatio = bundle.frameSize.h > 0 ? bundle.frameSize.w / bundle.frameSize.h : 0.6;
+  const frameAspectRatio = Number.isFinite(aspectRatio) && aspectRatio > 0 ? aspectRatio : 0.6;
   const reservedUiHeight = windowSize.width < 900 ? 240 : 280;
   const playableStageHeight = Math.max(320, windowSize.height - reservedUiHeight);
   const maxCharacterHeightFromStage = Math.round(playableStageHeight * CHARACTER_MAX_STAGE_HEIGHT_RATIO);
@@ -88,12 +84,13 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     170,
     Math.min(maxCharacterWidthFromStage, Math.max(virtualCharacterWidth, widthFromHeight)),
   );
-  const responsiveScale = character.scale;
-  const renderResolutionScale = Math.max(1, responsiveScale * clampedStageScale);
+  const viewport = {
+    width: characterWidth,
+    height: characterHeight,
+  };
+  const stageScale = Math.max(1, character.scale * clampedStageScale);
 
   useEffect(() => {
-    rendererRef.current = new CanvasSpritesheetRenderer();
-
     const handleWindowResize = () => {
       if (windowResizeTimeoutRef.current !== null) {
         window.cancelAnimationFrame(windowResizeTimeoutRef.current);
@@ -117,53 +114,6 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    const renderer = rendererRef.current;
-    if (!canvas || !container || !renderer) return;
-
-    renderer.attach(canvas);
-
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (!entry) return;
-
-      if (resizeTimeoutRef.current !== null) {
-        window.cancelAnimationFrame(resizeTimeoutRef.current);
-      }
-
-      resizeTimeoutRef.current = window.requestAnimationFrame(() => {
-        setViewport({
-          width: Math.max(1, Math.round(entry.contentRect.width)),
-          height: Math.max(1, Math.round(entry.contentRect.height)),
-        });
-        resizeTimeoutRef.current = null;
-      });
-    });
-
-    observer.observe(container);
-    return () => {
-      observer.disconnect();
-      if (resizeTimeoutRef.current !== null) {
-        window.cancelAnimationFrame(resizeTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const renderer = rendererRef.current;
-    if (!renderer) return;
-
-    renderer.resize(viewport.width, viewport.height, renderResolutionScale);
-    renderer.render({
-      bundle,
-      frame,
-      viewportWidth: viewport.width,
-      viewportHeight: viewport.height,
-    });
-  }, [bundle, frame, renderResolutionScale, viewport.height, viewport.width]);
-
-  useEffect(() => {
     if (character.isExiting) {
       setDisplayOpacity(character.opacity);
       const raf = window.requestAnimationFrame(() => {
@@ -176,8 +126,6 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     return undefined;
   }, [character.isExiting, character.opacity, character.entryVersion]);
 
-  if (!character.visible && !character.isExiting) return null;
-
   const spriteStyle = {
     left: `calc(${character.x * 100}% + ${character.xOffset * 100}%)`,
     bottom: `calc(${character.y}px - ${character.yOffset}px)`,
@@ -187,12 +135,69 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
     animationDuration: `${character.enterFrom === "fade" ? CHARACTER_FADE_ENTER_DURATION_MS : CHARACTER_ENTER_DURATION_MS}ms`,
     animationName: character.isExiting ? "none" : undefined,
     transition: `left ${character.moveDuration}ms ${character.moveEasing}, bottom ${character.moveDuration}ms ${character.moveEasing}, opacity ${character.hideTransition === "fadeAway" ? CHARACTER_FADE_AWAY_DURATION_MS : 220}ms ease, transform 300ms ease`,
-    "--vn-scale": String(responsiveScale),
+    "--vn-scale": String(character.scale),
     width: `${characterWidth}px`,
     height: `${characterHeight}px`,
     maxWidth: "100%",
     visibility: "visible" as const,
   } as CSSProperties;
+
+  return {
+    containerRef,
+    displayOpacity,
+    spriteStyle,
+    stageScale,
+    viewport,
+  };
+};
+
+const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps & {
+  bundle: Extract<LoadedCharacterBundle, { kind: "spritesheet" }>;
+}) => {
+  const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const {
+    containerRef,
+    spriteStyle,
+    stageScale,
+    viewport,
+  } = useCharacterStageSizing(
+    character,
+    bundle.frameSize.h > 0 ? bundle.frameSize.w / bundle.frameSize.h : 0.6,
+  );
+
+  useEffect(() => {
+    rendererRef.current = new CanvasSpritesheetRenderer();
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const renderer = rendererRef.current;
+    if (!canvas || !renderer) return;
+
+    renderer.attach(canvas);
+  }, []);
+
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer) return;
+
+    renderer.resize(viewport.width, viewport.height, stageScale);
+  }, [stageScale, viewport.height, viewport.width]);
+
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer) return;
+
+    renderer.render({
+      bundle,
+      frame: character.frame,
+      viewportWidth: viewport.width,
+      viewportHeight: viewport.height,
+    });
+  }, [bundle, character.frame, stageScale, viewport.height, viewport.width]);
+
+  if (!character.visible && !character.isExiting) return null;
 
   return (
     <div
@@ -203,6 +208,72 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
       <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
     </div>
   );
+});
+
+const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps & {
+  bundle: Extract<LoadedCharacterBundle, { kind: "sbn" }>;
+}) => {
+  const rendererRef = useRef<CanvasSbnRenderer | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const {
+    containerRef,
+    spriteStyle,
+    viewport,
+  } = useCharacterStageSizing(character, bundle.preferredAspectRatio);
+
+  useEffect(() => {
+    rendererRef.current = new CanvasSbnRenderer();
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const renderer = rendererRef.current;
+    if (!canvas || !renderer) return;
+
+    renderer.attach(canvas);
+  }, []);
+
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer) return;
+    renderer.resize(viewport.width, viewport.height);
+  }, [viewport.height, viewport.width]);
+
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer) return;
+    const camera = viewport.width === 520 && viewport.height === 880
+      ? bundle.preferredCamera
+      : fitCameraToScene(bundle.project, viewport.width, viewport.height);
+    renderer.render({
+      project: bundle.project,
+      frame: character.frame,
+      scale: 1,
+      camera,
+      viewportWidth: viewport.width,
+      viewportHeight: viewport.height,
+    });
+  }, [bundle, character.frame, viewport.height, viewport.width]);
+
+  if (!character.visible && !character.isExiting) return null;
+
+  return (
+    <div
+      ref={containerRef}
+      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 overflow-hidden`}
+      style={spriteStyle}
+    >
+      <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
+    </div>
+  );
+});
+
+const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps) => {
+  if (bundle.kind === "sbn") {
+    return <SbnCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
+  }
+
+  return <SpritesheetCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
 });
 
 const CutSceneOverlay = ({
@@ -835,7 +906,7 @@ const App = () => {
 
         const loadedBundles = await Promise.all(
           bundleEntries.map(async ([bundleId, bundlePath]) => {
-            const bundle = await loadSpritesheetBundle(bundleId, bundlePath);
+            const bundle = await loadCharacterBundle(bundleId, bundlePath);
             return [bundleId, bundle] as const;
           }),
         );
@@ -941,11 +1012,9 @@ const App = () => {
     let lastTick = performance.now();
 
     const loop = (time: number) => {
-      if (time - lastTick >= 1000 / CHARACTER_TICK_FPS) {
-        tickCharacters();
-        lastTick = time;
-      }
-
+      const deltaMs = time - lastTick;
+      lastTick = time;
+      tickCharacters(deltaMs);
       animationFrame = window.requestAnimationFrame(loop);
     };
 

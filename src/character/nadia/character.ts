@@ -1,8 +1,11 @@
 import type { CharacterDefinition } from "@/types/novel";
+import nadiaDefaultSbnUrl from "@/character/nadia/nadia-normal.sbn?url";
+import nadiaTalkSbnUrl from "@/character/nadia/nadia-normal-talk.sbn?url";
+import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 export const nadiaBundleRegistry = {
-  "nadia-normal": "/characters/nadia/normal/spritesheets-manifest.json",
-  "nadia-talk": "/characters/nadia/talk/spritesheets-manifest.json",
+  "nadia-normal": nadiaDefaultSbnUrl,
+  "nadia-talk": nadiaTalkSbnUrl,
 } as const;
 
 export const nadiaCharacter: CharacterDefinition = {
@@ -22,8 +25,8 @@ export const nadiaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.0,
   defaultY: -150,
-  defaultScale: 2.4,
-  defaultOpacity: 0.96,
+  defaultScale: isMobileDevice() ? 2.6 : 3,
+  defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,
   defaultLoop: true,

@@ -3,8 +3,8 @@ import { characterRegistry } from "@/character";
 import type { LocalizedText } from "@/lib/i18n";
 import { uiText } from "@/lib/i18n";
 import { demoScript } from "@/lib/runtime/dialogueScript";
+import { getCharacterBundleFps, getCharacterBundleTotalFrames, type LoadedCharacterBundle } from "@/types/characterBundle";
 import { unknownSpeakerIds } from "@/types/novel";
-import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 import type {
   ActiveCutScene,
   ActiveMultiCutScene,
@@ -25,7 +25,7 @@ import type {
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 type NovelStore = {
-  bundles: Record<string, LoadedSpritesheetBundle>;
+  bundles: Record<string, LoadedCharacterBundle>;
   background: string;
   parallaxLayers: ParallaxLayer[];
   backgroundAnimation: {
@@ -59,7 +59,7 @@ type NovelStore = {
   statusMessage: LocalizedText;
   ready: boolean;
   isEnded: boolean;
-  registerBundle: (id: string, bundle: LoadedSpritesheetBundle) => void;
+  registerBundle: (id: string, bundle: LoadedCharacterBundle) => void;
   setStatusMessage: (message: LocalizedText) => void;
   startStory: () => void;
   clearScene: () => void;
@@ -77,7 +77,7 @@ type NovelStore = {
   completeCutScene: () => void;
   completeMultiCutScene: () => void;
   completeInterstitial: () => void;
-  tickCharacters: () => void;
+  tickCharacters: (deltaMs: number) => void;
 };
 
 const script: VisualNovelScript = demoScript;
@@ -178,7 +178,7 @@ const resolveBundleId = (
 
 const syncTalkingBundles = (
   characters: Record<string, CharacterInstance> | undefined,
-  bundles: Record<string, LoadedSpritesheetBundle> | undefined,
+  bundles: Record<string, LoadedCharacterBundle> | undefined,
   activeSpeakerId: string | null | undefined,
 ) => {
   if (!characters) return characters;
@@ -197,13 +197,20 @@ const syncTalkingBundles = (
         return [id, character];
       }
 
-      const currentTotalFrames = Math.max(1, bundles?.[character.bundleId]?.totalFrames ?? 1);
-      const nextTotalFrames = Math.max(1, bundles?.[nextBundleId]?.totalFrames ?? 1);
+      const currentTotalFrames = bundles?.[character.bundleId]
+        ? getCharacterBundleTotalFrames(bundles[character.bundleId])
+        : 1;
+      const nextTotalFrames = bundles?.[nextBundleId]
+        ? getCharacterBundleTotalFrames(bundles[nextBundleId])
+        : 1;
       const progress = currentTotalFrames > 1 ? character.frame / currentTotalFrames : 0;
       const nextFrame = Math.min(
         nextTotalFrames - 1,
-        Math.max(0, Math.round(progress * (nextTotalFrames - 1))),
+        Math.max(0, progress * Math.max(0, nextTotalFrames - 1)),
       );
+      const nextFps = bundles?.[nextBundleId]
+        ? getCharacterBundleFps(bundles[nextBundleId])
+        : character.fps;
 
       return [
         id,
@@ -211,6 +218,7 @@ const syncTalkingBundles = (
           ...character,
           bundleId: nextBundleId,
           frame: nextFrame,
+          fps: nextFps,
         },
       ];
     }),
@@ -246,6 +254,7 @@ const normalizeCharacter = (
   current: CharacterInstance | undefined,
   command: Extract<VisualNovelCommand, { type: "showCharacter" }>,
   definition: CharacterDefinition,
+  bundles?: Record<string, LoadedCharacterBundle>,
 ): CharacterInstance => {
   const emotion = command.emotion ?? current?.emotion ?? definition.defaultEmotion ?? null;
   const position = command.position ?? current?.position ?? definition.defaultPosition ?? "center";
@@ -260,6 +269,7 @@ const normalizeCharacter = (
     definition.defaultX ??
     positionToX(position);
   const resolvedY = command.y ?? current?.y ?? definition.defaultY ?? 0;
+  const bundleFps = bundles?.[bundleId] ? getCharacterBundleFps(bundles[bundleId]) : undefined;
 
   return {
     id: command.id,
@@ -279,7 +289,7 @@ const normalizeCharacter = (
     scale: command.scale ?? current?.scale ?? definition.defaultScale ?? 1,
     opacity: command.opacity ?? current?.opacity ?? definition.defaultOpacity ?? 1,
     frame: command.frame ?? current?.frame ?? definition.defaultFrame ?? 0,
-    fps: command.fps ?? current?.fps ?? definition.defaultFps ?? 24,
+    fps: command.fps ?? bundleFps ?? current?.fps ?? definition.defaultFps ?? 24,
     loop: command.loop ?? current?.loop ?? definition.defaultLoop ?? true,
     visible: true,
     isExiting: false,
@@ -370,6 +380,7 @@ const runScriptUntilPause = (state: NovelStore) => {
             nextState.characters?.[command.id],
             command,
             characterRegistry[command.characterId],
+            state.bundles,
           ),
         };
         nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
@@ -781,9 +792,10 @@ export const useNovelStore = create<NovelStore>((set) => ({
       });
     }),
 
-  tickCharacters: () =>
+  tickCharacters: (deltaMs) =>
     set((state) => {
       const now = Date.now();
+      const safeDeltaMs = Math.max(0, Math.min(deltaMs, 100));
       const nextCharacters = Object.fromEntries(
         Object.entries(state.characters).map(([id, character]) => {
           const bundle = state.bundles[character.bundleId];
@@ -810,8 +822,11 @@ export const useNovelStore = create<NovelStore>((set) => ({
             return [id, character];
           }
 
-          const duration = Math.max(1, bundle.totalFrames);
-          const nextFrame = character.loop ? (character.frame + 1) % duration : Math.min(duration - 1, character.frame + 1);
+          const duration = getCharacterBundleTotalFrames(bundle);
+          const frameAdvance = (character.fps * safeDeltaMs) / 1000;
+          const nextFrame = character.loop
+            ? (character.frame + frameAdvance) % duration
+            : Math.min(duration - 1, character.frame + frameAdvance);
 
           return [
             id,

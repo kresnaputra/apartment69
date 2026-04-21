@@ -64,10 +64,12 @@ import {
   day7EternalPromiseScene,
 } from "@/scenes/day7/day7-endings";
 import { day4ComplateScene } from "@/scenes/day4/day4-complate";
+import { sbnTestScene } from "@/scenes/sbnTestScene";
 
 export const demoScript: VisualNovelScript = {
   startLabel: "opening",
   labels: {
+    "sbn-maya-test": sbnTestScene,
     // Day 1
     opening: openingScene,
     "elevator-meeting": elevatorMeetingScene,

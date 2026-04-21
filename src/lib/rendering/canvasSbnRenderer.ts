@@ -13,7 +13,8 @@ type RenderInput = {
 export class CanvasSbnRenderer {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
-  private imageCache = new Map<string, Promise<HTMLImageElement>>();
+  private static imageCache = new Map<string, HTMLImageElement>();
+  private static loadingCache = new Map<string, Promise<HTMLImageElement>>();
 
   attach(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -37,17 +38,29 @@ export class CanvasSbnRenderer {
   }
 
   private loadImage(src: string) {
-    const cached = this.imageCache.get(src);
+    const cachedImage = CanvasSbnRenderer.imageCache.get(src);
+    if (cachedImage) {
+      return Promise.resolve(cachedImage);
+    }
+
+    const cached = CanvasSbnRenderer.loadingCache.get(src);
     if (cached) return cached;
 
     const task = new Promise<HTMLImageElement>((resolve, reject) => {
       const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`Gagal memuat image asset: ${src}`));
+      img.onload = () => {
+        CanvasSbnRenderer.imageCache.set(src, img);
+        CanvasSbnRenderer.loadingCache.delete(src);
+        resolve(img);
+      };
+      img.onerror = () => {
+        CanvasSbnRenderer.loadingCache.delete(src);
+        reject(new Error(`Gagal memuat image asset: ${src}`));
+      };
       img.src = src;
     });
 
-    this.imageCache.set(src, task);
+    CanvasSbnRenderer.loadingCache.set(src, task);
     return task;
   }
 
@@ -60,6 +73,10 @@ export class CanvasSbnRenderer {
     ];
 
     await Promise.all(imageSources.map((source) => this.loadImage(source)));
+  }
+
+  private getImage(src: string) {
+    return CanvasSbnRenderer.imageCache.get(src) ?? null;
   }
 
   private worldToScreen(
@@ -81,39 +98,38 @@ export class CanvasSbnRenderer {
     };
   }
 
-  private async drawBackground(
+  private drawBackground(
     project: SbnProject,
     viewportWidth: number,
     viewportHeight: number,
   ) {
     if (!project.backgroundImage || !this.ctx) return;
 
-    try {
-      const background = await this.loadImage(project.backgroundImage);
-      const scale = Math.max(viewportWidth / background.width, viewportHeight / background.height);
-      const width = background.width * scale;
-      const height = background.height * scale;
+    const background = this.getImage(project.backgroundImage);
+    if (!background) return;
 
-      this.ctx.drawImage(
-        background,
-        (viewportWidth - width) / 2,
-        (viewportHeight - height) / 2,
-        width,
-        height,
-      );
-    } catch {
-      // Backgrounds are optional for the stage preview.
-    }
+    const scale = Math.max(viewportWidth / background.width, viewportHeight / background.height);
+    const width = background.width * scale;
+    const height = background.height * scale;
+
+    this.ctx.drawImage(
+      background,
+      (viewportWidth - width) / 2,
+      (viewportHeight - height) / 2,
+      width,
+      height,
+    );
   }
 
-  private async drawAttachment(
+  private drawAttachment(
     attachment: SbnAttachment,
     bone: WorldBone,
     input: RenderInput,
   ) {
     if (!attachment.imageData || !this.ctx) return;
 
-    const image = await this.loadImage(attachment.imageData);
+    const image = this.getImage(attachment.imageData);
+    if (!image) return;
     const screenPos = this.worldToScreen(
       bone._wx,
       bone._wy,
@@ -138,17 +154,17 @@ export class CanvasSbnRenderer {
     this.ctx.restore();
   }
 
-  async render(input: RenderInput) {
+  render(input: RenderInput) {
     if (!this.canvas || !this.ctx) return;
 
     this.ctx.clearRect(0, 0, input.viewportWidth, input.viewportHeight);
-    await this.drawBackground(input.project, input.viewportWidth, input.viewportHeight);
+    this.drawBackground(input.project, input.viewportWidth, input.viewportHeight);
 
     const bones = sampleBonesAtFrame(input.project, input.frame);
     const drawables = resolveSceneDrawables(input.project, bones);
 
     for (const drawable of drawables) {
-      await this.drawAttachment(drawable.attachment, drawable.bone, input);
+      this.drawAttachment(drawable.attachment, drawable.bone, input);
     }
   }
 }
