@@ -120,14 +120,19 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "아르카가 방에서 나온다. 바로 그때 엘리베이터가 열렸다. 거친 인상의 중년 남성이 빠르게 301호 쪽으로 걸어와 거칠게 문을 두드리기 시작한다.",
     }),
   ),
-  narrate(
+  show("mayasDad", "mayasFather", "neutral", {
+    position: "center",
+    enterFrom: "fade",
+  }),
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Maya! Buka pintunya! Papa tahu kamu di dalam. Kampus bilang kamu bolos ujian pakai alasan sakit. Buka!",
       en: "Maya! Open up! I know you're in there. The university told me you skipped your exam with a sick excuse. Open this door!",
       ja: "マヤ！開けなさい！中にいるのはわかってる。大学から、病気を口実に試験をサボったと連絡が来た。開けろ！",
       ko: "마야! 문 열어! 안에 있는 거 알아. 학교에서 아프다는 핑계로 시험 빠졌다고 했어. 열어!",
     }),
-    "Papa Maya",
   ),
   say(
     "arka",
@@ -139,7 +144,9 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "실례합니다. 문을 두드리시려면 좀 조용히 해주세요. 여기 아파트라 다른 입주민들이 불편할 수 있어요.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Papa Maya menoleh, menatap Arka dengan tatapan meremehkan.",
       en: "Maya's dad turns around and looks Arka up and down with open contempt.",
@@ -147,14 +154,15 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "마야 아버지가 돌아서며 아르카를 업신여기는 눈빛으로 훑어본다.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Kamu siapa? Nggak usah ikut campur urusan keluarga orang.",
       en: "Who are you? Stay out of other people's family business.",
       ja: "あなたは誰ですか。他人の家族のことに口を出さないでください。",
       ko: "당신은 누구요? 남의 가족 일에 끼어들지 마세요.",
     }),
-    "Papa Maya",
   ),
   say(
     "arka",
@@ -166,14 +174,15 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "저는 옆집 이웃 아르카입니다. 어제 따님을 클리닉에 데려간 게 저예요. 진짜로 아팠어요, 고열이었습니다. 결석 핑계가 아니에요.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Sakit atau nggak, harusnya dia tetap ujian! Maya!",
       en: "Sick or not, she should've taken the exam! Maya!",
       ja: "具合が悪くても、試験は受けるべきでしょう！マヤ！",
       ko: "아프든 말든 시험은 봤어야죠! 마야!",
     }),
-    "Papa Maya",
   ),
   show("maya-day6-hallway", "maya", "sad", {
     position: "right",
@@ -198,16 +207,19 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[37] },
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Susulan? Itu ngerusak catatan akademikmu! Papa sudah keluar banyak uang buat kuliahmu, dan ini balasanmu? Pacaran sama tetangga dan bolos ujian?!",
       en: "A makeup exam? That goes on your academic record! I've poured a fortune into your education, and this is what I get back? Dating the neighbor and skipping exams?!",
       ja: "追試？それは学業記録に傷がつく！お父さんがどれだけのお金をお前の学費に使ってきたと思っているんだ。それでこの仕打ちか？隣の男と付き合って試験をサボるとは！",
       ko: "추가 시험? 그게 학업 기록에 남잖아! 아빠가 네 대학 등록금에 얼마나 많은 돈을 썼는데, 이게 네 대답이야? 옆집이랑 사귀면서 시험은 빠지고?!",
     }),
-    "Papa Maya",
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Papa Maya menunjuk wajah Maya dengan marah. Maya menunduk ketakutan, nyaris menangis lagi. Arka berdiri di antara mereka.",
       en: "Maya's dad jabs a finger toward her face. Maya shrinks back, terrified, on the verge of tears again. Arka stands between them.",
@@ -217,10 +229,10 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
   ),
   menu(
     tx({
-      id: "APA YANG ARKA LAKUKAN?",
-      en: "WHAT DOES ARKA DO?",
-      ja: "ここでアルカはどうする？",
-      ko: "아르카는 어떻게 해야 할까?",
+      id: "Apa yang kamu lakukan?",
+      en: "What will you do?",
+      ja: "どうする？",
+      ko: "어떻게 할 거야?",
     }),
     [
       {
@@ -238,8 +250,8 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
         label: tx({
           id: "Beri Maya kendali dorong dia bicara",
           en: "Give Maya control push her to speak",
-          ja: "マヤに主導権を渡す 彼女が話すよう後押しする",
-          ko: "마야에게 주도권 넘기기 스스로 말하게 한다",
+          ja: "マヤに主導権を渡す 彼女に話させる",
+          ko: "마야에게 통제권 주기 그녀가 말하도록 밀어붙이기",
         }),
         next: "day6-supportive",
       },
@@ -267,14 +279,15 @@ export const day6ProtectiveScene: VisualNovelCommand[] = [
       ko: "아버지가 쓴 돈으로만 딸의 가치를 따지실 거라면 전부 끊으셔도 됩니다. 여기서 제가 책임지겠습니다.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Berani kamu bicara begitu ke saya?! Kamu pikir kamu siapa bisa ngurusin anak saya?",
       en: "How dare you talk to me like that?! Who do you think you are, stepping into my daughter's life?",
       ja: "よくもそんなことが言えたものだ！あなたはいったい何様のつもりで、娘のことに口を出しているんですか！",
       ko: "감히 나한테 그런 말을 해?! 당신이 뭔데 내 딸 일에 끼어들어요?",
     }),
-    "Papa Maya",
   ),
   say(
     "arka",
@@ -294,14 +307,15 @@ export const day6ProtectiveScene: VisualNovelCommand[] = [
       ko: "마야 아버지의 턱이 굳는다.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Bagus. Maya, kemasi barangmu sekarang. Atau kamu nggak usah anggap Papa ada lagi!",
       en: "Fine. Maya, pack your things right now. Or don't bother calling me your father anymore!",
       ja: "そうか。マヤ、今すぐ荷物をまとめなさい。さもなければ、もうお父さんだと思わなくていい！",
       ko: "좋아. 마야, 지금 당장 짐 싸. 아니면 앞으로 아빠 없는 셈 쳐!",
     }),
-    "Papa Maya",
   ),
   say(
     "maya",
@@ -322,15 +336,17 @@ export const day6ProtectiveScene: VisualNovelCommand[] = [
       ko: "마야 아버지는 딸을 오래 바라보다가 거칠게 발걸음을 돌려 엘리베이터로 향한다.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Kita lihat seberapa lama kamu bisa bertahan!",
       en: "We'll see how long that lasts!",
       ja: "どこまで続くか見ていなさい！",
       ko: "얼마나 버티는지 두고 보자!",
     }),
-    "Papa Maya",
   ),
+  hide("mayasDad"),
   jump("day6-aftermath"),
 ];
 
@@ -346,14 +362,15 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
       ko: "마야, 이건 네 인생이야. 그냥 고개 숙이지 마. 진짜로 어떻게 하고 싶은지 말해. 나 여기 있어.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Nggak usah dengerin orang asing ini, Maya! Kemasi barangmu, kita pulang sekarang.",
       en: "Don't listen to this stranger, Maya! Pack your things, we're going home right now.",
       ja: "こんな他人の言うことを聞く必要はない、マヤ！荷物をまとめなさい、今すぐ帰るぞ。",
       ko: "이 낯선 사람 말 듣지 마, 마야! 짐 싸, 지금 바로 집에 가자.",
     }),
-    "Papa Maya",
   ),
   narrate(
     tx({
@@ -374,14 +391,15 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[39] },
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Apa kamu bilang?",
       en: "What did you just say?",
       ja: "何を言ったんだ？",
       ko: "뭐라고 했어?",
     }),
-    "Papa Maya",
   ),
   say(
     "maya",
@@ -402,15 +420,17 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
       ko: "마야 아버지는 딸을 마치 낯선 사람을 보듯 바라본다.",
     }),
   ),
-  narrate(
+  say(
+    "mayasFather",
+    "angry",
     tx({
       id: "Kamu sudah dirusak sama lingkungan ini. Terserah kamu!",
       en: "This place has corrupted you. Do whatever you want!",
       ja: "この環境にすっかり毒されたな。好きにしろ！",
       ko: "이 환경에 물들었구나. 마음대로 해!",
     }),
-    "Papa Maya",
   ),
+  hide("mayasDad"),
   narrate(
     tx({
       id: "Papa Maya berbalik dan berjalan cepat menuju lift.",

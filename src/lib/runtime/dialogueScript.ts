@@ -67,7 +67,7 @@ import { day4ComplateScene } from "@/scenes/day4/day4-complate";
 import { sbnTestScene } from "@/scenes/sbnTestScene";
 
 export const demoScript: VisualNovelScript = {
-  startLabel: "day4-complate",
+  startLabel: "opening",
   labels: {
     "sbn-maya-test": sbnTestScene,
     // Day 1
