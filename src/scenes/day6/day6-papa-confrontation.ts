@@ -95,12 +95,11 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
   ),
   narrate(
     tx({
-      id: "Waduh. Bapaknya beneran datang. Kalau dibiarin, Maya bisa makin stres dan drop lagi.",
-      en: "Great. Her dad actually showed up. If I just let this play out, Maya's going to spiral right back down again.",
+      id: "Arka: Waduh. Bapaknya beneran datang. Kalau dibiarin, Maya bisa makin stres dan drop lagi.",
+      en: "Arka: Great. Her dad actually showed up. If I just let this play out, Maya's going to spiral right back down again.",
       ja: "まずい。本当に来た。このまま放っておいたら、マヤはまたストレスで倒れるかもしれない。",
       ko: "이런. 아버지가 진짜 왔다. 그냥 두면 마야가 또 무너질 수 있다.",
     }),
-    "arka",
   ),
   hide("maya-day6-papa-confrontation", "fadeAway"),
   bg(
