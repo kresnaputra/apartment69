@@ -1,6 +1,7 @@
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 import type { CharacterDefinition } from "@/types/novel";
 import mayaAngrySbnUrl from "@/character/maya/maya-angry.sbn?url";
+import mayaAngryTalkSbnUrl from "@/character/maya/maya-angry-talk.sbn?url";
 import mayaDefaultSbnUrl from "@/character/maya/maya-default.sbn?url";
 import mayaTalkSbnUrl from "@/character/maya/maya-talk.sbn?url";
 import mayaBlushSbnUrl from "@/character/maya/maya-blush.sbn?url";
@@ -17,7 +18,8 @@ export const mayaBundleRegistry = {
   "maya-sad-talk": mayaSadTalkSbnUrl,
   "maya-blush": mayaBlushSbnUrl,
   "maya-blush-talk": mayaBlushTalkSbnUrl,
-  "maya-angry-sbn": mayaAngrySbnUrl,
+  "maya-angry": mayaAngrySbnUrl,
+  "maya-angry-talk": mayaAngryTalkSbnUrl,
   "maya-shock": mayaShockSbnUrl,
   "maya-shock-talk": mayaShockTalkSbnUrl,
 } as const;
