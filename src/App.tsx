@@ -319,7 +319,6 @@ const CutSceneOverlay = ({
     { label: speedLabels.slow, value: 1 },
     { label: speedLabels.normal, value: 2 },
     { label: speedLabels.fast, value: 4 },
-    { label: speedLabels.faster, value: 6 },
   ];
 
   useEffect(() => {
@@ -525,23 +524,36 @@ const MultiCutSceneOverlay = ({
   onComplete: () => void;
 }) => {
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(initialSelectionId ?? selections[0]?.id ?? null);
+  const [maxUnlockedSelectionIndex, setMaxUnlockedSelectionIndex] = useState(0);
   const enabledSelections = selections.filter((scene) => scene.enabled !== false);
   const activeSelection = selections.find((scene) => scene.id === selectedSceneId) ?? selections[0];
   const currentSelectionIndex = enabledSelections.findIndex((scene) => scene.id === activeSelection?.id);
+  const isLastSelection = currentSelectionIndex >= enabledSelections.length - 1;
 
   useEffect(() => {
-    setSelectedSceneId(initialSelectionId ?? selections[0]?.id ?? null);
+    const initialId = initialSelectionId ?? enabledSelections[0]?.id ?? selections[0]?.id ?? null;
+    const initialIndex = Math.max(0, enabledSelections.findIndex((scene) => scene.id === initialId));
+    setSelectedSceneId(initialId);
+    setMaxUnlockedSelectionIndex(initialIndex);
   }, [initialSelectionId, selections]);
 
   const handleSelectScene = useCallback((sceneId: string) => {
+    const targetIndex = enabledSelections.findIndex((scene) => scene.id === sceneId);
+    if (targetIndex === -1 || targetIndex > maxUnlockedSelectionIndex) return;
     setSelectedSceneId(sceneId);
-  }, []);
+  }, [enabledSelections, maxUnlockedSelectionIndex]);
 
   const handleMoveScene = useCallback((direction: -1 | 1) => {
     if (enabledSelections.length <= 1 || currentSelectionIndex === -1) return;
-    const nextIndex = (currentSelectionIndex + direction + enabledSelections.length) % enabledSelections.length;
-    handleSelectScene(enabledSelections[nextIndex].id);
-  }, [currentSelectionIndex, enabledSelections, handleSelectScene]);
+    const nextIndex = currentSelectionIndex + direction;
+    if (nextIndex < 0 || nextIndex >= enabledSelections.length) return;
+
+    if (direction === 1) {
+      setMaxUnlockedSelectionIndex((current) => Math.max(current, nextIndex));
+    }
+
+    setSelectedSceneId(enabledSelections[nextIndex].id);
+  }, [currentSelectionIndex, enabledSelections]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
@@ -604,44 +616,48 @@ const MultiCutSceneOverlay = ({
           <button
             type="button"
             onClick={() => handleMoveScene(-1)}
-            disabled={enabledSelections.length <= 1}
+            disabled={currentSelectionIndex <= 0}
             style={{
               padding: "10px 14px",
               borderRadius: "10px",
               border: "1px solid rgba(255, 255, 255, 0.12)",
-              background: enabledSelections.length <= 1 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
-              color: enabledSelections.length <= 1 ? "rgba(255,255,255,0.45)" : "#f3eadf",
-              cursor: enabledSelections.length <= 1 ? "not-allowed" : "pointer",
+              background: currentSelectionIndex <= 0 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
+              color: currentSelectionIndex <= 0 ? "rgba(255,255,255,0.45)" : "#f3eadf",
+              cursor: currentSelectionIndex <= 0 ? "not-allowed" : "pointer",
             }}
           >
             {labels.previousScene}
           </button>
-          <button
-            type="button"
-            onClick={onComplete}
-            style={{
-              padding: "10px 16px",
-              borderRadius: "10px",
-              border: "1px solid rgba(210, 164, 86, 0.38)",
-              background: "rgba(210, 164, 86, 0.92)",
-              color: "#140f09",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            {labels.continueStory}
-          </button>
+          {isLastSelection ? (
+            <button
+              type="button"
+              onClick={onComplete}
+              style={{
+                padding: "10px 16px",
+                borderRadius: "10px",
+                border: "1px solid rgba(210, 164, 86, 0.38)",
+                background: "rgba(210, 164, 86, 0.92)",
+                color: "#140f09",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              {labels.continueStory}
+            </button>
+          ) : (
+            <div aria-hidden="true" style={{ minWidth: "154px" }} />
+          )}
           <button
             type="button"
             onClick={() => handleMoveScene(1)}
-            disabled={enabledSelections.length <= 1}
+            disabled={currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1}
             style={{
               padding: "10px 14px",
               borderRadius: "10px",
               border: "1px solid rgba(255, 255, 255, 0.12)",
-              background: enabledSelections.length <= 1 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
-              color: enabledSelections.length <= 1 ? "rgba(255,255,255,0.45)" : "#f3eadf",
-              cursor: enabledSelections.length <= 1 ? "not-allowed" : "pointer",
+              background: currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
+              color: currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1 ? "rgba(255,255,255,0.45)" : "#f3eadf",
+              cursor: currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1 ? "not-allowed" : "pointer",
             }}
           >
             {labels.nextScene}
@@ -651,29 +667,32 @@ const MultiCutSceneOverlay = ({
           {selections.map((scene) => {
             const isActive = activeSelection.id === scene.id;
             const isEnabled = scene.enabled !== false;
+            const enabledIndex = enabledSelections.findIndex((enabledScene) => enabledScene.id === scene.id);
+            const isUnlocked = isEnabled && enabledIndex !== -1 && enabledIndex <= maxUnlockedSelectionIndex;
             return (
               <button
                 key={scene.id}
                 type="button"
-                disabled={!isEnabled}
+                disabled={!isUnlocked}
                 onClick={() => handleSelectScene(scene.id)}
                 style={{
                   minWidth: "120px",
                   padding: "10px 14px",
                   borderRadius: "999px",
                   border: isActive ? "1px solid rgba(210, 164, 86, 0.52)" : "1px solid rgba(255, 255, 255, 0.1)",
-                  background: !isEnabled
+                  background: !isUnlocked
                     ? "rgba(255, 255, 255, 0.08)"
                     : isActive
                       ? "rgba(210, 164, 86, 0.18)"
                       : "rgba(17, 16, 24, 0.9)",
-                  color: !isEnabled ? "rgba(255,255,255,0.48)" : "#f3eadf",
-                  cursor: !isEnabled ? "not-allowed" : "pointer",
+                  color: !isUnlocked ? "rgba(255,255,255,0.48)" : "#f3eadf",
+                  cursor: !isUnlocked ? "not-allowed" : "pointer",
                   fontWeight: isActive ? 700 : 500,
+                  opacity: isUnlocked ? 1 : 0.58,
                 }}
               >
                 {resolveText(scene.label, language)}
-                {!isEnabled ? ` • ${labels.lockedScene}` : ""}
+                {!isUnlocked ? ` • ${labels.lockedScene}` : ""}
               </button>
             );
           })}
