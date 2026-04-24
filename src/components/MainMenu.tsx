@@ -141,7 +141,7 @@ export const MainMenu = ({
         </nav>
 
         <footer className="vn-menu-footer">
-          <span>© 2025 &nbsp;·&nbsp; Visual Novel Engine</span>
+          <span>© 2026 &nbsp;·&nbsp; Nrop Guy</span>
         </footer>
       </div>
 

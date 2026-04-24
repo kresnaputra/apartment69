@@ -197,7 +197,7 @@ export const MainMenuMobile = ({
         className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/36 tracking-[0.1em] whitespace-nowrap"
         style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "0.65rem" }}
       >
-        © 2025 &nbsp;·&nbsp; Visual Novel Engine
+        © 2026 &nbsp;·&nbsp; Nrop Guy
       </span>
 
       {/* Load slot picker */}
