@@ -5,6 +5,7 @@ import {
   centeredText,
   hide,
   jumpIf,
+  multiCutScene,
   narrate,
   say,
   scene,
@@ -12,6 +13,13 @@ import {
 } from "@/scenes/scriptTypes";
 import bedroomNightUrl from "@/background/bedroom-night.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
+import mayaSpecialScene1 from "@/cut-scene/maya-special-scene-1.webm?url";
+import mayaSpecialScene2 from "@/cut-scene/maya-special-scene-2.webm?url";
+import mayaSpecialScene3 from "@/cut-scene/maya-special-scene-3.webm?url";
+import mayaSpecialScene4 from "@/cut-scene/maya-special-scene-4.webm?url";
+import mayaSpecial2Scene1 from "@/cut-scene/maya-special-2-scene-1.webm?url";
+import mayaSpecial2Scene2 from "@/cut-scene/maya-special-2-scene-2.webm?url";
+import mayaSpecial2Scene3 from "@/cut-scene/maya-special-2-scene-3.webm?url";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   bg(
@@ -159,6 +167,135 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
   ),
   hide("maya-day7-devoted"),
   hide("arka-day7"),
+  multiCutScene(
+    [
+      {
+        id: "maya-special-scene-1",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: mayaSpecialScene1,
+        loop: true,
+        narrate: tx({
+          id: "Arka: Niat awalku malam ini cuma murni mau jadi sandaran biar dia bisa tidur tenang. Nggak ada niat buat ngambil kesempatan waktu dia lagi rapuh-rapuhnya begini.",
+          en: "Arka: My initial intention tonight was simply to be a support so she could sleep peacefully. I had no intention of taking advantage of her while she's in such a fragile state.",
+          ja: "アルカ：今夜の俺の本来の意図は、ただ彼女が安心して眠れるように支えになることだけだった。こんなに脆弱な状態の彼女につけ込むつもりなんて全くなかった。",
+          ko: "아르카: 오늘 밤 내 원래 의도는 순수하게 그녀가 편안히 잠들 수 있도록 의지가 되어주는 것뿐이었어. 그녀가 이렇게 취약한 상태일 때 기회를 이용할 생각은 전혀 없었어.",
+        }),
+      },
+      {
+        id: "maya-special-scene-2",
+        label: tx({
+          id: "Gaya 2",
+          en: "Style 2",
+          ja: "スタイル2",
+          ko: "스타일2",
+        }),
+        src: mayaSpecialScene2,
+        loop: true,
+        narrate: tx({
+          id: "Tapi batas antara rasa peduli, kasihan, dan hasrat ternyata tipis banget. Apalagi waktu dia natap aku kayak gitu. Tatapan orang yang lagi nyari pelampung di tengah badai, dan dia milih aku buat jadi pelampungnya.",
+          en: "But the line between care, pity, and desire is surprisingly thin. Especially when she looks at me like that. The look of someone desperately seeking a lifeline in the middle of a storm, and she chose me to be her lifeline.",
+          ja: "でも、思いやりと同情と欲望の境界線は驚くほど薄い。特に彼女があんな風に俺を見つめる時は。嵐の中で必死に救命具を探している人の眼差し、そして彼女は俺をその救命具に選んだ。",
+          ko: "하지만 배려와 동정, 그리고 욕망 사이의 경계선은 놀라울 정도로 얇다. 특히 그녀가 나를 그렇게 바라볼 때는. 폭풍 속에서 필사적으로 구명줄을 찾는 사람의 눈빛, 그리고 그녀는 나를 그 구명줄로 선택했다.",
+        }),
+      },
+      {
+        id: "maya-special-scene-3",
+        label: tx({
+          id: "Gaya 3",
+          en: "Style 3",
+          ja: "スタイル3",
+          ko: "스타일3",
+        }),
+        src: mayaSpecialScene3,
+        loop: true,
+        narrate: tx({
+          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
+          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
+          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
+          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
+        }),
+      },
+      {
+        id: "maya-special-scene-4",
+        label: tx({
+          id: "Gaya 4",
+          en: "Style 4",
+          ja: "スタイル4",
+          ko: "스타일4",
+        }),
+        src: mayaSpecialScene4,
+        loop: false,
+        narrate: tx({
+          id: "Nggak ada lagi Maya si mahasiswi kedokteran yang kaku dan tertutup. Di bawah lampu remang ini, dia cuma perempuan biasa yang butuh validasi kalau dia itu berharga. Dan entah kenapa, ngasih dia rasa aman itu... ngasih aku kepuasan yang nggak bisa dijelasin.",
+          en: "No more of that stiff, closed-off med student Maya. Under this dim light, she's just an ordinary girl who needs validation that she's worth something. And somehow, giving her that sense of safety... it gives me a satisfaction I can't explain.",
+          ja: "もう堅苦しくて閉ざされた医学生のマヤはいない。この薄暗い明かりの下で、彼女はただ自分に価値があると認めてもらいたい普通の女の子だ。そしてなぜか、彼女に安心感を与えること...それが俺に説明できない満足感を与えてくれる。",
+          ko: "이제 딱딱하고 폐쇄적인 의대생 마야는 없다. 이 희미한 불빛 아래에서, 그녀는 그저 자신이 가치 있다는 확인이 필요한 평범한 여자일 뿐이다. 그리고 왠지, 그녀에게 안정감을 주는 것... 그게 나한테 설명할 수 없는 만족감을 준다.",
+        }),
+      },
+    ],
+    "maya-special-2",
+  ),
+  multiCutScene(
+    [
+      {
+        id: "maya-special-2-scene-1",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: mayaSpecial2Scene1,
+        loop: true,
+        narrate: tx({
+          id: "Arka: Niat awalku malam ini cuma murni mau jadi sandaran biar dia bisa tidur tenang. Nggak ada niat buat ngambil kesempatan waktu dia lagi rapuh-rapuhnya begini.",
+          en: "Arka: My initial intention tonight was simply to be a support so she could sleep peacefully. I had no intention of taking advantage of her while she's in such a fragile state.",
+          ja: "アルカ：今夜の俺の本来の意図は、ただ彼女が安心して眠れるように支えになることだけだった。こんなに脆弱な状態の彼女につけ込むつもりなんて全くなかった。",
+          ko: "아르카: 오늘 밤 내 원래 의도는 순수하게 그녀가 편안히 잠들 수 있도록 의지가 되어주는 것뿐이었어. 그녀가 이렇게 취약한 상태일 때 기회를 이용할 생각은 전혀 없었어.",
+        }),
+      },
+      {
+        id: "maya-special-2-scene-2",
+        label: tx({
+          id: "Gaya 2",
+          en: "Style 2",
+          ja: "スタイル2",
+          ko: "스타일2",
+        }),
+        src: mayaSpecial2Scene2,
+        loop: true,
+        narrate: tx({
+          id: "Tapi batas antara rasa peduli, kasihan, dan hasrat ternyata tipis banget. Apalagi waktu dia natap aku kayak gitu. Tatapan orang yang lagi nyari pelampung di tengah badai, dan dia milih aku buat jadi pelampungnya.",
+          en: "But the line between care, pity, and desire is surprisingly thin. Especially when she looks at me like that. The look of someone desperately seeking a lifeline in the middle of a storm, and she chose me to be her lifeline.",
+          ja: "でも、思いやりと同情と欲望の境界線は驚くほど薄い。特に彼女があんな風に俺を見つめる時は。嵐の中で必死に救命具を探している人の眼差し、そして彼女は俺をその救命具に選んだ。",
+          ko: "하지만 배려와 동정, 그리고 욕망 사이의 경계선은 놀라울 정도로 얇다. 특히 그녀가 나를 그렇게 바라볼 때는. 폭풍 속에서 필사적으로 구명줄을 찾는 사람의 눈빛, 그리고 그녀는 나를 그 구명줄로 선택했다.",
+        }),
+      },
+      {
+        id: "maya-special-2-scene-3",
+        label: tx({
+          id: "Gaya 3",
+          en: "Style 3",
+          ja: "スタイル3",
+          ko: "스타일3",
+        }),
+        src: mayaSpecial2Scene3,
+        loop: true,
+        narrate: tx({
+          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
+          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
+          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
+          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
+        }),
+      },
+    ],
+    "maya-bed-3",
+  ),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
     tx({
@@ -320,6 +457,7 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
   ),
   hide("maya-day7-promise"),
   hide("arka-day7"),
+
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
     tx({
