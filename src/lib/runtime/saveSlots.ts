@@ -1,9 +1,10 @@
-import type { CharacterInstance, FlagMap } from "@/types/novel";
+import type { BackgroundVideo, CharacterInstance, FlagMap } from "@/types/novel";
 
 export type SaveSlot = {
   currentLabel: string;
   currentIndex: number;
   background: string;
+  backgroundVideo?: BackgroundVideo | null;
   location: string;
   speaker: string | null;
   preview: string;

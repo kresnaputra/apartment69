@@ -10,6 +10,7 @@ import type {
   ActiveMultiCutScene,
   ActiveInterstitial,
   ActiveMinigame,
+  BackgroundVideo,
   BlackScreenState,
   CharacterDefinition,
   CharacterEnterFrom,
@@ -27,6 +28,7 @@ import { isMobileDevice } from "@/lib/utils/deviceDetection";
 type NovelStore = {
   bundles: Record<string, LoadedCharacterBundle>;
   background: string;
+  backgroundVideo: BackgroundVideo | null;
   parallaxLayers: ParallaxLayer[];
   backgroundAnimation: {
     zoom?: number;
@@ -67,6 +69,7 @@ type NovelStore = {
     label: string,
     index: number,
     background: string,
+    backgroundVideo: BackgroundVideo | null,
     location: LocalizedText,
     characters: Record<string, CharacterInstance>,
     flags?: FlagMap,
@@ -84,6 +87,7 @@ const script: VisualNovelScript = demoScript;
 
 const emptyState = {
   background: "linear-gradient(180deg, #080b12 0%, #04050a 100%)",
+  backgroundVideo: null as BackgroundVideo | null,
   parallaxLayers: [] as ParallaxLayer[],
   backgroundAnimation: null as {
     zoom?: number;
@@ -314,6 +318,7 @@ const findActiveCharacterEntry = (
 const runScriptUntilPause = (state: NovelStore) => {
   const nextState: Partial<NovelStore> = {
     background: state.background,
+    backgroundVideo: state.backgroundVideo,
     parallaxLayers: state.parallaxLayers,
     backgroundAnimation: state.backgroundAnimation,
     blackScreen: state.blackScreen,
@@ -358,6 +363,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     switch (command.type) {
       case "scene":
         nextState.background = command.background;
+        nextState.backgroundVideo = command.backgroundVideo ?? null;
         nextState.parallaxLayers = command.parallaxLayers ?? [];
         nextState.backgroundAnimation = command.backgroundAnimation ?? null;
         nextState.blackScreen = null;
@@ -660,7 +666,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       }),
     ),
 
-  loadFromSave: (label, index, background, location, characters, flags) =>
+  loadFromSave: (label, index, background, backgroundVideo, location, characters, flags) =>
     set((state) =>
       runScriptUntilPause({
         ...state,
@@ -670,6 +676,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
         currentLabel: label,
         currentIndex: index,
         background,
+        backgroundVideo,
         location,
         characters,
         flags: flags ?? {},

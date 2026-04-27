@@ -957,6 +957,7 @@ const App = () => {
 
   const bundles = useNovelStore((state) => state.bundles);
   const background = useNovelStore((state) => state.background);
+  const backgroundVideo = useNovelStore((state) => state.backgroundVideo);
   const parallaxLayers = useNovelStore((state) => state.parallaxLayers);
   const backgroundAnimation = useNovelStore((state) => state.backgroundAnimation);
   const blackScreenState = useNovelStore((state) => state.blackScreen);
@@ -1359,6 +1360,7 @@ const App = () => {
       // currentIndex is already past the say command; step back to re-display it on load
       currentIndex: Math.max(0, currentIndex - 1),
       background,
+      backgroundVideo,
       location: resolvedLocation,
       speaker,
       preview: resolvedLine.slice(0, 80),
@@ -1378,6 +1380,7 @@ const App = () => {
       slot.currentLabel,
       slot.currentIndex,
       slot.background,
+      slot.backgroundVideo ?? null,
       slot.location,
       slot.characters ?? {},
       slot.flags ?? {},
@@ -1423,20 +1426,47 @@ const App = () => {
           advance();
         }}
       >
-        <div
-          className="vn-background"
-          style={{
-            backgroundImage: background,
-            ...(backgroundAnimation && {
-              animation: `vn-bg-zoom-pan ${backgroundAnimation.duration ?? 8}s ease-in-out forwards`,
-            }),
-            ...(backgroundAnimation && ({
-              "--vn-bg-zoom": backgroundAnimation.zoom ?? 1.2,
-              "--vn-bg-pan-x": `${backgroundAnimation.panX ?? 10}%`,
-              "--vn-bg-pan-y": `${backgroundAnimation.panY ?? 0}%`,
-            } as CSSProperties)),
-          }}
-        />
+        {backgroundVideo ? (
+          <video
+            key={`${backgroundVideo.src}-${sceneTransitionKey}`}
+            className="absolute inset-0 h-full w-full object-cover"
+            src={backgroundVideo.src}
+            autoPlay
+            loop={backgroundVideo.loop ?? true}
+            muted={backgroundVideo.muted ?? true}
+            playsInline
+            style={{
+              filter: backgroundVideo.filter,
+              ...(backgroundAnimation && {
+                animation: `vn-bg-zoom-pan ${backgroundAnimation.duration ?? 8}s ease-in-out forwards`,
+              }),
+              ...(backgroundAnimation && ({
+                "--vn-bg-zoom": backgroundAnimation.zoom ?? 1.2,
+                "--vn-bg-pan-x": `${backgroundAnimation.panX ?? 10}%`,
+                "--vn-bg-pan-y": `${backgroundAnimation.panY ?? 0}%`,
+              } as CSSProperties)),
+            }}
+            ref={(node) => {
+              if (!node) return;
+              node.playbackRate = backgroundVideo.playbackRate ?? 1;
+            }}
+          />
+        ) : (
+          <div
+            className="vn-background"
+            style={{
+              backgroundImage: background,
+              ...(backgroundAnimation && {
+                animation: `vn-bg-zoom-pan ${backgroundAnimation.duration ?? 8}s ease-in-out forwards`,
+              }),
+              ...(backgroundAnimation && ({
+                "--vn-bg-zoom": backgroundAnimation.zoom ?? 1.2,
+                "--vn-bg-pan-x": `${backgroundAnimation.panX ?? 10}%`,
+                "--vn-bg-pan-y": `${backgroundAnimation.panY ?? 0}%`,
+              } as CSSProperties)),
+            }}
+          />
+        )}
         <div className="vn-vignette" />
         <div className="vn-stage">
           <div className="vn-lighting" />

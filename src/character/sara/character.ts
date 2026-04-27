@@ -26,7 +26,7 @@ export const saraCharacter: CharacterDefinition = {
   defaultX: 0.0,
   defaultY: -150,
   defaultScale: isMobileDevice() ? 2.6 : 3,
-  defaultOpacity: 0.96,
+  defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,
   defaultLoop: true,

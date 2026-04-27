@@ -6,6 +6,7 @@ import type {
   CharacterHideTransition,
   ClearFlagCommand,
   ChoiceOption,
+  BackgroundVideo,
   CutSceneCommand,
   CutSceneSelection,
   FlagValue,
@@ -33,18 +34,34 @@ type CenteredTextOptions = {
   size?: "hero" | "sub";
 };
 
-export const scene = (background: string, location?: LocalizedText, transitionDuration?: number): SceneCommand => ({
+type SceneOptions = {
+  transitionDuration?: number;
+  backgroundVideo?: BackgroundVideo | null;
+};
+
+export const scene = (
+  background: string,
+  location?: LocalizedText,
+  transitionDurationOrOptions?: number | SceneOptions,
+): SceneCommand => ({
   type: "scene",
   background,
   location,
-  transitionDuration,
+  transitionDuration:
+    typeof transitionDurationOrOptions === "number"
+      ? transitionDurationOrOptions
+      : transitionDurationOrOptions?.transitionDuration,
+  backgroundVideo:
+    typeof transitionDurationOrOptions === "number"
+      ? null
+      : transitionDurationOrOptions?.backgroundVideo ?? null,
 });
 
 /**
  * Creates a scene command with an image-based background and optional parallax layers.
  * @param imageUrl - Vite-imported image URL for the base background
  * @param location - Optional location name shown in the caption
- * @param options - parallaxLayers, transitionDuration, backgroundAnimation
+ * @param options - parallaxLayers, transitionDuration, backgroundAnimation, backgroundVideo
  */
 export const bg = (
   imageUrl: string,
@@ -52,6 +69,7 @@ export const bg = (
   options?: {
     parallaxLayers?: ParallaxLayer[];
     transitionDuration?: number;
+    backgroundVideo?: BackgroundVideo | null;
     backgroundAnimation?: {
       zoom?: number;
       panX?: number;
@@ -65,6 +83,7 @@ export const bg = (
   location,
   parallaxLayers: options?.parallaxLayers,
   transitionDuration: options?.transitionDuration,
+  backgroundVideo: options?.backgroundVideo ?? null,
   backgroundAnimation: options?.backgroundAnimation,
 });
 

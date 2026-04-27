@@ -1,10 +1,14 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
 import { centeredText, hide, interstitial, jump, scene } from "@/scenes/scriptTypes";
+import { dayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
 
 export const day3ComplateScene: VisualNovelCommand[] = [
   hide("arka-bedroom"),
-  scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
+  scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", {
+    transitionDuration: 1000,
+    backgroundVideo: dayChangeClassic,
+  }),
   centeredText(tx({
     id: "HARI 3 SELESAI",
     en: "DAY 3 COMPLETE",

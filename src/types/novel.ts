@@ -71,12 +71,21 @@ export type ParallaxLayer = {
   yOffset?: number; // vertical offset as a fraction of viewport height, e.g. -0.1 = -10%
 };
 
+export type BackgroundVideo = {
+  src: string;
+  loop?: boolean;
+  muted?: boolean;
+  playbackRate?: number;
+  filter?: string;
+};
+
 export type SceneCommand = {
   type: "scene";
   background: string;
   location?: LocalizedText;
   transitionDuration?: number;
   parallaxLayers?: ParallaxLayer[];
+  backgroundVideo?: BackgroundVideo | null;
   backgroundAnimation?: {
     zoom?: number;
     panX?: number;
