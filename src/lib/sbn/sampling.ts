@@ -13,6 +13,8 @@ const DEFAULT_CAMERA: SceneBounds = {
 type CachedSceneExtents = Omit<SceneBounds, "zoom">;
 
 const sceneExtentsCache = new WeakMap<SbnProject, CachedSceneExtents>();
+const cameraBoundsCache = new WeakMap<SbnProject, Map<string, SceneBounds>>();
+const bonesCache = new WeakMap<SbnProject, Map<number, WorldBone[]>>();
 
 const cloneBones = (bones: SbnBone[]): WorldBone[] =>
   bones.map((bone) => ({
@@ -70,6 +72,18 @@ export const computeAllWorldTransforms = (bones: WorldBone[]) => {
 };
 
 export const sampleBonesAtFrame = (project: SbnProject, frame: number) => {
+  let projectCache = bonesCache.get(project);
+  if (!projectCache) {
+    projectCache = new Map();
+    bonesCache.set(project, projectCache);
+  }
+
+  const cached = projectCache.get(frame);
+  if (cached) {
+    // Deep clone to avoid returning mutated references
+    return cached.map(bone => ({ ...bone }));
+  }
+
   const bones = cloneBones(project.bones).map((bone) => {
     const setup = project.setupPose?.[String(bone.id)];
     return setup ? { ...bone, ...setup } : bone;
@@ -128,6 +142,16 @@ export const sampleBonesAtFrame = (project: SbnProject, frame: number) => {
   }
 
   computeAllWorldTransforms(bones);
+  projectCache.set(frame, bones);
+  
+  // Limit cache size to prevent memory leaks
+  if (projectCache.size > 100) {
+    const firstKey = projectCache.keys().next().value;
+    if (firstKey !== undefined) {
+      projectCache.delete(firstKey);
+    }
+  }
+  
   return bones;
 };
 
@@ -135,6 +159,8 @@ export const resolveSceneDrawables = (
   project: SbnProject,
   bones: WorldBone[],
 ): Array<{ slot: SbnSlot; attachment: SbnAttachment; bone: WorldBone }> => {
+  // Note: Removed caching here as bones are mutable and change every frame
+  // The performance gain from caching is negligible compared to bone calculations
   return bones.flatMap((bone) => {
     const boneSlots = project.slots
       .filter((slot) => slot.boneId === bone.id)
@@ -193,6 +219,19 @@ export const fitCameraToScene = (
     return DEFAULT_CAMERA;
   }
 
+  // Check camera bounds cache first
+  let projectCameraCache = cameraBoundsCache.get(project);
+  if (!projectCameraCache) {
+    projectCameraCache = new Map();
+    cameraBoundsCache.set(project, projectCameraCache);
+  }
+
+  const cameraKey = `${Math.round(viewportWidth / 10)}_${Math.round(viewportHeight / 10)}`;
+  const cachedCamera = projectCameraCache.get(cameraKey);
+  if (cachedCamera) {
+    return cachedCamera;
+  }
+
   const cachedExtents = sceneExtentsCache.get(project);
   let extents = cachedExtents;
 
@@ -243,8 +282,20 @@ export const fitCameraToScene = (
   const width = Math.max(1, extents.maxX - extents.minX);
   const height = Math.max(1, extents.maxY - extents.minY);
 
-  return {
+  const camera = {
     ...extents,
     zoom: Math.min((viewportWidth * 0.78) / width, (viewportHeight * 0.78) / height),
   };
+
+  projectCameraCache.set(cameraKey, camera);
+
+  // Limit cache size
+  if (projectCameraCache.size > 20) {
+    const firstKey = projectCameraCache.keys().next().value;
+    if (firstKey !== undefined) {
+      projectCameraCache.delete(firstKey);
+    }
+  }
+
+  return camera;
 };

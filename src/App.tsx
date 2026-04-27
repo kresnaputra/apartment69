@@ -21,6 +21,7 @@ import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, u
 import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
+import type { SceneBounds } from "@/types/sbn";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { characterBundleRegistry } from "@/character";
 import type { SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
@@ -215,6 +216,7 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
 }) => {
   const rendererRef = useRef<CanvasSbnRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const cameraRef = useRef<SceneBounds | null>(null);
   const {
     containerRef,
     spriteStyle,
@@ -238,19 +240,26 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
     const renderer = rendererRef.current;
     if (!renderer) return;
     renderer.resize(viewport.width, viewport.height, stageScale);
+    // Invalidate camera cache when viewport changes
+    cameraRef.current = null;
   }, [stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer) return;
-    const camera = viewport.width === 520 && viewport.height === 880
-      ? bundle.preferredCamera
-      : fitCameraToScene(bundle.project, viewport.width, viewport.height);
+    
+    // Only recalculate camera if it hasn't been cached
+    if (!cameraRef.current) {
+      cameraRef.current = viewport.width === 520 && viewport.height === 880
+        ? bundle.preferredCamera
+        : fitCameraToScene(bundle.project, viewport.width, viewport.height);
+    }
+    
     renderer.render({
       project: bundle.project,
       frame: character.frame,
       scale: 1,
-      camera,
+      camera: cameraRef.current,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
@@ -1030,11 +1039,18 @@ const App = () => {
   useEffect(() => {
     let animationFrame = 0;
     let lastTick = performance.now();
+    const targetFps = 24;
+    const frameInterval = 1000 / targetFps;
 
     const loop = (time: number) => {
       const deltaMs = time - lastTick;
-      lastTick = time;
-      tickCharacters(deltaMs);
+      
+      // Throttle to 24 FPS to reduce CPU usage
+      if (deltaMs >= frameInterval) {
+        lastTick = time - (deltaMs % frameInterval);
+        tickCharacters(deltaMs);
+      }
+      
       animationFrame = window.requestAnimationFrame(loop);
     };
 
