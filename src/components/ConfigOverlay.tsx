@@ -34,12 +34,12 @@ export const ConfigOverlay = ({
     onClick={onClose}
   >
     <div
-      className="w-full max-w-2xl mb-4 rounded-2xl"
+      className="w-full max-w-xl mb-4 rounded-2xl"
       style={{ background: "rgba(5,6,12,0.94)", backdropFilter: "blur(8px)" }}
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10">
-        <span className="text-white/50 text-[0.62rem] tracking-[0.08em] uppercase">{configLabel}</span>
+        <span className="text-white/50 text-[0.6rem] sm:text-[0.62rem] tracking-[0.08em] uppercase">{configLabel}</span>
         <button
           type="button"
           onClick={onClose}
@@ -49,10 +49,10 @@ export const ConfigOverlay = ({
         </button>
       </div>
 
-      <div className="px-4 py-4 flex flex-col gap-4">
-        <div className="flex items-center gap-3">
-          <label className="text-white/65 text-[0.7rem] shrink-0 w-[5.5rem] self-start pt-2">{languageLabel}</label>
-          <div className="flex-1 grid grid-cols-2 gap-2">
+      <div className="px-3 sm:px-4 py-3 sm:py-4 flex flex-col gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <label className="text-white/65 text-[0.65rem] sm:text-[0.7rem] shrink-0 w-20 sm:w-22 self-start pt-2">{languageLabel}</label>
+          <div className="flex-1 grid grid-cols-2 gap-1.5 sm:gap-2">
             {languageOptions.map((option) => {
               const active = option.code === language;
               return (
@@ -60,7 +60,7 @@ export const ConfigOverlay = ({
                   key={option.code}
                   type="button"
                   onClick={() => onLanguageChange(option.code)}
-                  className="rounded-xl border px-3 py-2.5 text-left transition-all duration-200"
+                  className="rounded-xl border px-2.5 sm:px-3 py-2 sm:py-2.5 text-left transition-all duration-200"
                   style={{
                     borderColor: active ? "rgba(210,164,86,0.5)" : "rgba(255,255,255,0.1)",
                     background: active
@@ -70,7 +70,7 @@ export const ConfigOverlay = ({
                   }}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-[0.82rem] text-white/92">{option.label}</span>
+                    <span className="text-[0.75rem] sm:text-[0.82rem] text-white/92">{option.label}</span>
                     <span
                       className="h-2.5 w-2.5 rounded-full border shrink-0"
                       style={{
@@ -84,8 +84,8 @@ export const ConfigOverlay = ({
             })}
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <label className="text-white/65 text-[0.7rem] shrink-0 w-[5.5rem]">{bgVolumeLabel}</label>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <label className="text-white/65 text-[0.65rem] sm:text-[0.7rem] shrink-0 w-20 sm:w-22">{bgVolumeLabel}</label>
           <input
             type="range"
             min="0"
@@ -95,12 +95,12 @@ export const ConfigOverlay = ({
             onChange={(e) => onBgVolumeChange(parseFloat(e.target.value))}
             className="flex-1 accent-[#d2a456]"
           />
-          <span className="text-white/45 text-[0.65rem] w-7 text-right shrink-0">
+          <span className="text-white/45 text-[0.6rem] sm:text-[0.65rem] w-7 sm:w-8 text-right shrink-0">
             {Math.round(bgVolume * 100)}%
           </span>
         </div>
-        <div className="flex items-center gap-3">
-          <label className="text-white/65 text-[0.7rem] shrink-0 w-[5.5rem]">{textSpeedLabel}</label>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <label className="text-white/65 text-[0.65rem] sm:text-[0.7rem] shrink-0 w-20 sm:w-22">{textSpeedLabel}</label>
           <input
             type="range"
             min="0.5"
@@ -110,7 +110,7 @@ export const ConfigOverlay = ({
             onChange={(e) => onTextSpeedChange(parseFloat(e.target.value))}
             className="flex-1 accent-[#d2a456]"
           />
-          <span className="text-white/45 text-[0.65rem] w-7 text-right shrink-0">
+          <span className="text-white/45 text-[0.6rem] sm:text-[0.65rem] w-7 sm:w-8 text-right shrink-0">
             {textSpeed.toFixed(2)}x
           </span>
         </div>
