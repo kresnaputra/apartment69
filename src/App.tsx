@@ -515,6 +515,7 @@ const CutSceneOverlay = ({
   continueHint,
   speedLabels,
   textSpeed = 1,
+  forcedPlaybackSpeed,
   onComplete,
 }: {
   src: string;
@@ -532,6 +533,7 @@ const CutSceneOverlay = ({
     faster: string;
   };
   textSpeed?: number;
+  forcedPlaybackSpeed?: number;
   onComplete: () => void;
 }) => {
   const [visible, setVisible] = useState(false);
@@ -545,9 +547,9 @@ const CutSceneOverlay = ({
   const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
   const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
   const speedOptions = [
-    { label: speedLabels.slow, value: 1 },
-    { label: speedLabels.normal, value: 2 },
-    { label: speedLabels.fast, value: 4 },
+    { label: "1x", value: 1 },
+    { label: "2x", value: 2 },
+    { label: "3x", value: 3 },
   ];
 
   useEffect(() => {
@@ -582,9 +584,9 @@ const CutSceneOverlay = ({
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = currentSpeed;
+      videoRef.current.playbackRate = forcedPlaybackSpeed ?? currentSpeed;
     }
-  }, [currentSpeed]);
+  }, [currentSpeed, forcedPlaybackSpeed]);
 
   const handleSpeedChange = (speed: number) => {
     setCurrentSpeed(speed);
@@ -756,6 +758,7 @@ const MultiCutSceneOverlay = ({
 }) => {
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(initialSelectionId ?? selections[0]?.id ?? null);
   const [maxUnlockedSelectionIndex, setMaxUnlockedSelectionIndex] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const enabledSelections = selections.filter((scene) => scene.enabled !== false);
   const activeSelection = selections.find((scene) => scene.id === selectedSceneId) ?? selections[0];
   const currentSelectionIndex = enabledSelections.findIndex((scene) => scene.id === activeSelection?.id);
@@ -765,13 +768,17 @@ const MultiCutSceneOverlay = ({
     const initialId = initialSelectionId ?? enabledSelections[0]?.id ?? selections[0]?.id ?? null;
     const initialIndex = Math.max(0, enabledSelections.findIndex((scene) => scene.id === initialId));
     setSelectedSceneId(initialId);
-    setMaxUnlockedSelectionIndex(initialIndex);
+    setMaxUnlockedSelectionIndex(Math.min(enabledSelections.length - 1, initialIndex + 1));
+    setPlaybackSpeed(1);
   }, [initialSelectionId, selections]);
 
   const handleSelectScene = useCallback((sceneId: string) => {
     const targetIndex = enabledSelections.findIndex((scene) => scene.id === sceneId);
     if (targetIndex === -1 || targetIndex > maxUnlockedSelectionIndex) return;
     setSelectedSceneId(sceneId);
+    if (targetIndex === maxUnlockedSelectionIndex && targetIndex < enabledSelections.length - 1) {
+      setMaxUnlockedSelectionIndex((current) => Math.max(current, targetIndex + 1));
+    }
   }, [enabledSelections, maxUnlockedSelectionIndex]);
 
   const handleMoveScene = useCallback((direction: -1 | 1) => {
@@ -811,7 +818,7 @@ const MultiCutSceneOverlay = ({
         src={activeSelection.src}
         loop={activeSelection.loop}
         narrate={activeSelection.narrate}
-        showSpeedControl={activeSelection.showSpeedControl ?? Boolean(activeSelection.loop)}
+        showSpeedControl={false}
         language={language}
         allowDirectExit={false}
         speedControlBottom="168px"
@@ -822,7 +829,8 @@ const MultiCutSceneOverlay = ({
           fast: labels.fastPlayback,
           faster: labels.fasterPlayback,
         }}
-        textSpeed={textSpeed}
+        textSpeed={textSpeed * playbackSpeed}
+        forcedPlaybackSpeed={playbackSpeed}
         onComplete={onComplete}
       />
       <div
@@ -831,71 +839,47 @@ const MultiCutSceneOverlay = ({
           position: "absolute",
           zIndex: 101,
           left: "50%",
-          bottom: "24px",
+          bottom: "26px",
           transform: "translateX(-50%)",
           display: "grid",
-          gap: "12px",
-          width: "min(92vw, 960px)",
-          padding: "14px",
-          borderRadius: "18px",
-          background: "rgba(8, 7, 12, 0.76)",
-          backdropFilter: "blur(14px)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
+          gap: "16px",
+          width: "min(92vw, 880px)",
+          padding: "0",
+          borderRadius: "0",
+          background: "transparent",
+          border: "none",
           pointerEvents: "auto",
         }}
       >
-        <div style={{ display: "flex", gap: "8px", justifyContent: "space-between", flexWrap: "wrap" }}>
-          <button
-            type="button"
-            onClick={() => handleMoveScene(-1)}
-            disabled={currentSelectionIndex <= 0}
-            style={{
-              padding: "10px 14px",
-              borderRadius: "10px",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              background: currentSelectionIndex <= 0 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
-              color: currentSelectionIndex <= 0 ? "rgba(255,255,255,0.45)" : "#f3eadf",
-              cursor: currentSelectionIndex <= 0 ? "not-allowed" : "pointer",
-            }}
-          >
-            {labels.previousScene}
-          </button>
-          {isLastSelection ? (
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          {[
+            { label: "1x", value: 1 },
+            { label: "2x", value: 2 },
+            { label: "3x", value: 3 },
+          ].map((option) => (
             <button
+              key={option.value}
               type="button"
-              onClick={onComplete}
+              onClick={() => setPlaybackSpeed(option.value)}
               style={{
-                padding: "10px 16px",
-                borderRadius: "10px",
-                border: "1px solid rgba(210, 164, 86, 0.38)",
-                background: "rgba(210, 164, 86, 0.92)",
-                color: "#140f09",
+                width: "56px",
+                height: "56px",
+                borderRadius: "999px",
+                border: option.value === playbackSpeed ? "1px solid rgba(210, 164, 86, 0.62)" : "1px solid rgba(210, 164, 86, 0.22)",
+                background: option.value === playbackSpeed ? "rgba(210, 164, 86, 0.96)" : "rgba(10, 11, 17, 0.74)",
+                color: option.value === playbackSpeed ? "#1b1510" : "rgba(210, 164, 86, 0.9)",
+                backdropFilter: "blur(12px)",
+                fontSize: "1rem",
                 fontWeight: 700,
                 cursor: "pointer",
+                boxShadow: option.value === playbackSpeed ? "0 10px 26px rgba(210, 164, 86, 0.22)" : "none",
               }}
             >
-              {labels.continueStory}
+              {option.label}
             </button>
-          ) : (
-            <div aria-hidden="true" style={{ minWidth: "154px" }} />
-          )}
-          <button
-            type="button"
-            onClick={() => handleMoveScene(1)}
-            disabled={currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1}
-            style={{
-              padding: "10px 14px",
-              borderRadius: "10px",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              background: currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1 ? "rgba(255,255,255,0.08)" : "rgba(17, 16, 24, 0.9)",
-              color: currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1 ? "rgba(255,255,255,0.45)" : "#f3eadf",
-              cursor: currentSelectionIndex === -1 || currentSelectionIndex >= enabledSelections.length - 1 ? "not-allowed" : "pointer",
-            }}
-          >
-            {labels.nextScene}
-          </button>
+          ))}
         </div>
-        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "center" }}>
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(selections.length, 5)}, minmax(0, 1fr))`, gap: "12px" }}>
           {selections.map((scene) => {
             const isActive = activeSelection.id === scene.id;
             const isEnabled = scene.enabled !== false;
@@ -908,26 +892,57 @@ const MultiCutSceneOverlay = ({
                 disabled={!isUnlocked}
                 onClick={() => handleSelectScene(scene.id)}
                 style={{
-                  minWidth: "120px",
-                  padding: "10px 14px",
+                  minWidth: 0,
+                  width: "100%",
+                  padding: "14px 18px",
                   borderRadius: "999px",
-                  border: isActive ? "1px solid rgba(210, 164, 86, 0.52)" : "1px solid rgba(255, 255, 255, 0.1)",
+                  border: "2px solid rgba(210, 164, 86, 0.72)",
                   background: !isUnlocked
-                    ? "rgba(255, 255, 255, 0.08)"
+                    ? "rgba(10, 11, 17, 0.38)"
                     : isActive
-                      ? "rgba(210, 164, 86, 0.18)"
-                      : "rgba(17, 16, 24, 0.9)",
-                  color: !isUnlocked ? "rgba(255,255,255,0.48)" : "#f3eadf",
+                      ? "rgba(210, 164, 86, 0.96)"
+                      : "rgba(10, 11, 17, 0.62)",
+                  color: !isUnlocked
+                    ? "rgba(210,164,86,0.32)"
+                    : isActive
+                      ? "#1b1510"
+                      : "rgba(210, 164, 86, 0.92)",
                   cursor: !isUnlocked ? "not-allowed" : "pointer",
                   fontWeight: isActive ? 700 : 500,
-                  opacity: isUnlocked ? 1 : 0.58,
+                  fontSize: "1.15rem",
+                  opacity: isUnlocked ? 1 : 0.48,
+                  backdropFilter: "blur(12px)",
+                  boxShadow: isActive ? "0 14px 30px rgba(210, 164, 86, 0.22)" : "none",
                 }}
               >
-                {resolveText(scene.label, language)}
-                {!isUnlocked ? ` • ${labels.lockedScene}` : ""}
+                {enabledIndex === -1 ? "?" : enabledIndex + 1}
               </button>
             );
           })}
+        </div>
+        <div>
+          {isLastSelection ? (
+            <button
+              type="button"
+              onClick={onComplete}
+              style={{
+                width: "100%",
+                padding: "18px 24px",
+                borderRadius: "999px",
+                border: "1px solid rgba(210, 164, 86, 0.38)",
+                background: "rgba(210, 164, 86, 0.96)",
+                color: "#1b1510",
+                fontWeight: 700,
+                fontSize: "1.25rem",
+                cursor: "pointer",
+                boxShadow: "0 14px 40px rgba(210, 164, 86, 0.2)",
+              }}
+            >
+              Finish
+            </button>
+          ) : (
+            <div aria-hidden="true" style={{ height: "66px" }} />
+          )}
         </div>
       </div>
     </div>
