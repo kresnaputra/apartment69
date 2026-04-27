@@ -286,6 +286,224 @@ const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpritePr
   return <SpritesheetCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
 });
 
+type CharacterStageProps = {
+  characters: Record<string, CharacterInstance>;
+  bundles: Record<string, LoadedCharacterBundle>;
+  activeCharacterId: string | null;
+  isNarration: boolean;
+  isSceneTransitioning: boolean;
+};
+
+const CharacterStage = memo(({ characters, bundles, activeCharacterId, isNarration, isSceneTransitioning }: CharacterStageProps) => {
+  if (isSceneTransitioning) return null;
+
+  const renderCharacters = Object.values(characters).sort((a, b) => a.y - b.y);
+
+  return (
+    <>
+      {renderCharacters.map((character) => {
+        const bundle = bundles[character.bundleId];
+        if (!bundle) return null;
+        const isUnknownSpeaker =
+          activeCharacterId !== null &&
+          unknownSpeakerIds.includes(activeCharacterId as (typeof unknownSpeakerIds)[number]);
+        const isDimmed = isNarration
+          ? true
+          : isUnknownSpeaker
+            ? character.characterId === "arka"
+            : activeCharacterId !== null && activeCharacterId !== character.characterId;
+        return (
+          <CharacterSprite
+            key={`${character.id}-${character.entryVersion}`}
+            bundle={bundle}
+            character={character}
+            isDimmed={isDimmed}
+          />
+        );
+      })}
+    </>
+  );
+});
+
+type DialogueUIProps = {
+  isMobile: boolean;
+  activeMinigame: { id: string } | null;
+  isCenteredText: boolean;
+  isNarration: boolean;
+  isSceneTransitioning: boolean;
+  speaker: string | null;
+  visibleLine: string;
+  resolvedLine: string;
+  lineSize: string;
+  isTyping: boolean;
+  resolvedChoices: Array<{ id: string; label: string; next: string }>;
+  isAuto: boolean;
+  labels: {
+    auto: string;
+    clickToFinish: string;
+    clickToContinue: string;
+    config: string;
+    exit: string;
+    log: string;
+    save: string;
+    skip: string;
+    tapToContinue: string;
+    tapToSkip: string;
+  };
+  onChoose: (next: string) => void;
+  onSuppressAdvance: () => void;
+  onAuto: () => void;
+  onSkip: () => void;
+  onLog: () => void;
+  onSave: () => void;
+  onConfig: () => void;
+  onExit: () => void;
+};
+
+const DialogueUI = memo(({ 
+  isMobile, 
+  activeMinigame, 
+  isCenteredText, 
+  isNarration, 
+  isSceneTransitioning,
+  speaker,
+  visibleLine,
+  resolvedLine,
+  lineSize,
+  isTyping,
+  resolvedChoices,
+  isAuto,
+  labels,
+  onChoose,
+  onSuppressAdvance,
+  onAuto,
+  onSkip,
+  onLog,
+  onSave,
+  onConfig,
+  onExit,
+}: DialogueUIProps) => {
+  if (activeMinigame) return null;
+
+  if (isCenteredText) {
+    return (
+      <div className={`vn-centered-text-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+        <div className="vn-centered-text-box">
+          <div className={`vn-centered-text-line vn-centered-text-line-${lineSize}`}>{visibleLine}</div>
+          <div className="vn-centered-text-hint">
+            {isTyping ? labels.clickToFinish : labels.clickToContinue}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isNarration) {
+    if (isMobile) {
+      return (
+        <NarratorMobile
+          continueHint={labels.tapToContinue}
+          finishHint={labels.tapToSkip}
+          visibleLine={visibleLine}
+          isTyping={isTyping}
+          isSceneTransitioning={isSceneTransitioning}
+        />
+      );
+    }
+    return (
+      <div className={`vn-narrator-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+        <div className="vn-narrator-box">
+          <div className="vn-narrator-line">{visibleLine}</div>
+          <div className="vn-narrator-hint">{isTyping ? labels.clickToFinish : labels.clickToContinue}</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <DialogueMobile
+        controlLabels={{
+          auto: labels.auto,
+          config: labels.config,
+          exit: labels.exit,
+          log: labels.log,
+          save: labels.save,
+          skip: labels.skip,
+        }}
+        continueHint={labels.tapToContinue}
+        finishHint={labels.tapToSkip}
+        speaker={speaker}
+        visibleLine={visibleLine}
+        line={resolvedLine}
+        isTyping={isTyping}
+        isSceneTransitioning={isSceneTransitioning}
+        choices={resolvedChoices}
+        onChoose={onChoose}
+        onSuppressAdvance={onSuppressAdvance}
+        isAuto={isAuto}
+        onAuto={onAuto}
+        onSkip={onSkip}
+        onLog={onLog}
+        onSave={onSave}
+        onConfig={onConfig}
+        onExit={onExit}
+      />
+    );
+  }
+
+  return (
+    <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
+      <div className="vn-dialogue-box">
+        {speaker ? <div className="vn-speaker">{speaker}</div> : null}
+        <div className="vn-line">{resolvedLine ? visibleLine : ""}</div>
+
+        {resolvedChoices.length > 0 ? (
+          <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
+            {resolvedChoices.map((choice) => (
+              <button
+                key={choice.id}
+                className="vn-choice"
+                type="button"
+                onClick={() => {
+                  onSuppressAdvance();
+                  onChoose(choice.next);
+                }}
+              >
+                {choice.label}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="vn-dialogue-bar">
+            <div className="vn-controls" onClick={(e) => e.stopPropagation()}>
+              {([
+                { label: labels.log, onClick: onLog },
+                { label: labels.auto, onClick: onAuto, active: isAuto },
+                { label: labels.skip, onClick: onSkip },
+                { label: labels.save, onClick: onSave },
+                { label: labels.config, onClick: onConfig },
+                { label: labels.exit, onClick: onExit },
+              ] as { label: string; onClick: () => void; active?: boolean }[]).map(({ label, onClick, active }) => (
+                <button
+                  key={label}
+                  type="button"
+                  className="vn-control"
+                  style={active ? { color: "#d2a456" } : undefined}
+                  onClick={onClick}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="vn-hint">{isTyping ? labels.clickToFinish : labels.clickToContinue}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
 const CutSceneOverlay = ({
   src,
   loop,
@@ -1231,27 +1449,13 @@ const App = () => {
             />
           ) : null}
 
-          {!isSceneTransitioning &&
-            renderCharacters.map((character) => {
-              const bundle = bundles[character.bundleId];
-              if (!bundle) return null;
-              const isUnknownSpeaker =
-                activeCharacterId !== null &&
-                unknownSpeakerIds.includes(activeCharacterId as (typeof unknownSpeakerIds)[number]);
-              const isDimmed = isNarration
-                ? true
-                : isUnknownSpeaker
-                  ? character.characterId === "arka"
-                  : activeCharacterId !== null && activeCharacterId !== character.characterId;
-              return (
-                <CharacterSprite
-                  key={`${character.id}-${character.entryVersion}`}
-                  bundle={bundle}
-                  character={character}
-                  isDimmed={isDimmed}
-                />
-              );
-            })}
+          <CharacterStage
+            characters={characters}
+            bundles={bundles}
+            activeCharacterId={activeCharacterId}
+            isNarration={isNarration}
+            isSceneTransitioning={isSceneTransitioning}
+          />
 
           {isMobile ? (
             <div className="absolute top-3 right-3 z-20">
@@ -1277,112 +1481,29 @@ const App = () => {
           />
         ) : null}
 
-        {activeMinigame ? null : isCenteredText ? (
-          <div className={`vn-centered-text-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
-            <div className="vn-centered-text-box">
-              <div className={`vn-centered-text-line vn-centered-text-line-${lineSize}`}>{visibleLine}</div>
-              <div className="vn-centered-text-hint">
-                {isTyping ? labels.clickToFinish : labels.clickToContinue}
-              </div>
-            </div>
-          </div>
-        ) : isNarration ? (
-          isMobile ? (
-            <NarratorMobile
-              continueHint={labels.tapToContinue}
-              finishHint={labels.tapToSkip}
-              visibleLine={visibleLine}
-              isTyping={isTyping}
-              isSceneTransitioning={isSceneTransitioning}
-            />
-          ) : (
-            <div className={`vn-narrator-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
-              <div className="vn-narrator-box">
-                <div className="vn-narrator-line">{visibleLine}</div>
-                <div className="vn-narrator-hint">{isTyping ? labels.clickToFinish : labels.clickToContinue}</div>
-              </div>
-            </div>
-          )
-        ) : (
-          isMobile ? (
-            <DialogueMobile
-              controlLabels={{
-                auto: labels.auto,
-                config: labels.config,
-                exit: labels.exit,
-                log: labels.log,
-                save: labels.save,
-                skip: labels.skip,
-              }}
-              continueHint={labels.tapToContinue}
-              finishHint={labels.tapToSkip}
-              speaker={speaker}
-              visibleLine={visibleLine}
-              line={resolvedLine}
-              isTyping={isTyping}
-              isSceneTransitioning={isSceneTransitioning}
-              choices={resolvedChoices}
-              onChoose={choose}
-              onSuppressAdvance={() => { suppressAdvanceOnceRef.current = true; }}
-              isAuto={isAuto}
-              onAuto={handleAuto}
-              onSkip={handleSkip}
-              onLog={() => setShowLog(true)}
-              onSave={() => setShowSaveSlots(true)}
-              onConfig={() => setShowConfig(true)}
-              onExit={() => { clearScene(); setPhase("menu"); }}
-            />
-          ) : (
-            <div className={`vn-dialogue-shell ${isSceneTransitioning ? "vn-dialogue-hidden" : ""}`}>
-              <div className="vn-dialogue-box">
-                {speaker ? <div className="vn-speaker">{speaker}</div> : null}
-                <div className="vn-line">{resolvedLine ? visibleLine : ""}</div>
-
-                {resolvedChoices.length > 0 ? (
-                  <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
-                    {resolvedChoices.map((choice) => (
-                      <button
-                        key={choice.id}
-                        className="vn-choice"
-                        type="button"
-                        onClick={() => {
-                          suppressAdvanceOnceRef.current = true;
-                          choose(choice.next);
-                        }}
-                      >
-                        {choice.label}
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="vn-dialogue-bar">
-                    <div className="vn-controls" onClick={(e) => e.stopPropagation()}>
-                      {([
-                        { label: labels.log, onClick: () => setShowLog(true) },
-                        { label: labels.auto, onClick: handleAuto, active: isAuto },
-                        { label: labels.skip, onClick: handleSkip },
-                        { label: labels.save, onClick: () => setShowSaveSlots(true) },
-                        { label: labels.config, onClick: () => setShowConfig(true) },
-                        { label: labels.exit, onClick: () => { clearScene(); setPhase("menu"); } },
-                      ] as { label: string; onClick: () => void; active?: boolean }[]).map(({ label, onClick, active }) => (
-                        <button
-                          key={label}
-                          type="button"
-                          className="vn-control"
-                          style={active ? { color: "#d2a456" } : undefined}
-                          onClick={onClick}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="vn-hint">{isTyping ? labels.clickToFinish : labels.clickToContinue}</div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )
-        )}
+        <DialogueUI
+          isMobile={isMobile}
+          activeMinigame={activeMinigame}
+          isCenteredText={isCenteredText}
+          isNarration={isNarration}
+          isSceneTransitioning={isSceneTransitioning}
+          speaker={speaker}
+          visibleLine={visibleLine}
+          resolvedLine={resolvedLine}
+          lineSize={lineSize}
+          isTyping={isTyping}
+          resolvedChoices={resolvedChoices}
+          isAuto={isAuto}
+          labels={labels}
+          onChoose={choose}
+          onSuppressAdvance={() => { suppressAdvanceOnceRef.current = true; }}
+          onAuto={handleAuto}
+          onSkip={handleSkip}
+          onLog={() => setShowLog(true)}
+          onSave={() => setShowSaveSlots(true)}
+          onConfig={() => setShowConfig(true)}
+          onExit={() => { clearScene(); setPhase("menu"); }}
+        />
 
         {activeMinigame?.id === "elevator-button" ? (
           isMobile
