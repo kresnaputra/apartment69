@@ -30,11 +30,11 @@ export const ConfigOverlay = ({
   onClose,
 }: ConfigOverlayProps) => (
   <div
-    className="fixed inset-0 z-50 flex items-end justify-center pointer-events-auto"
+    className="fixed inset-0 z-50 flex items-end justify-center pointer-events-auto px-4"
     onClick={onClose}
   >
     <div
-      className="w-[58vw] mb-4 rounded-2xl"
+      className="w-full max-w-2xl mb-4 rounded-2xl"
       style={{ background: "rgba(5,6,12,0.94)", backdropFilter: "blur(8px)" }}
       onClick={(e) => e.stopPropagation()}
     >
