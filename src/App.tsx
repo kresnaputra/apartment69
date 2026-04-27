@@ -37,7 +37,7 @@ import { unknownSpeakerIds } from "@/types/novel";
 import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
 
-const TEXT_SPEED = 18;
+const BASE_TEXT_SPEED = 18;
 const CUTSCENE_FADE_MS = 600;
 const BLACK_SCREEN_FADE_MS = 420;
 const CHARACTER_ENTER_DURATION_MS = 520;
@@ -514,6 +514,7 @@ const CutSceneOverlay = ({
   speedControlBottom = "60px",
   continueHint,
   speedLabels,
+  textSpeed = 1,
   onComplete,
 }: {
   src: string;
@@ -530,6 +531,7 @@ const CutSceneOverlay = ({
     fast: string;
     faster: string;
   };
+  textSpeed?: number;
   onComplete: () => void;
 }) => {
   const [visible, setVisible] = useState(false);
@@ -573,10 +575,10 @@ const CutSceneOverlay = ({
         }
         return current + 1;
       });
-    }, TEXT_SPEED);
+    }, BASE_TEXT_SPEED / textSpeed);
 
     return () => window.clearInterval(timer);
-  }, [resolvedNarrate]);
+  }, [resolvedNarrate, textSpeed]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -733,6 +735,7 @@ const MultiCutSceneOverlay = ({
   initialSelectionId,
   language,
   labels,
+  textSpeed = 1,
   onComplete,
 }: {
   selections: CutSceneSelection[];
@@ -748,6 +751,7 @@ const MultiCutSceneOverlay = ({
     normalPlayback: string;
     slowPlayback: string;
   };
+  textSpeed?: number;
   onComplete: () => void;
 }) => {
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(initialSelectionId ?? selections[0]?.id ?? null);
@@ -818,6 +822,7 @@ const MultiCutSceneOverlay = ({
           fast: labels.fastPlayback,
           faster: labels.fasterPlayback,
         }}
+        textSpeed={textSpeed}
         onComplete={onComplete}
       />
       <div
@@ -992,6 +997,7 @@ const App = () => {
       : DEFAULT_LANGUAGE;
   });
   const [bgVolume, setBgVolume] = useState(0.4);
+  const [textSpeed, setTextSpeed] = useState(1);
   const [saveToast, setSaveToast] = useState(false);
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
   const audioRef = useRef<NovelAudioEngine | null>(null);
@@ -1226,10 +1232,10 @@ const App = () => {
         }
         return current + 1;
       });
-    }, TEXT_SPEED);
+    }, BASE_TEXT_SPEED / textSpeed);
 
     return () => window.clearInterval(timer);
-  }, [resolvedLine]);
+  }, [resolvedLine, textSpeed]);
 
   useEffect(() => {
     if (!blackScreenState?.active) {
@@ -1556,6 +1562,7 @@ const App = () => {
               fast: labels.fastPlayback,
               faster: labels.fasterPlayback,
             }}
+            textSpeed={textSpeed}
             onComplete={completeCutScene}
           />
         ) : null}
@@ -1566,6 +1573,7 @@ const App = () => {
             selections={activeMultiCutScene.selections}
             initialSelectionId={activeMultiCutScene.initialSelectionId}
             language={language}
+            textSpeed={textSpeed}
             labels={{
               slowPlayback: labels.slowPlayback,
               normalPlayback: labels.normalPlayback,
@@ -1605,12 +1613,15 @@ const App = () => {
         <ConfigOverlay
           bgVolume={bgVolume}
           bgVolumeLabel={labels.volumeBgm}
+          textSpeed={textSpeed}
+          textSpeedLabel={resolveText(uiText.textSpeed, language)}
           configLabel={labels.config}
           language={language}
           languageLabel={labels.language}
           languageOptions={languageOptions}
           onLanguageChange={setLanguage}
           onBgVolumeChange={handleBgVolumeChange}
+          onTextSpeedChange={setTextSpeed}
           onClose={() => setShowConfig(false)}
         />
       )}

@@ -46,6 +46,12 @@ export const uiText = {
     ja: "BGM音量",
     ko: "배경음 볼륨",
   }),
+  textSpeed: tx({
+    id: "Kecepatan Teks",
+    en: "Text Speed",
+    ja: "テキスト速度",
+    ko: "텍스트 속도",
+  }),
   language: tx({ id: "Bahasa", en: "Language", ja: "言語", ko: "언어" }),
   mainMenuSettings: tx({
     id: "Pengaturan Main Menu",

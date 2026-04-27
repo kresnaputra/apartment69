@@ -3,24 +3,30 @@ import type { LanguageCode } from "@/lib/i18n";
 type ConfigOverlayProps = {
   bgVolume: number;
   bgVolumeLabel: string;
+  textSpeed: number;
+  textSpeedLabel: string;
   configLabel: string;
   language: LanguageCode;
   languageLabel: string;
   languageOptions: { code: LanguageCode; label: string }[];
   onLanguageChange: (language: LanguageCode) => void;
   onBgVolumeChange: (value: number) => void;
+  onTextSpeedChange: (value: number) => void;
   onClose: () => void;
 };
 
 export const ConfigOverlay = ({
   bgVolume,
   bgVolumeLabel,
+  textSpeed,
+  textSpeedLabel,
   configLabel,
   language,
   languageLabel,
   languageOptions,
   onLanguageChange,
   onBgVolumeChange,
+  onTextSpeedChange,
   onClose,
 }: ConfigOverlayProps) => (
   <div
@@ -91,6 +97,21 @@ export const ConfigOverlay = ({
           />
           <span className="text-white/45 text-[0.65rem] w-7 text-right shrink-0">
             {Math.round(bgVolume * 100)}%
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          <label className="text-white/65 text-[0.7rem] shrink-0 w-[5.5rem]">{textSpeedLabel}</label>
+          <input
+            type="range"
+            min="0.5"
+            max="3"
+            step="0.25"
+            value={textSpeed}
+            onChange={(e) => onTextSpeedChange(parseFloat(e.target.value))}
+            className="flex-1 accent-[#d2a456]"
+          />
+          <span className="text-white/45 text-[0.65rem] w-7 text-right shrink-0">
+            {textSpeed.toFixed(2)}x
           </span>
         </div>
       </div>
