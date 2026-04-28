@@ -1,12 +1,7 @@
 import type { CharacterDefinition } from "@/types/novel";
-import nadiaDefaultSbnUrl from "@/character/nadia/nadia-normal.sbn?url";
-import nadiaTalkSbnUrl from "@/character/nadia/nadia-normal-talk.sbn?url";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
-export const nadiaBundleRegistry = {
-  "nadia-normal": nadiaDefaultSbnUrl,
-  "nadia-talk": nadiaTalkSbnUrl,
-} as const;
+export const nadiaBundleRegistry = {} as const;
 
 export const nadiaCharacter: CharacterDefinition = {
   id: "nadia",

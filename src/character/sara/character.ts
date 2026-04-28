@@ -1,12 +1,7 @@
 import type { CharacterDefinition } from "@/types/novel";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
-import saraDefaultSbnUrl from "@/character/sara/sara-normal.sbn?url";
-import saraTalkSbnUrl from "@/character/sara/sara-normal-talk.sbn?url";
 
-export const saraBundleRegistry = {
-  "sara-normal": saraDefaultSbnUrl,
-  "sara-talk": saraTalkSbnUrl,
-} as const;
+export const saraBundleRegistry = {} as const;
 
 export const saraCharacter: CharacterDefinition = {
   id: "sara",

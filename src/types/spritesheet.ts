@@ -61,4 +61,5 @@ export type LoadedSpritesheetBundle = {
   totalFrames: number;
   fps: number;
   frameSize: { w: number; h: number };
+  trimBounds: SpritesheetFrameRect;
 };

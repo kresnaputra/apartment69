@@ -1,12 +1,7 @@
 import type { CharacterDefinition } from "@/types/novel";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
-import elenaDefaultSbnUrl from "@/character/elena/elena-normal.sbn?url";
-import elenaTalkSbnUrl from "@/character/elena/elena-normal-talk.sbn?url";
 
-export const elenaBundleRegistry = {
-  "elena-normal": elenaDefaultSbnUrl,
-  "elena-talk": elenaTalkSbnUrl,
-} as const;
+export const elenaBundleRegistry = {} as const;
 
 export const elenaCharacter: CharacterDefinition = {
   id: "elena",

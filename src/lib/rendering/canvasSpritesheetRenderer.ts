@@ -3,6 +3,7 @@ import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 type SpritesheetRenderInput = {
   bundle: LoadedSpritesheetBundle;
   frame: number;
+  dimmed?: boolean;
   viewportWidth: number;
   viewportHeight: number;
 };
@@ -19,10 +20,11 @@ export class CanvasSpritesheetRenderer {
     }
   }
 
-  resize(width: number, height: number, resolutionScale = 1) {
+  resize(width: number, height: number, resolutionScale = 1, maxPixelRatio = 4) {
     if (!this.canvas || !this.ctx || width <= 0 || height <= 0) return;
 
-    const pixelRatio = Math.max(1, window.devicePixelRatio || 1) * Math.max(1, resolutionScale);
+    const rawPixelRatio = Math.max(1, window.devicePixelRatio || 1) * Math.max(1, resolutionScale);
+    const pixelRatio = Math.max(1, Math.min(maxPixelRatio, rawPixelRatio));
     this.canvas.width = Math.round(width * pixelRatio);
     this.canvas.height = Math.round(height * pixelRatio);
     this.canvas.style.width = `${width}px`;
@@ -35,7 +37,7 @@ export class CanvasSpritesheetRenderer {
   render(input: SpritesheetRenderInput) {
     if (!this.canvas || !this.ctx) return;
 
-    const { bundle, frame, viewportWidth, viewportHeight } = input;
+    const { bundle, dimmed = false, frame, viewportWidth, viewportHeight } = input;
     const normalizedFrame = Math.min(
       bundle.animationFrames.length - 1,
       Math.max(0, Math.floor(frame)),
@@ -65,6 +67,7 @@ export class CanvasSpritesheetRenderer {
     const drawX = (viewportWidth - targetWidth) / 2;
     const drawY = viewportHeight - targetHeight;
 
+    this.ctx.filter = dimmed ? "brightness(55%) saturate(86%)" : "none";
     this.ctx.drawImage(
       activeSheet.image,
       source.x,
@@ -76,5 +79,6 @@ export class CanvasSpritesheetRenderer {
       source.w * scale,
       source.h * scale,
     );
+    this.ctx.filter = "none";
   }
 }

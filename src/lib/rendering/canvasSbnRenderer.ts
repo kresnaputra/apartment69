@@ -24,10 +24,10 @@ export class CanvasSbnRenderer {
     }
   }
 
-  resize(width: number, height: number, resolutionScale = 1) {
+  resize(width: number, height: number, resolutionScale = 1, useDevicePixelRatio = true) {
     if (!this.canvas || !this.ctx || width <= 0 || height <= 0) return;
 
-    const dpr = Math.max(1, window.devicePixelRatio || 1) * Math.max(1, resolutionScale);
+    const dpr = (useDevicePixelRatio ? Math.max(1, window.devicePixelRatio || 1) : 1) * Math.max(1, resolutionScale);
     this.canvas.width = Math.round(width * dpr);
     this.canvas.height = Math.round(height * dpr);
     this.canvas.style.width = `${width}px`;
@@ -77,6 +77,20 @@ export class CanvasSbnRenderer {
 
   private getImage(src: string) {
     return CanvasSbnRenderer.imageCache.get(src) ?? null;
+  }
+
+  static releaseProjectImages(project: SbnProject) {
+    const imageSources = [
+      ...(project.backgroundImage ? [project.backgroundImage] : []),
+      ...project.attachments
+        .map((attachment) => attachment.imageData)
+        .filter((imageData): imageData is string => Boolean(imageData)),
+    ];
+
+    for (const source of imageSources) {
+      CanvasSbnRenderer.imageCache.delete(source);
+      CanvasSbnRenderer.loadingCache.delete(source);
+    }
   }
 
   private worldToScreen(

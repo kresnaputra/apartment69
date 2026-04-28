@@ -11,8 +11,18 @@ const DEFAULT_CAMERA: SceneBounds = {
 };
 
 type CachedSceneExtents = Omit<SceneBounds, "zoom">;
+type CachedKeyframeTrack = {
+  frames: number[];
+  dataByFrame: Record<string, ReturnType<typeof normalizeKeyframeData>>;
+};
+type CachedDrawableBinding = {
+  slot: SbnSlot;
+  attachment: SbnAttachment;
+};
 
 const sceneExtentsCache = new WeakMap<SbnProject, CachedSceneExtents>();
+const keyframeTrackCache = new WeakMap<SbnProject, Map<string, CachedKeyframeTrack>>();
+const drawableBindingCache = new WeakMap<SbnProject, Map<number, CachedDrawableBinding[]>>();
 
 const cloneBones = (bones: SbnBone[]): WorldBone[] =>
   bones.map((bone) => ({
@@ -38,6 +48,58 @@ export const applyEasing = (easing: string, t: number) => {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
   }
   return t;
+};
+
+const getKeyframeTracks = (project: SbnProject) => {
+  const cached = keyframeTrackCache.get(project);
+  if (cached) return cached;
+
+  const tracks = new Map<string, CachedKeyframeTrack>();
+
+  for (const [boneId, boneKeyframes] of Object.entries(project.keyframes ?? {})) {
+    const frames = Object.keys(boneKeyframes)
+      .map(Number)
+      .sort((a, b) => a - b);
+
+    if (frames.length === 0) continue;
+
+    const dataByFrame = Object.fromEntries(
+      frames.map((frame) => [String(frame), normalizeKeyframeData(boneKeyframes[String(frame)])]),
+    );
+
+    tracks.set(boneId, { frames, dataByFrame });
+  }
+
+  keyframeTrackCache.set(project, tracks);
+  return tracks;
+};
+
+const getDrawableBindings = (project: SbnProject) => {
+  const cached = drawableBindingCache.get(project);
+  if (cached) return cached;
+
+  const attachmentBySlotAndName = new Map<string, SbnAttachment>();
+  const bindings = new Map<number, CachedDrawableBinding[]>();
+
+  for (const attachment of project.attachments) {
+    attachmentBySlotAndName.set(`${attachment.slotId}:${attachment.name}`, attachment);
+  }
+
+  const sortedSlots = [...project.slots].sort((left, right) => left.drawOrder - right.drawOrder);
+
+  for (const slot of sortedSlots) {
+    if (!slot.attachmentName) continue;
+
+    const attachment = attachmentBySlotAndName.get(`${slot.id}:${slot.attachmentName}`);
+    if (!attachment) continue;
+
+    const current = bindings.get(slot.boneId) ?? [];
+    current.push({ slot, attachment });
+    bindings.set(slot.boneId, current);
+  }
+
+  drawableBindingCache.set(project, bindings);
+  return bindings;
 };
 
 export const computeAllWorldTransforms = (bones: WorldBone[]) => {
@@ -74,27 +136,22 @@ export const sampleBonesAtFrame = (project: SbnProject, frame: number) => {
     const setup = project.setupPose?.[String(bone.id)];
     return setup ? { ...bone, ...setup } : bone;
   });
+  const keyframeTracks = getKeyframeTracks(project);
 
   for (const bone of bones) {
-    const boneKeyframes = project.keyframes?.[String(bone.id)];
-    if (!boneKeyframes) continue;
-
-    const frames = Object.keys(boneKeyframes)
-      .map(Number)
-      .sort((a, b) => a - b);
-
-    if (frames.length === 0) continue;
+    const track = keyframeTracks.get(String(bone.id));
+    if (!track) continue;
 
     let previousFrame: number | null = null;
     let nextFrame: number | null = null;
 
-    for (const keyframe of frames) {
+    for (const keyframe of track.frames) {
       if (keyframe <= frame) previousFrame = keyframe;
       if (keyframe >= frame && nextFrame === null) nextFrame = keyframe;
     }
 
     const applyFrame = (frameIndex: number) => {
-      const data = normalizeKeyframeData(boneKeyframes[String(frameIndex)]);
+      const data = track.dataByFrame[String(frameIndex)];
       bone.x = data.x;
       bone.y = data.y;
       bone.rotation = data.rotation;
@@ -114,8 +171,8 @@ export const sampleBonesAtFrame = (project: SbnProject, frame: number) => {
 
     if (previousFrame === null || nextFrame === null) continue;
 
-    const from = normalizeKeyframeData(boneKeyframes[String(previousFrame)]);
-    const to = normalizeKeyframeData(boneKeyframes[String(nextFrame)]);
+    const from = track.dataByFrame[String(previousFrame)];
+    const to = track.dataByFrame[String(nextFrame)];
     const t = previousFrame === nextFrame ? 1 : (frame - previousFrame) / (nextFrame - previousFrame);
     const easedT = applyEasing(String(from.easing), t);
     const lerp = (start: number, end: number) => start + (end - start) * easedT;
@@ -135,21 +192,13 @@ export const resolveSceneDrawables = (
   project: SbnProject,
   bones: WorldBone[],
 ): Array<{ slot: SbnSlot; attachment: SbnAttachment; bone: WorldBone }> => {
+  const drawableBindings = getDrawableBindings(project);
+
   return bones.flatMap((bone) => {
-    const boneSlots = project.slots
-      .filter((slot) => slot.boneId === bone.id)
-      .sort((left, right) => left.drawOrder - right.drawOrder);
+    const bindings = drawableBindings.get(bone.id);
+    if (!bindings) return [];
 
-    return boneSlots.flatMap((slot) => {
-      if (!slot.attachmentName) return [];
-
-      const attachment = project.attachments.find(
-        (item) => item.slotId === slot.id && item.name === slot.attachmentName,
-      );
-      if (!attachment) return [];
-
-      return [{ slot, attachment, bone }];
-    });
+    return bindings.map(({ slot, attachment }) => ({ slot, attachment, bone }));
   });
 };
 

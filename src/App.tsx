@@ -7,6 +7,7 @@ import { SmartphoneContactMinigame } from "@/components/minigames/SmartphoneCont
 import { SmartphoneContactMinigameMobile } from "@/components/minigames/SmartphoneContactMinigameMobile";
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
+import { CanvasBakedSbnRenderer } from "@/lib/rendering/canvasBakedSbnRenderer";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { loadCharacterBundle } from "@/lib/rendering/loadCharacterBundle";
@@ -156,6 +157,8 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
 }) => {
   const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const isMobile = useIsMobile();
+  const renderedFrame = Math.floor(character.frame);
   const {
     containerRef,
     spriteStyle,
@@ -182,8 +185,13 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
     const renderer = rendererRef.current;
     if (!renderer) return;
 
-    renderer.resize(viewport.width, viewport.height, stageScale);
-  }, [stageScale, viewport.height, viewport.width]);
+    renderer.resize(
+      viewport.width,
+      viewport.height,
+      isMobile ? 1.25 : Math.max(stageScale, character.scale),
+      isMobile ? 1.75 : 4,
+    );
+  }, [character.scale, isMobile, stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
     const renderer = rendererRef.current;
@@ -191,11 +199,12 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
 
     renderer.render({
       bundle,
-      frame: character.frame,
+      dimmed: isDimmed,
+      frame: renderedFrame,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, character.frame, stageScale, viewport.height, viewport.width]);
+  }, [bundle, isDimmed, renderedFrame, stageScale, viewport.height, viewport.width]);
 
   if (!character.visible && !character.isExiting) return null;
 
@@ -215,6 +224,7 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
 }) => {
   const rendererRef = useRef<CanvasSbnRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const isMobile = useIsMobile();
   const {
     containerRef,
     spriteStyle,
@@ -237,8 +247,8 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer) return;
-    renderer.resize(viewport.width, viewport.height, stageScale);
-  }, [stageScale, viewport.height, viewport.width]);
+    renderer.resize(viewport.width, viewport.height, stageScale, !isMobile);
+  }, [isMobile, stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
     const renderer = rendererRef.current;
@@ -269,9 +279,68 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
   );
 });
 
+const BakedSbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps & {
+  bundle: Extract<LoadedCharacterBundle, { kind: "baked-sbn" }>;
+}) => {
+  const rendererRef = useRef<CanvasBakedSbnRenderer | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const {
+    containerRef,
+    spriteStyle,
+    stageScale,
+    viewport,
+  } = useCharacterStageSizing(character, bundle.preferredAspectRatio);
+
+  useEffect(() => {
+    rendererRef.current = new CanvasBakedSbnRenderer();
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const renderer = rendererRef.current;
+    if (!canvas || !renderer) return;
+
+    renderer.attach(canvas);
+  }, []);
+
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer) return;
+    renderer.resize(viewport.width, viewport.height, stageScale);
+  }, [stageScale, viewport.height, viewport.width]);
+
+  useEffect(() => {
+    const renderer = rendererRef.current;
+    if (!renderer) return;
+
+    renderer.render({
+      bundle,
+      frame: character.frame,
+      viewportWidth: viewport.width,
+      viewportHeight: viewport.height,
+    });
+  }, [bundle, character.frame, stageScale, viewport.height, viewport.width]);
+
+  if (!character.visible && !character.isExiting) return null;
+
+  return (
+    <div
+      ref={containerRef}
+      className={`vn-character vn-enter-${character.enterFrom} ${isDimmed ? "vn-character-dimmed" : ""} pointer-events-none absolute bottom-0 z-10 overflow-hidden`}
+      style={spriteStyle}
+    >
+      <canvas ref={canvasRef} className="h-full w-full" aria-label={character.displayName} />
+    </div>
+  );
+});
+
 const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps) => {
   if (bundle.kind === "sbn") {
     return <SbnCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
+  }
+
+  if (bundle.kind === "baked-sbn") {
+    return <BakedSbnCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
   }
 
   return <SpritesheetCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
@@ -1219,14 +1288,9 @@ const App = () => {
             renderCharacters.map((character) => {
               const bundle = bundles[character.bundleId];
               if (!bundle) return null;
-              const isUnknownSpeaker =
-                activeCharacterId !== null &&
-                unknownSpeakerIds.includes(activeCharacterId as (typeof unknownSpeakerIds)[number]);
               const isDimmed = isNarration
                 ? true
-                : isUnknownSpeaker
-                  ? character.characterId === "arka"
-                  : activeCharacterId !== null && activeCharacterId !== character.characterId;
+                : activeCharacterId !== null && activeCharacterId !== character.characterId;
               return (
                 <CharacterSprite
                   key={`${character.id}-${character.entryVersion}`}
