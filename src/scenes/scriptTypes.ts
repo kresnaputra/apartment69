@@ -32,6 +32,7 @@ type SayOptions = {
 
 type CenteredTextOptions = {
   size?: "hero" | "sub";
+  typingSpeed?: number;
 };
 
 type SceneOptions = {
@@ -146,6 +147,7 @@ export const centeredText = (text: LocalizedText, options?: CenteredTextOptions)
   type: "centeredText",
   text,
   size: options?.size,
+  typingSpeed: options?.typingSpeed,
 });
 
 export function say<TCharacterId extends CharacterId>(

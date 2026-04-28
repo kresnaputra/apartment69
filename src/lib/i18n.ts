@@ -30,6 +30,18 @@ export const uiText = {
   start: tx({ id: "Mulai", en: "Start", ja: "スタート", ko: "시작" }),
   load: tx({ id: "Muat", en: "Load", ja: "ロード", ko: "불러오기" }),
   gallery: tx({ id: "Galeri", en: "Gallery", ja: "ギャラリー", ko: "갤러리" }),
+  galleryTitle: tx({
+    id: "Galeri Kenangan",
+    en: "Memory Gallery",
+    ja: "メモリーギャラリー",
+    ko: "메모리 갤러리",
+  }),
+  galleryEmpty: tx({
+    id: "Belum Terbuka",
+    en: "Not Unlocked Yet",
+    ja: "未開放",
+    ko: "아직 잠김",
+  }),
   settings: tx({ id: "Pengaturan", en: "Settings", ja: "設定", ko: "설정" }),
   slot: tx({ id: "Slot", en: "Slot", ja: "スロット", ko: "슬롯" }),
   exit: tx({ id: "Keluar", en: "Exit", ja: "終了", ko: "종료" }),

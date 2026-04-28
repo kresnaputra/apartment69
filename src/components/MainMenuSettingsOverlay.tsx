@@ -7,8 +7,11 @@ type MainMenuSettingsOverlayProps = {
   language: LanguageCode;
   languageLabel: string;
   languageOptions: { code: LanguageCode; label: string }[];
+  textSpeed: number;
+  textSpeedLabel: string;
   onLanguageChange: (language: LanguageCode) => void;
   onBgVolumeChange: (value: number) => void;
+  onTextSpeedChange: (value: number) => void;
   onClose: () => void;
   title: string;
 };
@@ -20,8 +23,11 @@ export const MainMenuSettingsOverlay = ({
   language,
   languageLabel,
   languageOptions,
+  textSpeed,
+  textSpeedLabel,
   onLanguageChange,
   onBgVolumeChange,
+  onTextSpeedChange,
   onClose,
   title,
 }: MainMenuSettingsOverlayProps) => (
@@ -97,6 +103,22 @@ export const MainMenuSettingsOverlay = ({
             step="0.05"
             value={bgVolume}
             onChange={(e) => onBgVolumeChange(parseFloat(e.target.value))}
+            className="w-full accent-[#d2a456]"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-4">
+            <label className="text-white/68 text-[0.78rem]">{textSpeedLabel}</label>
+            <span className="text-white/45 text-[0.72rem]">{textSpeed.toFixed(2)}x</span>
+          </div>
+          <input
+            type="range"
+            min="0.5"
+            max="3"
+            step="0.25"
+            value={textSpeed}
+            onChange={(e) => onTextSpeedChange(parseFloat(e.target.value))}
             className="w-full accent-[#d2a456]"
           />
         </div>

@@ -145,6 +145,7 @@ export type CenteredTextCommand = {
   type: "centeredText";
   text: LocalizedText;
   size?: "hero" | "sub";
+  typingSpeed?: number;
 };
 
 export type MenuCommand = {

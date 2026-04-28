@@ -14,7 +14,7 @@ export const day6ComplateScene: VisualNovelCommand[] = [
     en: "DAY 6 COMPLETE",
     ja: "6日目 終了",
     ko: "6일차 완료",
-  }), { size: "hero" }),
+  }), { size: "hero", typingSpeed: 0.3 }),
   interstitial(),
   jump("day7-intro"),
 ];

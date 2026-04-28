@@ -51,6 +51,7 @@ type NovelStore = {
   activeVoice: string | null;
   line: LocalizedText;
   lineSize: "hero" | "sub";
+  lineTypingSpeed: number;
   choices: ChoiceOption[];
   choicePrompt: LocalizedText;
   flags: FlagMap;
@@ -110,6 +111,7 @@ const emptyState = {
   activeVoice: null,
   line: "",
   lineSize: "hero" as const,
+  lineTypingSpeed: 1,
   choices: [] as ChoiceOption[],
   choicePrompt: "",
   flags: {} as FlagMap,
@@ -336,6 +338,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     activeVoice: state.activeVoice,
     line: state.line,
     lineSize: state.lineSize,
+    lineTypingSpeed: state.lineTypingSpeed,
     choices: [],
     choicePrompt: "",
     flags: state.flags,
@@ -555,6 +558,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.activeVoice = null;
         nextState.line = command.text;
         nextState.lineSize = command.size ?? "hero";
+        nextState.lineTypingSpeed = command.typingSpeed ?? 1;
         nextState.choices = [];
         nextState.choicePrompt = "";
         nextState.characters = {};
@@ -570,6 +574,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.activeVoice = command.voice ?? null;
         nextState.line = command.text;
         nextState.lineSize = "sub";
+        nextState.lineTypingSpeed = 1;
         nextState.choices = [];
         nextState.choicePrompt = "";
         nextState.history = [

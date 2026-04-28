@@ -17,7 +17,7 @@ export const day4ComplateScene: VisualNovelCommand[] = [
       ja: "4日目 終了",
       ko: "4일차 완료",
     }),
-    { size: "hero" },
+    { size: "hero", typingSpeed: 0.3 },
   ),
   jump("day5-maya-morning"),
 ];

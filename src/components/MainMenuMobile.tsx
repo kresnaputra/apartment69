@@ -6,6 +6,7 @@ import rainCityMusic from "@/music/rain-city.mp3";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
+import { GalleryOverlay } from "@/components/GalleryOverlay";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 
 type MainMenuMobileProps = {
@@ -14,6 +15,8 @@ type MainMenuMobileProps = {
     close: string;
     exit: string;
     gallery: string;
+    galleryEmpty: string;
+    galleryTitle: string;
     load: string;
     loading: string;
     mainMenuSettings: string;
@@ -22,11 +25,14 @@ type MainMenuMobileProps = {
     slot: string;
     start: string;
     subtitle: string;
+    textSpeed: string;
     volumeBgm: string;
   };
   language: LanguageCode;
+  textSpeed: number;
   onLanguageChange: (language: LanguageCode) => void;
   onBgVolumeChange: (value: number) => void;
+  onTextSpeedChange: (value: number) => void;
   onStart: () => void;
   onLoad: (slot: SaveSlot) => void;
   slots: (SaveSlot | null)[];
@@ -37,8 +43,10 @@ export const MainMenuMobile = ({
   bgVolume,
   labels,
   language,
+  textSpeed,
   onLanguageChange,
   onBgVolumeChange,
+  onTextSpeedChange,
   onStart,
   onLoad,
   slots,
@@ -47,6 +55,7 @@ export const MainMenuMobile = ({
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [showLoadSlots, setShowLoadSlots] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
 
@@ -176,7 +185,7 @@ export const MainMenuMobile = ({
           </button>
 
           {/* Gallery */}
-          <button type="button" disabled className={btnDisabled} style={fontStyle}>
+          <button type="button" onClick={() => setShowGallery(true)} className={btnActive} style={fontStyle}>
             {labels.gallery}
           </button>
 
@@ -215,6 +224,15 @@ export const MainMenuMobile = ({
         />
       )}
 
+      {showGallery && (
+        <GalleryOverlay
+          closeLabel={labels.close}
+          emptyLabel={labels.galleryEmpty}
+          onClose={() => setShowGallery(false)}
+          title={labels.galleryTitle}
+        />
+      )}
+
       {showSettings && (
         <MainMenuSettingsOverlay
           bgVolume={bgVolume}
@@ -223,8 +241,11 @@ export const MainMenuMobile = ({
           language={language}
           languageLabel={labels.language}
           languageOptions={languageOptions}
+          textSpeed={textSpeed}
+          textSpeedLabel={labels.textSpeed}
           onLanguageChange={onLanguageChange}
           onBgVolumeChange={onBgVolumeChange}
+          onTextSpeedChange={onTextSpeedChange}
           onClose={() => setShowSettings(false)}
           title={labels.mainMenuSettings}
         />

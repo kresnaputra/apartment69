@@ -975,6 +975,7 @@ const App = () => {
   const activeVoice = useNovelStore((state) => state.activeVoice);
   const line = useNovelStore((state) => state.line);
   const lineSize = useNovelStore((state) => state.lineSize);
+  const lineTypingSpeed = useNovelStore((state) => state.lineTypingSpeed);
   const choices = useNovelStore((state) => state.choices);
   const statusMessage = useNovelStore((state) => state.statusMessage);
   const characters = useNovelStore((state) => state.characters);
@@ -1043,6 +1044,8 @@ const App = () => {
     fastPlayback: resolveText(uiText.playbackFast, language),
     fasterPlayback: resolveText(uiText.playbackFaster, language),
     gallery: resolveText(uiText.gallery, language),
+    galleryEmpty: resolveText(uiText.galleryEmpty, language),
+    galleryTitle: resolveText(uiText.galleryTitle, language),
     language: resolveText(uiText.language, language),
     load: resolveText(uiText.load, language),
     loading: resolveText(uiText.loading, language),
@@ -1063,6 +1066,7 @@ const App = () => {
     slowPlayback: resolveText(uiText.playbackSlow, language),
     tapToContinue: resolveText(uiText.tapToContinue, language),
     tapToSkip: resolveText(uiText.tapToSkip, language),
+    textSpeed: resolveText(uiText.textSpeed, language),
     unknownScene: resolveText(uiText.unknownScene, language),
     volumeBgm: resolveText(uiText.volumeBgm, language),
   };
@@ -1248,10 +1252,10 @@ const App = () => {
         }
         return current + 1;
       });
-    }, BASE_TEXT_SPEED / textSpeed);
+    }, BASE_TEXT_SPEED / (textSpeed * Math.max(0.1, lineTypingSpeed)));
 
     return () => window.clearInterval(timer);
-  }, [resolvedLine, textSpeed]);
+  }, [resolvedLine, textSpeed, lineTypingSpeed]);
 
   useEffect(() => {
     if (!blackScreenState?.active) {
@@ -1402,8 +1406,8 @@ const App = () => {
     <>
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} language={language} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
-          : <MainMenu bgVolume={bgVolume} labels={labels} language={language} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
+          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
+          : <MainMenu bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
       )}
       <main
         className="vn-root"

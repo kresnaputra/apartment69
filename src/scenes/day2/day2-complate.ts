@@ -7,7 +7,7 @@ import {
   jump,
   scene,
 } from "@/scenes/scriptTypes";
-import { dayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
+import { officeDayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
 
 export const day2ComplateScene: VisualNovelCommand[] = [
   hide("arka-bedroom"),
@@ -21,7 +21,7 @@ export const day2ComplateScene: VisualNovelCommand[] = [
     }),
     {
       transitionDuration: 1000,
-      backgroundVideo: dayChangeClassic,
+      backgroundVideo: officeDayChangeClassic,
     },
   ),
   centeredText(
@@ -31,7 +31,7 @@ export const day2ComplateScene: VisualNovelCommand[] = [
       ja: "2日目 終了",
       ko: "2일차 완료",
     }),
-    { size: "hero" },
+    { size: "hero", typingSpeed: 0.3 },
   ),
   interstitial(),
   jump("day3-maya-phone-call"),
