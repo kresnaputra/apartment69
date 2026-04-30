@@ -18,8 +18,10 @@ import {
   cutScene,
 } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
+import hospitalUrl from "@/background/hospital.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import mayaBedroomNightUrl from "@/background/maya-bedroom-night.png";
+import mayaCollapseUrl from "@/background/maya-collapse.png";
 import mayaBed1 from "@/cut-scene/maya-bed-1.webm?url";
 import mayaBed2 from "@/cut-scene/maya-bed-2.webm?url";
 import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
@@ -178,17 +180,126 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
 
 export const day4MayaBadEndingScene: VisualNovelCommand[] = [
   setFlag("mayaRouteFailed", true),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Ya udah, kalau kamu maksa. Aku pesanin taksi online sekarang biar kamu nggak usah jalan ke depan. Tunggu di bawah aja.",
+      en: "Alright, if you're really forcing it. I'll book you a ride now so you don't have to walk out front. Just wait downstairs.",
+      ja: "わかった、そこまで言うなら。今タクシーを呼ぶから、外まで歩かなくていい。下で待ってて。",
+      ko: "알겠어, 그렇게까지 고집한다면. 지금 택시 부를게. 앞까지 걸어가지 말고 아래에서 기다려.",
+    }),
+  ),
+  say(
+    "maya",
+    "sad",
+    tx({
+      id: "Makasih, Arka... aku jalan ke lift dulu.",
+      en: "Thanks, Arka... I'll head to the elevator first.",
+      ja: "ありがとう、アルカ…先にエレベーターの方へ行くね。",
+      ko: "고마워, 아르카... 나 먼저 엘리베이터 쪽으로 갈게.",
+    }),
+  ),
   narrate(
     tx({
-      id: "Biar aku pesanin kendaraan. Aku antar kamu sampai depan gedungnya.",
-      en: "I'll get you a ride. I'll take you straight to the building.",
-      ja: "車を呼ぶ。建物の前まで送るよ。",
-      ko: "차 불러줄게. 건물 앞까지 데려다줄게.",
+      id: "Maya memaksakan diri berjalan menyusuri lorong menuju lift. Langkahnya pelan dan tidak seimbang. Arka masih berdiri di depan pintu unitnya, menatap Maya dari belakang sambil memegang HP untuk memesan taksi.",
+      en: "Maya forces herself down the hallway toward the elevator. Her steps are slow and unsteady. Arka stays by his apartment door, watching her from behind while holding his phone to book the ride.",
+      ja: "マヤは無理やり廊下を進み、エレベーターへ向かう。足取りは遅く、ひどく不安定だった。アルカは自室のドアの前に立ったまま、タクシーを呼ぼうとスマホを持ち、彼女の背中を見つめている。",
+      ko: "마야는 억지로 복도를 걸어 엘리베이터 쪽으로 향한다. 걸음은 느리고 불안정하다. 아르카는 자기 방 문 앞에 선 채, 택시를 부르려고 휴대폰을 들고 그녀의 뒷모습을 바라본다.",
     }),
+  ),
+  narrate(
+    tx({
+      id: "Saat Maya mengangkat tangannya yang gemetar untuk menekan tombol lift, tiba-tiba kakinya benar-benar kehilangan tenaga. Terdengar suara gedebuk keras saat tubuhnya ambruk dan kepalanya membentur lantai lorong.",
+      en: "As Maya raises her trembling hand to press the elevator button, her legs suddenly give out completely. A heavy thud echoes through the hallway as her body collapses and her head hits the floor.",
+      ja: "震える手を上げてエレベーターのボタンを押そうとした瞬間、マヤの足から完全に力が抜けた。体が崩れ落ち、頭が廊下の床にぶつかる鈍い音が響く。",
+      ko: "마야가 떨리는 손을 들어 엘리베이터 버튼을 누르려는 순간, 다리에서 완전히 힘이 빠진다. 몸이 무너지며 머리가 복도 바닥에 부딪히는 둔탁한 소리가 울린다.",
+    }),
+  ),
+  hide("maya-day4-hallway"),
+  bg(
+    mayaCollapseUrl,
+    tx({
+      id: "Maya Collapses",
+      en: "Maya Collapses",
+      ja: "マヤが倒れる",
+      ko: "마야가 쓰러진다",
+    }),
+    {
+      backgroundAnimation: {
+        zoom: 1.08,
+        panX: 8,
+        panY: 0,
+        duration: 14,
+      },
+      transitionDuration: 900,
+    },
+  ),
+  say(
     "arka",
+    "surprised",
+    tx({
+      id: "Maya!!",
+      en: "Maya!!",
+      ja: "マヤ!!",
+      ko: "마야!!",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Arka melempar HP-nya dan langsung berlari kencang. Dia berjongkok di samping Maya dan membalikkan tubuhnya. Gadis itu sudah tidak sadarkan diri, wajahnya seputih kertas dan suhu badannya sangat panas.",
+      en: "Arka throws his phone aside and sprints toward her. He drops to his knees beside Maya and turns her over. She's already unconscious, her face paper-white and her body burning hot.",
+      ja: "アルカはスマホを放り投げ、全力で駆け寄った。マヤのそばに膝をつき、体を仰向けにする。彼女はすでに意識を失っていて、顔は紙のように白く、体はひどく熱かった。",
+      ko: "아르카는 휴대폰을 내던지고 곧장 달려간다. 마야 옆에 무릎을 꿇고 그녀의 몸을 돌려 눕힌다. 그녀는 이미 의식을 잃었고, 얼굴은 종이처럼 창백하며 몸은 불덩이처럼 뜨겁다.",
+    }),
   ),
   hide("maya-day4-hallway"),
   hide("arka-day4-hallway"),
+  bg(
+    hospitalUrl,
+    tx({
+      id: "Rumah Sakit - IGD",
+      en: "Hospital - Emergency Room",
+      ja: "病院 - 救急外来",
+      ko: "병원 - 응급실",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Nurutin kemauan dia ternyata jadi keputusan paling bodohku. Baru aja mau mencet tombol lift, dia langsung ambruk. Aku panik setengah mati bawa dia ke IGD.",
+      en: "Going along with what she wanted turned out to be the stupidest decision I could've made. She was just about to press the elevator button when she collapsed. I nearly lost my mind getting her to the ER.",
+      ja: "彼女の言う通りにしたのは、俺ができる中で一番愚かな判断だった。エレベーターのボタンを押そうとした瞬間、彼女は崩れ落ちた。救急外来へ連れていく間、俺は半分パニックだった。",
+      ko: "그녀 뜻대로 해준 건 내가 할 수 있는 가장 멍청한 선택이었다. 엘리베이터 버튼을 누르려던 순간, 그녀는 그대로 쓰러졌다. 응급실로 데려가는 동안 나는 거의 정신이 나갈 뻔했다.",
+    }),
+    "arka",
+  ),
+  narrate(
+    tx({
+      id: "Dokter bilang dia tipes dan kelelahan parah. Sialnya, rumah sakit menghubungi bapaknya. Dia datang, menatapku sinis menuduh bawa pengaruh buruk, lalu langsung memindahkan Maya ke RS lain.",
+      en: "The doctor said she had typhoid and severe exhaustion. The worst part was the hospital contacted her father. He showed up, looked at me like I was some bad influence, then immediately transferred Maya to another hospital.",
+      ja: "医者は、彼女が腸チフスと重度の過労だと言った。最悪なことに、病院は彼女の父親へ連絡していた。彼は現れるなり、俺を悪影響を与えた相手みたいに冷たく睨み、そのままマヤを別の病院へ移した。",
+      ko: "의사는 그녀가 장티푸스에 심한 과로까지 겹쳤다고 말했다. 최악인 건 병원이 그녀의 아버지에게 연락했다는 거다. 그는 나타나자마자 나를 나쁜 영향을 준 사람처럼 싸늘하게 노려보고는 곧바로 마야를 다른 병원으로 옮겼다.",
+    }),
+    "arka",
+  ),
+  narrate(
+    tx({
+      id: "Bapaknya bilang Maya nggak akan pernah balik ke apartemen lagi. Ditarik pulang. Aku bahkan nggak sempat lihat dia sadar atau sekadar minta maaf.",
+      en: "Her father said Maya would never come back to the apartment again. He was taking her home. I didn't even get to see her wake up, or even say I was sorry.",
+      ja: "彼女の父親は、マヤはもう二度とアパートへ戻らないと言った。実家へ連れ戻すのだと。俺は、彼女が目を覚ますところを見ることも、謝ることさえできなかった。",
+      ko: "그녀의 아버지는 마야가 다시는 아파트로 돌아오지 않을 거라고 말했다. 집으로 데려가겠다고. 나는 그녀가 깨어나는 모습도 보지 못했고, 미안하다는 말조차 하지 못했다.",
+    }),
+    "arka",
+  ),
+  narrate(
+    tx({
+      id: "Kalau aja tadi siang aku lebih tegas maksa dia istirahat... mungkin ceritanya nggak bakal berakhir sekacau ini. Sekarang, kamar 301 bakal selamanya kosong.",
+      en: "If only I'd been firmer this afternoon and forced her to rest... maybe things wouldn't have ended this badly. Now, Room 301 is going to stay empty forever.",
+      ja: "もし昼間、もっと強く言って彼女を休ませていたら…こんな最悪な終わり方にはならなかったのかもしれない。今、301号室は永遠に空っぽのままだ。",
+      ko: "오늘 오후에 내가 더 단호하게 그녀를 쉬게 했다면... 이렇게 엉망으로 끝나지는 않았을지도 모른다. 이제 301호는 영원히 비어 있을 것이다.",
+    }),
+    "arka",
+  ),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
     tx({
@@ -210,10 +321,10 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
   ),
   centeredText(
     tx({
-      id: "Maya pingsan di kampus, dirawat di rumah sakit, lalu dipaksa pulang oleh ayahnya.",
-      en: "Maya collapsed on campus, was taken to the hospital, and was forced to go home by her father.",
-      ja: "マヤは大学で倒れ、病院に運ばれ、その後父親に無理やり連れ帰られた。",
-      ko: "마야는 캠퍼스에서 쓰러져 병원으로 옮겨졌고, 결국 아버지에게 강제로 집으로 끌려갔다.",
+      id: "Maya pingsan di lorong sebelum sempat berangkat, dibawa ke IGD, lalu dipindahkan dan ditarik pulang oleh ayahnya.",
+      en: "Maya collapsed in the hallway before she could leave, was rushed to the ER, then was transferred away and taken home by her father.",
+      ja: "マヤは出発する前に廊下で倒れ、救急外来へ運ばれ、その後父親に別の病院へ移されて実家へ連れ戻された。",
+      ko: "마야는 출발하기도 전에 복도에서 쓰러져 응급실로 옮겨졌고, 이후 아버지에 의해 다른 병원으로 이송된 뒤 집으로 끌려갔다.",
     }),
     { size: "sub" },
   ),
