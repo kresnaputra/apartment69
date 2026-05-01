@@ -61,10 +61,10 @@ export const uiText = {
   }),
   language: tx({ id: "Bahasa", en: "Language", ja: "言語", ko: "언어" }),
   mainMenuSettings: tx({
-    id: "Pengaturan Main Menu",
-    en: "Main Menu Settings",
-    ja: "メインメニュー設定",
-    ko: "메인 메뉴 설정",
+    id: "Pengaturan",
+    en: "Settings",
+    ja: "設定",
+    ko: "설정",
   }),
   tapToSkip: tx({
     id: "Ketuk untuk lewati",

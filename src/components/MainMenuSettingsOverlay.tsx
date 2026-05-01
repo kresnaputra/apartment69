@@ -47,7 +47,7 @@ export const MainMenuSettingsOverlay = ({
     <div
       className="absolute inset-y-0 right-0 flex flex-col w-[min(28rem,90vw)] border-l border-white/10"
       style={{
-        background: "linear-gradient(180deg, rgba(8,10,16,0.2), rgba(6,8,12,0.2))",
+        background: "rgba(4, 5, 10, 0.82)",
         backdropFilter: "blur(32px)",
         animation: exiting
           ? "vn-slide-to-right 260ms cubic-bezier(0.4,0,1,1) both"
@@ -57,10 +57,7 @@ export const MainMenuSettingsOverlay = ({
     >
       {/* Header */}
       <div className="flex items-center justify-between px-7 pt-8 pb-5 border-b border-white/10 shrink-0">
-        <div>
-          <p className="m-0 text-white/38 text-[0.65rem] tracking-[0.22em] uppercase mb-1">Main Menu</p>
-          <h2 className="m-0 text-white/90 text-[1.1rem] font-medium">{title}</h2>
-        </div>
+        <p className="m-0 text-white/38 text-[0.65rem] tracking-[0.22em] uppercase">{title}</p>
         <button
           type="button"
           onClick={handleClose}

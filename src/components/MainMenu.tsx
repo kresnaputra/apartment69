@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
 import rainCityMusic from "@/music/rain-city.mp3";
+import nropLogo from "@/assets/logo-nrop.png";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
@@ -99,6 +100,19 @@ export const MainMenu = ({
     <div className={`vn-menu-root ${visible ? "vn-menu-visible" : ""} ${exiting ? "vn-menu-exiting" : ""}`}>
       <div className="vn-menu-bg" style={{ backgroundImage: `url(${mainMenuBg})` }} />
       <div className="vn-menu-overlay" />
+      <img
+        src={nropLogo}
+        alt="NROP"
+        style={{
+          position: "absolute",
+          top: "1.5rem",
+          left: "2rem",
+          width: "clamp(5rem, 8vw, 8rem)",
+          opacity: 0.55,
+          zIndex: 2,
+          pointerEvents: "none",
+        }}
+      />
 
       <div className="vn-menu-layout">
         <header className="vn-menu-header">
@@ -143,7 +157,19 @@ export const MainMenu = ({
         </nav>
       </div>
 
-      <footer className="vn-menu-footer">© 2026 &nbsp;·&nbsp; Nrop Guy</footer>
+      <footer className="vn-menu-footer">© 2026 &nbsp;·&nbsp; NVN Tools</footer>
+      <span style={{
+        position: "absolute",
+        bottom: "1.75rem",
+        right: "2rem",
+        fontSize: "0.65rem",
+        letterSpacing: "0.14em",
+        color: "rgba(255, 255, 255, 0.2)",
+        fontFamily: '"Crimson Text", Georgia, serif',
+        textTransform: "uppercase",
+        zIndex: 2,
+        pointerEvents: "none",
+      }}>v0.8.0</span>
 
       {showLoadSlots && (
         <SaveSlotOverlay

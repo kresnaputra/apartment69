@@ -168,15 +168,15 @@ textarea {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: clamp(5rem, 11vh, 8rem) clamp(2rem, 4vw, 3rem);
+  padding: clamp(5rem, 11vh, 8rem) clamp(2rem, 0vw, 3rem);
   transition: opacity 160ms ease;
   pointer-events: none;
 }
 
 .vn-narrator-box {
   position: relative;
-  width: min(32rem, 34vw);
-  min-width: min(24rem, 76vw);
+  width: min(50rem, 66vw);
+  min-width: min(30rem, 82vw);
   padding: 1.75rem 1.25rem 1rem 0.75rem;
 }
 
@@ -185,7 +185,7 @@ textarea {
   position: absolute;
   inset: -2rem -2rem -2rem -3rem;
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.34) 42%, rgba(0, 0, 0, 0) 100%);
+    linear-gradient(90deg, rgba(0, 0, 0, 0.52) 0%, rgba(0, 0, 0, 0.28) 46%, rgba(0, 0, 0, 0) 100%);
   filter: blur(8px);
   z-index: -1;
 }
