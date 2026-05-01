@@ -3,6 +3,7 @@ import type { LoadedSpritesheetBundle } from "@/types/spritesheet";
 type SpritesheetRenderInput = {
   bundle: LoadedSpritesheetBundle;
   frame: number;
+  dimmed?: boolean;
   viewportWidth: number;
   viewportHeight: number;
 };
@@ -76,5 +77,13 @@ export class CanvasSpritesheetRenderer {
       source.w * scale,
       source.h * scale,
     );
+
+    if (input.dimmed) {
+      this.ctx.save();
+      this.ctx.globalCompositeOperation = "source-atop";
+      this.ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      this.ctx.fillRect(0, 0, viewportWidth, viewportHeight);
+      this.ctx.restore();
+    }
   }
 }

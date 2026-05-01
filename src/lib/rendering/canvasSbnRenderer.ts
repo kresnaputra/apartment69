@@ -5,6 +5,7 @@ type RenderInput = {
   project: SbnProject;
   frame: number;
   scale: number;
+  dimmed?: boolean;
   camera: SceneBounds;
   viewportWidth: number;
   viewportHeight: number;
@@ -154,6 +155,16 @@ export class CanvasSbnRenderer {
     this.ctx.restore();
   }
 
+  private drawDimOverlay(viewportWidth: number, viewportHeight: number) {
+    if (!this.ctx) return;
+
+    this.ctx.save();
+    this.ctx.globalCompositeOperation = "source-atop";
+    this.ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+    this.ctx.fillRect(0, 0, viewportWidth, viewportHeight);
+    this.ctx.restore();
+  }
+
   render(input: RenderInput) {
     if (!this.canvas || !this.ctx) return;
 
@@ -165,6 +176,10 @@ export class CanvasSbnRenderer {
 
     for (const drawable of drawables) {
       this.drawAttachment(drawable.attachment, drawable.bone, input);
+    }
+
+    if (input.dimmed) {
+      this.drawDimOverlay(input.viewportWidth, input.viewportHeight);
     }
   }
 }

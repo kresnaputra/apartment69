@@ -32,7 +32,6 @@ import {
 } from "@/lib/runtime/admob";
 import { useNovelStore } from "@/store/novelStore";
 import type { LoadedCharacterBundle } from "@/types/characterBundle";
-import { unknownSpeakerIds } from "@/types/novel";
 import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
 
@@ -192,10 +191,11 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
     renderer.render({
       bundle,
       frame: character.frame,
+      dimmed: isDimmed,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, character.frame, stageScale, viewport.height, viewport.width]);
+  }, [bundle, character.frame, isDimmed, stageScale, viewport.height, viewport.width]);
 
   if (!character.visible && !character.isExiting) return null;
 
@@ -250,11 +250,12 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
       project: bundle.project,
       frame: character.frame,
       scale: 1,
+      dimmed: isDimmed,
       camera,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, character.frame, viewport.height, viewport.width]);
+  }, [bundle, character.frame, isDimmed, viewport.height, viewport.width]);
 
   if (!character.visible && !character.isExiting) return null;
 
@@ -1219,14 +1220,9 @@ const App = () => {
             renderCharacters.map((character) => {
               const bundle = bundles[character.bundleId];
               if (!bundle) return null;
-              const isUnknownSpeaker =
-                activeCharacterId !== null &&
-                unknownSpeakerIds.includes(activeCharacterId as (typeof unknownSpeakerIds)[number]);
               const isDimmed = isNarration
                 ? true
-                : isUnknownSpeaker
-                  ? character.characterId === "arka"
-                  : activeCharacterId !== null && activeCharacterId !== character.characterId;
+                : activeCharacterId !== null && activeCharacterId !== character.characterId;
               return (
                 <CharacterSprite
                   key={`${character.id}-${character.entryVersion}`}
