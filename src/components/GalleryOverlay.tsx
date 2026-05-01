@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 type GalleryOverlayProps = {
   closeLabel: string;
   emptyLabel: string;
@@ -12,60 +14,63 @@ export const GalleryOverlay = ({
   emptyLabel,
   onClose,
   title,
-}: GalleryOverlayProps) => (
-  <div
-    className="fixed inset-0 z-[120] flex items-center justify-center pointer-events-auto px-4 py-6"
-    style={{ background: "rgba(0,0,0,0.56)" }}
-    onClick={onClose}
-  >
+}: GalleryOverlayProps) => {
+  const [exiting, setExiting] = useState(false);
+
+  const handleClose = () => {
+    setExiting(true);
+    window.setTimeout(onClose, 280);
+  };
+
+  return (
     <div
-      className="w-full max-w-5xl rounded-[2rem] border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.42)] overflow-hidden"
+      className="fixed inset-0 z-[120] flex flex-col pointer-events-auto"
       style={{
-        background: "linear-gradient(180deg, rgba(10,12,18,0.97), rgba(7,9,14,0.95))",
-        backdropFilter: "blur(10px)",
+        background: "rgba(0,0,0,0.72)",
+        backdropFilter: "blur(18px)",
+        animation: exiting
+          ? "vn-opening-fade-out 280ms ease forwards"
+          : "vn-opening-fade-in 280ms ease forwards",
       }}
-      onClick={(event) => event.stopPropagation()}
     >
-      <div className="flex items-center justify-between gap-4 px-6 py-4 border-b border-white/10">
-        <div>
-          <p className="m-0 text-white/40 text-[0.68rem] tracking-[0.18em] uppercase">Gallery</p>
-          <h2 className="m-0 text-white/92 text-[1.08rem] font-medium">{title}</h2>
-        </div>
+      {/* Header */}
+      <div className="flex items-center justify-end gap-4 px-8 py-5 border-b border-white/10 shrink-0">
         <button
           type="button"
-          onClick={onClose}
-          className="rounded-full border border-white/12 px-3 py-1.5 text-[0.72rem] text-white/70 transition-colors hover:text-white hover:border-white/30"
+          onClick={handleClose}
+          className="rounded-full border border-white/12 px-3.5 py-1.5 text-[0.7rem] tracking-[0.1em] uppercase text-white/55 transition-colors hover:text-white hover:border-white/30"
         >
           {closeLabel}
         </button>
       </div>
 
-      <div className="px-5 py-5 sm:px-6 sm:py-6">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 sm:gap-4">
+      {/* Grid */}
+      <div className="flex-1 overflow-y-auto px-8 py-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {PLACEHOLDER_ITEMS.map((item) => (
             <div
               key={item}
               className="rounded-[1.4rem] border border-white/10 overflow-hidden"
               style={{
-                background: "linear-gradient(180deg, rgba(18,20,28,0.92), rgba(11,13,18,0.94))",
+                background: "linear-gradient(180deg, rgba(18,20,28,0.72), rgba(11,13,18,0.74))",
               }}
             >
               <div
                 className="aspect-[4/5] flex items-center justify-center"
                 style={{
                   background:
-                    "radial-gradient(circle at top, rgba(210,164,86,0.14), transparent 46%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))",
+                    "radial-gradient(circle at top, rgba(255,214,173,0.12), transparent 46%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))",
                 }}
               >
                 <div
-                  className="h-[62%] w-[72%] rounded-[1.1rem] border border-dashed border-[#d2a456]/35 flex items-center justify-center"
-                  style={{ background: "rgba(210,164,86,0.04)" }}
+                  className="h-[62%] w-[72%] rounded-[1.1rem] border border-dashed border-[#ffd6ad]/30 flex items-center justify-center"
+                  style={{ background: "rgba(255,214,173,0.03)" }}
                 >
-                  <span className="text-[#d2a456]/45 text-[0.9rem] sm:text-[1rem]">#{item}</span>
+                  <span className="text-[#ffd6ad]/40 text-[0.9rem] sm:text-[1rem]">#{item}</span>
                 </div>
               </div>
               <div className="px-3 py-3 border-t border-white/6">
-                <p className="m-0 text-white/42 text-[0.72rem] tracking-[0.12em] uppercase text-center">
+                <p className="m-0 text-white/38 text-[0.68rem] tracking-[0.12em] uppercase text-center">
                   {emptyLabel}
                 </p>
               </div>
@@ -74,5 +79,5 @@ export const GalleryOverlay = ({
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};

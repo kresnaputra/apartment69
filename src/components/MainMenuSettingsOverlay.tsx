@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { LanguageCode } from "@/lib/i18n";
 
 type MainMenuSettingsOverlayProps = {
@@ -30,35 +31,51 @@ export const MainMenuSettingsOverlay = ({
   onTextSpeedChange,
   onClose,
   title,
-}: MainMenuSettingsOverlayProps) => (
+}: MainMenuSettingsOverlayProps) => {
+  const [exiting, setExiting] = useState(false);
+
+  const handleClose = () => {
+    setExiting(true);
+    window.setTimeout(onClose, 280);
+  };
+
+  return (
   <div
-    className="fixed inset-0 z-[120] flex items-center justify-center pointer-events-auto"
-    style={{ background: "rgba(0,0,0,0.42)" }}
-    onClick={onClose}
+    className="fixed inset-0 z-[120] pointer-events-auto"
+    onClick={handleClose}
   >
     <div
-      className="w-[min(32rem,90vw)] rounded-3xl border border-white/12 shadow-[0_30px_80px_rgba(0,0,0,0.4)]"
-      style={{ background: "linear-gradient(180deg, rgba(10,12,18,0.96), rgba(8,10,14,0.94))", backdropFilter: "blur(10px)" }}
+      className="absolute inset-y-0 right-0 flex flex-col w-[min(28rem,90vw)] border-l border-white/10"
+      style={{
+        background: "linear-gradient(180deg, rgba(8,10,16,0.2), rgba(6,8,12,0.2))",
+        backdropFilter: "blur(32px)",
+        animation: exiting
+          ? "vn-slide-to-right 260ms cubic-bezier(0.4,0,1,1) both"
+          : "vn-slide-from-right 280ms cubic-bezier(0.22,1,0.36,1) both",
+      }}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+      {/* Header */}
+      <div className="flex items-center justify-between px-7 pt-8 pb-5 border-b border-white/10 shrink-0">
         <div>
-          <p className="m-0 text-white/40 text-[0.68rem] tracking-[0.18em] uppercase">Main Menu</p>
-          <h2 className="m-0 text-white/90 text-[1.05rem] font-medium">{title}</h2>
+          <p className="m-0 text-white/38 text-[0.65rem] tracking-[0.22em] uppercase mb-1">Main Menu</p>
+          <h2 className="m-0 text-white/90 text-[1.1rem] font-medium">{title}</h2>
         </div>
         <button
           type="button"
-          onClick={onClose}
-          className="rounded-full border border-white/12 px-3 py-1.5 text-[0.72rem] text-white/70 transition-colors hover:text-white hover:border-white/30"
+          onClick={handleClose}
+          className="rounded-full border border-white/12 px-3.5 py-1.5 text-[0.7rem] tracking-[0.1em] uppercase text-white/55 transition-colors hover:text-white hover:border-white/30"
         >
           {closeLabel}
         </button>
       </div>
 
-      <div className="px-6 py-5 flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <label className="text-white/68 text-[0.78rem]">{languageLabel}</label>
-          <div className="grid grid-cols-2 gap-3">
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-7 py-6 flex flex-col gap-7">
+        {/* Language */}
+        <div className="flex flex-col gap-3">
+          <label className="text-white/45 text-[0.68rem] tracking-[0.18em] uppercase">{languageLabel}</label>
+          <div className="grid grid-cols-2 gap-2.5">
             {languageOptions.map((option) => {
               const active = option.code === language;
               return (
@@ -66,22 +83,22 @@ export const MainMenuSettingsOverlay = ({
                   key={option.code}
                   type="button"
                   onClick={() => onLanguageChange(option.code)}
-                  className="rounded-2xl border px-4 py-3 text-left transition-all duration-200"
+                  className="rounded-xl border px-4 py-3 text-left transition-all duration-200"
                   style={{
-                    borderColor: active ? "rgba(210,164,86,0.5)" : "rgba(255,255,255,0.1)",
+                    borderColor: active ? "rgba(255,214,173,0.45)" : "rgba(255,255,255,0.08)",
                     background: active
-                      ? "linear-gradient(180deg, rgba(210,164,86,0.18), rgba(210,164,86,0.08))"
-                      : "rgba(255,255,255,0.04)",
-                    boxShadow: active ? "0 0 0 1px rgba(210,164,86,0.12) inset" : "none",
+                      ? "linear-gradient(180deg, rgba(255,214,173,0.14), rgba(255,214,173,0.06))"
+                      : "rgba(255,255,255,0.03)",
+                    boxShadow: active ? "0 0 0 1px rgba(255,214,173,0.1) inset" : "none",
                   }}
                 >
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-[0.9rem] text-white/92">{option.label}</span>
+                    <span className="text-[0.88rem] text-white/88">{option.label}</span>
                     <span
-                      className="h-2.5 w-2.5 rounded-full border"
+                      className="h-2 w-2 rounded-full border shrink-0"
                       style={{
-                        borderColor: active ? "rgba(210,164,86,0.75)" : "rgba(255,255,255,0.18)",
-                        background: active ? "#d2a456" : "transparent",
+                        borderColor: active ? "rgba(255,214,173,0.7)" : "rgba(255,255,255,0.18)",
+                        background: active ? "#ffd6ad" : "transparent",
                       }}
                     />
                   </div>
@@ -91,10 +108,11 @@ export const MainMenuSettingsOverlay = ({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-4">
-            <label className="text-white/68 text-[0.78rem]">{bgVolumeLabel}</label>
-            <span className="text-white/45 text-[0.72rem]">{Math.round(bgVolume * 100)}%</span>
+        {/* BGM Volume */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <label className="text-white/45 text-[0.68rem] tracking-[0.18em] uppercase">{bgVolumeLabel}</label>
+            <span className="text-white/38 text-[0.68rem]">{Math.round(bgVolume * 100)}%</span>
           </div>
           <input
             type="range"
@@ -103,14 +121,15 @@ export const MainMenuSettingsOverlay = ({
             step="0.05"
             value={bgVolume}
             onChange={(e) => onBgVolumeChange(parseFloat(e.target.value))}
-            className="w-full accent-[#d2a456]"
+            className="w-full accent-[#ffd6ad]"
           />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between gap-4">
-            <label className="text-white/68 text-[0.78rem]">{textSpeedLabel}</label>
-            <span className="text-white/45 text-[0.72rem]">{textSpeed.toFixed(2)}x</span>
+        {/* Text Speed */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <label className="text-white/45 text-[0.68rem] tracking-[0.18em] uppercase">{textSpeedLabel}</label>
+            <span className="text-white/38 text-[0.68rem]">{textSpeed.toFixed(2)}x</span>
           </div>
           <input
             type="range"
@@ -119,10 +138,11 @@ export const MainMenuSettingsOverlay = ({
             step="0.25"
             value={textSpeed}
             onChange={(e) => onTextSpeedChange(parseFloat(e.target.value))}
-            className="w-full accent-[#d2a456]"
+            className="w-full accent-[#ffd6ad]"
           />
         </div>
       </div>
     </div>
   </div>
-);
+  );
+};

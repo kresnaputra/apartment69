@@ -1239,3 +1239,13 @@ textarea {
     filter: blur(8px);
   }
 }
+
+@keyframes vn-slide-from-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes vn-slide-to-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}

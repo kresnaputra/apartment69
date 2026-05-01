@@ -21,12 +21,7 @@ export const resolveText = (text: LocalizedText | undefined, language: LanguageC
 export const tx = (value: Partial<Record<LanguageCode, string>>): LocalizedText => value;
 
 export const uiText = {
-  titleSubtitle: tx({
-    id: "Tetangga yang Suka Menolong",
-    en: "The Helpful Neighbor",
-    ja: "助け好きな隣人",
-    ko: "도와주기 좋아하는 이웃",
-  }),
+  titleSubtitle: "The Helpful Neighbor",
   start: tx({ id: "Mulai", en: "Start", ja: "スタート", ko: "시작" }),
   load: tx({ id: "Muat", en: "Load", ja: "ロード", ko: "불러오기" }),
   gallery: tx({ id: "Galeri", en: "Gallery", ja: "ギャラリー", ko: "갤러리" }),

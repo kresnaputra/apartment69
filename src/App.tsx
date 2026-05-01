@@ -948,8 +948,8 @@ const MultiCutSceneOverlay = ({
           bottom: "26px",
           transform: "translateX(-50%)",
           display: "grid",
-          gap: "16px",
-          width: "min(92vw, 880px)",
+          gap: "8px",
+          width: "min(72vw, 600px)",
           padding: "0",
           borderRadius: "0",
           background: "transparent",
@@ -957,7 +957,8 @@ const MultiCutSceneOverlay = ({
           pointerEvents: "auto",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+        {/* Speed buttons */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
           {[
             { label: "1x", value: 1 },
             { label: "2x", value: 2 },
@@ -968,24 +969,33 @@ const MultiCutSceneOverlay = ({
               type="button"
               onClick={() => setPlaybackSpeed(option.value)}
               style={{
-                width: "56px",
-                height: "56px",
+                padding: "3px 10px",
                 borderRadius: "999px",
-                border: option.value === playbackSpeed ? "1px solid rgba(210, 164, 86, 0.62)" : "1px solid rgba(210, 164, 86, 0.22)",
-                background: option.value === playbackSpeed ? "rgba(210, 164, 86, 0.96)" : "rgba(10, 11, 17, 0.74)",
-                color: option.value === playbackSpeed ? "#1b1510" : "rgba(210, 164, 86, 0.9)",
-                backdropFilter: "blur(12px)",
-                fontSize: "1rem",
-                fontWeight: 700,
+                border: option.value === playbackSpeed
+                  ? "1px solid rgba(255, 214, 173, 0.55)"
+                  : "1px solid rgba(255, 255, 255, 0.1)",
+                background: option.value === playbackSpeed
+                  ? "rgba(255, 214, 173, 0.14)"
+                  : "transparent",
+                backdropFilter: "blur(16px)",
+                color: option.value === playbackSpeed
+                  ? "#ffd6ad"
+                  : "rgba(255, 255, 255, 0.38)",
+                fontSize: "0.62rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                fontWeight: option.value === playbackSpeed ? 600 : 400,
                 cursor: "pointer",
-                boxShadow: option.value === playbackSpeed ? "0 10px 26px rgba(210, 164, 86, 0.22)" : "none",
+                transition: "all 160ms ease",
               }}
             >
               {option.label}
             </button>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(selections.length, 5)}, minmax(0, 1fr))`, gap: "12px" }}>
+
+        {/* Scene selector buttons */}
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(selections.length, 5)}, minmax(0, 1fr))`, gap: "10px" }}>
           {selections.map((scene) => {
             const isActive = activeSelection.id === scene.id;
             const isEnabled = scene.enabled !== false;
@@ -1000,25 +1010,26 @@ const MultiCutSceneOverlay = ({
                 style={{
                   minWidth: 0,
                   width: "100%",
-                  padding: "14px 18px",
-                  borderRadius: "999px",
-                  border: "2px solid rgba(210, 164, 86, 0.72)",
-                  background: !isUnlocked
-                    ? "rgba(10, 11, 17, 0.38)"
-                    : isActive
-                      ? "rgba(210, 164, 86, 0.96)"
-                      : "rgba(10, 11, 17, 0.62)",
+                  padding: "9px 8px",
+                  borderRadius: "10px",
+                  border: isActive
+                    ? "1px solid rgba(255, 214, 173, 0.45)"
+                    : "1px solid rgba(255, 255, 255, 0.08)",
+                  background: isActive
+                    ? "rgba(255, 214, 173, 0.12)"
+                    : "rgba(0, 0, 0, 0.55)",
+                  backdropFilter: "blur(16px)",
                   color: !isUnlocked
-                    ? "rgba(210,164,86,0.32)"
+                    ? "rgba(255, 255, 255, 0.18)"
                     : isActive
-                      ? "#1b1510"
-                      : "rgba(210, 164, 86, 0.92)",
+                      ? "#ffd6ad"
+                      : "rgba(255, 255, 255, 0.55)",
                   cursor: !isUnlocked ? "not-allowed" : "pointer",
-                  fontWeight: isActive ? 700 : 500,
-                  fontSize: "1.15rem",
-                  opacity: isUnlocked ? 1 : 0.48,
-                  backdropFilter: "blur(12px)",
-                  boxShadow: isActive ? "0 14px 30px rgba(210, 164, 86, 0.22)" : "none",
+                  fontWeight: isActive ? 600 : 400,
+                  fontSize: "0.85rem",
+                  letterSpacing: "0.04em",
+                  opacity: isUnlocked ? 1 : 0.35,
+                  transition: "all 160ms ease",
                 }}
               >
                 {enabledIndex === -1 ? "?" : enabledIndex + 1}
@@ -1026,6 +1037,8 @@ const MultiCutSceneOverlay = ({
             );
           })}
         </div>
+
+        {/* Continue / spacer */}
         <div>
           {isLastSelection ? (
             <button
@@ -1033,21 +1046,24 @@ const MultiCutSceneOverlay = ({
               onClick={onComplete}
               style={{
                 width: "100%",
-                padding: "18px 24px",
-                borderRadius: "999px",
-                border: "1px solid rgba(210, 164, 86, 0.38)",
-                background: "rgba(210, 164, 86, 0.96)",
-                color: "#1b1510",
-                fontWeight: 700,
-                fontSize: "1.25rem",
+                padding: "9px 16px",
+                borderRadius: "10px",
+                border: "1px solid rgba(255, 214, 173, 0.35)",
+                background: "rgba(255, 214, 173, 0.12)",
+                backdropFilter: "blur(16px)",
+                color: "#ffd6ad",
+                fontWeight: 600,
+                fontSize: "0.72rem",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
                 cursor: "pointer",
-                boxShadow: "0 14px 40px rgba(210, 164, 86, 0.2)",
+                transition: "all 160ms ease",
               }}
             >
               Finish
             </button>
           ) : (
-            <div aria-hidden="true" style={{ height: "66px" }} />
+            <div aria-hidden="true" style={{ height: "52px" }} />
           )}
         </div>
       </div>

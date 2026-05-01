@@ -4,19 +4,22 @@ import { bg, jump, narrate } from "@/scenes/scriptTypes";
 import apartment from "@/background/apartment.png";
 
 export const openingScene: VisualNovelCommand[] = [
-  bg(apartment, tx({
-    id: "Lentera Apartments",
-    en: "Lentera Apartments",
-    ja: "レンテラ・アパートメント",
-    ko: "렌테라 아파트",
-  }), {
-    backgroundAnimation: {
-      zoom: 1.3,
-      panX: -15,
-      panY: 0,
-      duration: 10,
+  bg(
+    apartment,
+    tx({
+      id: "Lentera Apartments",
+      en: "Lentera Apartments",
+      ja: "レンテラ・アパートメント",
+      ko: "렌테라 아파트",
+    }),
+    {
+      backgroundAnimation: {
+        panX: -8,
+        panY: 0,
+        duration: 10,
+      },
     },
-  }),
+  ),
   narrate(
     tx({
       id: "Lentera Apartments. Namanya memang terdengar megah, tapi aslinya nggak semewah itu. Tetap saja, uang muka tempat ini cukup murah buat bikin aku bertahan beberapa bulan. Aku cuma butuh tempat yang tenang, jauh dari bising kota, dan yang paling penting... tempat di mana nggak ada yang peduli siapa aku sebenarnya.",
