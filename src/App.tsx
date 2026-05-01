@@ -33,7 +33,6 @@ import {
 } from "@/lib/runtime/admob";
 import { useNovelStore } from "@/store/novelStore";
 import type { LoadedCharacterBundle } from "@/types/characterBundle";
-import { unknownSpeakerIds } from "@/types/novel";
 import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
 
@@ -193,10 +192,11 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
     renderer.render({
       bundle,
       frame: character.frame,
+      dimmed: isDimmed,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, character.frame, stageScale, viewport.height, viewport.width]);
+  }, [bundle, character.frame, isDimmed, stageScale, viewport.height, viewport.width]);
 
   if (!character.visible && !character.isExiting) return null;
 
@@ -254,16 +254,18 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
         ? bundle.preferredCamera
         : fitCameraToScene(bundle.project, viewport.width, viewport.height);
     }
+    const camera = cameraRef.current;
     
     renderer.render({
       project: bundle.project,
       frame: character.frame,
       scale: 1,
-      camera: cameraRef.current,
+      dimmed: isDimmed,
+      camera,
       viewportWidth: viewport.width,
       viewportHeight: viewport.height,
     });
-  }, [bundle, character.frame, viewport.height, viewport.width]);
+  }, [bundle, character.frame, isDimmed, viewport.height, viewport.width]);
 
   if (!character.visible && !character.isExiting) return null;
 
@@ -304,14 +306,9 @@ const CharacterStage = memo(({ characters, bundles, activeCharacterId, isNarrati
       {renderCharacters.map((character) => {
         const bundle = bundles[character.bundleId];
         if (!bundle) return null;
-        const isUnknownSpeaker =
-          activeCharacterId !== null &&
-          unknownSpeakerIds.includes(activeCharacterId as (typeof unknownSpeakerIds)[number]);
         const isDimmed = isNarration
           ? true
-          : isUnknownSpeaker
-            ? character.characterId === "arka"
-            : activeCharacterId !== null && activeCharacterId !== character.characterId;
+          : activeCharacterId !== null && activeCharacterId !== character.characterId;
         return (
           <CharacterSprite
             key={`${character.id}-${character.entryVersion}`}
@@ -1504,13 +1501,22 @@ const App = () => {
             />
           ) : null}
 
-          <CharacterStage
-            characters={characters}
-            bundles={bundles}
-            activeCharacterId={activeCharacterId}
-            isNarration={isNarration}
-            isSceneTransitioning={isSceneTransitioning}
-          />
+          {!isSceneTransitioning &&
+            renderCharacters.map((character) => {
+              const bundle = bundles[character.bundleId];
+              if (!bundle) return null;
+              const isDimmed = isNarration
+                ? true
+                : activeCharacterId !== null && activeCharacterId !== character.characterId;
+              return (
+                <CharacterSprite
+                  key={`${character.id}-${character.entryVersion}`}
+                  bundle={bundle}
+                  character={character}
+                  isDimmed={isDimmed}
+                />
+              );
+            })}
 
           {isMobile ? (
             <div className="absolute top-3 right-3 z-20">

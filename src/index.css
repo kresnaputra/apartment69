@@ -125,8 +125,7 @@ textarea {
 }
 
 .vn-character-dimmed {
-  filter: brightness(0.58) saturate(0.82);
-  transition: filter 240ms ease;
+  transition: none;
 }
 
 .vn-enter-left {

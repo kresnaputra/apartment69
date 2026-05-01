@@ -36,7 +36,11 @@ import { day2FreeTimeScene } from "@/scenes/day2/day2-free-time";
 import { day2HallwayScene } from "@/scenes/day2/day2-hallway";
 import { day2MayaBedroomScene } from "@/scenes/day2/day2-maya-bedroom";
 import { day2ComplateScene } from "@/scenes/day2/day2-complate";
-import { mayaPhoneCallScene, mayaPhoneCallLogicalScene, mayaPhoneCallEmpathyScene } from "@/scenes/day3/day3-mayaPhoneCall";
+import {
+  mayaPhoneCallScene,
+  mayaPhoneCallLogicalScene,
+  mayaPhoneCallEmpathyScene,
+} from "@/scenes/day3/day3-mayaPhoneCall";
 import {
   day3RouteSelectionScene,
   day3Slot2ElenaScene,
@@ -49,7 +53,10 @@ import {
   day4MayaCollapseScene,
   day4MayaForceRestScene,
 } from "@/scenes/day4/day4-maya-collapse";
-import { day5MayaMorningScene, day5LobbyFarewellScene } from "@/scenes/day5/day5-maya-morning";
+import {
+  day5MayaMorningScene,
+  day5LobbyFarewellScene,
+} from "@/scenes/day5/day5-maya-morning";
 import { day5ComplateScene } from "@/scenes/day5/day5-complate";
 import {
   day6PapaConfrontationScene,

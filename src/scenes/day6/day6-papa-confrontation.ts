@@ -143,9 +143,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "실례합니다. 문을 두드리시려면 좀 조용히 해주세요. 여기 아파트라 다른 입주민들이 불편할 수 있어요.",
     }),
   ),
-  say(
-    "mayasFather",
-    "angry",
+  narrate(
     tx({
       id: "Papa Maya menoleh, menatap Arka dengan tatapan meremehkan.",
       en: "Maya's dad turns around and looks Arka up and down with open contempt.",
