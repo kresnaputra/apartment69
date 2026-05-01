@@ -169,7 +169,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "day4-maya-force-rest",
+  startLabel: "opening",
   labels: {
     "sbn-maya-test": sbnTestScene,
     // Day 1
