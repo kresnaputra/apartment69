@@ -139,6 +139,7 @@ export type SayCommand = {
   emotion?: AnyCharacterEmotion | null;
   hideName?: boolean;
   voice?: string;
+  continueVoice?: boolean;
 };
 
 export type CenteredTextCommand = {

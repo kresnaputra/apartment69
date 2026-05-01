@@ -29,7 +29,9 @@ import {
 } from "@/scenes/day1/bedroomDay1";
 import { stayRouteScene } from "@/scenes/stayRoute";
 import { visitRouteScene } from "@/scenes/visitRoute";
-import type { VisualNovelScript } from "@/types/novel";
+import type { LocalizedText } from "@/lib/i18n";
+import type { LanguageCode } from "@/lib/i18n";
+import type { SayCommand, VisualNovelCommand, VisualNovelScript } from "@/types/novel";
 import { day1ComplateScene } from "@/scenes/day1/day1-complate";
 import { day2BedroomScene } from "@/scenes/day2/day2-bedroom";
 import { day2FreeTimeScene } from "@/scenes/day2/day2-free-time";
@@ -73,7 +75,100 @@ import {
 import { day4ComplateScene } from "@/scenes/day4/day4-complate";
 import { sbnTestScene } from "@/scenes/sbnTestScene";
 
-export const demoScript: VisualNovelScript = {
+const splitSentences = (text: string) => {
+  const trimmed = text.trim();
+  if (!trimmed) return [text];
+
+  const parts: string[] = [];
+  let start = 0;
+
+  for (let index = 0; index < trimmed.length; index += 1) {
+    const char = trimmed[index];
+    const isEllipsisDot = char === "." && trimmed[index + 1] === "." && trimmed[index + 2] === ".";
+    if (isEllipsisDot) {
+      index += 2;
+      continue;
+    }
+
+    if (char !== "." && char !== "?" && char !== "!" && char !== "。" && char !== "？" && char !== "！") {
+      continue;
+    }
+
+    const part = trimmed.slice(start, index + 1).trim();
+    if (part) parts.push(part);
+    start = index + 1;
+  }
+
+  const rest = trimmed.slice(start).trim();
+  if (rest) parts.push(rest);
+
+  return parts.length > 0 ? parts : [trimmed];
+};
+
+const pickLanguagePart = (parts: string[], index: number) => {
+  if (index < parts.length) return parts[index];
+  return parts[parts.length - 1] ?? "";
+};
+
+const splitLocalizedText = (text: LocalizedText): LocalizedText[] => {
+  if (typeof text === "string") {
+    return splitSentences(text);
+  }
+
+  const languageParts = Object.fromEntries(
+    Object.entries(text).map(([language, value]) => [
+      language,
+      splitSentences(value),
+    ]),
+  ) as Partial<Record<LanguageCode, string[]>>;
+  const primaryParts = languageParts.id ?? languageParts.en ?? languageParts.ja ?? languageParts.ko ?? [];
+
+  if (primaryParts.length <= 1) return [text];
+
+  return primaryParts.map((_, index) => {
+    const segment: Partial<Record<LanguageCode, string>> = {};
+
+    for (const [language, parts] of Object.entries(languageParts) as [LanguageCode, string[]][]) {
+      segment[language] = pickLanguagePart(parts, index);
+    }
+
+    return segment;
+  });
+};
+
+const splitDialogueCommand = (command: SayCommand): SayCommand[] => {
+  if (command.speaker === null || command.speaker === undefined) {
+    return [command];
+  }
+
+  const parts = splitLocalizedText(command.text);
+  if (parts.length <= 1) return [command];
+
+  return parts.map((text, index) => ({
+    ...command,
+    text,
+    voice: index === 0 ? command.voice : undefined,
+    continueVoice: index > 0 && Boolean(command.voice),
+  }));
+};
+
+const splitCharacterDialogue = (commands: VisualNovelCommand[]): VisualNovelCommand[] =>
+  commands.flatMap<VisualNovelCommand>((command) => {
+    if (command.type !== "say") return [command];
+    return splitDialogueCommand(command);
+  });
+
+const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScript => ({
+  ...script,
+  labels: Object.fromEntries(
+    Object.entries(script.labels).map(([label, commands]) => [
+      label,
+      splitCharacterDialogue(commands),
+    ]),
+  ),
+});
+
+export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
   startLabel: "opening",
   labels: {
     "sbn-maya-test": sbnTestScene,
@@ -135,4 +230,4 @@ export const demoScript: VisualNovelScript = {
     "day7-eternal-promise": day7EternalPromiseScene,
     epilogue: epilogueScene,
   },
-};
+});

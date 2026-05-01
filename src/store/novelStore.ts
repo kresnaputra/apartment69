@@ -571,7 +571,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.speaker = resolveSpeakerName(command.speaker, command.hideName);
         nextState.activeCharacterId = command.speaker ?? null;
         nextState.pendingSceneContinuation = false;
-        nextState.activeVoice = command.voice ?? null;
+        nextState.activeVoice = command.continueVoice ? state.activeVoice : command.voice ?? null;
         nextState.line = command.text;
         nextState.lineSize = "sub";
         nextState.lineTypingSpeed = 1;
@@ -712,7 +712,6 @@ export const useNovelStore = create<NovelStore>((set) => ({
 
       return runScriptUntilPause({
         ...state,
-        activeVoice: null,
         pendingSceneContinuation: false,
         ready: false,
       });

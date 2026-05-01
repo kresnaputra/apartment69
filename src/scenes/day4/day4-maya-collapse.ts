@@ -255,6 +255,16 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
   ),
   hide("maya-day4-hallway"),
   hide("arka-day4-hallway"),
+  scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 5000),
+  centeredText(
+    tx({
+      id: "Nurutin kemauan dia ternyata jadi keputusan paling bodohku. Baru aja mau mencet tombol lift, dia langsung ambruk. Aku panik setengah mati bawa dia ke IGD.",
+      en: "Going along with what she wanted turned out to be the stupidest decision I could've made. She was just about to press the elevator button when she collapsed. I nearly lost my mind getting her to the ER.",
+      ja: "彼女の言う通りにしたのは、俺ができる中で一番愚かな判断だった。エレベーターのボタンを押そうとした瞬間、彼女は崩れ落ちた。救急外来へ連れていく間、俺は半分パニックだった。",
+      ko: "그녀 뜻대로 해준 건 내가 할 수 있는 가장 멍청한 선택이었다. 엘리베이터 버튼을 누르려던 순간, 그녀는 그대로 쓰러졌다. 응급실로 데려가는 동안 나는 거의 정신이 나갈 뻔했다.",
+    }),
+    { size: "sub" },
+  ),
   bg(
     hospitalUrl,
     tx({
@@ -263,15 +273,6 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
       ja: "病院 - 救急外来",
       ko: "병원 - 응급실",
     }),
-  ),
-  narrate(
-    tx({
-      id: "Nurutin kemauan dia ternyata jadi keputusan paling bodohku. Baru aja mau mencet tombol lift, dia langsung ambruk. Aku panik setengah mati bawa dia ke IGD.",
-      en: "Going along with what she wanted turned out to be the stupidest decision I could've made. She was just about to press the elevator button when she collapsed. I nearly lost my mind getting her to the ER.",
-      ja: "彼女の言う通りにしたのは、俺ができる中で一番愚かな判断だった。エレベーターのボタンを押そうとした瞬間、彼女は崩れ落ちた。救急外来へ連れていく間、俺は半分パニックだった。",
-      ko: "그녀 뜻대로 해준 건 내가 할 수 있는 가장 멍청한 선택이었다. 엘리베이터 버튼을 누르려던 순간, 그녀는 그대로 쓰러졌다. 응급실로 데려가는 동안 나는 거의 정신이 나갈 뻔했다.",
-    }),
-    "arka",
   ),
   narrate(
     tx({
