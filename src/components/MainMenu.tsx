@@ -109,8 +109,9 @@ export const MainMenu = ({
           <p className="vn-menu-subtitle">{labels.subtitle}</p>
         </header>
 
+        <hr className="vn-menu-rule" />
+
         <nav className="vn-menu-nav">
-          {/* Start */}
           <button
             type="button"
             disabled={!isReady}
@@ -123,36 +124,26 @@ export const MainMenu = ({
               labels.start
             )}
           </button>
-
-          {/* Load */}
           <button
             type="button"
-            className="vn-menu-btn vn-menu-btn-secondary"
+            className="vn-menu-btn"
             onClick={() => setShowLoadSlots(true)}
           >
             {labels.load}
           </button>
-
-          {/* Gallery */}
-          <button type="button" className="vn-menu-btn vn-menu-btn-secondary" onClick={() => setShowGallery(true)}>
+          <button type="button" className="vn-menu-btn" onClick={() => setShowGallery(true)}>
             {labels.gallery}
           </button>
-
-          {/* Setting */}
-          <button type="button" className="vn-menu-btn vn-menu-btn-secondary" onClick={() => setShowSettings(true)}>
+          <button type="button" className="vn-menu-btn" onClick={() => setShowSettings(true)}>
             {labels.settings}
           </button>
-
-          {/* Exit */}
-          <button type="button" className="vn-menu-btn vn-menu-btn-secondary" onClick={handleExit}>
+          <button type="button" className="vn-menu-btn" onClick={handleExit}>
             {labels.exit}
           </button>
         </nav>
-
-        <footer className="vn-menu-footer">
-          <span>© 2026 &nbsp;·&nbsp; Nrop Guy</span>
-        </footer>
       </div>
+
+      <footer className="vn-menu-footer">© 2026 &nbsp;·&nbsp; Nrop Guy</footer>
 
       {showLoadSlots && (
         <SaveSlotOverlay

@@ -35,6 +35,8 @@ import { useNovelStore } from "@/store/novelStore";
 import type { LoadedCharacterBundle } from "@/types/characterBundle";
 import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
+import nropLogo from "@/assets/logo-nrop.png";
+import nvmLogo from "@/assets/nvm-logo-white.png";
 
 const BASE_TEXT_SPEED = 18;
 const CUTSCENE_FADE_MS = 600;
@@ -54,6 +56,113 @@ type CharacterSpriteProps = {
   character: CharacterInstance;
   isDimmed: boolean;
 };
+
+type OpeningLogoProps = {
+  phaseState: "enter" | "exit";
+};
+
+type PoweredByLogoProps = {
+  phaseState: "enter" | "exit";
+};
+
+type OpeningWarningProps = {
+  language: LanguageCode;
+  phaseState: "enter" | "exit";
+};
+
+type SbnLoadingScreenProps = {
+  loadingLabel: string;
+  phaseState: "enter" | "exit";
+  statusMessage: string;
+};
+
+const openingWarningText = {
+  title: {
+    id: "Peringatan Konten",
+    en: "Content Warning",
+    ja: "コンテンツ警告",
+    ko: "콘텐츠 경고",
+  },
+  body: {
+    id: "Game ini berisi tema dewasa, tekanan keluarga, hubungan intim, dan adegan emosional yang mungkin tidak cocok untuk semua pemain.",
+    en: "This game contains mature themes, family pressure, intimate relationships, and emotional scenes that may not be suitable for all players.",
+    ja: "このゲームには成人向けのテーマ、家族からの圧力、親密な関係、感情的なシーンが含まれており、すべてのプレイヤーに適しているとは限りません。",
+    ko: "이 게임에는 성인 주제, 가족의 압박, 친밀한 관계, 감정적인 장면이 포함되어 있어 모든 플레이어에게 적합하지 않을 수 있습니다.",
+  },
+  age: {
+    id: "Hanya untuk pemain dewasa. Dengan melanjutkan, kamu menyatakan sudah cukup umur dan memahami kontennya.",
+    en: "For adult players only. By continuing, you confirm that you are of age and understand the content.",
+    ja: "成人プレイヤーのみ対象です。続行すると、年齢条件を満たし内容を理解していることに同意したものとみなされます。",
+    ko: "성인 플레이어 전용입니다. 계속 진행하면 연령 조건을 충족하며 콘텐츠를 이해했음을 확인하는 것입니다.",
+  },
+} satisfies Record<string, LocalizedText>;
+
+const OpeningLogo = ({ phaseState }: OpeningLogoProps) => (
+  <div
+    className={`fixed inset-0 z-[80] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
+  >
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(210,164,86,0.18),rgba(0,0,0,0)_34%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
+    <section className="relative mx-auto flex w-[min(88vw,620px)] flex-col items-center text-center">
+      <img
+        src={nropLogo}
+        alt="NROP"
+        className="h-auto w-[min(72vw,430px)] object-contain opacity-95 drop-shadow-[0_18px_60px_rgba(210,164,86,0.18)]"
+      />
+    </section>
+  </div>
+);
+
+const PoweredByLogo = ({ phaseState }: PoweredByLogoProps) => (
+  <div
+    className={`fixed inset-0 z-[80] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
+  >
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),rgba(0,0,0,0)_34%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
+    <section className="relative mx-auto flex w-[min(88vw,620px)] flex-col items-center">
+      <p className="mb-8 w-[min(66vw,380px)] text-left text-[0.72rem] font-semibold uppercase tracking-[0.42em] text-white/62">
+        Powered by
+      </p>
+      <img
+        src={nvmLogo}
+        alt="NVM"
+        className="h-auto w-[min(66vw,380px)] object-contain opacity-95 drop-shadow-[0_18px_60px_rgba(255,255,255,0.14)]"
+      />
+    </section>
+  </div>
+);
+
+const OpeningWarning = ({ language, phaseState }: OpeningWarningProps) => (
+  <div
+    className={`fixed inset-0 z-[80] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
+  >
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(210,164,86,0.12),rgba(0,0,0,0)_42%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
+    <section className="relative mx-auto flex w-[min(88vw,680px)] flex-col items-center text-center">
+      <p className="mb-3 text-[0.72rem] font-semibold uppercase tracking-[0.42em] text-[#d2a456]/80">
+        {resolveText(openingWarningText.title, language)}
+      </p>
+      <p className="max-w-[56ch] text-balance text-[clamp(1rem,2vw,1.25rem)] leading-relaxed text-[#f6efe5]/88">
+        {resolveText(openingWarningText.body, language)}
+      </p>
+      <p className="mt-5 max-w-[52ch] text-balance text-[clamp(0.84rem,1.6vw,1rem)] leading-relaxed text-[#b9aa9b]">
+        {resolveText(openingWarningText.age, language)}
+      </p>
+    </section>
+  </div>
+);
+
+const SbnLoadingScreen = ({ loadingLabel, phaseState, statusMessage }: SbnLoadingScreenProps) => (
+  <div className={`fixed inset-0 z-[140] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_900ms_ease_forwards]" : "animate-[vn-opening-fade-in_800ms_ease_forwards]"}`}>
+    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(210,164,86,0.12),rgba(0,0,0,0)_38%)]" />
+    <section className="relative mx-auto flex w-[min(86vw,520px)] flex-col items-center text-center">
+      <div className="mb-8 h-12 w-12 animate-spin rounded-full border border-[#d2a456]/20 border-t-[#d2a456]" />
+      <p className="text-[0.72rem] font-semibold uppercase tracking-[0.42em] text-[#d2a456]/80">
+        {loadingLabel}
+      </p>
+      <p className="mt-4 text-[clamp(0.95rem,2vw,1.15rem)] leading-relaxed text-[#d8c8b8]/82">
+        {statusMessage}
+      </p>
+    </section>
+  </div>
+);
 
 const useCharacterStageSizing = (character: CharacterInstance, aspectRatio: number) => {
   const [windowSize, setWindowSize] = useState(() => ({
@@ -948,7 +1057,10 @@ const MultiCutSceneOverlay = ({
 
 const App = () => {
   const isMobile = useIsMobile();
-  const [phase, setPhase] = useState<"menu" | "story">("menu");
+  const [phase, setPhase] = useState<"logo" | "poweredBy" | "warning" | "loading" | "menu" | "story">("logo");
+  const [openingPhaseState, setOpeningPhaseState] = useState<"enter" | "exit">("enter");
+  const [loadingPhaseState, setLoadingPhaseState] = useState<"enter" | "exit">("enter");
+  const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
   const [bundlesReady, setBundlesReady] = useState(false);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
 
@@ -1016,6 +1128,7 @@ const App = () => {
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
   const audioRef = useRef<NovelAudioEngine | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
+  const hasStartedBundleLoadRef = useRef(false);
   const previousSceneTransitionTokenRef = useRef<number | null>(null);
   const suppressAdvanceOnceRef = useRef(false);
   const resolvedLine = resolveText(line, language);
@@ -1167,6 +1280,10 @@ const App = () => {
   }, [phase]);
 
   useEffect(() => {
+    if (phase !== "loading" || hasStartedBundleLoadRef.current) return;
+
+    hasStartedBundleLoadRef.current = true;
+    setShowLoadingOverlay(true);
     let cancelled = false;
 
     const load = async () => {
@@ -1188,9 +1305,16 @@ const App = () => {
         }
 
         setBundlesReady(true);
+        setLoadingPhaseState("exit");
+        setPhase("menu");
+        window.setTimeout(() => {
+          setShowLoadingOverlay(false);
+          setLoadingPhaseState("enter");
+        }, 900);
       } catch (error) {
         const message = error instanceof Error ? error.message : "Gagal memuat visual novel.";
         setStatusMessage(message);
+        hasStartedBundleLoadRef.current = false;
       }
     };
 
@@ -1199,7 +1323,7 @@ const App = () => {
     return () => {
       cancelled = true;
     };
-  }, [registerBundle, setStatusMessage]);
+  }, [phase, registerBundle, setStatusMessage]);
 
   useLayoutEffect(() => {
     if (previousSceneTransitionTokenRef.current === null) {
@@ -1301,6 +1425,8 @@ const App = () => {
 
   useEffect(() => {
     const handleAdvance = () => {
+      if (phase !== "story") return;
+
       if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
         suppressAdvanceOnceRef.current = false;
         return;
@@ -1338,7 +1464,30 @@ const App = () => {
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("contextmenu", handleContextMenu);
     };
-  }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, resolvedLine.length]);
+  }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, phase, resolvedLine.length]);
+
+  useEffect(() => {
+    if (phase !== "logo" && phase !== "poweredBy" && phase !== "warning") return;
+
+    setOpeningPhaseState("enter");
+    const exitDelay = phase === "warning" ? 5600 : 3400;
+    const nextDelay = phase === "warning" ? 7000 : 4700;
+    const exitTimer = window.setTimeout(() => setOpeningPhaseState("exit"), exitDelay);
+    const nextTimer = window.setTimeout(() => {
+      setPhase((current) => {
+        if (current === "logo") return "poweredBy";
+        if (current === "poweredBy") return "warning";
+        if (current === "warning") return "loading";
+        return current;
+      });
+      setOpeningPhaseState("enter");
+    }, nextDelay);
+
+    return () => {
+      window.clearTimeout(exitTimer);
+      window.clearTimeout(nextTimer);
+    };
+  }, [phase]);
 
   const handleStartStory = () => {
     startStory();
@@ -1401,6 +1550,33 @@ const App = () => {
 
   return (
     <>
+      {phase === "logo" ? (
+        <OpeningLogo
+          phaseState={openingPhaseState}
+        />
+      ) : null}
+
+      {phase === "poweredBy" ? (
+        <PoweredByLogo
+          phaseState={openingPhaseState}
+        />
+      ) : null}
+
+      {phase === "warning" ? (
+        <OpeningWarning
+          language={language}
+          phaseState={openingPhaseState}
+        />
+      ) : null}
+
+      {showLoadingOverlay ? (
+        <SbnLoadingScreen
+          loadingLabel={labels.loading}
+          phaseState={loadingPhaseState}
+          statusMessage={resolvedStatusMessage}
+        />
+      ) : null}
+
       {phase === "menu" && (
         isMobile
           ? <MainMenuMobile bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
