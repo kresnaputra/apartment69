@@ -131,7 +131,7 @@ export const MainMenuMobile = ({
       <div className="relative z-10 flex h-full w-full items-center justify-between px-[8vw]">
 
         {/* Left: title block */}
-        <div className="flex flex-col items-start gap-1">
+        <div className="flex flex-col items-start gap-0">
           <h1 className="m-0 flex items-baseline gap-[0.06em] leading-none" style={{ textShadow: "0 2px 24px rgba(0,0,0,0.45)" }}>
             <span
               className="text-white uppercase tracking-[0.02em]"
@@ -148,7 +148,13 @@ export const MainMenuMobile = ({
           </h1>
           <p
             className="m-0 text-white/88 tracking-[0.1em]"
-            style={{ fontFamily: '"Mr De Haviland", cursive', fontSize: "clamp(1.4rem, 3.5vw, 2.6rem)" }}
+            style={{
+              fontFamily: '"Caveat", cursive',
+              fontSize: "clamp(1.4rem, 3.5vw, 2.4rem)",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+            }}
           >
             {labels.subtitle}
           </p>
