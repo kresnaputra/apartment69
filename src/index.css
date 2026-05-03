@@ -409,10 +409,17 @@ textarea {
     border-color 160ms ease;
 }
 
-.vn-choice:hover {
+.vn-choice:hover:not(:disabled) {
   transform: translateY(-1px);
   background: var(--choice-hover);
   border-color: rgba(255, 214, 173, 0.3);
+}
+
+.vn-choice:disabled,
+.vn-choice--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .vn-loading {

@@ -14,21 +14,29 @@ import elevator from "@/background/elevator.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const elevatorMeetingScene: VisualNovelCommand[] = [
-  bg(elevator, tx({
-    id: "Lentera Apartments - Lift",
-    en: "Lentera Apartments - Elevator",
-    ja: "レンテラ・アパートメント - エレベーター",
-    ko: "렌테라 아파트 - 엘리베이터",
-  })),
+  bg(
+    elevator,
+    tx({
+      id: "Lentera Apartments - Lift",
+      en: "Lentera Apartments - Elevator",
+      ja: "レンテラ・アパートメント - エレベーター",
+      ko: "렌테라 아파트 - 엘리베이터",
+    }),
+  ),
   show("arka-elevator", "arka", "neutral", {
     position: "left",
   }),
-  say("maya", "worried", tx({
-    id: "Jangan tutup liftnya dulu...!",
-    en: "Don’t close the elevator yet…! ",
-    ja: "エレベーター閉めないで…！",
-    ko: "엘리베이터 닫지 마요...!",
-  }), { hideName: true, voice: mayaDay1To4Voices[0] }),
+  say(
+    "maya",
+    "worried",
+    tx({
+      id: "Jangan tutup liftnya dulu...!",
+      en: "Don’t close the elevator yet…! ",
+      ja: "エレベーター閉めないで…！",
+      ko: "엘리베이터 닫지 마요...!",
+    }),
+    { hideName: true, voice: mayaDay1To4Voices[0] },
+  ),
   minigame("elevator-button"),
   say(
     "maya",
@@ -64,12 +72,16 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     }),
     { hideName: true, voice: mayaDay1To4Voices[2] },
   ),
-  say("arka", "neutral", tx({
-    id: "Iya. Kita kenal?",
-    en: "Yeah. Do I know you?",
-    ja: "うん。俺たち知り合いだっけ？",
-    ko: "응. 우리 아는 사이야?",
-  })),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Iya. Kita kenal?",
+      en: "Yeah. Do I know you?",
+      ja: "うん。俺たち知り合いだっけ？",
+      ko: "응. 우리 아는 사이야?",
+    }),
+  ),
   say(
     "maya",
     "worried",
@@ -81,12 +93,16 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[3] },
   ),
-  say("arka", "neutral", tx({
-    id: "Baru pindah hari ini. Lantai tiga.",
-    en: "Just moved in today. Third floor.",
-    ja: "今日引っ越してきたばっか。三階。",
-    ko: "오늘 막 이사 왔어. 3층.",
-  })),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Baru pindah hari ini. Lantai tiga.",
+      en: "Just moved in today. Third floor.",
+      ja: "今日引っ越してきたばっか。三階。",
+      ko: "오늘 막 이사 왔어. 3층.",
+    }),
+  ),
   say(
     "maya",
     "calm",
@@ -98,39 +114,57 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[4] },
   ),
-  menu(tx({
-    id: "Pilihanmu?",
-    en: "Your choice?",
-    ja: "どうする？",
-    ko: "어떻게 할까?",
-  }), [
-    { id: "accept-maya-number", label: tx({ id: "Terima", en: "Accept", ja: "受け取る", ko: "받기" }), next: "accept-maya-number" },
-    {
-      id: "decline-maya-number",
-      label: tx({ id: "Tolak", en: "Decline", ja: "断る", ko: "거절하기" }),
-      next: "decline-maya-number",
-    },
-  ]),
+  menu(
+    tx({
+      id: "Pilihanmu?",
+      en: "Your choice?",
+      ja: "どうする？",
+      ko: "어떻게 할까?",
+    }),
+    [
+      {
+        id: "accept-maya-number",
+        label: tx({ id: "Terima", en: "Accept", ja: "受け取る", ko: "받기" }),
+        next: "accept-maya-number",
+      },
+      {
+        id: "decline-maya-number",
+        label: tx({ id: "Tolak", en: "Decline", ja: "断る", ko: "거절하기" }),
+        next: "decline-maya-number",
+        disabled: true,
+      },
+    ],
+  ),
 ];
 
 export const acceptMayaNumberScene: VisualNovelCommand[] = [
   setFlag("mayaAcceptedNumber", true),
-  say("maya", "calm", tx({
-    id: "Makasih, Arka... nanti aku chat ya, oke?",
-    en: "Thanks, Arka… I’ll text you later, okay?",
-    ja: "ありがと、アルカ…あとでメッセージするね。いい？",
-    ko: "고마워, 아르카... 나중에 연락할게, 알았지?",
-  }), { voice: mayaDay1To4Voices[5] }),
+  say(
+    "maya",
+    "calm",
+    tx({
+      id: "Makasih, Arka... nanti aku chat ya, oke?",
+      en: "Thanks, Arka… I’ll text you later, okay?",
+      ja: "ありがと、アルカ…あとでメッセージするね。いい？",
+      ko: "고마워, 아르카... 나중에 연락할게, 알았지?",
+    }),
+    { voice: mayaDay1To4Voices[5] },
+  ),
   jump("elena-encounter"),
 ];
 
 export const declineMayaNumberScene: VisualNovelCommand[] = [
   setFlag("mayaAcceptedNumber", false),
-  say("maya", "calm", tx({
-    id: "Ah... maaf kalau aku bikin kamu nggak nyaman...",
-    en: "Ah… sorry if I made you uncomfortable…",
-    ja: "あ…ごめんね、嫌な感じにさせちゃったなら…",
-    ko: "아... 내가 불편하게 했다면 미안해...",
-  }), { voice: mayaDay1To4Voices[6] }),
+  say(
+    "maya",
+    "calm",
+    tx({
+      id: "Ah... maaf kalau aku bikin kamu nggak nyaman...",
+      en: "Ah… sorry if I made you uncomfortable…",
+      ja: "あ…ごめんね、嫌な感じにさせちゃったなら…",
+      ko: "아... 내가 불편하게 했다면 미안해...",
+    }),
+    { voice: mayaDay1To4Voices[6] },
+  ),
   jump("elena-encounter"),
 ];

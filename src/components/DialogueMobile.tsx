@@ -1,4 +1,4 @@
-type Choice = { id: string; label: string; next: string };
+type Choice = { id: string; label: string; next: string; disabled?: boolean };
 type ControlLabels = {
   auto: string;
   config: string;
@@ -78,7 +78,8 @@ export const DialogueMobile = ({
             <button
               key={choice.id}
               type="button"
-              className="w-full max-w-[26rem] mx-auto rounded-full border border-white/18 bg-[rgba(10,8,13,0.56)] text-white/90 text-[0.78rem] py-2 px-4 backdrop-blur-sm transition-all duration-[160ms] hover:-translate-y-px hover:bg-[rgba(255,214,173,0.18)] hover:border-[rgba(255,214,173,0.3)] active:translate-y-0"
+              disabled={choice.disabled}
+              className={`w-full max-w-[26rem] mx-auto rounded-full border border-white/18 bg-[rgba(10,8,13,0.56)] text-white/90 text-[0.78rem] py-2 px-4 backdrop-blur-sm transition-all duration-[160ms] active:translate-y-0${choice.disabled ? " opacity-35 cursor-not-allowed pointer-events-none" : " hover:-translate-y-px hover:bg-[rgba(255,214,173,0.18)] hover:border-[rgba(255,214,173,0.3)]"}`}
               onClick={() => {
                 onSuppressAdvance();
                 onChoose(choice.next);

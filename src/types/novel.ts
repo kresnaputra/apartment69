@@ -17,6 +17,7 @@ export type ChoiceOption = {
   id: string;
   label: LocalizedText;
   next: string;
+  disabled?: boolean;
 };
 
 export type FlagValue = boolean | number | string | null;

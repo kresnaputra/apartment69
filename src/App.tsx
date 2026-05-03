@@ -442,7 +442,7 @@ type DialogueUIProps = {
   resolvedLine: string;
   lineSize: string;
   isTyping: boolean;
-  resolvedChoices: Array<{ id: string; label: string; next: string }>;
+  resolvedChoices: Array<{ id: string; label: string; next: string; disabled?: boolean }>;
   isAuto: boolean;
   labels: {
     auto: string;
@@ -569,8 +569,9 @@ const DialogueUI = memo(({
             {resolvedChoices.map((choice) => (
               <button
                 key={choice.id}
-                className="vn-choice"
+                className={`vn-choice${choice.disabled ? " vn-choice--disabled" : ""}`}
                 type="button"
+                disabled={choice.disabled}
                 onClick={() => {
                   onSuppressAdvance();
                   onChoose(choice.next);
@@ -1154,10 +1155,9 @@ const App = () => {
   const isTyping = revealedCount < resolvedLine.length;
   const isNarration = textPresentation === "narration" && choices.length === 0 && Boolean(resolvedLine);
   const isCenteredText = textPresentation === "centered" && choices.length === 0 && Boolean(resolvedLine);
-  const resolvedChoices = choices.map((choice) => ({
-    ...choice,
-    label: resolveText(choice.label, language),
-  }));
+  const resolvedChoices: Array<{ id: string; label: string; next: string; disabled?: boolean }> = choices.map(
+    (choice) => ({ ...choice, label: resolveText(choice.label, language) }),
+  );
   const labels = {
     auto: resolveText(uiText.auto, language),
     clickToContinue: resolveText(uiText.clickToContinue, language),
