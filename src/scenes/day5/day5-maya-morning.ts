@@ -1,11 +1,12 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, jumpIf, minigame, narrate, say, show } from "@/scenes/scriptTypes";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import frontOfficeUrl from "@/background/front-office.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day5MayaMorningScene: VisualNovelCommand[] = [
+  jumpIf("maya-love", "day5-lobby-farewell", { value: 1 }),
   bg(
     mayaBedroomUrl,
     tx({

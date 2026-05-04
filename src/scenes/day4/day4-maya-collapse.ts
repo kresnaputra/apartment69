@@ -7,6 +7,7 @@ import {
   clearBlackScreen,
   hide,
   jump,
+  jumpIf,
   menu,
   multiCutScene,
   minigame,
@@ -618,6 +619,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ko: "좋아. 체온도 정상으로 돌아왔으니까 난 일단 내 방으로 갈게. 시간도 늦었고. 뭐 필요하거나 다시 열 오르면 바로 전화해. 진짜로.",
     }),
   ),
+  jumpIf("maya-love", "day4-complate", { value: 1 }),
   narrate(
     tx({
       id: "Saat Arka berbalik hendak menuju pintu, Maya tiba-tiba menarik ujung bajunya dengan tangan yang masih sedikit gemetar.",
