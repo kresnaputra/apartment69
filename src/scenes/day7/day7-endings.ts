@@ -3,6 +3,7 @@ import { tx } from "@/lib/i18n";
 import {
   bg,
   centeredText,
+  cutScene,
   hide,
   jumpIf,
   multiCutScene,
@@ -20,6 +21,12 @@ import mayaSpecialScene4 from "@/cut-scene/maya-special-scene-4.webm?url";
 import mayaSpecial2Scene1 from "@/cut-scene/maya-special-2-scene-1.webm?url";
 import mayaSpecial2Scene2 from "@/cut-scene/maya-special-2-scene-2.webm?url";
 import mayaSpecial2Scene3 from "@/cut-scene/maya-special-2-scene-3.webm?url";
+import mayaSpecialSceneNormal1 from "@/cut-scene/maya-special-scene-normal-1.webm?url";
+import mayaSpecialSceneNormal2 from "@/cut-scene/maya-special-scene-normal-2.webm?url";
+import mayaSpecialSceneNormal3 from "@/cut-scene/maya-special-scene-normal-3.webm?url";
+import mayaSpecialSceneNormal4 from "@/cut-scene/maya-special-scene-normal-4.webm?url";
+import mayaSpecialSceneNormal5 from "@/cut-scene/maya-special-scene-normal-5.webm?url";
+import mayaSpecialSceneNormal6 from "@/cut-scene/maya-special-scene-normal-6.webm?url";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   bg(
@@ -457,6 +464,34 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
   ),
   hide("maya-day7-promise"),
   hide("arka-day7"),
+  cutScene(mayaSpecialSceneNormal1, true),
+  cutScene(mayaSpecialSceneNormal2, true),
+  multiCutScene([
+    {
+      src: mayaSpecialSceneNormal3,
+      id: "maya-special-normal-3",
+      label: "",
+      loop: true,
+    },
+    {
+      src: mayaSpecialSceneNormal4,
+      id: "maya-special-normal-4",
+      label: "",
+      loop: true,
+    },
+    {
+      src: mayaSpecialSceneNormal5,
+      id: "maya-special-normal-5",
+      label: "",
+      loop: true,
+    },
+    {
+      src: mayaSpecialSceneNormal6,
+      id: "maya-special-normal-6",
+      label: "",
+      loop: true,
+    },
+  ]),
 
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
