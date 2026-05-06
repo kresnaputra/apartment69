@@ -60,7 +60,6 @@ export const MainMenu = ({
   const [showSettings, setShowSettings] = useState(false);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
 
-
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
     bgMusicRef.current.play(rainCityMusic, bgVolume);
@@ -91,14 +90,18 @@ export const MainMenu = ({
     window.setTimeout(() => onLoad(slot), 640);
   };
 
-
   const handleExit = () => {
     void getCurrentWindow().close();
   };
 
   return (
-    <div className={`vn-menu-root ${visible ? "vn-menu-visible" : ""} ${exiting ? "vn-menu-exiting" : ""}`}>
-      <div className="vn-menu-bg" style={{ backgroundImage: `url(${mainMenuBg})` }} />
+    <div
+      className={`vn-menu-root ${visible ? "vn-menu-visible" : ""} ${exiting ? "vn-menu-exiting" : ""}`}
+    >
+      <div
+        className="vn-menu-bg"
+        style={{ backgroundImage: `url(${mainMenuBg})` }}
+      />
       <div className="vn-menu-overlay" />
       <img
         src={nropLogo}
@@ -133,7 +136,10 @@ export const MainMenu = ({
             onClick={handleStart}
           >
             {!isReady ? (
-              <span className="vn-menu-btn-loading">{labels.loading}<span className="vn-menu-dots" /></span>
+              <span className="vn-menu-btn-loading">
+                {labels.loading}
+                <span className="vn-menu-dots" />
+              </span>
             ) : (
               labels.start
             )}
@@ -145,10 +151,18 @@ export const MainMenu = ({
           >
             {labels.load}
           </button>
-          <button type="button" className="vn-menu-btn" onClick={() => setShowGallery(true)}>
+          <button
+            type="button"
+            className="vn-menu-btn"
+            onClick={() => setShowGallery(true)}
+          >
             {labels.gallery}
           </button>
-          <button type="button" className="vn-menu-btn" onClick={() => setShowSettings(true)}>
+          <button
+            type="button"
+            className="vn-menu-btn"
+            onClick={() => setShowSettings(true)}
+          >
             {labels.settings}
           </button>
           <button type="button" className="vn-menu-btn" onClick={handleExit}>
@@ -158,18 +172,22 @@ export const MainMenu = ({
       </div>
 
       <footer className="vn-menu-footer">© 2026 &nbsp;·&nbsp; NVN Tools</footer>
-      <span style={{
-        position: "absolute",
-        bottom: "1.75rem",
-        right: "2rem",
-        fontSize: "0.65rem",
-        letterSpacing: "0.14em",
-        color: "rgba(255, 255, 255, 0.2)",
-        fontFamily: '"Crimson Text", Georgia, serif',
-        textTransform: "uppercase",
-        zIndex: 2,
-        pointerEvents: "none",
-      }}>v0.8.0</span>
+      <span
+        style={{
+          position: "absolute",
+          bottom: "1.75rem",
+          right: "2rem",
+          fontSize: "0.65rem",
+          letterSpacing: "0.14em",
+          color: "rgba(255, 255, 255, 0.2)",
+          fontFamily: '"Crimson Text", Georgia, serif',
+          textTransform: "uppercase",
+          zIndex: 2,
+          pointerEvents: "none",
+        }}
+      >
+        v0.6.0
+      </span>
 
       {showLoadSlots && (
         <SaveSlotOverlay

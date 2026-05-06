@@ -11,17 +11,30 @@ export const languageOptions: { code: LanguageCode; label: string }[] = [
   { code: "id", label: "Bahasa Indonesia" },
 ];
 
-export const resolveText = (text: LocalizedText | undefined, language: LanguageCode): string => {
+export const resolveText = (
+  text: LocalizedText | undefined,
+  language: LanguageCode,
+): string => {
   if (text === undefined) return "";
   if (typeof text === "string") return text;
 
-  return text[language] ?? text.en ?? text.id ?? text.ja ?? text.ko ?? Object.values(text)[0] ?? "";
+  return (
+    text[language] ??
+    text.en ??
+    text.id ??
+    text.ja ??
+    text.ko ??
+    Object.values(text)[0] ??
+    ""
+  );
 };
 
-export const tx = (value: Partial<Record<LanguageCode, string>>): LocalizedText => value;
+export const tx = (
+  value: Partial<Record<LanguageCode, string>>,
+): LocalizedText => value;
 
 export const uiText = {
-  titleSubtitle: "THE HELPFUL NEIGHBOR",
+  titleSubtitle: "EVERY ROOM HAS A PROBLEM",
   start: tx({ id: "Mulai", en: "Start", ja: "スタート", ko: "시작" }),
   load: tx({ id: "Muat", en: "Load", ja: "ロード", ko: "불러오기" }),
   gallery: tx({ id: "Galeri", en: "Gallery", ja: "ギャラリー", ko: "갤러리" }),
@@ -40,7 +53,12 @@ export const uiText = {
   settings: tx({ id: "Pengaturan", en: "Settings", ja: "設定", ko: "설정" }),
   slot: tx({ id: "Slot", en: "Slot", ja: "スロット", ko: "슬롯" }),
   exit: tx({ id: "Keluar", en: "Exit", ja: "終了", ko: "종료" }),
-  loading: tx({ id: "Memuat", en: "Loading", ja: "読み込み中", ko: "불러오는 중" }),
+  loading: tx({
+    id: "Memuat",
+    en: "Loading",
+    ja: "読み込み中",
+    ko: "불러오는 중",
+  }),
   save: tx({ id: "Simpan", en: "Save", ja: "セーブ", ko: "저장" }),
   log: tx({ id: "Log", en: "Log", ja: "ログ", ko: "로그" }),
   auto: tx({ id: "Otomatis", en: "Auto", ja: "オート", ko: "자동" }),
@@ -144,14 +162,24 @@ export const uiText = {
     ja: "まだ会話はありません。",
     ko: "아직 대화가 없습니다.",
   }),
-  emptySlot: tx({ id: "— Kosong —", en: "— Empty —", ja: "— 空き —", ko: "— 비어 있음 —" }),
+  emptySlot: tx({
+    id: "— Kosong —",
+    en: "— Empty —",
+    ja: "— 空き —",
+    ko: "— 비어 있음 —",
+  }),
   unknownScene: tx({
     id: "Adegan Tidak Diketahui",
     en: "Unknown Scene",
     ja: "不明なシーン",
     ko: "알 수 없는 장면",
   }),
-  saved: tx({ id: "Tersimpan!", en: "Saved!", ja: "保存しました！", ko: "저장됨!" }),
+  saved: tx({
+    id: "Tersimpan!",
+    en: "Saved!",
+    ja: "保存しました！",
+    ko: "저장됨!",
+  }),
   storyLoading: tx({
     id: "Memuat cerita...",
     en: "Loading story...",
