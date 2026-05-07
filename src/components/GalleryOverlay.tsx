@@ -1,18 +1,44 @@
 import { useState } from "react";
+import sceneMaya1 from "@/gallery/scene-maya-1.png";
+import sceneMaya2 from "@/gallery/scene-maya-2.png";
+import sceneMaya3 from "@/gallery/scene-maya-3.png";
 
 type GalleryOverlayProps = {
   closeLabel: string;
   emptyLabel: string;
   onClose: () => void;
+  onOpenScene: (label: string) => void;
   title: string;
 };
 
 const PLACEHOLDER_ITEMS = Array.from({ length: 8 }, (_, index) => index + 1);
 
+const GALLERY_ITEMS = [
+  {
+    id: "scene-maya-1",
+    imageUrl: sceneMaya1,
+    label: "Scene Maya 1",
+    sceneLabel: "day4-maya-force-rest",
+  },
+  {
+    id: "scene-maya-2",
+    imageUrl: sceneMaya2,
+    label: "Scene Maya 2",
+    sceneLabel: "day7-devoted-submission",
+  },
+  {
+    id: "scene-maya-3",
+    imageUrl: sceneMaya3,
+    label: "Scene Maya 3",
+    sceneLabel: "day7-eternal-promise",
+  },
+] as const;
+
 export const GalleryOverlay = ({
   closeLabel,
   emptyLabel,
   onClose,
+  onOpenScene,
   title,
 }: GalleryOverlayProps) => {
   const [exiting, setExiting] = useState(false);
@@ -34,7 +60,10 @@ export const GalleryOverlay = ({
       }}
     >
       {/* Header */}
-      <div className="flex items-center justify-end gap-4 px-8 py-5 border-b border-white/10 shrink-0">
+      <div className="flex items-center justify-between gap-4 px-8 py-5 border-b border-white/10 shrink-0">
+        <div>
+          <p className="m-0 text-[0.72rem] tracking-[0.18em] uppercase text-white/35">{title}</p>
+        </div>
         <button
           type="button"
           onClick={handleClose}
@@ -47,6 +76,43 @@ export const GalleryOverlay = ({
       {/* Grid */}
       <div className="flex-1 overflow-y-auto px-8 py-6">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {GALLERY_ITEMS.map((item) => (
+            <div
+              key={item.id}
+              className="rounded-[1.4rem] border border-white/10 overflow-hidden"
+              style={{
+                background: "linear-gradient(180deg, rgba(18,20,28,0.78), rgba(11,13,18,0.82))",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenScene(item.sceneLabel);
+                  onClose();
+                }}
+                className="block w-full text-left"
+              >
+              <div
+                className="aspect-square overflow-hidden"
+                style={{
+                  background:
+                    "radial-gradient(circle at top, rgba(255,214,173,0.12), transparent 46%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))",
+                }}
+              >
+                <img
+                  src={item.imageUrl}
+                  alt={item.label}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="px-3 py-3 border-t border-white/6">
+                <p className="m-0 text-white/72 text-[0.68rem] tracking-[0.12em] uppercase text-center">
+                  {item.label}
+                </p>
+              </div>
+              </button>
+            </div>
+          ))}
           {PLACEHOLDER_ITEMS.map((item) => (
             <div
               key={item}
@@ -56,7 +122,7 @@ export const GalleryOverlay = ({
               }}
             >
               <div
-                className="aspect-[4/5] flex items-center justify-center"
+                className="aspect-square flex items-center justify-center"
                 style={{
                   background:
                     "radial-gradient(circle at top, rgba(255,214,173,0.12), transparent 46%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))",

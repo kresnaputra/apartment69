@@ -65,6 +65,7 @@ type NovelStore = {
   registerBundle: (id: string, bundle: LoadedCharacterBundle) => void;
   setStatusMessage: (message: LocalizedText) => void;
   startStory: () => void;
+  startFromLabel: (label: string, flags?: FlagMap) => void;
   clearScene: () => void;
   loadFromSave: (
     label: string,
@@ -668,6 +669,19 @@ export const useNovelStore = create<NovelStore>((set) => ({
         ...emptyState,
         bundles: state.bundles,
         statusMessage: state.statusMessage,
+      }),
+    ),
+
+  startFromLabel: (label, flags) =>
+    set((state) =>
+      runScriptUntilPause({
+        ...state,
+        ...emptyState,
+        bundles: state.bundles,
+        statusMessage: state.statusMessage,
+        currentLabel: label,
+        currentIndex: 0,
+        flags: flags ?? {},
       }),
     ),
 

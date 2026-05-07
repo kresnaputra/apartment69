@@ -235,10 +235,12 @@ export const minigame = (minigameId: MinigameId, options?: Record<string, unknow
  * @param loop - If true, video will loop until user clicks or presses a button
  * @param narrate - Optional narration text to display during the cutscene
  * @param showSpeedControl - If true, shows on-screen buttons to change playback speed
+ * @param audioSrc - Optional standalone audio track for the cutscene
  */
-export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText, showSpeedControl?: boolean): CutSceneCommand => ({
+export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText, showSpeedControl?: boolean, audioSrc?: string): CutSceneCommand => ({
   type: "cutScene",
   src,
+  audioSrc,
   loop,
   narrate,
   showSpeedControl,

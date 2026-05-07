@@ -27,6 +27,7 @@ import mayaSpecialSceneNormal3 from "@/cut-scene/maya-special-scene-normal-3.web
 import mayaSpecialSceneNormal4 from "@/cut-scene/maya-special-scene-normal-4.webm?url";
 import mayaSpecialSceneNormal5 from "@/cut-scene/maya-special-scene-normal-5.webm?url";
 import mayaSpecialSceneNormal6 from "@/cut-scene/maya-special-scene-normal-6.webm?url";
+import mayaBadEndingSound from "@/voice/maya/maya-special-2-scene-1.wav";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   bg(
@@ -65,6 +66,15 @@ export const day7IntroScene: VisualNovelCommand[] = [
 ];
 
 export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
+   bg(
+    bedroomNightUrl,
+    tx({
+      id: "Unit 302 - 20:00",
+      en: "Unit 302 - 20:00",
+      ja: "302号室 - 20:00",
+      ko: "302호 - 20:00",
+    }),
+  ),
   show("maya-day7-devoted", "maya", "blush", {
     position: "center",
     enterFrom: "fade",
@@ -258,6 +268,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
           ko: "스타일1",
         }),
         src: mayaSpecial2Scene1,
+        audioSrc: mayaBadEndingSound,
         loop: true,
         narrate: tx({
           id: "Arka: Niat awalku malam ini cuma murni mau jadi sandaran biar dia bisa tidur tenang. Nggak ada niat buat ngambil kesempatan waktu dia lagi rapuh-rapuhnya begini.",
@@ -331,9 +342,21 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
     }),
     { size: "sub" },
   ),
+  jumpIf("galleryMode", "gallery-return", {
+    value: true,
+  }),
 ];
 
 export const day7EternalPromiseScene: VisualNovelCommand[] = [
+   bg(
+    bedroomNightUrl,
+    tx({
+      id: "Unit 302 - 20:00",
+      en: "Unit 302 - 20:00",
+      ja: "302号室 - 20:00",
+      ko: "302호 - 20:00",
+    }),
+  ),
   show("maya-day7-promise", "maya", "calm", {
     position: "center",
     enterFrom: "fade",

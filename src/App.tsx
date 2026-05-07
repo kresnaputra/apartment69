@@ -613,6 +613,7 @@ const DialogueUI = memo(({
 
 const CutSceneOverlay = ({
   src,
+  audioSrc,
   loop,
   narrate,
   showSpeedControl,
@@ -626,6 +627,7 @@ const CutSceneOverlay = ({
   onComplete,
 }: {
   src: string;
+  audioSrc?: string;
   loop?: boolean;
   narrate?: LocalizedText;
   showSpeedControl?: boolean;
@@ -650,6 +652,8 @@ const CutSceneOverlay = ({
   const [currentSpeed, setCurrentSpeed] = useState(1);
   const completedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const previousVideoTimeRef = useRef(0);
 
   const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
   const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
@@ -671,6 +675,7 @@ const CutSceneOverlay = ({
     setRevealedCount(0);
     setVideoEnded(false);
     setCurrentSpeed(1);
+    previousVideoTimeRef.current = 0;
   }, [resolvedNarrate, src]);
 
   useEffect(() => {
@@ -693,7 +698,18 @@ const CutSceneOverlay = ({
     if (videoRef.current) {
       videoRef.current.playbackRate = forcedPlaybackSpeed ?? currentSpeed;
     }
+    if (audioRef.current) {
+      audioRef.current.playbackRate = forcedPlaybackSpeed ?? currentSpeed;
+    }
   }, [currentSpeed, forcedPlaybackSpeed]);
+
+  useEffect(() => {
+    const audioNode = audioRef.current;
+    if (!audioNode || !audioSrc) return;
+
+    audioNode.currentTime = 0;
+    void audioNode.play().catch(() => {});
+  }, [audioSrc, src]);
 
   const handleSpeedChange = (speed: number) => {
     setCurrentSpeed(speed);
@@ -708,6 +724,22 @@ const CutSceneOverlay = ({
     setFadingOut(true);
     window.setTimeout(onComplete, CUTSCENE_FADE_MS);
   }, [allowDirectExit, loop, onComplete, videoEnded]);
+
+  const handleVideoTimeUpdate = useCallback(() => {
+    const videoNode = videoRef.current;
+    const audioNode = audioRef.current;
+    if (!videoNode) return;
+
+    const currentTime = videoNode.currentTime;
+    const previousTime = previousVideoTimeRef.current;
+
+    if (loop && audioSrc && audioNode && currentTime + 0.2 < previousTime) {
+      audioNode.currentTime = 0;
+      void audioNode.play().catch(() => {});
+    }
+
+    previousVideoTimeRef.current = currentTime;
+  }, [audioSrc, loop]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
@@ -742,6 +774,7 @@ const CutSceneOverlay = ({
         playsInline
         loop={loop}
         onEnded={() => setVideoEnded(true)}
+        onTimeUpdate={handleVideoTimeUpdate}
         style={{
           width: "100%",
           height: "100%",
@@ -751,6 +784,14 @@ const CutSceneOverlay = ({
           transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
         }}
       />
+      {audioSrc ? (
+        <audio
+          ref={audioRef}
+          key={`${src}:${audioSrc}`}
+          src={audioSrc}
+          autoPlay
+        />
+      ) : null}
       {visibleNarrate && (
         <div className="vn-narrator-shell" style={{
           opacity: fadingOut || !visible ? 0 : 1,
@@ -923,6 +964,7 @@ const MultiCutSceneOverlay = ({
       <CutSceneOverlay
         key={activeSelection.id}
         src={activeSelection.src}
+        audioSrc={activeSelection.audioSrc}
         loop={activeSelection.loop}
         narrate={activeSelection.narrate}
         showSpeedControl={false}
@@ -1108,6 +1150,7 @@ const App = () => {
   const registerBundle = useNovelStore((state) => state.registerBundle);
   const setStatusMessage = useNovelStore((state) => state.setStatusMessage);
   const startStory = useNovelStore((state) => state.startStory);
+  const startFromLabel = useNovelStore((state) => state.startFromLabel);
   const advance = useNovelStore((state) => state.advance);
   const choose = useNovelStore((state) => state.choose);
   const completeMinigame = useNovelStore((state) => state.completeMinigame);
@@ -1143,6 +1186,7 @@ const App = () => {
   const [textSpeed, setTextSpeed] = useState(1);
   const [saveToast, setSaveToast] = useState(false);
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
+  const [autoOpenGalleryOnMenu, setAutoOpenGalleryOnMenu] = useState(false);
   const audioRef = useRef<NovelAudioEngine | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
   const hasStartedBundleLoadRef = useRef(false);
@@ -1510,6 +1554,12 @@ const App = () => {
     setPhase("story");
   };
 
+  const handleOpenGalleryScene = (label: string) => {
+    setAutoOpenGalleryOnMenu(true);
+    startFromLabel(label, { galleryMode: true });
+    setPhase("story");
+  };
+
   const handleAuto = () => setIsAuto((prev) => !prev);
 
   const handleSkip = () => {
@@ -1595,8 +1645,8 @@ const App = () => {
 
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
-          : <MainMenu bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} />
+          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          : <MainMenu bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
       )}
       <main
         className="vn-root"
@@ -1798,6 +1848,7 @@ const App = () => {
           <CutSceneOverlay
             key={`${activeCutScene.src}:${activeCutScene.loop ? "loop" : "once"}`}
             src={activeCutScene.src}
+            audioSrc={activeCutScene.audioSrc}
             loop={activeCutScene.loop}
             narrate={activeCutScene.narrate}
             showSpeedControl={activeCutScene.showSpeedControl}

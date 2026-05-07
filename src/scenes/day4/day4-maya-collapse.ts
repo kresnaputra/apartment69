@@ -333,6 +333,15 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
 ];
 
 export const day4MayaForceRestScene: VisualNovelCommand[] = [
+  bg(
+    mayaBedroomUrl,
+    tx({
+      id: "Unit 301 - Kamar Maya",
+      en: "Unit 301 - Maya's Room",
+      ja: "301号室 - マヤの部屋",
+      ko: "301호 - 마야의 방",
+    }),
+  ),
   setFlag("mayaProtectedOnDay4", true),
   say(
     "arka",

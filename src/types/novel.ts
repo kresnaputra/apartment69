@@ -27,6 +27,7 @@ export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-con
 
 export type ActiveCutScene = {
   src: string;
+  audioSrc?: string;
   loop?: boolean;
   narrate?: LocalizedText;
   showSpeedControl?: boolean;
@@ -189,6 +190,7 @@ export type MinigameCommand = {
 export type CutSceneCommand = {
   type: "cutScene";
   src: string;
+  audioSrc?: string;
   loop?: boolean;
   narrate?: LocalizedText;
   showSpeedControl?: boolean;
@@ -204,6 +206,7 @@ export type CutSceneSelection = {
   id: string;
   label: LocalizedText;
   src: string;
+  audioSrc?: string;
   loop?: boolean;
   narrate?: LocalizedText;
   showSpeedControl?: boolean;

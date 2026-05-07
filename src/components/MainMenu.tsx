@@ -35,9 +35,12 @@ type MainMenuProps = {
   onBgVolumeChange: (value: number) => void;
   onTextSpeedChange: (value: number) => void;
   onStart: () => void;
+  onOpenGalleryScene: (label: string) => void;
   onLoad: (slot: SaveSlot) => void;
   slots: (SaveSlot | null)[];
   isReady: boolean;
+  autoOpenGallery?: boolean;
+  onAutoOpenGalleryConsumed?: () => void;
 };
 
 export const MainMenu = ({
@@ -49,9 +52,12 @@ export const MainMenu = ({
   onBgVolumeChange,
   onTextSpeedChange,
   onStart,
+  onOpenGalleryScene,
   onLoad,
   slots,
   isReady,
+  autoOpenGallery = false,
+  onAutoOpenGalleryConsumed,
 }: MainMenuProps) => {
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
@@ -76,6 +82,12 @@ export const MainMenu = ({
     const t = window.setTimeout(() => setVisible(true), 80);
     return () => window.clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    if (!autoOpenGallery) return;
+    setShowGallery(true);
+    onAutoOpenGalleryConsumed?.();
+  }, [autoOpenGallery, onAutoOpenGalleryConsumed]);
 
   const handleStart = () => {
     if (!isReady) return;
@@ -208,6 +220,7 @@ export const MainMenu = ({
           closeLabel={labels.close}
           emptyLabel={labels.galleryEmpty}
           onClose={() => setShowGallery(false)}
+          onOpenScene={onOpenGalleryScene}
           title={labels.galleryTitle}
         />
       )}

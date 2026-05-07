@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { centeredText, hide, jump, scene } from "@/scenes/scriptTypes";
+import { centeredText, hide, jumpIf, scene } from "@/scenes/scriptTypes";
 import { mayaDayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
 
 export const day4ComplateScene: VisualNovelCommand[] = [
@@ -19,5 +19,8 @@ export const day4ComplateScene: VisualNovelCommand[] = [
     }),
     { size: "hero", typingSpeed: 0.3 },
   ),
-  jump("day5-maya-morning"),
+  jumpIf("galleryMode", "gallery-return", {
+    value: true,
+    elseTarget: "day5-maya-morning",
+  }),
 ];
