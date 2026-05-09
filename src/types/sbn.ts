@@ -56,6 +56,14 @@ export type SbnAttachment = {
   scaleX: number;
   scaleY: number;
   slotId: number;
+  opacity?: number;
+  opaqueBounds?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  imageIsCropped?: boolean;
   assetPath?: string;
   imageData?: string;
 };

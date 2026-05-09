@@ -49,7 +49,7 @@ export const mayaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0,
   defaultY: -250,
-  defaultScale: isMobileDevice() ? 3.3 : 3.3,
+  defaultScale: isMobileDevice() ? 2.9 : 3.1,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,

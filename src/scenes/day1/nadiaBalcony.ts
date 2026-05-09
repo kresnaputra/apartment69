@@ -58,7 +58,6 @@ export const nadiaBalconyScene: VisualNovelCommand[] = [
   show("nadia-balcony", "nadia", "neutral", {
     position: "center",
     enterFrom: "right",
-    xOffset: -0.04,
   }),
   say(
     "nadia",
@@ -125,7 +124,7 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
     ja: "えっ…ちょっと待って、確認してみる！",
     ko: "어...? 잠깐만, 확인해볼게!",
   }), { hideName: true }),
-  moveTo("nadia-balcony", "right", { xOffset: 0.5 }),
+  hide("nadia-balcony", "fadeAway"),
   narrate(
     tx({
       id: "(Dia menghilang masuk ke dalam, dan sesaat kemudian lampunya menyala lagi.)",
@@ -134,11 +133,9 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
       ko: "(그녀는 안으로 사라지고, 잠시 뒤 조명이 다시 켜진다.)",
     }),
   ),
-  hide("nadia-balcony"),
   show("nadia-balcony", "nadia", "neutral", {
     position: "center",
     enterFrom: "right",
-    xOffset: -0.04,
   }),
   say(
     "nadia",
@@ -206,6 +203,7 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
     }),
   ),
   jump("sara-hallway"),
+  hide("nadia-balcony"),
 ];
 
 export const nadiaAdviceRefuseScene: VisualNovelCommand[] = [

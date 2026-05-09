@@ -181,10 +181,19 @@ export const resolveSceneDrawables = (
 
 export const getAttachmentBounds = (attachment: SbnAttachment, bone: WorldBone) => {
   const rotation = ((bone._wrot + attachment.rotation) * Math.PI) / 180;
-  const width = attachment.width * Math.abs(attachment.scaleX * bone.scaleX) * 0.5;
-  const height = attachment.height * Math.abs(attachment.scaleY * bone.scaleY) * 0.5;
-  const offsetX = attachment.x;
-  const offsetY = attachment.y;
+  const totalScaleX = attachment.scaleX * bone.scaleX;
+  const totalScaleY = attachment.scaleY * bone.scaleY;
+  const cropBounds = attachment.imageIsCropped ? attachment.opaqueBounds : undefined;
+  const pixelScaleX = Math.abs(totalScaleX) * 0.5;
+  const pixelScaleY = Math.abs(totalScaleY) * 0.5;
+  const width = (cropBounds?.width ?? attachment.width) * pixelScaleX;
+  const height = (cropBounds?.height ?? attachment.height) * pixelScaleY;
+  const offsetX =
+    attachment.x +
+    ((cropBounds?.x ?? 0) + (cropBounds?.width ?? attachment.width) / 2 - attachment.width / 2) * pixelScaleX;
+  const offsetY =
+    attachment.y +
+    ((cropBounds?.y ?? 0) + (cropBounds?.height ?? attachment.height) / 2 - attachment.height / 2) * pixelScaleY;
   const cos = Math.cos(rotation);
   const sin = Math.sin(rotation);
   const centerX = bone._wx + offsetX * cos - offsetY * sin;

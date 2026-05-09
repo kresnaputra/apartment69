@@ -165,17 +165,30 @@ export class CanvasSbnRenderer {
     );
     const totalScaleX = attachment.scaleX * bone.scaleX;
     const totalScaleY = attachment.scaleY * bone.scaleY;
-    const width = attachment.width * Math.abs(totalScaleX) * input.camera.zoom * input.scale * 0.5;
-    const height = attachment.height * Math.abs(totalScaleY) * input.camera.zoom * input.scale * 0.5;
+    const pixelScaleX = Math.abs(totalScaleX) * input.camera.zoom * input.scale * 0.5;
+    const pixelScaleY = Math.abs(totalScaleY) * input.camera.zoom * input.scale * 0.5;
+    const cropBounds = attachment.imageIsCropped ? attachment.opaqueBounds : undefined;
+    const originalWidth = attachment.width * pixelScaleX;
+    const originalHeight = attachment.height * pixelScaleY;
+    const width = (cropBounds?.width ?? attachment.width) * pixelScaleX;
+    const height = (cropBounds?.height ?? attachment.height) * pixelScaleY;
     const offsetX = attachment.x * input.camera.zoom * input.scale;
     const offsetY = attachment.y * input.camera.zoom * input.scale;
+    const cropOffsetX = (cropBounds?.x ?? 0) * pixelScaleX;
+    const cropOffsetY = (cropBounds?.y ?? 0) * pixelScaleY;
 
     this.ctx.save();
     this.ctx.translate(screenPos.x, screenPos.y);
     this.ctx.rotate((bone._wrot * Math.PI) / 180);
     this.ctx.rotate((attachment.rotation * Math.PI) / 180);
     this.ctx.scale(totalScaleX < 0 ? -1 : 1, totalScaleY < 0 ? -1 : 1);
-    this.ctx.drawImage(image, offsetX - width / 2, offsetY - height / 2, width, height);
+    this.ctx.drawImage(
+      image,
+      offsetX - originalWidth / 2 + cropOffsetX,
+      offsetY - originalHeight / 2 + cropOffsetY,
+      width,
+      height,
+    );
     this.ctx.restore();
   }
 
