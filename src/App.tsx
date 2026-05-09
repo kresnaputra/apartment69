@@ -1464,7 +1464,7 @@ const App = () => {
   useEffect(() => {
     let animationFrame = 0;
     let lastTick = performance.now();
-    const targetFps = 24;
+    const targetFps = 60;
     const frameInterval = 1000 / targetFps;
 
     const loop = (time: number) => {

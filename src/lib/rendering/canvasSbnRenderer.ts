@@ -14,6 +14,9 @@ type RenderInput = {
 export class CanvasSbnRenderer {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;
+  private backingWidth = 0;
+  private backingHeight = 0;
+  private pixelRatio = 1;
   private static imageCache = new Map<string, HTMLImageElement>();
   private static loadingCache = new Map<string, Promise<HTMLImageElement>>();
 
@@ -28,9 +31,30 @@ export class CanvasSbnRenderer {
   resize(width: number, height: number, resolutionScale = 1) {
     if (!this.canvas || !this.ctx || width <= 0 || height <= 0) return;
 
-    const dpr = Math.max(1, window.devicePixelRatio || 1) * Math.max(1, resolutionScale);
-    this.canvas.width = Math.round(width * dpr);
-    this.canvas.height = Math.round(height * dpr);
+    const navigatorWithMemory = navigator as Navigator & { deviceMemory?: number };
+    const isSmallViewport = Math.min(window.innerWidth, window.innerHeight) < 700;
+    const isLowMemoryDevice = (navigatorWithMemory.deviceMemory ?? 8) <= 4;
+    const maxPixelRatio = isSmallViewport ? 2.75 : isLowMemoryDevice ? 2 : 2.5;
+    const dpr = Math.min(
+      maxPixelRatio,
+      Math.max(1, (window.devicePixelRatio || 1) * Math.max(1, resolutionScale)),
+    );
+    const backingWidth = Math.round(width * dpr);
+    const backingHeight = Math.round(height * dpr);
+
+    if (
+      this.backingWidth === backingWidth &&
+      this.backingHeight === backingHeight &&
+      this.pixelRatio === dpr
+    ) {
+      return;
+    }
+
+    this.backingWidth = backingWidth;
+    this.backingHeight = backingHeight;
+    this.pixelRatio = dpr;
+    this.canvas.width = backingWidth;
+    this.canvas.height = backingHeight;
     this.canvas.style.width = `${width}px`;
     this.canvas.style.height = `${height}px`;
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
