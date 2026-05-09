@@ -9,6 +9,7 @@ import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
+import type { FlagMap } from "@/types/novel";
 
 type MainMenuProps = {
   bgVolume: number;
@@ -18,6 +19,7 @@ type MainMenuProps = {
     gallery: string;
     galleryEmpty: string;
     galleryTitle: string;
+    lockedScene: string;
     load: string;
     loading: string;
     mainMenuSettings: string;
@@ -39,6 +41,7 @@ type MainMenuProps = {
   onLoad: (slot: SaveSlot) => void;
   slots: (SaveSlot | null)[];
   isReady: boolean;
+  flags: FlagMap;
   autoOpenGallery?: boolean;
   onAutoOpenGalleryConsumed?: () => void;
 };
@@ -56,6 +59,7 @@ export const MainMenu = ({
   onLoad,
   slots,
   isReady,
+  flags,
   autoOpenGallery = false,
   onAutoOpenGalleryConsumed,
 }: MainMenuProps) => {
@@ -219,6 +223,8 @@ export const MainMenu = ({
         <GalleryOverlay
           closeLabel={labels.close}
           emptyLabel={labels.galleryEmpty}
+          flags={flags}
+          lockedLabel={labels.lockedScene}
           onClose={() => setShowGallery(false)}
           onOpenScene={onOpenGalleryScene}
           title={labels.galleryTitle}

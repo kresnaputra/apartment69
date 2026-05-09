@@ -10,6 +10,7 @@ import {
   narrate,
   say,
   scene,
+  setFlag,
   show,
 } from "@/scenes/scriptTypes";
 import bedroomNightUrl from "@/background/bedroom-night.png";
@@ -342,6 +343,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
     }),
     { size: "sub" },
   ),
+  setFlag("gallerySceneMaya2Unlocked", true),
   jumpIf("galleryMode", "gallery-return", {
     value: true,
   }),
@@ -535,4 +537,5 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
     }),
     { size: "sub" },
   ),
+  setFlag("gallerySceneMaya3Unlocked", true),
 ];

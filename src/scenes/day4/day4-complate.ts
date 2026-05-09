@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { centeredText, hide, jumpIf, scene } from "@/scenes/scriptTypes";
+import { centeredText, hide, jumpIf, scene, setFlag } from "@/scenes/scriptTypes";
 import { mayaDayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
 
 export const day4ComplateScene: VisualNovelCommand[] = [
@@ -19,6 +19,7 @@ export const day4ComplateScene: VisualNovelCommand[] = [
     }),
     { size: "hero", typingSpeed: 0.3 },
   ),
+  setFlag("gallerySceneMaya1Unlocked", true),
   jumpIf("galleryMode", "gallery-return", {
     value: true,
     elseTarget: "day5-maya-morning",
