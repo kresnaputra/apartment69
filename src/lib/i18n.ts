@@ -77,6 +77,18 @@ export const uiText = {
     ja: "テキスト速度",
     ko: "텍스트 속도",
   }),
+  graphicsQuality: tx({
+    id: "Grafis",
+    en: "Graphics",
+    ja: "グラフィック",
+    ko: "그래픽",
+  }),
+  animationFps: tx({
+    id: "FPS Animasi",
+    en: "Animation FPS",
+    ja: "アニメーションFPS",
+    ko: "애니메이션 FPS",
+  }),
   language: tx({ id: "Bahasa", en: "Language", ja: "言語", ko: "언어" }),
   mainMenuSettings: tx({
     id: "Pengaturan",

@@ -1,15 +1,24 @@
 import { useState } from "react";
 import type { LanguageCode } from "@/lib/i18n";
+import type { AnimationFrameRate, GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 
 type MainMenuSettingsOverlayProps = {
   bgVolume: number;
   bgVolumeLabel: string;
   closeLabel: string;
+  frameRate: AnimationFrameRate;
+  frameRateLabel: string;
+  frameRateOptions: Array<{ value: AnimationFrameRate; label: string }>;
+  graphicsQuality: GraphicsQuality;
+  graphicsQualityLabel: string;
+  graphicsQualityOptions: Array<{ value: GraphicsQuality; label: string }>;
   language: LanguageCode;
   languageLabel: string;
   languageOptions: { code: LanguageCode; label: string }[];
   textSpeed: number;
   textSpeedLabel: string;
+  onFrameRateChange: (frameRate: AnimationFrameRate) => void;
+  onGraphicsQualityChange: (quality: GraphicsQuality) => void;
   onLanguageChange: (language: LanguageCode) => void;
   onBgVolumeChange: (value: number) => void;
   onTextSpeedChange: (value: number) => void;
@@ -21,11 +30,19 @@ export const MainMenuSettingsOverlay = ({
   bgVolume,
   bgVolumeLabel,
   closeLabel,
+  frameRate,
+  frameRateLabel,
+  frameRateOptions,
+  graphicsQuality,
+  graphicsQualityLabel,
+  graphicsQualityOptions,
   language,
   languageLabel,
   languageOptions,
   textSpeed,
   textSpeedLabel,
+  onFrameRateChange,
+  onGraphicsQualityChange,
   onLanguageChange,
   onBgVolumeChange,
   onTextSpeedChange,
@@ -99,6 +116,60 @@ export const MainMenuSettingsOverlay = ({
                       }}
                     />
                   </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Graphics */}
+        <div className="flex flex-col gap-3">
+          <label className="text-white/45 text-[0.68rem] tracking-[0.18em] uppercase">{graphicsQualityLabel}</label>
+          <div className="grid grid-cols-3 gap-2">
+            {graphicsQualityOptions.map((option) => {
+              const active = option.value === graphicsQuality;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => onGraphicsQualityChange(option.value)}
+                  className="rounded-xl border px-3 py-3 text-center transition-all duration-200"
+                  style={{
+                    borderColor: active ? "rgba(255,214,173,0.45)" : "rgba(255,255,255,0.08)",
+                    background: active
+                      ? "linear-gradient(180deg, rgba(255,214,173,0.14), rgba(255,214,173,0.06))"
+                      : "rgba(255,255,255,0.03)",
+                    boxShadow: active ? "0 0 0 1px rgba(255,214,173,0.1) inset" : "none",
+                  }}
+                >
+                  <span className="text-[0.78rem] text-white/88">{option.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* FPS */}
+        <div className="flex flex-col gap-3">
+          <label className="text-white/45 text-[0.68rem] tracking-[0.18em] uppercase">{frameRateLabel}</label>
+          <div className="grid grid-cols-3 gap-2">
+            {frameRateOptions.map((option) => {
+              const active = option.value === frameRate;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => onFrameRateChange(option.value)}
+                  className="rounded-xl border px-3 py-3 text-center transition-all duration-200"
+                  style={{
+                    borderColor: active ? "rgba(255,214,173,0.45)" : "rgba(255,255,255,0.08)",
+                    background: active
+                      ? "linear-gradient(180deg, rgba(255,214,173,0.14), rgba(255,214,173,0.06))"
+                      : "rgba(255,255,255,0.03)",
+                    boxShadow: active ? "0 0 0 1px rgba(255,214,173,0.1) inset" : "none",
+                  }}
+                >
+                  <span className="text-[0.78rem] text-white/88">{option.label}</span>
                 </button>
               );
             })}

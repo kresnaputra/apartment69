@@ -28,6 +28,18 @@ import type { SmartphoneContactOverrides } from "@/components/minigames/smartpho
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import {
+  ANIMATION_FRAME_RATE_STORAGE_KEY,
+  DEFAULT_ANIMATION_FRAME_RATE,
+  DEFAULT_GRAPHICS_QUALITY,
+  GRAPHICS_QUALITY_STORAGE_KEY,
+  frameRateOptions,
+  graphicsQualityOptions,
+  isAnimationFrameRate,
+  isGraphicsQuality,
+  type AnimationFrameRate,
+  type GraphicsQuality,
+} from "@/lib/runtime/graphicsSettings";
+import {
   initializeAdMob,
   showDayTransitionInterstitial,
 } from "@/lib/runtime/admob";
@@ -54,6 +66,7 @@ const CHARACTER_MIN_STAGE_HEIGHT_RATIO = 0.58;
 type CharacterSpriteProps = {
   bundle: LoadedCharacterBundle;
   character: CharacterInstance;
+  graphicsQuality: GraphicsQuality;
   isDimmed: boolean;
 };
 
@@ -320,7 +333,7 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
   );
 });
 
-const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps & {
+const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed }: CharacterSpriteProps & {
   bundle: Extract<LoadedCharacterBundle, { kind: "sbn" }>;
 }) => {
   const rendererRef = useRef<CanvasSbnRenderer | null>(null);
@@ -351,10 +364,10 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
     const usesCroppedImages = bundle.project.attachments.some(
       (attachment) => attachment.imageIsCropped && attachment.opaqueBounds,
     );
-    renderer.resize(viewport.width, viewport.height, stageScale, usesCroppedImages);
+    renderer.resize(viewport.width, viewport.height, stageScale, usesCroppedImages, graphicsQuality);
     // Invalidate camera cache when viewport changes
     cameraRef.current = null;
-  }, [bundle, stageScale, viewport.height, viewport.width]);
+  }, [bundle, graphicsQuality, stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
     const renderer = rendererRef.current;
@@ -392,23 +405,24 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
   );
 });
 
-const CharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps) => {
+const CharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed }: CharacterSpriteProps) => {
   if (bundle.kind === "sbn") {
-    return <SbnCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
+    return <SbnCharacterSprite bundle={bundle} character={character} graphicsQuality={graphicsQuality} isDimmed={isDimmed} />;
   }
 
-  return <SpritesheetCharacterSprite bundle={bundle} character={character} isDimmed={isDimmed} />;
+  return <SpritesheetCharacterSprite bundle={bundle} character={character} graphicsQuality={graphicsQuality} isDimmed={isDimmed} />;
 });
 
 type CharacterStageProps = {
   characters: Record<string, CharacterInstance>;
   bundles: Record<string, LoadedCharacterBundle>;
   activeCharacterId: string | null;
+  graphicsQuality: GraphicsQuality;
   isNarration: boolean;
   isSceneTransitioning: boolean;
 };
 
-const CharacterStage = memo(({ characters, bundles, activeCharacterId, isNarration, isSceneTransitioning }: CharacterStageProps) => {
+const CharacterStage = memo(({ characters, bundles, activeCharacterId, graphicsQuality, isNarration, isSceneTransitioning }: CharacterStageProps) => {
   if (isSceneTransitioning) return null;
 
   const renderCharacters = Object.values(characters).sort((a, b) => a.y - b.y);
@@ -426,6 +440,7 @@ const CharacterStage = memo(({ characters, bundles, activeCharacterId, isNarrati
             key={`${character.id}-${character.entryVersion}`}
             bundle={bundle}
             character={character}
+            graphicsQuality={graphicsQuality}
             isDimmed={isDimmed}
           />
         );
@@ -627,6 +642,7 @@ const CutSceneOverlay = ({
   speedLabels,
   textSpeed = 1,
   forcedPlaybackSpeed,
+  narrationClassName,
   onComplete,
 }: {
   src: string;
@@ -646,6 +662,7 @@ const CutSceneOverlay = ({
   };
   textSpeed?: number;
   forcedPlaybackSpeed?: number;
+  narrationClassName?: string;
   onComplete: () => void;
 }) => {
   const [visible, setVisible] = useState(false);
@@ -796,7 +813,7 @@ const CutSceneOverlay = ({
         />
       ) : null}
       {visibleNarrate && (
-        <div className="vn-narrator-shell" style={{
+        <div className={`vn-narrator-shell ${narrationClassName ?? ""}`} style={{
           opacity: fadingOut || !visible ? 0 : 1,
           transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
         }}>
@@ -983,28 +1000,14 @@ const MultiCutSceneOverlay = ({
         }}
         textSpeed={textSpeed * playbackSpeed}
         forcedPlaybackSpeed={playbackSpeed}
+        narrationClassName="vn-multicut-narrator-shell"
         onComplete={onComplete}
       />
       <div
+        className="vn-multicut-controls"
         onClick={(e) => e.stopPropagation()}
-        style={{
-          position: "absolute",
-          zIndex: 101,
-          left: "50%",
-          bottom: "26px",
-          transform: "translateX(-50%)",
-          display: "grid",
-          gap: "8px",
-          width: "min(72vw, 600px)",
-          padding: "0",
-          borderRadius: "0",
-          background: "transparent",
-          border: "none",
-          pointerEvents: "auto",
-        }}
       >
-        {/* Speed buttons */}
-        <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+        <div className="vn-multicut-speed">
           {[
             { label: "1x", value: 1 },
             { label: "2x", value: 2 },
@@ -1014,34 +1017,14 @@ const MultiCutSceneOverlay = ({
               key={option.value}
               type="button"
               onClick={() => setPlaybackSpeed(option.value)}
-              style={{
-                padding: "3px 10px",
-                borderRadius: "999px",
-                border: option.value === playbackSpeed
-                  ? "1px solid rgba(255, 214, 173, 0.55)"
-                  : "1px solid rgba(255, 255, 255, 0.1)",
-                background: option.value === playbackSpeed
-                  ? "rgba(255, 214, 173, 0.14)"
-                  : "transparent",
-                backdropFilter: "blur(16px)",
-                color: option.value === playbackSpeed
-                  ? "#ffd6ad"
-                  : "rgba(255, 255, 255, 0.38)",
-                fontSize: "0.62rem",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                fontWeight: option.value === playbackSpeed ? 600 : 400,
-                cursor: "pointer",
-                transition: "all 160ms ease",
-              }}
+              className={`vn-multicut-speed-button${option.value === playbackSpeed ? " vn-multicut-speed-button-active" : ""}`}
             >
               {option.label}
             </button>
           ))}
         </div>
 
-        {/* Scene selector buttons */}
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(selections.length, 5)}, minmax(0, 1fr))`, gap: "10px" }}>
+        <div className="vn-multicut-scenes">
           {selections.map((scene) => {
             const isActive = activeSelection.id === scene.id;
             const isEnabled = scene.enabled !== false;
@@ -1053,30 +1036,11 @@ const MultiCutSceneOverlay = ({
                 type="button"
                 disabled={!isUnlocked}
                 onClick={() => handleSelectScene(scene.id)}
-                style={{
-                  minWidth: 0,
-                  width: "100%",
-                  padding: "9px 8px",
-                  borderRadius: "10px",
-                  border: isActive
-                    ? "1px solid rgba(255, 214, 173, 0.45)"
-                    : "1px solid rgba(255, 255, 255, 0.08)",
-                  background: isActive
-                    ? "rgba(255, 214, 173, 0.12)"
-                    : "rgba(0, 0, 0, 0.55)",
-                  backdropFilter: "blur(16px)",
-                  color: !isUnlocked
-                    ? "rgba(255, 255, 255, 0.18)"
-                    : isActive
-                      ? "#ffd6ad"
-                      : "rgba(255, 255, 255, 0.55)",
-                  cursor: !isUnlocked ? "not-allowed" : "pointer",
-                  fontWeight: isActive ? 600 : 400,
-                  fontSize: "0.85rem",
-                  letterSpacing: "0.04em",
-                  opacity: isUnlocked ? 1 : 0.35,
-                  transition: "all 160ms ease",
-                }}
+                className={[
+                  "vn-multicut-scene-button",
+                  isActive ? "vn-multicut-scene-button-active" : "",
+                  !isUnlocked ? "vn-multicut-scene-button-locked" : "",
+                ].filter(Boolean).join(" ")}
               >
                 {enabledIndex === -1 ? "?" : enabledIndex + 1}
               </button>
@@ -1084,32 +1048,17 @@ const MultiCutSceneOverlay = ({
           })}
         </div>
 
-        {/* Continue / spacer */}
-        <div>
+        <div className="vn-multicut-continue-row">
           {isLastSelection ? (
             <button
               type="button"
               onClick={onComplete}
-              style={{
-                width: "100%",
-                padding: "9px 16px",
-                borderRadius: "10px",
-                border: "1px solid rgba(255, 214, 173, 0.35)",
-                background: "rgba(255, 214, 173, 0.12)",
-                backdropFilter: "blur(16px)",
-                color: "#ffd6ad",
-                fontWeight: 600,
-                fontSize: "0.72rem",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                cursor: "pointer",
-                transition: "all 160ms ease",
-              }}
+              className="vn-multicut-continue-button"
             >
-              Finish
+              {labels.continueStory}
             </button>
           ) : (
-            <div aria-hidden="true" style={{ height: "52px" }} />
+            <div aria-hidden="true" className="vn-multicut-continue-spacer" />
           )}
         </div>
       </div>
@@ -1185,6 +1134,16 @@ const App = () => {
       ? saved as LanguageCode
       : DEFAULT_LANGUAGE;
   });
+  const [graphicsQuality, setGraphicsQuality] = useState<GraphicsQuality>(() => {
+    if (typeof window === "undefined") return DEFAULT_GRAPHICS_QUALITY;
+    const saved = window.localStorage.getItem(GRAPHICS_QUALITY_STORAGE_KEY);
+    return isGraphicsQuality(saved) ? saved : DEFAULT_GRAPHICS_QUALITY;
+  });
+  const [frameRate, setFrameRate] = useState<AnimationFrameRate>(() => {
+    if (typeof window === "undefined") return DEFAULT_ANIMATION_FRAME_RATE;
+    const saved = window.localStorage.getItem(ANIMATION_FRAME_RATE_STORAGE_KEY);
+    return isAnimationFrameRate(saved) ? Number(saved) as AnimationFrameRate : DEFAULT_ANIMATION_FRAME_RATE;
+  });
   const [bgVolume, setBgVolume] = useState(0.4);
   const [textSpeed, setTextSpeed] = useState(1);
   const [saveToast, setSaveToast] = useState(false);
@@ -1205,6 +1164,10 @@ const App = () => {
   const resolvedChoices: Array<{ id: string; label: string; next: string; disabled?: boolean }> = choices.map(
     (choice) => ({ ...choice, label: resolveText(choice.label, language) }),
   );
+  const resolvedGraphicsQualityOptions = graphicsQualityOptions.map((option) => ({
+    ...option,
+    label: resolveText(option.label, language),
+  }));
   const labels = {
     auto: resolveText(uiText.auto, language),
     clickToContinue: resolveText(uiText.clickToContinue, language),
@@ -1214,11 +1177,13 @@ const App = () => {
     continueStory: resolveText(uiText.continueStory, language),
     emptySlot: resolveText(uiText.emptySlot, language),
     exit: resolveText(uiText.exit, language),
+    frameRate: resolveText(uiText.animationFps, language),
     fastPlayback: resolveText(uiText.playbackFast, language),
     fasterPlayback: resolveText(uiText.playbackFaster, language),
     gallery: resolveText(uiText.gallery, language),
     galleryEmpty: resolveText(uiText.galleryEmpty, language),
     galleryTitle: resolveText(uiText.galleryTitle, language),
+    graphicsQuality: resolveText(uiText.graphicsQuality, language),
     language: resolveText(uiText.language, language),
     load: resolveText(uiText.load, language),
     loading: resolveText(uiText.loading, language),
@@ -1247,6 +1212,14 @@ const App = () => {
   useEffect(() => {
     window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
   }, [language]);
+
+  useEffect(() => {
+    window.localStorage.setItem(GRAPHICS_QUALITY_STORAGE_KEY, graphicsQuality);
+  }, [graphicsQuality]);
+
+  useEffect(() => {
+    window.localStorage.setItem(ANIMATION_FRAME_RATE_STORAGE_KEY, String(frameRate));
+  }, [frameRate]);
 
   useEffect(() => {
     audioRef.current = new NovelAudioEngine();
@@ -1467,13 +1440,12 @@ const App = () => {
   useEffect(() => {
     let animationFrame = 0;
     let lastTick = performance.now();
-    const targetFps = 60;
-    const frameInterval = 1000 / targetFps;
+    const frameInterval = 1000 / frameRate;
 
     const loop = (time: number) => {
       const deltaMs = time - lastTick;
       
-      // Throttle to 24 FPS to reduce CPU usage
+      // Throttle animation updates to the target FPS to reduce CPU usage
       if (deltaMs >= frameInterval) {
         lastTick = time - (deltaMs % frameInterval);
         tickCharacters(deltaMs);
@@ -1484,7 +1456,7 @@ const App = () => {
 
     animationFrame = window.requestAnimationFrame(loop);
     return () => window.cancelAnimationFrame(animationFrame);
-  }, [tickCharacters]);
+  }, [frameRate, tickCharacters]);
 
   useEffect(() => {
     const handleAdvance = () => {
@@ -1648,8 +1620,8 @@ const App = () => {
 
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={flags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
-          : <MainMenu bgVolume={bgVolume} labels={labels} language={language} textSpeed={textSpeed} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={flags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={flags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          : <MainMenu bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={flags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
       )}
       <main
         className="vn-root"
@@ -1758,6 +1730,7 @@ const App = () => {
                   key={`${character.id}-${character.entryVersion}`}
                   bundle={bundle}
                   character={character}
+                  graphicsQuality={graphicsQuality}
                   isDimmed={isDimmed}
                 />
               );

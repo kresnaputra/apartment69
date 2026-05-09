@@ -1,4 +1,5 @@
 import { resolveSceneDrawables, sampleBonesAtFrame } from "@/lib/sbn/sampling";
+import type { GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import type { SceneBounds, SbnAttachment, SbnProject, WorldBone } from "@/types/sbn";
 
 const CROPPED_IMAGE_GUTTER_PX = 2;
@@ -31,15 +32,31 @@ export class CanvasSbnRenderer {
     }
   }
 
-  resize(width: number, height: number, resolutionScale = 1, allowHighResolution = false) {
+  resize(
+    width: number,
+    height: number,
+    resolutionScale = 1,
+    allowHighResolution = false,
+    graphicsQuality: GraphicsQuality = "balanced",
+  ) {
     if (!this.canvas || !this.ctx || width <= 0 || height <= 0) return;
 
     const navigatorWithMemory = navigator as Navigator & { deviceMemory?: number };
     const isSmallViewport = Math.min(window.innerWidth, window.innerHeight) < 700;
     const isLowMemoryDevice = (navigatorWithMemory.deviceMemory ?? 8) <= 4;
+    const croppedImagePixelRatio = (() => {
+      if (graphicsQuality === "performance") return isSmallViewport ? 1.85 : 2;
+      if (graphicsQuality === "high") return isSmallViewport ? 3.5 : 3.25;
+      return isLowMemoryDevice ? 2.25 : isSmallViewport ? 3 : 3.25;
+    })();
+    const defaultPixelRatio = (() => {
+      if (graphicsQuality === "performance") return isSmallViewport ? 1.75 : 2;
+      if (graphicsQuality === "high") return isSmallViewport ? 3 : 2.75;
+      return isSmallViewport ? 2.75 : isLowMemoryDevice ? 2 : 2.5;
+    })();
     const maxPixelRatio = allowHighResolution
-      ? (isSmallViewport ? 4 : 3.25)
-      : (isSmallViewport ? 2.75 : isLowMemoryDevice ? 2 : 2.5);
+      ? croppedImagePixelRatio
+      : defaultPixelRatio;
     const dpr = Math.min(
       maxPixelRatio,
       Math.max(1, (window.devicePixelRatio || 1) * Math.max(1, resolutionScale)),

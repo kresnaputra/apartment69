@@ -8,6 +8,7 @@ import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
+import type { AnimationFrameRate, GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import type { FlagMap } from "@/types/novel";
 
@@ -16,9 +17,11 @@ type MainMenuProps = {
   labels: {
     close: string;
     exit: string;
+    frameRate: string;
     gallery: string;
     galleryEmpty: string;
     galleryTitle: string;
+    graphicsQuality: string;
     lockedScene: string;
     load: string;
     loading: string;
@@ -31,8 +34,14 @@ type MainMenuProps = {
     textSpeed: string;
     volumeBgm: string;
   };
+  frameRate: AnimationFrameRate;
+  frameRateOptions: Array<{ value: AnimationFrameRate; label: string }>;
+  graphicsQuality: GraphicsQuality;
+  graphicsQualityOptions: Array<{ value: GraphicsQuality; label: string }>;
   language: LanguageCode;
   textSpeed: number;
+  onFrameRateChange: (frameRate: AnimationFrameRate) => void;
+  onGraphicsQualityChange: (quality: GraphicsQuality) => void;
   onLanguageChange: (language: LanguageCode) => void;
   onBgVolumeChange: (value: number) => void;
   onTextSpeedChange: (value: number) => void;
@@ -49,8 +58,14 @@ type MainMenuProps = {
 export const MainMenu = ({
   bgVolume,
   labels,
+  frameRate,
+  frameRateOptions,
+  graphicsQuality,
+  graphicsQualityOptions,
   language,
   textSpeed,
+  onFrameRateChange,
+  onGraphicsQualityChange,
   onLanguageChange,
   onBgVolumeChange,
   onTextSpeedChange,
@@ -236,11 +251,19 @@ export const MainMenu = ({
           bgVolume={bgVolume}
           bgVolumeLabel={labels.volumeBgm}
           closeLabel={labels.close}
+          frameRate={frameRate}
+          frameRateLabel={labels.frameRate}
+          frameRateOptions={frameRateOptions}
+          graphicsQuality={graphicsQuality}
+          graphicsQualityLabel={labels.graphicsQuality}
+          graphicsQualityOptions={graphicsQualityOptions}
           language={language}
           languageLabel={labels.language}
           languageOptions={languageOptions}
           textSpeed={textSpeed}
           textSpeedLabel={labels.textSpeed}
+          onFrameRateChange={onFrameRateChange}
+          onGraphicsQualityChange={onGraphicsQualityChange}
           onLanguageChange={onLanguageChange}
           onBgVolumeChange={onBgVolumeChange}
           onTextSpeedChange={onTextSpeedChange}
