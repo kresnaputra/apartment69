@@ -1,7 +1,6 @@
 import type {
-  LoadedSheetSource,
+  LoadedFrameBitmap,
   LoadedSpritesheetBundle,
-  SpritesheetFrameData,
   SpritesheetJson,
   SpritesheetManifest,
 } from "@/types/spritesheet";
@@ -26,8 +25,7 @@ export const loadSpritesheetBundle = async (
   }
   const manifest: SpritesheetManifest = await manifestResponse.json();
 
-  const allFrames: Record<string, SpritesheetFrameData> = {};
-  const sheetSources: LoadedSheetSource[] = [];
+  const frameBitmaps: LoadedFrameBitmap[] = new Array(manifest.totalFrames);
   let frameSize = { w: 0, h: 0 };
 
   for (const sheet of manifest.sheets) {
@@ -42,29 +40,32 @@ export const loadSpritesheetBundle = async (
       loadImage(imageUrl),
     ]);
 
-    Object.assign(allFrames, sheetJson.frames);
-
     if (sheetJson.meta.frameSize) {
       frameSize = sheetJson.meta.frameSize;
     }
 
-    sheetSources.push({
-      frameStart: sheet.frameStart,
-      frameEnd: sheet.frameEnd,
-      image: sheetImage,
-    });
-  }
+    await Promise.all(
+      Array.from({ length: sheet.frameEnd - sheet.frameStart + 1 }, async (_, idx) => {
+        const frameIndex = sheet.frameStart + idx;
+        const frameName = `frame_${String(frameIndex).padStart(4, "0")}`;
+        const frameData = sheetJson.frames[frameName];
+        if (!frameData) return;
 
-  const animationFrames = Array.from({ length: manifest.totalFrames }, (_, i) =>
-    `frame_${String(i).padStart(4, "0")}`,
-  );
+        const { x, y, w, h } = frameData.frame;
+        const bitmap = await createImageBitmap(sheetImage, x, y, w, h);
+        frameBitmaps[frameIndex] = {
+          bitmap,
+          spriteSourceSize: frameData.spriteSourceSize,
+          sourceSize: frameData.sourceSize ?? frameSize,
+        };
+      }),
+    );
+  }
 
   return {
     id: bundleId,
     manifest,
-    frames: allFrames,
-    animationFrames,
-    sheetSources,
+    frameBitmaps,
     totalFrames: manifest.totalFrames,
     fps: manifest.fps,
     frameSize,

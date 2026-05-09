@@ -37,45 +37,29 @@ export class CanvasSpritesheetRenderer {
     if (!this.canvas || !this.ctx) return;
 
     const { bundle, frame, viewportWidth, viewportHeight } = input;
-    const normalizedFrame = Math.min(
-      bundle.animationFrames.length - 1,
-      Math.max(0, Math.floor(frame)),
-    );
-    const frameName = bundle.animationFrames[normalizedFrame];
-    const frameData = bundle.frames[frameName];
+    const normalizedFrame = Math.min(bundle.frameBitmaps.length - 1, Math.max(0, Math.floor(frame)));
+    const frameData = bundle.frameBitmaps[normalizedFrame];
     if (!frameData) return;
 
-    const activeSheet =
-      bundle.sheetSources.find(
-        (sheet) => normalizedFrame >= sheet.frameStart && normalizedFrame <= sheet.frameEnd,
-      ) ?? bundle.sheetSources[0];
-    if (!activeSheet?.image?.complete) return;
+    const { bitmap, spriteSourceSize, sourceSize } = frameData;
 
     this.ctx.clearRect(0, 0, viewportWidth, viewportHeight);
 
-    const source = frameData.frame;
-    const frameSize = frameData.sourceSize ?? bundle.frameSize;
-
-    // Scale to fit the viewport while maintaining aspect ratio, anchored to bottom
-    const scaleX = viewportWidth / frameSize.w;
-    const scaleY = viewportHeight / frameSize.h;
+    const scaleX = viewportWidth / sourceSize.w;
+    const scaleY = viewportHeight / sourceSize.h;
     const scale = Math.min(scaleX, scaleY);
 
-    const targetWidth = frameSize.w * scale;
-    const targetHeight = frameSize.h * scale;
+    const targetWidth = sourceSize.w * scale;
+    const targetHeight = sourceSize.h * scale;
     const drawX = (viewportWidth - targetWidth) / 2;
     const drawY = viewportHeight - targetHeight;
 
     this.ctx.drawImage(
-      activeSheet.image,
-      source.x,
-      source.y,
-      source.w,
-      source.h,
-      drawX + frameData.spriteSourceSize.x * scale,
-      drawY + frameData.spriteSourceSize.y * scale,
-      source.w * scale,
-      source.h * scale,
+      bitmap,
+      drawX + spriteSourceSize.x * scale,
+      drawY + spriteSourceSize.y * scale,
+      bitmap.width * scale,
+      bitmap.height * scale,
     );
 
     if (input.dimmed) {

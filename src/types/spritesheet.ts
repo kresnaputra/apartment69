@@ -46,18 +46,16 @@ export type SpritesheetManifest = {
   sheets: SpritesheetManifestEntry[];
 };
 
-export type LoadedSheetSource = {
-  frameStart: number;
-  frameEnd: number;
-  image: HTMLImageElement;
+export type LoadedFrameBitmap = {
+  bitmap: ImageBitmap;
+  spriteSourceSize: SpritesheetFrameRect;
+  sourceSize: { w: number; h: number };
 };
 
 export type LoadedSpritesheetBundle = {
   id: string;
   manifest: SpritesheetManifest;
-  frames: Record<string, SpritesheetFrameData>;
-  animationFrames: string[];
-  sheetSources: LoadedSheetSource[];
+  frameBitmaps: LoadedFrameBitmap[];
   totalFrames: number;
   fps: number;
   frameSize: { w: number; h: number };

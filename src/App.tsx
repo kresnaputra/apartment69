@@ -44,6 +44,8 @@ import {
   showDayTransitionInterstitial,
 } from "@/lib/runtime/admob";
 import { useNovelStore } from "@/store/novelStore";
+import { characterFrameRegistry } from "@/lib/runtime/characterFrameRegistry";
+import { getCharacterBundleTotalFrames } from "@/types/characterBundle";
 import type { LoadedCharacterBundle } from "@/types/characterBundle";
 import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
@@ -278,6 +280,8 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
 }) => {
   const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const frameRef = useRef(character.frame);
+  const completeCharacterExit = useNovelStore((s) => s.completeCharacterExit);
   const {
     containerRef,
     spriteStyle,
@@ -288,6 +292,9 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
     bundle.frameSize.h > 0 ? bundle.frameSize.w / bundle.frameSize.h : 0.6,
   );
 
+  const loopRef = useRef({ bundle, character, isDimmed, viewport, stageScale, completeCharacterExit });
+  loopRef.current = { bundle, character, isDimmed, viewport, stageScale, completeCharacterExit };
+
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();
   }, []);
@@ -296,29 +303,75 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
     const canvas = canvasRef.current;
     const renderer = rendererRef.current;
     if (!canvas || !renderer) return;
-
     renderer.attach(canvas);
   }, []);
 
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer) return;
-
     renderer.resize(viewport.width, viewport.height, stageScale);
   }, [stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
-    const renderer = rendererRef.current;
-    if (!renderer) return;
+    let animationFrame = 0;
+    let lastTime = performance.now();
+    let lastBundle = loopRef.current.bundle;
 
-    renderer.render({
-      bundle,
-      frame: character.frame,
-      dimmed: isDimmed,
-      viewportWidth: viewport.width,
-      viewportHeight: viewport.height,
-    });
-  }, [bundle, character.frame, isDimmed, stageScale, viewport.height, viewport.width]);
+    const loop = (time: number) => {
+      const { bundle: b, character: c, isDimmed: dim, viewport: vp, completeCharacterExit: complete } = loopRef.current;
+      const renderer = rendererRef.current;
+
+      if (b !== lastBundle) {
+        const oldTotal = getCharacterBundleTotalFrames(lastBundle);
+        const newTotal = getCharacterBundleTotalFrames(b);
+        const progress = oldTotal > 1 ? frameRef.current / oldTotal : 0;
+        frameRef.current = Math.min(newTotal - 1, Math.max(0, progress * Math.max(0, newTotal - 1)));
+        lastBundle = b;
+      }
+
+      if (
+        c.isExiting &&
+        c.hideTransition === "fadeAway" &&
+        c.hideStartedAt !== null &&
+        Date.now() - c.hideStartedAt >= CHARACTER_FADE_AWAY_DURATION_MS
+      ) {
+        complete(c.id);
+        animationFrame = requestAnimationFrame(loop);
+        return;
+      }
+
+      if (renderer && vp.width > 0 && vp.height > 0) {
+        const deltaMs = Math.max(0, Math.min(time - lastTime, 100));
+        lastTime = time;
+
+        const duration = getCharacterBundleTotalFrames(b);
+        const frameAdvance = (c.fps * deltaMs) / 1000;
+        frameRef.current = c.loop
+          ? (frameRef.current + frameAdvance) % duration
+          : Math.min(duration - 1, frameRef.current + frameAdvance);
+        characterFrameRegistry.set(c.id, frameRef.current);
+
+        renderer.render({
+          bundle: b,
+          frame: frameRef.current,
+          dimmed: dim,
+          viewportWidth: vp.width,
+          viewportHeight: vp.height,
+        });
+      } else {
+        lastTime = time;
+      }
+
+      animationFrame = requestAnimationFrame(loop);
+    };
+
+    animationFrame = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      characterFrameRegistry.delete(character.id);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!character.visible && !character.isExiting) return null;
 
@@ -339,12 +392,17 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
   const rendererRef = useRef<CanvasSbnRenderer | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const cameraRef = useRef<SceneBounds | null>(null);
+  const frameRef = useRef(character.frame);
+  const completeCharacterExit = useNovelStore((s) => s.completeCharacterExit);
   const {
     containerRef,
     spriteStyle,
     stageScale,
     viewport,
   } = useCharacterStageSizing(character, bundle.preferredAspectRatio);
+
+  const loopRef = useRef({ bundle, character, graphicsQuality, isDimmed, viewport, stageScale, completeCharacterExit });
+  loopRef.current = { bundle, character, graphicsQuality, isDimmed, viewport, stageScale, completeCharacterExit };
 
   useEffect(() => {
     rendererRef.current = new CanvasSbnRenderer();
@@ -354,7 +412,6 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
     const canvas = canvasRef.current;
     const renderer = rendererRef.current;
     if (!canvas || !renderer) return;
-
     renderer.attach(canvas);
   }, []);
 
@@ -362,35 +419,81 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
     const renderer = rendererRef.current;
     if (!renderer) return;
     const usesCroppedImages = bundle.project.attachments.some(
-      (attachment) => attachment.imageIsCropped && attachment.opaqueBounds,
+      (a) => a.imageIsCropped && a.opaqueBounds,
     );
     renderer.resize(viewport.width, viewport.height, stageScale, usesCroppedImages, graphicsQuality);
-    // Invalidate camera cache when viewport changes
     cameraRef.current = null;
   }, [bundle, graphicsQuality, stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
-    const renderer = rendererRef.current;
-    if (!renderer) return;
-    
-    // Only recalculate camera if it hasn't been cached
-    if (!cameraRef.current) {
-      cameraRef.current = viewport.width === 520 && viewport.height === 880
-        ? bundle.preferredCamera
-        : fitCameraToScene(bundle.project, viewport.width, viewport.height);
-    }
-    const camera = cameraRef.current;
-    
-    renderer.render({
-      project: bundle.project,
-      frame: character.frame,
-      scale: 1,
-      dimmed: isDimmed,
-      camera,
-      viewportWidth: viewport.width,
-      viewportHeight: viewport.height,
-    });
-  }, [bundle, character.frame, isDimmed, viewport.height, viewport.width]);
+    let animationFrame = 0;
+    let lastTime = performance.now();
+    let lastBundle = loopRef.current.bundle;
+
+    const loop = (time: number) => {
+      const { bundle: b, character: c, isDimmed: dim, viewport: vp, completeCharacterExit: complete } = loopRef.current;
+      const renderer = rendererRef.current;
+
+      if (b !== lastBundle) {
+        const oldTotal = getCharacterBundleTotalFrames(lastBundle);
+        const newTotal = getCharacterBundleTotalFrames(b);
+        const progress = oldTotal > 1 ? frameRef.current / oldTotal : 0;
+        frameRef.current = Math.min(newTotal - 1, Math.max(0, progress * Math.max(0, newTotal - 1)));
+        cameraRef.current = null;
+        lastBundle = b;
+      }
+
+      if (
+        c.isExiting &&
+        c.hideTransition === "fadeAway" &&
+        c.hideStartedAt !== null &&
+        Date.now() - c.hideStartedAt >= CHARACTER_FADE_AWAY_DURATION_MS
+      ) {
+        complete(c.id);
+        animationFrame = requestAnimationFrame(loop);
+        return;
+      }
+
+      if (renderer && vp.width > 0 && vp.height > 0) {
+        const deltaMs = Math.max(0, Math.min(time - lastTime, 100));
+        lastTime = time;
+
+        const duration = getCharacterBundleTotalFrames(b);
+        const frameAdvance = (c.fps * deltaMs) / 1000;
+        frameRef.current = c.loop
+          ? (frameRef.current + frameAdvance) % duration
+          : Math.min(duration - 1, frameRef.current + frameAdvance);
+        characterFrameRegistry.set(c.id, frameRef.current);
+
+        if (!cameraRef.current) {
+          cameraRef.current = vp.width === 520 && vp.height === 880
+            ? b.preferredCamera
+            : fitCameraToScene(b.project, vp.width, vp.height);
+        }
+
+        renderer.render({
+          project: b.project,
+          frame: frameRef.current,
+          scale: 1,
+          dimmed: dim,
+          camera: cameraRef.current,
+          viewportWidth: vp.width,
+          viewportHeight: vp.height,
+        });
+      } else {
+        lastTime = time;
+      }
+
+      animationFrame = requestAnimationFrame(loop);
+    };
+
+    animationFrame = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      characterFrameRegistry.delete(character.id);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!character.visible && !character.isExiting) return null;
 
@@ -1109,7 +1212,6 @@ const App = () => {
   const completeCutScene = useNovelStore((state) => state.completeCutScene);
   const completeMultiCutScene = useNovelStore((state) => state.completeMultiCutScene);
   const completeInterstitial = useNovelStore((state) => state.completeInterstitial);
-  const tickCharacters = useNovelStore((state) => state.tickCharacters);
   const clearScene = useNovelStore((state) => state.clearScene);
   const loadFromSave = useNovelStore((state) => state.loadFromSave);
   const isEnded = useNovelStore((state) => state.isEnded);
@@ -1436,27 +1538,6 @@ const App = () => {
     const timer = window.setTimeout(() => { advance(); }, 1500);
     return () => window.clearTimeout(timer);
   }, [isAuto, isTyping, choices.length, isSceneTransitioning, isEnded, advance, resolvedLine]);
-
-  useEffect(() => {
-    let animationFrame = 0;
-    let lastTick = performance.now();
-    const frameInterval = 1000 / frameRate;
-
-    const loop = (time: number) => {
-      const deltaMs = time - lastTick;
-      
-      // Throttle animation updates to the target FPS to reduce CPU usage
-      if (deltaMs >= frameInterval) {
-        lastTick = time - (deltaMs % frameInterval);
-        tickCharacters(deltaMs);
-      }
-      
-      animationFrame = window.requestAnimationFrame(loop);
-    };
-
-    animationFrame = window.requestAnimationFrame(loop);
-    return () => window.cancelAnimationFrame(animationFrame);
-  }, [frameRate, tickCharacters]);
 
   useEffect(() => {
     const handleAdvance = () => {

@@ -3,6 +3,7 @@ import { characterRegistry } from "@/character";
 import type { LocalizedText } from "@/lib/i18n";
 import { uiText } from "@/lib/i18n";
 import { demoScript } from "@/lib/runtime/dialogueScript";
+import { characterFrameRegistry } from "@/lib/runtime/characterFrameRegistry";
 import { getCharacterBundleFps, getCharacterBundleTotalFrames, type LoadedCharacterBundle } from "@/types/characterBundle";
 import { unknownSpeakerIds } from "@/types/novel";
 import type {
@@ -82,7 +83,7 @@ type NovelStore = {
   completeCutScene: () => void;
   completeMultiCutScene: () => void;
   completeInterstitial: () => void;
-  tickCharacters: (deltaMs: number) => void;
+  completeCharacterExit: (id: string) => void;
 };
 
 const script: VisualNovelScript = demoScript;
@@ -125,7 +126,6 @@ const emptyState = {
 };
 
 const MAX_STEPS_PER_PASS = 100;
-const CHARACTER_FADE_AWAY_DURATION_MS = 420;
 
 const positionToX = (position: CharacterStagePosition) => {
   if (position === "left") return isMobileDevice() ? 0.15 : 0.25;
@@ -210,7 +210,8 @@ const syncTalkingBundles = (
       const nextTotalFrames = bundles?.[nextBundleId]
         ? getCharacterBundleTotalFrames(bundles[nextBundleId])
         : 1;
-      const progress = currentTotalFrames > 1 ? character.frame / currentTotalFrames : 0;
+      const currentFrame = characterFrameRegistry.get(id) ?? character.frame;
+      const progress = currentTotalFrames > 1 ? currentFrame / currentTotalFrames : 0;
       const nextFrame = Math.min(
         nextTotalFrames - 1,
         Math.max(0, progress * Math.max(0, nextTotalFrames - 1)),
@@ -817,54 +818,21 @@ export const useNovelStore = create<NovelStore>((set) => ({
       });
     }),
 
-  tickCharacters: (deltaMs) =>
+  completeCharacterExit: (id) =>
     set((state) => {
-      const now = Date.now();
-      const safeDeltaMs = Math.max(0, Math.min(deltaMs, 100));
-      const nextCharacters = Object.fromEntries(
-        Object.entries(state.characters).map(([id, character]) => {
-          const bundle = state.bundles[character.bundleId];
-          const isFadeAwayFinished =
-            character.isExiting &&
-            character.hideTransition === "fadeAway" &&
-            character.hideStartedAt !== null &&
-            now - character.hideStartedAt >= CHARACTER_FADE_AWAY_DURATION_MS;
-
-          if (isFadeAwayFinished) {
-            return [
-              id,
-              {
-                ...character,
-                visible: false,
-                isExiting: false,
-                hideTransition: "none",
-                hideStartedAt: null,
-              },
-            ];
-          }
-
-          if (!bundle || !character.visible) {
-            return [id, character];
-          }
-
-          const duration = getCharacterBundleTotalFrames(bundle);
-          const frameAdvance = (character.fps * safeDeltaMs) / 1000;
-          const nextFrame = character.loop
-            ? (character.frame + frameAdvance) % duration
-            : Math.min(duration - 1, character.frame + frameAdvance);
-
-          return [
-            id,
-            {
-              ...character,
-              frame: nextFrame,
-            },
-          ];
-        }),
-      ) as Record<string, CharacterInstance>;
-
+      const character = state.characters[id];
+      if (!character) return state;
       return {
-        characters: nextCharacters,
+        characters: {
+          ...state.characters,
+          [id]: {
+            ...character,
+            visible: false,
+            isExiting: false,
+            hideTransition: "none",
+            hideStartedAt: null,
+          },
+        },
       };
     }),
 }));
