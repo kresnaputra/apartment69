@@ -25,7 +25,7 @@ export const nadiaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0.0,
   defaultY: -150,
-  defaultScale: isMobileDevice() ? 2.6 : 3.2,
+  defaultScale: isMobileDevice() ? 2.8 : 3.2,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,

@@ -25,7 +25,7 @@ export const elenaCharacter: CharacterDefinition = {
   defaultMoveEasing: "ease-in-out",
   defaultX: 0,
   defaultY: -150,
-  defaultScale: isMobileDevice() ? 2.6 : 3,
+  defaultScale: isMobileDevice() ? 2.7 : 3,
   defaultOpacity: 1,
   defaultFrame: 0,
   defaultFps: 24,
