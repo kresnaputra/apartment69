@@ -348,10 +348,13 @@ const SbnCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSprit
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer) return;
-    renderer.resize(viewport.width, viewport.height, stageScale);
+    const usesCroppedImages = bundle.project.attachments.some(
+      (attachment) => attachment.imageIsCropped && attachment.opaqueBounds,
+    );
+    renderer.resize(viewport.width, viewport.height, stageScale, usesCroppedImages);
     // Invalidate camera cache when viewport changes
     cameraRef.current = null;
-  }, [stageScale, viewport.height, viewport.width]);
+  }, [bundle, stageScale, viewport.height, viewport.width]);
 
   useEffect(() => {
     const renderer = rendererRef.current;
