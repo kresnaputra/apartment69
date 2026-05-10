@@ -30,10 +30,15 @@ import mayaBedSound2 from "@/voice/maya/maya-bed-2.wav";
 import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
 import mayaBedSound3 from "@/voice/maya/maya-bed-3.wav";
 import mayaBed4 from "@/cut-scene/maya-bed-4.webm?url";
+import mayaBedSound4 from "@/voice/maya/maya-bed-4.wav";
 import mayaBed5 from "@/cut-scene/maya-bed-5.webm?url";
+import mayaBedSound5 from "@/voice/maya/maya-bed-5.wav";
 import mayaBed6 from "@/cut-scene/maya-bed-6.webm?url";
+import mayaBedSound6 from "@/voice/maya/maya-bed-6.wav";
 import mayaBed7 from "@/cut-scene/maya-bed-7.webm?url";
+import mayaBedSound7 from "@/voice/maya/maya-bed-7.wav";
 import mayaBed8 from "@/cut-scene/maya-bed-8.webm?url";
+import mayaBedSound8 from "@/voice/maya/maya-bed-8.wav";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
@@ -754,6 +759,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
         }),
         src: mayaBed4,
         loop: true,
+        audioSrc: mayaBedSound4,
         narrate: tx({
           id: "Arka: Niat awalku malam ini cuma murni mau jadi sandaran biar dia bisa tidur tenang. Nggak ada niat buat ngambil kesempatan waktu dia lagi rapuh-rapuhnya begini.",
           en: "Arka: My initial intention tonight was simply to be a support so she could sleep peacefully. I had no intention of taking advantage of her while she's in such a fragile state.",
@@ -770,6 +776,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
           ko: "스타일2",
         }),
         src: mayaBed5,
+        audioSrc: mayaBedSound5,
         loop: false,
         narrate: tx({
           id: "Tapi batas antara rasa peduli, kasihan, dan hasrat ternyata tipis banget. Apalagi waktu dia natap aku kayak gitu. Tatapan orang yang lagi nyari pelampung di tengah badai, dan dia milih aku buat jadi pelampungnya.",
@@ -787,6 +794,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
           ko: "스타일3",
         }),
         src: mayaBed6,
+        audioSrc: mayaBedSound6,
         loop: true,
         narrate: tx({
           id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
@@ -804,6 +812,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
           ko: "스타일4",
         }),
         src: mayaBed7,
+        audioSrc: mayaBedSound7,
         loop: true,
         narrate: tx({
           id: "Nggak ada lagi Maya si mahasiswi kedokteran yang kaku dan tertutup. Di bawah lampu remang ini, dia cuma perempuan biasa yang butuh validasi kalau dia itu berharga. Dan entah kenapa, ngasih dia rasa aman itu... ngasih aku kepuasan yang nggak bisa dijelasin.",
@@ -821,6 +830,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
           ko: "스타일5",
         }),
         src: mayaBed8,
+        audioSrc: mayaBedSound8,
         loop: false,
         narrate: tx({
           id: "Malam ini kita ngelewatin batas yang nggak bakal bisa ditarik mundur lagi. Besok pagi pas matahari terbit, hubungan kita sebagai sekadar 'tetangga sebelah' resmi selesai.",

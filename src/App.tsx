@@ -1637,12 +1637,10 @@ const App = () => {
     };
   }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, phase, resolvedLine.length]);
 
-  // Reset focused choice to first available when choice set changes; also clear control focus
+  // Clear focus when choice set changes; highlight only after user presses D-pad
   useEffect(() => {
     setFocusedControlIndex(-1);
-    if (choices.length === 0) return;
-    const firstEnabled = resolvedChoices.findIndex((c) => !c.disabled);
-    setFocusedChoiceIndex(firstEnabled >= 0 ? firstEnabled : 0);
+    setFocusedChoiceIndex(-1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [choices.length]);
 
@@ -1656,9 +1654,9 @@ const App = () => {
         event.preventDefault();
         const dir = event.key === "ArrowUp" ? -1 : 1;
         setFocusedChoiceIndex((prev) => {
-          let next = prev + dir;
-          // wrap around
-          next = ((next % cs.length) + cs.length) % cs.length;
+          // First D-pad press: start at top (Down) or bottom (Up)
+          const seed = prev < 0 ? (dir > 0 ? 0 : cs.length - 1) : prev + dir;
+          let next = ((seed % cs.length) + cs.length) % cs.length;
           // skip disabled
           const start = next;
           while (cs[next]?.disabled) {
