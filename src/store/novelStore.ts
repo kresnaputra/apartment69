@@ -495,6 +495,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.pendingSceneContinuation = false;
         nextState.activeCutScene = {
           src: command.src,
+          audioSrc: command.audioSrc,
           loop: command.loop,
           narrate: command.narrate,
           showSpeedControl: command.showSpeedControl,

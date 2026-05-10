@@ -697,7 +697,7 @@ const DialogueUI = memo(({
             {resolvedChoices.map((choice, idx) => (
               <button
                 key={choice.id}
-                className={`vn-choice${choice.disabled ? " vn-choice--disabled" : ""}${focusedChoiceIndex === idx && !choice.disabled ? " vn-choice--focused" : ""}`}
+                className={`vn-choice${choice.disabled ? " vn-choice--disabled" : ""}`}
                 type="button"
                 disabled={choice.disabled}
                 onClick={() => {
@@ -838,7 +838,27 @@ const CutSceneOverlay = ({
     if (!audioNode || !audioSrc) return;
 
     audioNode.currentTime = 0;
-    void audioNode.play().catch(() => {});
+
+    const retry = () => {
+      void audioNode.play().catch(() => {});
+      document.removeEventListener("touchstart", retry, true);
+      document.removeEventListener("click", retry, true);
+      document.removeEventListener("keydown", retry, true);
+    };
+
+    void audioNode.play().catch(() => {
+      // Android WebView blocks autoplay outside a user-gesture call stack.
+      // Retry on the very next interaction (tap / click / key).
+      document.addEventListener("touchstart", retry, true);
+      document.addEventListener("click", retry, true);
+      document.addEventListener("keydown", retry, true);
+    });
+
+    return () => {
+      document.removeEventListener("touchstart", retry, true);
+      document.removeEventListener("click", retry, true);
+      document.removeEventListener("keydown", retry, true);
+    };
   }, [audioSrc, src]);
 
   const handleSpeedChange = (speed: number) => {
@@ -920,6 +940,7 @@ const CutSceneOverlay = ({
           key={`${src}:${audioSrc}`}
           src={audioSrc}
           autoPlay
+          playsInline
         />
       ) : null}
       {visibleNarrate && (
@@ -1270,6 +1291,8 @@ const App = () => {
   const focusedChoiceIndexRef = useRef(0);
   const focusedControlIndexRef = useRef(-1);
   focusedControlIndexRef.current = focusedControlIndex;
+  const isMobileRef = useRef(isMobile);
+  isMobileRef.current = isMobile;
   const showLogRef = useRef(showLog);
   const showConfigRef = useRef(showConfig);
   const showSaveSlotsRef = useRef(showSaveSlots);
@@ -1592,10 +1615,11 @@ const App = () => {
     const handleKeydown = (event: KeyboardEvent) => {
       if (event.key !== " " && event.key !== "Enter") return;
       if (activeMinigame) return;
+      if (choicesRef.current.length > 0) return;
       event.preventDefault();
       // If a control button is focused and no choices shown, activate it
       const ctrlIdx = focusedControlIndexRef.current;
-      if (ctrlIdx >= 0 && choicesRef.current.length === 0) {
+      if (ctrlIdx >= 0) {
         activateControlRef.current(ctrlIdx);
         setFocusedControlIndex(-1);
         return;
@@ -1646,6 +1670,7 @@ const App = () => {
         return;
       }
       if (event.key === "Enter" || event.key === " ") {
+        if (!isMobileRef.current) return;
         const choice = cs[focusedChoiceIndexRef.current];
         if (choice && !choice.disabled) {
           event.preventDefault();

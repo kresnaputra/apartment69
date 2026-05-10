@@ -24,8 +24,11 @@ import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import mayaBedroomNightUrl from "@/background/maya-bedroom-night.png";
 import mayaCollapseUrl from "@/background/maya-collapse.png";
 import mayaBed1 from "@/cut-scene/maya-bed-1.webm?url";
+import mayaBedSound1 from "@/voice/maya/maya-bed-1.wav";
 import mayaBed2 from "@/cut-scene/maya-bed-2.webm?url";
+import mayaBedSound2 from "@/voice/maya/maya-bed-2.wav";
 import mayaBed3 from "@/cut-scene/maya-bed-3.webm?url";
+import mayaBedSound3 from "@/voice/maya/maya-bed-3.wav";
 import mayaBed4 from "@/cut-scene/maya-bed-4.webm?url";
 import mayaBed5 from "@/cut-scene/maya-bed-5.webm?url";
 import mayaBed6 from "@/cut-scene/maya-bed-6.webm?url";
@@ -736,9 +739,9 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
     }),
   ),
   clearBlackScreen(),
-  cutScene(mayaBed1, true),
-  cutScene(mayaBed2, true),
-  cutScene(mayaBed3, true),
+  cutScene(mayaBed1, true, undefined, undefined, mayaBedSound1),
+  cutScene(mayaBed2, true, undefined, undefined, mayaBedSound2),
+  cutScene(mayaBed3, true, undefined, undefined, mayaBedSound3),
   multiCutScene(
     [
       {
