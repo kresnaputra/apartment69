@@ -1,8 +1,21 @@
+import { useEffect, useRef } from "react";
+
 type ElevatorButtonMinigameMobileProps = {
   onComplete: () => void;
 };
 
 export const ElevatorButtonMinigameMobile = ({ onComplete }: ElevatorButtonMinigameMobileProps) => {
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Enter") { e.preventDefault(); onCompleteRef.current(); }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"

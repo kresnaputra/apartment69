@@ -87,16 +87,16 @@ function buildBasePaths(type: PipeType): string[] {
   return [`M 0,${HC} L ${SZ},${HC}`, `M ${HC},0 L ${HC},${SZ}`];
 }
 
-type CellProps = { cell: CellDef; active: boolean; onRotate: () => void };
+type CellProps = { cell: CellDef; active: boolean; isCursor: boolean; onRotate: () => void };
 
-function PipeCell({ cell, active, onRotate }: CellProps) {
+function PipeCell({ cell, active, isCursor, onRotate }: CellProps) {
   const paths = buildBasePaths(cell.type);
   const color = active ? "#4bb8ff" : "#3a3a52";
   const bg = active ? "rgba(75,184,255,0.07)" : "rgba(255,255,255,0.02)";
   return (
     <svg width={SZ} height={SZ} style={{ cursor: "pointer", display: "block" }} onClick={onRotate}>
       <rect width={SZ} height={SZ} fill={bg} rx={3} />
-      <rect width={SZ} height={SZ} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={1} />
+      <rect width={SZ} height={SZ} fill="none" stroke={isCursor ? "rgba(255,214,173,0.7)" : "rgba(255,255,255,0.05)"} strokeWidth={isCursor ? 2 : 1} />
       <g style={{ transformOrigin: `${HC}px ${HC}px`, transform: `rotate(${cell.rotation * 90}deg)`, transition: "transform 0.12s ease-out" }}>
         {paths.map((d, i) => (
           <path key={i} d={d} stroke={color} strokeWidth={7} fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -119,8 +119,11 @@ export const PipeConnectionMinigameMobile = ({ onComplete }: Props) => {
     INIT.map(row => row.map(c => ({ ...c })))
   );
   const [done, setDone] = useState(false);
+  const [cursor, setCursor] = useState<[number, number]>([0, 0]);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
+  const cursorRef = useRef<[number, number]>([0, 0]);
+  cursorRef.current = cursor;
 
   const vis = floodFill(grid);
   const solved = checkSolved(grid, vis);
@@ -145,6 +148,39 @@ export const PipeConnectionMinigameMobile = ({ onComplete }: Props) => {
     },
     [done]
   );
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (done) return;
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setCursor(([r, c]) => [Math.max(0, r - 1), c]);
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setCursor(([r, c]) => [Math.min(ROWS - 1, r + 1), c]);
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setCursor(([r, c]) => [r, Math.max(0, c - 1)]);
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setCursor(([r, c]) => [r, Math.min(COLS - 1, c + 1)]);
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const [r, c] = cursorRef.current;
+        rotate(r, c);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [done, rotate]);
 
   const srcColor = vis[1][0] ? "#4bb8ff" : "#252535";
   const drainColor = solved ? "#00e5a0" : vis[2][3] ? "#4bb8ff" : "#252535";
@@ -241,7 +277,7 @@ export const PipeConnectionMinigameMobile = ({ onComplete }: Props) => {
           >
             {grid.map((row, r) =>
               row.map((cell, c) => (
-                <PipeCell key={`${r}-${c}`} cell={cell} active={vis[r][c]} onRotate={() => rotate(r, c)} />
+                <PipeCell key={`${r}-${c}`} cell={cell} active={vis[r][c]} isCursor={cursor[0] === r && cursor[1] === c} onRotate={() => rotate(r, c)} />
               ))
             )}
           </div>

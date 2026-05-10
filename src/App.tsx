@@ -23,6 +23,7 @@ import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
 import type { SceneBounds } from "@/types/sbn";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { useGamepad } from "@/hooks/useGamepad";
 import { characterBundleRegistry } from "@/character";
 import type { SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
@@ -564,6 +565,8 @@ type DialogueUIProps = {
   lineSize: string;
   isTyping: boolean;
   resolvedChoices: Array<{ id: string; label: string; next: string; disabled?: boolean }>;
+  focusedChoiceIndex: number;
+  focusedControlIndex: number;
   isAuto: boolean;
   labels: {
     auto: string;
@@ -587,11 +590,11 @@ type DialogueUIProps = {
   onExit: () => void;
 };
 
-const DialogueUI = memo(({ 
-  isMobile, 
-  activeMinigame, 
-  isCenteredText, 
-  isNarration, 
+const DialogueUI = memo(({
+  isMobile,
+  activeMinigame,
+  isCenteredText,
+  isNarration,
   isSceneTransitioning,
   speaker,
   visibleLine,
@@ -599,6 +602,8 @@ const DialogueUI = memo(({
   lineSize,
   isTyping,
   resolvedChoices,
+  focusedChoiceIndex,
+  focusedControlIndex,
   isAuto,
   labels,
   onChoose,
@@ -666,6 +671,8 @@ const DialogueUI = memo(({
         isTyping={isTyping}
         isSceneTransitioning={isSceneTransitioning}
         choices={resolvedChoices}
+        focusedChoiceIndex={focusedChoiceIndex}
+        focusedControlIndex={focusedControlIndex}
         onChoose={onChoose}
         onSuppressAdvance={onSuppressAdvance}
         isAuto={isAuto}
@@ -687,10 +694,10 @@ const DialogueUI = memo(({
 
         {resolvedChoices.length > 0 ? (
           <div className="vn-choices" onClick={(event) => event.stopPropagation()}>
-            {resolvedChoices.map((choice) => (
+            {resolvedChoices.map((choice, idx) => (
               <button
                 key={choice.id}
-                className={`vn-choice${choice.disabled ? " vn-choice--disabled" : ""}`}
+                className={`vn-choice${choice.disabled ? " vn-choice--disabled" : ""}${focusedChoiceIndex === idx && !choice.disabled ? " vn-choice--focused" : ""}`}
                 type="button"
                 disabled={choice.disabled}
                 onClick={() => {
@@ -1228,6 +1235,9 @@ const App = () => {
   const [showLog, setShowLog] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [showSaveSlots, setShowSaveSlots] = useState(false);
+  const [focusedChoiceIndex, setFocusedChoiceIndex] = useState(0);
+  const [focusedControlIndex, setFocusedControlIndex] = useState(-1);
+  const CONTROL_COUNT = 6; // Auto, Skip, Log, Save, Config, Exit
   const [blackScreenVisible, setBlackScreenVisible] = useState(false);
   const [language, setLanguage] = useState<LanguageCode>(() => {
     if (typeof window === "undefined") return DEFAULT_LANGUAGE;
@@ -1256,6 +1266,18 @@ const App = () => {
   const hasStartedBundleLoadRef = useRef(false);
   const previousSceneTransitionTokenRef = useRef<number | null>(null);
   const suppressAdvanceOnceRef = useRef(false);
+  const choicesRef = useRef<Array<{ id: string; label: string; next: string; disabled?: boolean }>>([]);
+  const focusedChoiceIndexRef = useRef(0);
+  const focusedControlIndexRef = useRef(-1);
+  focusedControlIndexRef.current = focusedControlIndex;
+  const showLogRef = useRef(showLog);
+  const showConfigRef = useRef(showConfig);
+  const showSaveSlotsRef = useRef(showSaveSlots);
+  showLogRef.current = showLog;
+  showConfigRef.current = showConfig;
+  showSaveSlotsRef.current = showSaveSlots;
+
+  useGamepad();
   const resolvedLine = resolveText(line, language);
   const resolvedLocation = resolveText(location, language);
   const resolvedStatusMessage = resolveText(statusMessage, language);
@@ -1266,6 +1288,8 @@ const App = () => {
   const resolvedChoices: Array<{ id: string; label: string; next: string; disabled?: boolean }> = choices.map(
     (choice) => ({ ...choice, label: resolveText(choice.label, language) }),
   );
+  choicesRef.current = resolvedChoices;
+  focusedChoiceIndexRef.current = focusedChoiceIndex;
   const resolvedGraphicsQualityOptions = graphicsQualityOptions.map((option) => ({
     ...option,
     label: resolveText(option.label, language),
@@ -1569,6 +1593,13 @@ const App = () => {
       if (event.key !== " " && event.key !== "Enter") return;
       if (activeMinigame) return;
       event.preventDefault();
+      // If a control button is focused and no choices shown, activate it
+      const ctrlIdx = focusedControlIndexRef.current;
+      if (ctrlIdx >= 0 && choicesRef.current.length === 0) {
+        activateControlRef.current(ctrlIdx);
+        setFocusedControlIndex(-1);
+        return;
+      }
       handleAdvance();
     };
 
@@ -1581,6 +1612,84 @@ const App = () => {
       window.removeEventListener("contextmenu", handleContextMenu);
     };
   }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, phase, resolvedLine.length]);
+
+  // Reset focused choice to first available when choice set changes; also clear control focus
+  useEffect(() => {
+    setFocusedControlIndex(-1);
+    if (choices.length === 0) return;
+    const firstEnabled = resolvedChoices.findIndex((c) => !c.disabled);
+    setFocusedChoiceIndex(firstEnabled >= 0 ? firstEnabled : 0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [choices.length]);
+
+  // Gamepad/keyboard: D-pad navigates choices, Enter selects focused choice
+  useEffect(() => {
+    if (phase !== "story") return;
+    const handler = (event: KeyboardEvent) => {
+      const cs = choicesRef.current;
+      if (cs.length === 0) return;
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+        const dir = event.key === "ArrowUp" ? -1 : 1;
+        setFocusedChoiceIndex((prev) => {
+          let next = prev + dir;
+          // wrap around
+          next = ((next % cs.length) + cs.length) % cs.length;
+          // skip disabled
+          const start = next;
+          while (cs[next]?.disabled) {
+            next = ((next + dir + cs.length) % cs.length);
+            if (next === start) break;
+          }
+          return next;
+        });
+        return;
+      }
+      if (event.key === "Enter" || event.key === " ") {
+        const choice = cs[focusedChoiceIndexRef.current];
+        if (choice && !choice.disabled) {
+          event.preventDefault();
+          suppressAdvanceOnceRef.current = true;
+          choose(choice.next);
+        }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [choose, phase]);
+
+  // Gamepad/keyboard: Escape (B button) closes overlays or deselects focused control
+  useEffect(() => {
+    if (phase !== "story") return;
+    const handler = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (showLogRef.current) { setShowLog(false); return; }
+      if (showConfigRef.current) { setShowConfig(false); return; }
+      if (showSaveSlotsRef.current) { setShowSaveSlots(false); return; }
+      // Deselect focused control button if any
+      if (focusedControlIndexRef.current >= 0) { setFocusedControlIndex(-1); return; }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [phase]);
+
+  // Gamepad/keyboard: Left/Right navigates control buttons in dialogue (no choices, no overlay)
+  useEffect(() => {
+    if (phase !== "story") return;
+    const handler = (event: KeyboardEvent) => {
+      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+      if (choicesRef.current.length > 0) return;
+      if (showLogRef.current || showConfigRef.current || showSaveSlotsRef.current) return;
+      event.preventDefault();
+      const dir = event.key === "ArrowRight" ? 1 : -1;
+      setFocusedControlIndex((prev) => {
+        if (prev < 0) return dir > 0 ? 0 : CONTROL_COUNT - 1;
+        return ((prev + dir) % CONTROL_COUNT + CONTROL_COUNT) % CONTROL_COUNT;
+      });
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "logo" && phase !== "poweredBy" && phase !== "warning") return;
@@ -1624,6 +1733,16 @@ const App = () => {
     } else {
       advance();
     }
+  };
+
+  const activateControlRef = useRef<(idx: number) => void>(() => {});
+  activateControlRef.current = (idx: number) => {
+    if (idx === 0) handleAuto();
+    else if (idx === 1) handleSkip();
+    else if (idx === 2) setShowLog(true);
+    else if (idx === 3) setShowSaveSlots(true);
+    else if (idx === 4) setShowConfig(true);
+    else if (idx === 5) { clearScene(); setPhase("menu"); }
   };
 
   const handleSaveToSlot = (slotIndex: number) => {
@@ -1853,6 +1972,8 @@ const App = () => {
           lineSize={lineSize}
           isTyping={isTyping}
           resolvedChoices={resolvedChoices}
+          focusedChoiceIndex={focusedChoiceIndex}
+          focusedControlIndex={focusedControlIndex}
           isAuto={isAuto}
           labels={labels}
           onChoose={choose}

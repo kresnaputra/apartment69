@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import sceneMaya1 from "@/gallery/scene-maya-1.png";
 import sceneMaya2 from "@/gallery/scene-maya-2.png";
 import sceneMaya3 from "@/gallery/scene-maya-3.png";
@@ -50,11 +50,43 @@ export const GalleryOverlay = ({
   title,
 }: GalleryOverlayProps) => {
   const [exiting, setExiting] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(0);
+  const focusedIndexRef = useRef(0);
+  focusedIndexRef.current = focusedIndex;
 
   const handleClose = () => {
     setExiting(true);
     window.setTimeout(onClose, 280);
   };
+  const handleCloseRef = useRef(handleClose);
+  handleCloseRef.current = handleClose;
+
+  useEffect(() => {
+    const unlockedItems = GALLERY_ITEMS.filter(item => Boolean(flags[item.unlockFlag]));
+    const totalNavigable = unlockedItems.length;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { handleCloseRef.current(); return; }
+      if (totalNavigable === 0) return;
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev - 1 + totalNavigable) % totalNavigable);
+        return;
+      }
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev + 1) % totalNavigable);
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const item = unlockedItems[focusedIndexRef.current];
+        if (item) { onOpenScene(item.sceneLabel); onClose(); }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flags]);
 
   return (
     <div
@@ -87,12 +119,17 @@ export const GalleryOverlay = ({
           {GALLERY_ITEMS.map((item) => (
             (() => {
               const isUnlocked = Boolean(flags[item.unlockFlag]);
+              const unlockedItems = GALLERY_ITEMS.filter(i => Boolean(flags[i.unlockFlag]));
+              const unlockedIdx = unlockedItems.indexOf(item);
+              const isFocused = isUnlocked && unlockedIdx === focusedIndex;
               return (
             <div
               key={item.id}
-              className="rounded-[1.4rem] border border-white/10 overflow-hidden"
+              className="rounded-[1.4rem] border overflow-hidden transition-all duration-150"
               style={{
                 background: "linear-gradient(180deg, rgba(18,20,28,0.78), rgba(11,13,18,0.82))",
+                borderColor: isFocused ? "rgba(255,214,173,0.5)" : "rgba(255,255,255,0.10)",
+                boxShadow: isFocused ? "0 0 0 2px rgba(255,214,173,0.2)" : "none",
               }}
             >
               <button

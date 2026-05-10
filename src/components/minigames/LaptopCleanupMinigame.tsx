@@ -20,8 +20,13 @@ export const LaptopCleanupMinigame = ({ onComplete }: Props) => {
   const [processes, setProcesses] = useState<JunkProcess[]>(JUNK_PROCESSES);
   const [killing, setKilling] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(0);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
+  const focusedIndexRef = useRef(0);
+  focusedIndexRef.current = focusedIndex;
+  const processesRef = useRef(processes);
+  processesRef.current = processes;
 
   const cpuPercent =
     processes.length === 0
@@ -43,6 +48,37 @@ export const LaptopCleanupMinigame = ({ onComplete }: Props) => {
     const t = setTimeout(() => onCompleteRef.current(), 1200);
     return () => clearTimeout(t);
   }, [processes]);
+
+  // Keep focusedIndex within bounds when processes are killed
+  useEffect(() => {
+    setFocusedIndex(prev => Math.min(prev, Math.max(0, processes.length - 1)));
+  }, [processes.length]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const procs = processesRef.current;
+      if (procs.length === 0) return;
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev - 1 + procs.length) % procs.length);
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev + 1) % procs.length);
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const proc = procs[focusedIndexRef.current];
+        if (proc) killProcess(proc.id);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  // killProcess is stable (no deps change)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
@@ -150,8 +186,9 @@ export const LaptopCleanupMinigame = ({ onComplete }: Props) => {
 
           {/* Process rows */}
           <div style={{ minHeight: 160 }}>
-            {processes.map(p => {
+            {processes.map((p, idx) => {
               const isKilling = killing === p.id;
+              const isFocused = focusedIndex === idx;
               return (
                 <div
                   key={p.id}
@@ -162,7 +199,12 @@ export const LaptopCleanupMinigame = ({ onComplete }: Props) => {
                     padding: "6px 6px",
                     borderRadius: 4,
                     marginBottom: 2,
-                    background: isKilling ? "rgba(247,118,142,0.10)" : "rgba(255,255,255,0.03)",
+                    background: isKilling
+                      ? "rgba(247,118,142,0.10)"
+                      : isFocused
+                      ? "rgba(122,162,247,0.12)"
+                      : "rgba(255,255,255,0.03)",
+                    outline: isFocused ? "1px solid rgba(122,162,247,0.35)" : "none",
                     opacity: isKilling ? 0.45 : 1,
                     transition: "all 0.35s ease",
                   }}

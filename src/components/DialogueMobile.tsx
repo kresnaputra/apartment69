@@ -18,6 +18,8 @@ type DialogueMobileProps = {
   isTyping: boolean;
   isSceneTransitioning: boolean;
   choices: Choice[];
+  focusedChoiceIndex?: number;
+  focusedControlIndex?: number;
   onChoose: (next: string) => void;
   onSuppressAdvance: () => void;
   isAuto?: boolean;
@@ -39,6 +41,8 @@ export const DialogueMobile = ({
   isTyping,
   isSceneTransitioning,
   choices,
+  focusedChoiceIndex,
+  focusedControlIndex = -1,
   onChoose,
   onSuppressAdvance,
   isAuto = false,
@@ -74,20 +78,30 @@ export const DialogueMobile = ({
           className="grid gap-1.5 mt-2 pointer-events-auto"
           onClick={(e) => e.stopPropagation()}
         >
-          {choices.map((choice) => (
-            <button
-              key={choice.id}
-              type="button"
-              disabled={choice.disabled}
-              className={`w-full max-w-[26rem] mx-auto rounded-full border border-white/18 bg-[rgba(10,8,13,0.56)] text-white/90 text-[0.78rem] py-2 px-4 backdrop-blur-sm transition-all duration-[160ms] active:translate-y-0${choice.disabled ? " opacity-35 cursor-not-allowed pointer-events-none" : " hover:-translate-y-px hover:bg-[rgba(255,214,173,0.18)] hover:border-[rgba(255,214,173,0.3)]"}`}
-              onClick={() => {
-                onSuppressAdvance();
-                onChoose(choice.next);
-              }}
-            >
-              {choice.label}
-            </button>
-          ))}
+          {choices.map((choice, idx) => {
+            const isFocused = focusedChoiceIndex === idx;
+            return (
+              <button
+                key={choice.id}
+                type="button"
+                disabled={choice.disabled}
+                className={[
+                  "w-full max-w-[26rem] mx-auto rounded-full border text-[0.78rem] py-2 px-4 backdrop-blur-sm transition-all duration-[160ms] active:translate-y-0",
+                  choice.disabled
+                    ? "opacity-35 cursor-not-allowed pointer-events-none border-white/18 bg-[rgba(10,8,13,0.56)] text-white/90"
+                    : isFocused
+                    ? "-translate-y-px bg-[rgba(255,214,173,0.22)] border-[rgba(255,214,173,0.5)] text-[#ffd6a0]"
+                    : "border-white/18 bg-[rgba(10,8,13,0.56)] text-white/90 hover:-translate-y-px hover:bg-[rgba(255,214,173,0.18)] hover:border-[rgba(255,214,173,0.3)]",
+                ].join(" ")}
+                onClick={() => {
+                  onSuppressAdvance();
+                  onChoose(choice.next);
+                }}
+              >
+                {choice.label}
+              </button>
+            );
+          })}
         </div>
       ) : (
         <div className="flex items-center justify-between gap-2 mt-2">
@@ -105,7 +119,9 @@ export const DialogueMobile = ({
               { label: controlLabels.save, handler: onSave, active: false },
               { label: controlLabels.config, handler: onConfig, active: false },
               { label: controlLabels.exit, handler: onExit, active: false },
-            ].map(({ label, handler, active }) => (
+            ].map(({ label, handler, active }, idx) => {
+              const isFocused = focusedControlIndex === idx;
+              return (
               <button
                 key={label}
                 type="button"
@@ -114,12 +130,15 @@ export const DialogueMobile = ({
                   "rounded px-2 py-1 text-[0.6rem] tracking-[0.02em] border backdrop-blur-sm transition-all duration-150 active:scale-95",
                   active
                     ? "text-[#d2a456] border-[rgba(210,164,86,0.4)] bg-[rgba(210,164,86,0.12)]"
+                    : isFocused
+                    ? "text-white border-white/50 bg-[rgba(255,255,255,0.14)] scale-105"
                     : "text-white/65 border-white/15 bg-[rgba(10,8,13,0.45)] hover:text-white/90 hover:border-white/30",
                 ].join(" ")}
               >
                 {label}
               </button>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

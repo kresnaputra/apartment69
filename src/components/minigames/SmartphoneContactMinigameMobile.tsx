@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import type { LanguageCode, LocalizedText } from "@/lib/i18n";
 import { resolveText } from "@/lib/i18n";
 import { resolveSmartphoneContactOptions, type SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
@@ -50,6 +51,38 @@ export const SmartphoneContactMinigameMobile = ({
   const resolvedTitle = resolveText(title, language);
   const resolvedSubtitle = resolveText(subtitle, language);
   const resolvedAppLabel = resolveText(appLabel, language);
+
+  const [focusedIndex, setFocusedIndex] = useState(0);
+  const focusedIndexRef = useRef(0);
+  focusedIndexRef.current = focusedIndex;
+  const visibleOptionsRef = useRef(visibleOptions);
+  visibleOptionsRef.current = visibleOptions;
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const opts = visibleOptionsRef.current;
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev - 1 + opts.length) % opts.length);
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev + 1) % opts.length);
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const opt = opts[focusedIndexRef.current];
+        if (opt && !opt.disabled) onSelectRef.current(opt.next);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center"
@@ -239,7 +272,9 @@ export const SmartphoneContactMinigameMobile = ({
           className="flex flex-col overflow-y-auto px-3 pt-2.5 gap-1.5"
           style={{ paddingBottom: 8, flex: 1, minHeight: 0 }}
         >
-          {visibleOptions.map((option) => (
+          {visibleOptions.map((option, idx) => {
+            const isFocused = focusedIndex === idx && !option.disabled;
+            return (
             <button
               key={option.id}
               type="button"
@@ -251,9 +286,17 @@ export const SmartphoneContactMinigameMobile = ({
                 padding: "9px 12px",
                 background: option.disabled
                   ? "rgba(255,255,255,0.025)"
+                  : isFocused
+                  ? `linear-gradient(135deg, ${option.accent}30 0%, rgba(255,255,255,0.06) 100%)`
                   : `linear-gradient(135deg, ${option.accent}18 0%, rgba(255,255,255,0.025) 100%)`,
-                border: option.disabled ? "1px solid rgba(255,255,255,0.08)" : `1px solid ${option.accent}24`,
-                boxShadow: `inset 0 1px 0 rgba(255,255,255,0.05)`,
+                border: option.disabled
+                  ? "1px solid rgba(255,255,255,0.08)"
+                  : isFocused
+                  ? `1.5px solid ${option.accent}60`
+                  : `1px solid ${option.accent}24`,
+                boxShadow: isFocused
+                  ? `inset 0 1px 0 rgba(255,255,255,0.08), 0 0 0 2px ${option.accent}18`
+                  : `inset 0 1px 0 rgba(255,255,255,0.05)`,
                 opacity: option.disabled ? 0.4 : 1,
                 cursor: option.disabled ? "not-allowed" : "pointer",
                 filter: option.disabled ? "grayscale(0.5)" : "none",
@@ -329,7 +372,8 @@ export const SmartphoneContactMinigameMobile = ({
                 />
               </svg>
             </button>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

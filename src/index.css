@@ -515,6 +515,13 @@ textarea {
   border-color: rgba(255, 214, 173, 0.3);
 }
 
+.vn-choice--focused:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(255, 214, 173, 0.22);
+  border-color: rgba(255, 214, 173, 0.5);
+  color: #ffd6a0;
+}
+
 .vn-choice:disabled,
 .vn-choice--disabled {
   opacity: 0.35;

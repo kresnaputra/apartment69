@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getDateLocale, resolveText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { SLOT_COUNT } from "@/lib/runtime/saveSlots";
@@ -34,11 +34,42 @@ export const SaveSlotOverlay = ({
   onClose,
 }: SaveSlotOverlayProps) => {
   const [exiting, setExiting] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(0);
+  const focusedIndexRef = useRef(0);
+  focusedIndexRef.current = focusedIndex;
 
   const handleClose = () => {
     setExiting(true);
     window.setTimeout(onClose, 280);
   };
+
+  const handleCloseRef = useRef(handleClose);
+  handleCloseRef.current = handleClose;
+
+  const slotsRef = useRef(slots);
+  slotsRef.current = slots;
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { handleCloseRef.current(); return; }
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev - 1 + SLOT_COUNT) % SLOT_COUNT);
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setFocusedIndex(prev => (prev + 1) % SLOT_COUNT);
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById(`save-slot-btn-${focusedIndexRef.current}`)?.click();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const handleSelect = (index: number) => {
     setExiting(true);
@@ -79,9 +110,11 @@ export const SaveSlotOverlay = ({
             const slot = slots[i] ?? null;
             const isEmpty = slot === null;
             const disabled = mode === "load" && isEmpty;
+            const isFocused = focusedIndex === i && !disabled;
 
             return (
               <button
+                id={`save-slot-btn-${i}`}
                 key={i}
                 type="button"
                 disabled={disabled}
@@ -90,6 +123,8 @@ export const SaveSlotOverlay = ({
                   "w-full text-left rounded-xl px-4 py-3.5 border transition-all duration-150",
                   disabled
                     ? "border-white/6 opacity-30 cursor-default"
+                    : isFocused
+                    ? "border-[rgba(255,214,173,0.5)] bg-[rgba(255,214,173,0.08)] cursor-pointer"
                     : "border-white/10 hover:border-[rgba(255,214,173,0.3)] hover:bg-[rgba(255,214,173,0.05)] cursor-pointer",
                 ].join(" ")}
               >

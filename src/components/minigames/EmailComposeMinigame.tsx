@@ -32,8 +32,13 @@ export const EmailComposeMinigame = ({ onComplete }: Props) => {
   const [attached, setAttached] = useState(false);
   const [sent, setSent] = useState(false);
   const [wrongPick, setWrongPick] = useState<string | null>(null);
+  const [focusedOptionIndex, setFocusedOptionIndex] = useState(0);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
+  const focusedOptionIndexRef = useRef(0);
+  focusedOptionIndexRef.current = focusedOptionIndex;
+  const stepRef = useRef(step);
+  stepRef.current = step;
 
   const isReadyToSend = subject === "correct" && body === "correct" && attached;
 
@@ -76,6 +81,34 @@ export const EmailComposeMinigame = ({ onComplete }: Props) => {
     const t = setTimeout(() => onCompleteRef.current(), 1400);
     return () => clearTimeout(t);
   }, [sent]);
+
+  // Reset focused index when step changes
+  useEffect(() => { setFocusedOptionIndex(0); }, [step]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const s = stepRef.current;
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        e.preventDefault();
+        const dir = e.key === "ArrowDown" ? 1 : -1;
+        const listLen = s === "subject" ? SUBJECT_OPTIONS.length : s === "body" ? BODY_OPTIONS.length : 0;
+        if (listLen > 0) setFocusedOptionIndex(prev => ((prev + dir) % listLen + listLen) % listLen);
+        return;
+      }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const idx = focusedOptionIndexRef.current;
+        if (s === "subject") handleSubjectPick(SUBJECT_OPTIONS[idx]?.id ?? "");
+        else if (s === "body") handleBodyPick(BODY_OPTIONS[idx]?.id ?? "");
+        else if (s === "attach") handleAttach();
+        else if (s === "send") handleSend();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  // handlers are stable within render
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const stepLabel: Record<Step, string> = {
     subject: "1 / 3 — Choose the right subject line",
@@ -176,12 +209,13 @@ export const EmailComposeMinigame = ({ onComplete }: Props) => {
               </div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                {SUBJECT_OPTIONS.map(opt => (
+                {SUBJECT_OPTIONS.map((opt, idx) => (
                   <OptionButton
                     key={opt.id}
                     label={opt.label}
                     isWrong={wrongPick === opt.id}
                     disabled={step !== "subject"}
+                    isFocused={step === "subject" && focusedOptionIndex === idx}
                     onClick={() => handleSubjectPick(opt.id)}
                   />
                 ))}
@@ -210,12 +244,13 @@ export const EmailComposeMinigame = ({ onComplete }: Props) => {
               </div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                {BODY_OPTIONS.map(opt => (
+                {BODY_OPTIONS.map((opt, idx) => (
                   <OptionButton
                     key={opt.id}
                     label={opt.label}
                     isWrong={wrongPick === opt.id}
                     disabled={step !== "body"}
+                    isFocused={step === "body" && focusedOptionIndex === idx}
                     onClick={() => handleBodyPick(opt.id)}
                     multiline
                   />
@@ -346,12 +381,14 @@ const OptionButton = ({
   label,
   isWrong,
   disabled,
+  isFocused = false,
   onClick,
   multiline = false,
 }: {
   label: string;
   isWrong: boolean;
   disabled: boolean;
+  isFocused?: boolean;
   onClick: () => void;
   multiline?: boolean;
 }) => (
@@ -362,13 +399,19 @@ const OptionButton = ({
     style={{
       textAlign: "left",
       padding: multiline ? "11px 14px" : "11px 14px",
-      background: isWrong ? "rgba(247,118,142,0.15)" : "rgba(255,255,255,0.05)",
+      background: isWrong
+        ? "rgba(247,118,142,0.15)"
+        : isFocused
+        ? "rgba(122,162,247,0.12)"
+        : "rgba(255,255,255,0.05)",
       border: isWrong
         ? "1px solid rgba(247,118,142,0.55)"
+        : isFocused
+        ? "1.5px solid rgba(122,162,247,0.5)"
         : "1px solid rgba(255,255,255,0.10)",
       borderRadius: 6,
       fontSize: 13,
-      color: isWrong ? "#f7768e" : disabled ? "rgba(255,255,255,0.28)" : "#c0caf5",
+      color: isWrong ? "#f7768e" : disabled ? "rgba(255,255,255,0.28)" : isFocused ? "#7aa2f7" : "#c0caf5",
       cursor: disabled ? "not-allowed" : "pointer",
       fontFamily: "inherit",
       lineHeight: 1.5,

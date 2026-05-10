@@ -82,7 +82,16 @@ export const MainMenuMobile = ({
   const [showLoadSlots, setShowLoadSlots] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [focusedMenuIndex, setFocusedMenuIndex] = useState(0);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
+  const showLoadSlotsRef = useRef(showLoadSlots);
+  const showGalleryRef = useRef(showGallery);
+  const showSettingsRef = useRef(showSettings);
+  const focusedMenuIndexRef = useRef(focusedMenuIndex);
+  showLoadSlotsRef.current = showLoadSlots;
+  showGalleryRef.current = showGallery;
+  showSettingsRef.current = showSettings;
+  focusedMenuIndexRef.current = focusedMenuIndex;
 
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
@@ -122,6 +131,41 @@ export const MainMenuMobile = ({
     onAutoOpenGalleryConsumed?.();
   }, [autoOpenGallery, onAutoOpenGalleryConsumed]);
 
+  // Gamepad/keyboard navigation for main menu buttons and overlays
+  useEffect(() => {
+    const MENU_COUNT = 5; // Start, Load, Gallery, Settings, Exit
+    const handler = (event: KeyboardEvent) => {
+      // B button (Escape) closes any open overlay
+      if (event.key === "Escape") {
+        if (showLoadSlotsRef.current) { setShowLoadSlots(false); return; }
+        if (showGalleryRef.current) { setShowGallery(false); return; }
+        if (showSettingsRef.current) { setShowSettings(false); return; }
+        return;
+      }
+      // Only navigate main menu when no overlay is open
+      if (showLoadSlotsRef.current || showGalleryRef.current || showSettingsRef.current) return;
+
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        setFocusedMenuIndex((prev) => (prev - 1 + MENU_COUNT) % MENU_COUNT);
+        return;
+      }
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        setFocusedMenuIndex((prev) => (prev + 1) % MENU_COUNT);
+        return;
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById(`main-menu-btn-${focusedMenuIndexRef.current}`)?.click();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  // focusedMenuIndex is read via DOM id, no need in deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleStart = () => {
     if (!isReady) return;
     setExiting(true);
@@ -142,7 +186,7 @@ export const MainMenuMobile = ({
 
   const btnBase = "w-full rounded-full backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 transition-all duration-200 border";
   const btnActive = `${btnBase} bg-[rgba(12,14,20,0.68)] text-white/90 border-white/25 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer`;
-  const btnDisabled = `${btnBase} bg-[rgba(12,14,20,0.68)] text-white/90 border-white/25 opacity-55 cursor-default`;
+  const btnFocused = `${btnBase} -translate-y-0.5 bg-[rgba(255,214,173,0.15)] text-[#ffd6a0] border-[rgba(255,214,173,0.45)] cursor-pointer`;
   const fontStyle = { fontFamily: '"Crimson Text", Georgia, serif', fontSize: "clamp(0.95rem, 2vw, 1.1rem)" };
 
   return (
@@ -193,12 +237,18 @@ export const MainMenuMobile = ({
 
         {/* Right: buttons */}
         <div className="flex flex-col items-center gap-2.5 w-[clamp(160px,28vw,260px)]">
-          {/* Start — primary */}
+          {/* Start — primary (index 0) */}
           <button
+            id="main-menu-btn-0"
             type="button"
             disabled={!isReady}
             onClick={handleStart}
-            className="w-full rounded-full bg-white text-[#1a1a1a] font-semibold tracking-[0.03em] py-3 px-6 transition-all duration-200 disabled:opacity-55 enabled:hover:-translate-y-0.5 enabled:hover:shadow-[0_6px_24px_rgba(255,255,255,0.18)] enabled:active:translate-y-0 cursor-pointer disabled:cursor-default"
+            className={[
+              "w-full rounded-full font-semibold tracking-[0.03em] py-3 px-6 transition-all duration-200 cursor-pointer disabled:cursor-default",
+              focusedMenuIndex === 0 && isReady
+                ? "bg-[#ffd6a0] text-[#1a1a1a] -translate-y-0.5 shadow-[0_6px_24px_rgba(255,214,173,0.35)] disabled:opacity-55"
+                : "bg-white text-[#1a1a1a] disabled:opacity-55 enabled:hover:-translate-y-0.5 enabled:hover:shadow-[0_6px_24px_rgba(255,255,255,0.18)] enabled:active:translate-y-0",
+            ].join(" ")}
             style={fontStyle}
           >
             {!isReady ? (
@@ -211,28 +261,29 @@ export const MainMenuMobile = ({
             )}
           </button>
 
-          {/* Load */}
+          {/* Load (index 1) */}
           <button
+            id="main-menu-btn-1"
             type="button"
             onClick={() => setShowLoadSlots(true)}
-            className={btnActive}
+            className={focusedMenuIndex === 1 ? btnFocused : btnActive}
             style={fontStyle}
           >
             {labels.load}
           </button>
 
-          {/* Gallery */}
-          <button type="button" onClick={() => setShowGallery(true)} className={btnActive} style={fontStyle}>
+          {/* Gallery (index 2) */}
+          <button id="main-menu-btn-2" type="button" onClick={() => setShowGallery(true)} className={focusedMenuIndex === 2 ? btnFocused : btnActive} style={fontStyle}>
             {labels.gallery}
           </button>
 
-          {/* Setting */}
-          <button type="button" onClick={() => setShowSettings(true)} className={btnActive} style={fontStyle}>
+          {/* Settings (index 3) */}
+          <button id="main-menu-btn-3" type="button" onClick={() => setShowSettings(true)} className={focusedMenuIndex === 3 ? btnFocused : btnActive} style={fontStyle}>
             {labels.settings}
           </button>
 
-          {/* Exit */}
-          <button type="button" onClick={handleExit} className={btnActive} style={fontStyle}>
+          {/* Exit (index 4) */}
+          <button id="main-menu-btn-4" type="button" onClick={handleExit} className={focusedMenuIndex === 4 ? btnFocused : btnActive} style={fontStyle}>
             {labels.exit}
           </button>
         </div>
