@@ -14,8 +14,6 @@ type GalleryOverlayProps = {
   title: string;
 };
 
-const PLACEHOLDER_ITEMS = Array.from({ length: 8 }, (_, index) => index + 1);
-
 const GALLERY_ITEMS = [
   {
     id: "scene-maya-1",
@@ -175,35 +173,6 @@ export const GalleryOverlay = ({
             </div>
               );
             })()
-          ))}
-          {PLACEHOLDER_ITEMS.map((item) => (
-            <div
-              key={item}
-              className="rounded-[1.4rem] border border-white/10 overflow-hidden"
-              style={{
-                background: "linear-gradient(180deg, rgba(18,20,28,0.72), rgba(11,13,18,0.74))",
-              }}
-            >
-              <div
-                className="aspect-square flex items-center justify-center"
-                style={{
-                  background:
-                    "radial-gradient(circle at top, rgba(255,214,173,0.12), transparent 46%), linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0))",
-                }}
-              >
-                <div
-                  className="h-[62%] w-[72%] rounded-[1.1rem] border border-dashed border-[#ffd6ad]/30 flex items-center justify-center"
-                  style={{ background: "rgba(255,214,173,0.03)" }}
-                >
-                  <span className="text-[#ffd6ad]/40 text-[0.9rem] sm:text-[1rem]">#{item}</span>
-                </div>
-              </div>
-              <div className="px-3 py-3 border-t border-white/6">
-                <p className="m-0 text-white/38 text-[0.68rem] tracking-[0.12em] uppercase text-center">
-                  {emptyLabel}
-                </p>
-              </div>
-            </div>
           ))}
         </div>
       </div>
