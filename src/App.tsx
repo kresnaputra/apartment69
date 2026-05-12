@@ -778,6 +778,7 @@ const CutSceneOverlay = ({
   const [visible, setVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
+  const [videoStarted, setVideoStarted] = useState(false);
   const [revealedCount, setRevealedCount] = useState(0);
   const [currentSpeed, setCurrentSpeed] = useState(1);
   const completedRef = useRef(false);
@@ -804,7 +805,9 @@ const CutSceneOverlay = ({
   useEffect(() => {
     setRevealedCount(0);
     setVideoEnded(false);
+    setVideoStarted(false);
     setCurrentSpeed(1);
+    completedRef.current = false;
     previousVideoTimeRef.current = 0;
   }, [resolvedNarrate, src]);
 
@@ -832,6 +835,42 @@ const CutSceneOverlay = ({
       audioRef.current.playbackRate = forcedPlaybackSpeed ?? currentSpeed;
     }
   }, [currentSpeed, forcedPlaybackSpeed]);
+
+  useEffect(() => {
+    const videoNode = videoRef.current;
+    if (!videoNode) return;
+
+    videoNode.currentTime = 0;
+
+    const retry = () => {
+      void videoNode.play()
+        .then(() => {
+          setVideoStarted(true);
+        })
+        .catch(() => {});
+      document.removeEventListener("touchstart", retry, true);
+      document.removeEventListener("click", retry, true);
+      document.removeEventListener("keydown", retry, true);
+    };
+
+    void videoNode.play()
+      .then(() => {
+        setVideoStarted(true);
+      })
+      .catch(() => {
+        // Android WebView can reject autoplay and show a native play badge.
+        // Retry on the next user gesture and keep the video hidden until playback starts.
+        document.addEventListener("touchstart", retry, true);
+        document.addEventListener("click", retry, true);
+        document.addEventListener("keydown", retry, true);
+      });
+
+    return () => {
+      document.removeEventListener("touchstart", retry, true);
+      document.removeEventListener("click", retry, true);
+      document.removeEventListener("keydown", retry, true);
+    };
+  }, [src]);
 
   useEffect(() => {
     const audioNode = audioRef.current;
@@ -922,15 +961,19 @@ const CutSceneOverlay = ({
         src={src}
         autoPlay
         playsInline
+        preload="auto"
+        controls={false}
+        disablePictureInPicture
         loop={loop}
         onEnded={() => setVideoEnded(true)}
+        onPlaying={() => setVideoStarted(true)}
         onTimeUpdate={handleVideoTimeUpdate}
         style={{
           width: "100%",
           height: "100%",
           objectFit: "contain",
           pointerEvents: "none",
-          opacity: fadingOut || !visible ? 0 : 1,
+          opacity: fadingOut || !visible || !videoStarted ? 0 : 1,
           transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
         }}
       />

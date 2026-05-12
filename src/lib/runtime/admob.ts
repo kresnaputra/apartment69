@@ -5,22 +5,27 @@ import {
 } from "@capacitor-community/admob";
 
 const DEFAULT_ANDROID_INTERSTITIAL_ID = "ca-app-pub-3940256099942544/1033173712";
+const PRODUCTION_ANDROID_INTERSTITIAL_ID = "ca-app-pub-4155071339433058/6638950171";
 
 let initialized = false;
 
 const isAdMobEnabled = () => import.meta.env.VITE_ENABLE_ADMOB !== "false";
+const isAdMobTesting = () => import.meta.env.VITE_ADMOB_TEST_MODE === "true";
 
 const isAndroidNative = () =>
   Capacitor.isNativePlatform() && Capacitor.getPlatform() === "android";
 
 const getInterstitialId = () =>
-  import.meta.env.VITE_ADMOB_ANDROID_INTERSTITIAL_ID || DEFAULT_ANDROID_INTERSTITIAL_ID;
+  import.meta.env.VITE_ADMOB_ANDROID_INTERSTITIAL_ID ||
+  (isAdMobTesting()
+    ? DEFAULT_ANDROID_INTERSTITIAL_ID
+    : PRODUCTION_ANDROID_INTERSTITIAL_ID);
 
 export const initializeAdMob = async () => {
   if (!isAdMobEnabled() || !isAndroidNative() || initialized) return;
 
   await AdMob.initialize({
-    initializeForTesting: true,
+    initializeForTesting: isAdMobTesting(),
   });
 
   initialized = true;
@@ -73,7 +78,7 @@ export const showDayTransitionInterstitial = async () => {
     try {
       await AdMob.prepareInterstitial({
         adId: getInterstitialId(),
-        isTesting: true,
+        isTesting: isAdMobTesting(),
       });
       await AdMob.showInterstitial();
     } catch {
