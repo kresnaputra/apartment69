@@ -745,6 +745,8 @@ const CutSceneOverlay = ({
   loop,
   narrate,
   showSpeedControl,
+  endFrame,
+  fps,
   language,
   allowDirectExit = true,
   speedControlBottom = "60px",
@@ -760,6 +762,8 @@ const CutSceneOverlay = ({
   loop?: boolean;
   narrate?: LocalizedText;
   showSpeedControl?: boolean;
+  endFrame?: number;
+  fps?: number;
   language: LanguageCode;
   allowDirectExit?: boolean;
   speedControlBottom?: string;
@@ -788,6 +792,9 @@ const CutSceneOverlay = ({
 
   const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
   const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
+  const endTime = typeof endFrame === "number" && typeof fps === "number" && fps > 0
+    ? endFrame / fps
+    : null;
   const speedOptions = [
     { label: "1x", value: 1 },
     { label: "2x", value: 2 },
@@ -809,7 +816,7 @@ const CutSceneOverlay = ({
     setCurrentSpeed(1);
     completedRef.current = false;
     previousVideoTimeRef.current = 0;
-  }, [resolvedNarrate, src]);
+  }, [endFrame, fps, resolvedNarrate, src]);
 
   useEffect(() => {
     if (!resolvedNarrate) return;
@@ -870,7 +877,7 @@ const CutSceneOverlay = ({
       document.removeEventListener("click", retry, true);
       document.removeEventListener("keydown", retry, true);
     };
-  }, [src]);
+  }, [endTime, src]);
 
   useEffect(() => {
     const audioNode = audioRef.current;
@@ -898,7 +905,7 @@ const CutSceneOverlay = ({
       document.removeEventListener("click", retry, true);
       document.removeEventListener("keydown", retry, true);
     };
-  }, [audioSrc, src]);
+  }, [audioSrc, endTime, src]);
 
   const handleSpeedChange = (speed: number) => {
     setCurrentSpeed(speed);
@@ -921,6 +928,31 @@ const CutSceneOverlay = ({
 
     const currentTime = videoNode.currentTime;
     const previousTime = previousVideoTimeRef.current;
+    const playbackEndTime = endTime;
+
+    if (playbackEndTime !== null && currentTime >= Math.max(0, playbackEndTime - 0.01)) {
+      if (loop) {
+        videoNode.currentTime = 0;
+        if (audioNode) {
+          audioNode.currentTime = 0;
+          void audioNode.play().catch(() => {});
+        }
+        previousVideoTimeRef.current = 0;
+        return;
+      }
+
+      if (!videoEnded) {
+        videoNode.pause();
+        videoNode.currentTime = playbackEndTime;
+        if (audioNode) {
+          audioNode.pause();
+          audioNode.currentTime = Math.max(0, playbackEndTime);
+        }
+        setVideoEnded(true);
+      }
+      previousVideoTimeRef.current = playbackEndTime;
+      return;
+    }
 
     if (loop && audioSrc && audioNode && currentTime + 0.2 < previousTime) {
       audioNode.currentTime = 0;
@@ -928,7 +960,7 @@ const CutSceneOverlay = ({
     }
 
     previousVideoTimeRef.current = currentTime;
-  }, [audioSrc, loop]);
+  }, [audioSrc, endTime, loop, videoEnded]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
@@ -957,7 +989,7 @@ const CutSceneOverlay = ({
     >
       <video
         ref={videoRef}
-        key={src}
+        key={`${src}:${endFrame ?? "full"}:${fps ?? "auto"}`}
         src={src}
         autoPlay
         playsInline
@@ -980,7 +1012,7 @@ const CutSceneOverlay = ({
       {audioSrc ? (
         <audio
           ref={audioRef}
-          key={`${src}:${audioSrc}`}
+          key={`${src}:${audioSrc}:${endFrame ?? "full"}:${fps ?? "auto"}`}
           src={audioSrc}
           autoPlay
           playsInline
@@ -1160,6 +1192,8 @@ const MultiCutSceneOverlay = ({
         loop={activeSelection.loop}
         narrate={activeSelection.narrate}
         showSpeedControl={false}
+        endFrame={activeSelection.endFrame}
+        fps={activeSelection.fps}
         language={language}
         allowDirectExit={false}
         speedControlBottom="168px"
@@ -2070,12 +2104,14 @@ const App = () => {
 
         {activeCutScene ? (
           <CutSceneOverlay
-            key={`${activeCutScene.src}:${activeCutScene.loop ? "loop" : "once"}`}
+            key={`${activeCutScene.src}:${activeCutScene.loop ? "loop" : "once"}:${activeCutScene.endFrame ?? "full"}:${activeCutScene.fps ?? "auto"}`}
             src={activeCutScene.src}
             audioSrc={activeCutScene.audioSrc}
             loop={activeCutScene.loop}
             narrate={activeCutScene.narrate}
             showSpeedControl={activeCutScene.showSpeedControl}
+            endFrame={activeCutScene.endFrame}
+            fps={activeCutScene.fps}
             language={language}
             continueHint={labels.clickToContinue}
             speedLabels={{

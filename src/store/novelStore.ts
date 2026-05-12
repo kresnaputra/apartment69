@@ -499,6 +499,8 @@ const runScriptUntilPause = (state: NovelStore) => {
           loop: command.loop,
           narrate: command.narrate,
           showSpeedControl: command.showSpeedControl,
+          endFrame: command.endFrame,
+          fps: command.fps,
         };
         nextState.activeMultiCutScene = null;
         nextState.activeVoice = null;

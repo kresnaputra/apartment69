@@ -236,14 +236,26 @@ export const minigame = (minigameId: MinigameId, options?: Record<string, unknow
  * @param narrate - Optional narration text to display during the cutscene
  * @param showSpeedControl - If true, shows on-screen buttons to change playback speed
  * @param audioSrc - Optional standalone audio track for the cutscene
+ * @param endFrame - Optional last frame to play before pausing/ending the cutscene
+ * @param fps - Frame rate used to convert `endFrame` into seconds
  */
-export const cutScene = (src: string, loop?: boolean, narrate?: LocalizedText, showSpeedControl?: boolean, audioSrc?: string): CutSceneCommand => ({
+export const cutScene = (
+  src: string,
+  loop?: boolean,
+  narrate?: LocalizedText,
+  showSpeedControl?: boolean,
+  audioSrc?: string,
+  endFrame?: number,
+  fps?: number,
+): CutSceneCommand => ({
   type: "cutScene",
   src,
   audioSrc,
   loop,
   narrate,
   showSpeedControl,
+  endFrame,
+  fps,
 });
 
 export const multiCutScene = (

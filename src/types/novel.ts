@@ -31,6 +31,8 @@ export type ActiveCutScene = {
   loop?: boolean;
   narrate?: LocalizedText;
   showSpeedControl?: boolean;
+  endFrame?: number;
+  fps?: number;
 };
 
 export type ActiveMultiCutScene = {
@@ -194,6 +196,8 @@ export type CutSceneCommand = {
   loop?: boolean;
   narrate?: LocalizedText;
   showSpeedControl?: boolean;
+  endFrame?: number;
+  fps?: number;
 };
 
 export type MultiCutSceneCommand = {
@@ -211,6 +215,8 @@ export type CutSceneSelection = {
   narrate?: LocalizedText;
   showSpeedControl?: boolean;
   enabled?: boolean;
+  endFrame?: number;
+  fps?: number;
 };
 
 export type InterstitialCommand = {

@@ -28,7 +28,13 @@ import mayaSpecialSceneNormal3 from "@/cut-scene/maya-special-scene-normal-3.web
 import mayaSpecialSceneNormal4 from "@/cut-scene/maya-special-scene-normal-4.webm?url";
 import mayaSpecialSceneNormal5 from "@/cut-scene/maya-special-scene-normal-5.webm?url";
 import mayaSpecialSceneNormal6 from "@/cut-scene/maya-special-scene-normal-6.webm?url";
+import mayaSpecialSceneNormal7 from "@/cut-scene/maya-special-scene-normal-7.webm?url";
+import mayaSpecialSceneNormal8 from "@/cut-scene/maya-special-scene-normal-8.webm?url";
+import mayaSpecialSceneNormal9 from "@/cut-scene/maya-special-scene-normal-9.webm?url";
 import mayaBadEndingSound from "@/voice/maya/maya-special-2-scene-1.wav";
+import mayaSpecialSceneNormalSound7 from "@/voice/maya/maya-special-scene-normal-7.wav";
+import mayaSpecialSceneNormalSound8 from "@/voice/maya/maya-special-scene-normal-8.wav";
+import mayaSpecialSceneNormalSound9 from "@/voice/maya/maya-special-scene-normal-9.wav";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   bg(
@@ -67,7 +73,7 @@ export const day7IntroScene: VisualNovelCommand[] = [
 ];
 
 export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
-   bg(
+  bg(
     bedroomNightUrl,
     tx({
       id: "Unit 302 - 20:00",
@@ -350,7 +356,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
 ];
 
 export const day7EternalPromiseScene: VisualNovelCommand[] = [
-   bg(
+  bg(
     bedroomNightUrl,
     tx({
       id: "Unit 302 - 20:00",
@@ -515,6 +521,31 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       id: "maya-special-normal-6",
       label: "",
       loop: true,
+    },
+    {
+      src: mayaSpecialSceneNormal7,
+      id: "maya-special-normal-7",
+      label: "",
+      loop: true,
+      audioSrc: mayaSpecialSceneNormalSound7,
+    },
+    {
+      src: mayaSpecialSceneNormal8,
+      id: "maya-special-normal-8",
+      label: "",
+      loop: true,
+      audioSrc: mayaSpecialSceneNormalSound8,
+      endFrame: 120,
+      fps: 120,
+    },
+    {
+      src: mayaSpecialSceneNormal9,
+      id: "maya-special-normal-9",
+      label: "",
+      loop: true,
+      audioSrc: mayaSpecialSceneNormalSound9,
+      endFrame: 300,
+      fps: 120,
     },
   ]),
 
