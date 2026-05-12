@@ -225,13 +225,6 @@ textarea {
   pointer-events: auto;
 }
 
-.vn-multicut-speed {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.vn-multicut-speed-button,
 .vn-multicut-scene-button,
 .vn-multicut-continue-button {
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -246,18 +239,6 @@ textarea {
     opacity 160ms ease;
 }
 
-.vn-multicut-speed-button {
-  min-width: 2.9rem;
-  min-height: 1.7rem;
-  padding: 0.2rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.vn-multicut-speed-button-active,
 .vn-multicut-scene-button-active,
 .vn-multicut-continue-button {
   border-color: rgba(255, 214, 173, 0.45);
@@ -265,7 +246,6 @@ textarea {
   color: #ffd6ad;
 }
 
-.vn-multicut-speed-button-active,
 .vn-multicut-scene-button-active {
   font-weight: 700;
 }
@@ -1314,18 +1294,6 @@ textarea {
     backdrop-filter: blur(18px);
   }
 
-  .vn-multicut-speed {
-    justify-content: flex-start;
-    gap: 0.3rem;
-  }
-
-  .vn-multicut-speed-button {
-    min-width: 2.3rem;
-    min-height: 1.8rem;
-    padding: 0.2rem 0.45rem;
-    font-size: 0.56rem;
-  }
-
   .vn-multicut-scenes {
     display: flex;
     gap: 0.36rem;
@@ -1393,17 +1361,6 @@ textarea {
     gap: 0.34rem;
     padding: 0.28rem;
     border-radius: 0.72rem;
-  }
-
-  .vn-multicut-speed {
-    gap: 0.22rem;
-  }
-
-  .vn-multicut-speed-button {
-    min-width: 2rem;
-    min-height: 1.45rem;
-    padding: 0.1rem 0.35rem;
-    font-size: 0.5rem;
   }
 
   .vn-multicut-scenes {

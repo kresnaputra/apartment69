@@ -1100,7 +1100,6 @@ const MultiCutSceneOverlay = ({
 }) => {
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(initialSelectionId ?? selections[0]?.id ?? null);
   const [maxUnlockedSelectionIndex, setMaxUnlockedSelectionIndex] = useState(0);
-  const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const enabledSelections = selections.filter((scene) => scene.enabled !== false);
   const activeSelection = selections.find((scene) => scene.id === selectedSceneId) ?? selections[0];
   const currentSelectionIndex = enabledSelections.findIndex((scene) => scene.id === activeSelection?.id);
@@ -1111,7 +1110,6 @@ const MultiCutSceneOverlay = ({
     const initialIndex = Math.max(0, enabledSelections.findIndex((scene) => scene.id === initialId));
     setSelectedSceneId(initialId);
     setMaxUnlockedSelectionIndex(Math.min(enabledSelections.length - 1, initialIndex + 1));
-    setPlaybackSpeed(1);
   }, [initialSelectionId, selections]);
 
   const handleSelectScene = useCallback((sceneId: string) => {
@@ -1172,8 +1170,7 @@ const MultiCutSceneOverlay = ({
           fast: labels.fastPlayback,
           faster: labels.fasterPlayback,
         }}
-        textSpeed={textSpeed * playbackSpeed}
-        forcedPlaybackSpeed={playbackSpeed}
+        textSpeed={textSpeed}
         narrationClassName="vn-multicut-narrator-shell"
         onComplete={onComplete}
       />
@@ -1181,23 +1178,6 @@ const MultiCutSceneOverlay = ({
         className="vn-multicut-controls"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="vn-multicut-speed">
-          {[
-            { label: "1x", value: 1 },
-            { label: "2x", value: 2 },
-            { label: "3x", value: 3 },
-          ].map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => setPlaybackSpeed(option.value)}
-              className={`vn-multicut-speed-button${option.value === playbackSpeed ? " vn-multicut-speed-button-active" : ""}`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-
         <div className="vn-multicut-scenes">
           {selections.map((scene) => {
             const isActive = activeSelection.id === scene.id;
