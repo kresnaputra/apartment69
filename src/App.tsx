@@ -65,6 +65,8 @@ const VIRTUAL_CHARACTER_WIDTH = 270;
 const VIRTUAL_CHARACTER_HEIGHT = 470;
 const CHARACTER_MAX_STAGE_HEIGHT_RATIO = 0.78;
 const CHARACTER_MIN_STAGE_HEIGHT_RATIO = 0.58;
+const BG_VOLUME_STORAGE_KEY = "apartment69:bg-volume";
+const DEFAULT_BG_VOLUME = 0.4;
 
 type CharacterSpriteProps = {
   bundle: LoadedCharacterBundle;
@@ -1334,7 +1336,11 @@ const App = () => {
     const saved = window.localStorage.getItem(ANIMATION_FRAME_RATE_STORAGE_KEY);
     return isAnimationFrameRate(saved) ? Number(saved) as AnimationFrameRate : DEFAULT_ANIMATION_FRAME_RATE;
   });
-  const [bgVolume, setBgVolume] = useState(0.4);
+  const [bgVolume, setBgVolume] = useState(() => {
+    if (typeof window === "undefined") return DEFAULT_BG_VOLUME;
+    const saved = Number(window.localStorage.getItem(BG_VOLUME_STORAGE_KEY));
+    return Number.isFinite(saved) ? Math.min(1, Math.max(0, saved)) : DEFAULT_BG_VOLUME;
+  });
   const [textSpeed, setTextSpeed] = useState(1);
   const [saveToast, setSaveToast] = useState(false);
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
@@ -1428,6 +1434,10 @@ const App = () => {
   }, [frameRate]);
 
   useEffect(() => {
+    window.localStorage.setItem(BG_VOLUME_STORAGE_KEY, String(bgVolume));
+  }, [bgVolume]);
+
+  useEffect(() => {
     audioRef.current = new NovelAudioEngine();
     bgMusicRef.current = new BackgroundMusic();
     return () => {
@@ -1515,11 +1525,11 @@ const App = () => {
 
   useEffect(() => {
     if (phase === "story") {
-      bgMusicRef.current?.play(gameplayMusic, 0.4);
+      bgMusicRef.current?.play(gameplayMusic, bgVolume);
     } else {
       bgMusicRef.current?.stop();
     }
-  }, [phase]);
+  }, [bgVolume, phase]);
 
   useEffect(() => {
     if (phase !== "loading" || hasStartedBundleLoadRef.current) return;

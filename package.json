@@ -17,6 +17,7 @@
     "cap:sync:free": "bun run build:android:free && cap sync android",
     "cap:sync:pro": "bun run build:android:pro && cap sync android",
     "apk:release:free": "bun run cap:sync:free && cd android && ./gradlew assembleRelease",
+    "apk:release:pro": "bun run cap:sync:pro && cd android && ./gradlew assembleRelease",
     "cap:open": "cap open android",
     "cap:run": "bun run build:android && cap sync android && cap run android --no-sync",
     "cap:run:free": "bun run build:android:free && cap sync android && cap run android --no-sync",

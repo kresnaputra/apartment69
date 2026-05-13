@@ -91,7 +91,7 @@ export const MainMenu = ({
     return () => {
       bgMusicRef.current?.dispose();
     };
-  }, [bgVolume]);
+  }, []);
 
   useEffect(() => {
     bgMusicRef.current?.setVolume(bgVolume);

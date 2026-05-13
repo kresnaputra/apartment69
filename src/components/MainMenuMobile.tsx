@@ -114,7 +114,7 @@ export const MainMenuMobile = ({
       document.removeEventListener("click", unlock, true);
       bgMusicRef.current?.dispose();
     };
-  }, [bgVolume]);
+  }, []);
 
   useEffect(() => {
     bgMusicRef.current?.setVolume(bgVolume);
