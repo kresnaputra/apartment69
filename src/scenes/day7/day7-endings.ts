@@ -32,6 +32,13 @@ import mayaSpecialSceneNormal7 from "@/cut-scene/maya-special-scene-normal-7.web
 import mayaSpecialSceneNormal8 from "@/cut-scene/maya-special-scene-normal-8.webm?url";
 import mayaSpecialSceneNormal9 from "@/cut-scene/maya-special-scene-normal-9.webm?url";
 import mayaBadEndingSound from "@/voice/maya/maya-special-2-scene-1.wav";
+
+// Sound
+import mayaSpecialSceneNormalSound2 from "@/voice/maya/maya-special-scene-normal-2.wav";
+import mayaSpecialSceneNormalSound3 from "@/voice/maya/maya-special-scene-normal-3.wav";
+import mayaSpecialSceneNormalSound4 from "@/voice/maya/maya-special-scene-normal-4.wav";
+import mayaSpecialSceneNormalSound5 from "@/voice/maya/maya-special-scene-normal-5.wav";
+import mayaSpecialSceneNormalSound6 from "@/voice/maya/maya-special-scene-normal-6.wav";
 import mayaSpecialSceneNormalSound7 from "@/voice/maya/maya-special-scene-normal-7.wav";
 import mayaSpecialSceneNormalSound8 from "@/voice/maya/maya-special-scene-normal-8.wav";
 import mayaSpecialSceneNormalSound9 from "@/voice/maya/maya-special-scene-normal-9.wav";
@@ -496,31 +503,43 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
   hide("maya-day7-promise"),
   hide("arka-day7"),
   cutScene(mayaSpecialSceneNormal1, true),
-  cutScene(mayaSpecialSceneNormal2, true),
+  cutScene(
+    mayaSpecialSceneNormal2,
+    true,
+    undefined,
+    undefined,
+    mayaSpecialSceneNormalSound2,
+  ),
   multiCutScene([
     {
       src: mayaSpecialSceneNormal3,
       id: "maya-special-normal-3",
       label: "",
       loop: true,
+      audioSrc: mayaSpecialSceneNormalSound3,
     },
     {
       src: mayaSpecialSceneNormal4,
       id: "maya-special-normal-4",
       label: "",
       loop: true,
+      audioSrc: mayaSpecialSceneNormalSound4,
     },
     {
       src: mayaSpecialSceneNormal5,
       id: "maya-special-normal-5",
       label: "",
       loop: true,
+      audioSrc: mayaSpecialSceneNormalSound5,
+      endFrame: 120,
+      fps: 120,
     },
     {
       src: mayaSpecialSceneNormal6,
       id: "maya-special-normal-6",
       label: "",
       loop: true,
+      audioSrc: mayaSpecialSceneNormalSound6,
     },
     {
       src: mayaSpecialSceneNormal7,
