@@ -34,6 +34,11 @@ import mayaSpecialSceneNormal9 from "@/cut-scene/maya-special-scene-normal-9.web
 import mayaBadEndingSound from "@/voice/maya/maya-special-2-scene-1.wav";
 
 // Sound
+import mayaSpecialSceneSound1 from "@/voice/maya/maya-special-scene-1.wav";
+import mayaSpecialSceneSound2 from "@/voice/maya/maya-special-scene-2.wav";
+import mayaSpecialSceneSound3 from "@/voice/maya/maya-special-scene-3.wav";
+import mayaSpecialSceneSound4 from "@/voice/maya/maya-special-scene-4.wav";
+
 import mayaSpecialSceneNormalSound2 from "@/voice/maya/maya-special-scene-normal-2.wav";
 import mayaSpecialSceneNormalSound3 from "@/voice/maya/maya-special-scene-normal-3.wav";
 import mayaSpecialSceneNormalSound4 from "@/voice/maya/maya-special-scene-normal-4.wav";
@@ -210,6 +215,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         }),
         src: mayaSpecialScene1,
         loop: true,
+        audioSrc: mayaSpecialSceneSound1,
         narrate: tx({
           id: "Arka: Niat awalku malam ini cuma murni mau jadi sandaran biar dia bisa tidur tenang. Nggak ada niat buat ngambil kesempatan waktu dia lagi rapuh-rapuhnya begini.",
           en: "Arka: My initial intention tonight was simply to be a support so she could sleep peacefully. I had no intention of taking advantage of her while she's in such a fragile state.",
@@ -227,6 +233,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         }),
         src: mayaSpecialScene2,
         loop: true,
+        audioSrc: mayaSpecialSceneSound2,
         narrate: tx({
           id: "Tapi batas antara rasa peduli, kasihan, dan hasrat ternyata tipis banget. Apalagi waktu dia natap aku kayak gitu. Tatapan orang yang lagi nyari pelampung di tengah badai, dan dia milih aku buat jadi pelampungnya.",
           en: "But the line between care, pity, and desire is surprisingly thin. Especially when she looks at me like that. The look of someone desperately seeking a lifeline in the middle of a storm, and she chose me to be her lifeline.",
@@ -243,6 +250,9 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
           ko: "스타일3",
         }),
         src: mayaSpecialScene3,
+        audioSrc: mayaSpecialSceneSound3,
+        endFrame: 120,
+        fps: 120,
         loop: true,
         narrate: tx({
           id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
@@ -260,6 +270,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
           ko: "스타일4",
         }),
         src: mayaSpecialScene4,
+        audioSrc: mayaSpecialSceneSound4,
         loop: false,
         narrate: tx({
           id: "Nggak ada lagi Maya si mahasiswi kedokteran yang kaku dan tertutup. Di bawah lampu remang ini, dia cuma perempuan biasa yang butuh validasi kalau dia itu berharga. Dan entah kenapa, ngasih dia rasa aman itu... ngasih aku kepuasan yang nggak bisa dijelasin.",
