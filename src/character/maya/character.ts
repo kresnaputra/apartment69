@@ -10,6 +10,7 @@ import mayaSadSbnUrl from "@/character/maya/maya-sad.sbn?url";
 import mayaSadTalkSbnUrl from "@/character/maya/maya-sad-talk.sbn?url";
 import mayaShockSbnUrl from "@/character/maya/maya-shock.sbn?url";
 import mayaShockTalkSbnUrl from "@/character/maya/maya-shock-talk.sbn?url";
+import mayaFallenSbnUrl from "@/character/maya/maya-fallen.sbn?url";
 
 export const mayaBundleRegistry = {
   "maya-talk": mayaTalkSbnUrl,
@@ -22,6 +23,7 @@ export const mayaBundleRegistry = {
   "maya-angry-talk": mayaAngryTalkSbnUrl,
   "maya-shock": mayaShockSbnUrl,
   "maya-shock-talk": mayaShockTalkSbnUrl,
+  "maya-fallen": mayaFallenSbnUrl,
 } as const;
 
 export const mayaCharacter: CharacterDefinition = {
@@ -33,12 +35,14 @@ export const mayaCharacter: CharacterDefinition = {
     sad: "maya-sad-talk",
     blush: "maya-blush-talk",
     angry: "maya-angry-sbn",
+    fallen: "maya-fallen",
   },
   bundleIdByEmotion: {
     neutral: "maya-normal",
     sad: "maya-sad",
     blush: "maya-blush",
     angry: "maya-angry-sbn",
+    fallen: "maya-fallen",
   },
   defaultEmotion: "neutral",
   defaultPosition: "right",

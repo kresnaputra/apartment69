@@ -22,20 +22,23 @@ import mayaSpecialScene4 from "@/cut-scene/maya-special-scene-4.webm?url";
 import mayaSpecial2Scene1 from "@/cut-scene/maya-special-2-scene-1.webm?url";
 import mayaSpecial2Scene2 from "@/cut-scene/maya-special-2-scene-2.webm?url";
 import mayaSpecial2Scene3 from "@/cut-scene/maya-special-2-scene-3.webm?url";
+import mayaSpecial2Scene4 from "@/cut-scene/maya-special-2-scene-4.webm?url";
+import mayaSpecial2Scene5 from "@/cut-scene/maya-special-2-scene-5.webm?url";
+import mayaSpecial2Scene6 from "@/cut-scene/maya-special-2-scene-6.webm?url";
 import mayaSpecialSceneNormal1 from "@/cut-scene/maya-special-scene-normal-1.webm?url";
 import mayaSpecialSceneNormal2 from "@/cut-scene/maya-special-scene-normal-2.webm?url";
 import mayaSpecialSceneNormal3 from "@/cut-scene/maya-special-scene-normal-3.webm?url";
 import mayaSpecialSceneNormal4 from "@/cut-scene/maya-special-scene-normal-4.webm?url";
 import mayaSpecialSceneNormal5 from "@/cut-scene/maya-special-scene-normal-5.webm?url";
 import mayaSpecialSceneNormal6 from "@/cut-scene/maya-special-scene-normal-6.webm?url";
-import mayaSpecialSceneNormal7 from "@/cut-scene/maya-special-scene-normal-7.webm?url";
-import mayaSpecialSceneNormal8 from "@/cut-scene/maya-special-scene-normal-8.webm?url";
-import mayaSpecialSceneNormal9 from "@/cut-scene/maya-special-scene-normal-9.webm?url";
 
 // Sound
 import mayaBadEndingSound from "@/voice/maya/maya-special-2-scene-1.wav";
 import mayaBadEndingSound2 from "@/voice/maya/maya-special-2-scene-2.wav";
 import mayaBadEndingSound3 from "@/voice/maya/maya-special-2-scene-3.wav";
+import mayaBadEndingSound4 from "@/voice/maya/maya-special-2-scene-4.wav";
+import mayaBadEndingSound5 from "@/voice/maya/maya-special-2-scene-5.wav";
+import mayaBadEndingSound6 from "@/voice/maya/maya-special-2-scene-6.wav";
 
 import mayaSpecialSceneSound1 from "@/voice/maya/maya-special-scene-1.wav";
 import mayaSpecialSceneSound2 from "@/voice/maya/maya-special-scene-2.wav";
@@ -47,9 +50,6 @@ import mayaSpecialSceneNormalSound3 from "@/voice/maya/maya-special-scene-normal
 import mayaSpecialSceneNormalSound4 from "@/voice/maya/maya-special-scene-normal-4.wav";
 import mayaSpecialSceneNormalSound5 from "@/voice/maya/maya-special-scene-normal-5.wav";
 import mayaSpecialSceneNormalSound6 from "@/voice/maya/maya-special-scene-normal-6.wav";
-import mayaSpecialSceneNormalSound7 from "@/voice/maya/maya-special-scene-normal-7.wav";
-import mayaSpecialSceneNormalSound8 from "@/voice/maya/maya-special-scene-normal-8.wav";
-import mayaSpecialSceneNormalSound9 from "@/voice/maya/maya-special-scene-normal-9.wav";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   bg(
@@ -97,9 +97,11 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
       ko: "302호 - 20:00",
     }),
   ),
-  show("maya-day7-devoted", "maya", "blush", {
+  show("maya-day7-devoted", "maya", "fallen", {
     position: "center",
     enterFrom: "fade",
+    xOffset: 0.02,
+    scale: 3.3
   }),
   narrate(
     tx({
@@ -111,7 +113,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "blush",
+    "fallen",
     tx({
       id: "Arka... aku udah mikirin semuanya seharian ini. Papa udah blokir semua rekeningku. Kampus juga rasanya udah nggak penting lagi.",
       en: "Arka... I've been thinking about everything all day. Dad already blocked all my accounts. And school... it doesn't feel important anymore.",
@@ -140,7 +142,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "blush",
+    "fallen",
     tx({
       id: "Buat apa aku capek-capek jadi dokter kalau ujung-ujungnya cuma buat muasin ego Papa? Kemarin, kamu bilang kamu yang bakal tanggung jawab atas hidupku, kan? Sekarang... aku milikmu, Arka.",
       en: "What's the point of exhausting myself to become a doctor if it was all just to feed my dad's ego? Yesterday, you said you'd take responsibility for my life, right? So now... I'm yours, Arka.",
@@ -169,7 +171,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "blush",
+    "fallen",
     tx({
       id: "Itu yang aku mau. Terlalu capek mikir buat diriku sendiri. Aku cuma mau jadi apa pun yang kamu mau. Atur aku, Arka.",
       en: "That's what I want. I'm too tired of thinking for myself. I just want to be whatever you want me to be. Take control of me, Arka.",
@@ -335,6 +337,60 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         }),
         src: mayaSpecial2Scene3,
         audioSrc: mayaBadEndingSound3,
+        loop: true,
+        narrate: tx({
+          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
+          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
+          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
+          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
+        }),
+      },
+      {
+        id: "maya-special-2-scene-4",
+        label: tx({
+          id: "Gaya 4",
+          en: "Style 4",
+          ja: "スタイル4",
+          ko: "스타일4",
+        }),
+        src: mayaSpecial2Scene4,
+        audioSrc: mayaBadEndingSound4,
+        loop: true,
+        narrate: tx({
+          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
+          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
+          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
+          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
+        }),
+      },
+      {
+        id: "maya-special-2-scene-5",
+        label: tx({
+          id: "Gaya 5",
+          en: "Style 5",
+          ja: "スタイル5",
+          ko: "스타일5",
+        }),
+        src: mayaSpecial2Scene5,
+        audioSrc: mayaBadEndingSound5,
+        loop: true,
+        narrate: tx({
+          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
+          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
+          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
+          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
+        }),
+      },
+      {
+        id: "maya-special-2-scene-6",
+        label: tx({
+          id: "Gaya 6",
+          en: "Style 6",
+          ja: "スタイル6",
+          ko: "스타일6",
+        }),
+        src: mayaSpecial2Scene6,
+        audioSrc: mayaBadEndingSound6,
         loop: true,
         narrate: tx({
           id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
@@ -558,31 +614,6 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       label: "",
       loop: true,
       audioSrc: mayaSpecialSceneNormalSound6,
-    },
-    {
-      src: mayaSpecialSceneNormal7,
-      id: "maya-special-normal-7",
-      label: "",
-      loop: true,
-      audioSrc: mayaSpecialSceneNormalSound7,
-    },
-    {
-      src: mayaSpecialSceneNormal8,
-      id: "maya-special-normal-8",
-      label: "",
-      loop: true,
-      audioSrc: mayaSpecialSceneNormalSound8,
-      endFrame: 120,
-      fps: 120,
-    },
-    {
-      src: mayaSpecialSceneNormal9,
-      id: "maya-special-normal-9",
-      label: "",
-      loop: true,
-      audioSrc: mayaSpecialSceneNormalSound9,
-      endFrame: 300,
-      fps: 120,
     },
   ]),
 
