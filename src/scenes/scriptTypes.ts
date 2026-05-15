@@ -8,6 +8,7 @@ import type {
   ChoiceOption,
   BackgroundVideo,
   CutSceneCommand,
+  CutSceneNarration,
   CutSceneSelection,
   FlagValue,
   HideCharacterCommand,
@@ -242,7 +243,7 @@ export const minigame = (minigameId: MinigameId, options?: Record<string, unknow
 export const cutScene = (
   src: string,
   loop?: boolean,
-  narrate?: LocalizedText,
+  narrate?: CutSceneNarration,
   showSpeedControl?: boolean,
   audioSrc?: string,
   endFrame?: number,

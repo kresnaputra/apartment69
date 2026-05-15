@@ -48,7 +48,7 @@ import { useNovelStore } from "@/store/novelStore";
 import { characterFrameRegistry } from "@/lib/runtime/characterFrameRegistry";
 import { getCharacterBundleTotalFrames } from "@/types/characterBundle";
 import type { LoadedCharacterBundle } from "@/types/characterBundle";
-import type { CharacterInstance, CutSceneSelection } from "@/types/novel";
+import type { CharacterInstance, CutSceneNarration, CutSceneSelection } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
 import nropLogo from "@/assets/logo-nrop.png";
 import nvmLogo from "@/assets/nvm-logo-white.png";
@@ -181,6 +181,19 @@ const SbnLoadingScreen = ({ loadingLabel, phaseState, statusMessage }: SbnLoadin
     </section>
   </div>
 );
+
+const sliceNarrationBlocks = (blocks: string[], revealedCount: number) => {
+  let remaining = revealedCount;
+
+  return blocks
+    .map((block) => {
+      if (remaining <= 0) return "";
+      const visible = block.slice(0, remaining);
+      remaining -= block.length;
+      return visible;
+    })
+    .filter((block) => block.length > 0);
+};
 
 const useCharacterStageSizing = (character: CharacterInstance, aspectRatio: number) => {
   const [windowSize, setWindowSize] = useState(() => ({
@@ -762,7 +775,7 @@ const CutSceneOverlay = ({
   src: string;
   audioSrc?: string;
   loop?: boolean;
-  narrate?: LocalizedText;
+  narrate?: CutSceneNarration;
   showSpeedControl?: boolean;
   endFrame?: number;
   fps?: number;
@@ -792,8 +805,13 @@ const CutSceneOverlay = ({
   const audioRef = useRef<HTMLAudioElement>(null);
   const previousVideoTimeRef = useRef(0);
 
-  const resolvedNarrate = narrate ? resolveText(narrate, language) : null;
-  const visibleNarrate = resolvedNarrate ? resolvedNarrate.slice(0, revealedCount) : null;
+  const resolvedNarrateBlocks = narrate
+    ? (Array.isArray(narrate) ? narrate : [narrate]).map((entry) => resolveText(entry, language))
+    : [];
+  const resolvedNarrate = resolvedNarrateBlocks.join("");
+  const visibleNarrateBlocks = resolvedNarrate
+    ? sliceNarrationBlocks(resolvedNarrateBlocks, revealedCount)
+    : [];
   const endTime = typeof endFrame === "number" && typeof fps === "number" && fps > 0
     ? endFrame / fps
     : null;
@@ -1020,17 +1038,25 @@ const CutSceneOverlay = ({
           playsInline
         />
       ) : null}
-      {visibleNarrate && (
+      {visibleNarrateBlocks.length > 0 && (
         <div className={`vn-narrator-shell ${narrationClassName ?? ""}`} style={{
           opacity: fadingOut || !visible ? 0 : 1,
           transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
         }}>
           <div className="vn-narrator-box">
-            <div className="vn-narrator-line">{visibleNarrate}</div>
+            {visibleNarrateBlocks.map((block, index) => (
+              <div
+                key={`${index}-${block.length}`}
+                className="vn-narrator-line"
+                style={index > 0 ? { marginTop: "1rem" } : undefined}
+              >
+                {block}
+              </div>
+            ))}
           </div>
         </div>
       )}
-      {!visibleNarrate && allowDirectExit && (videoEnded || loop) ? (
+      {visibleNarrateBlocks.length === 0 && allowDirectExit && (videoEnded || loop) ? (
         <div
           style={{
             position: "absolute",

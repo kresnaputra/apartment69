@@ -24,12 +24,13 @@ export type FlagValue = boolean | number | string | null;
 export type FlagMap = Record<string, FlagValue>;
 
 export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts" | "laptop-cleanup" | "email-compose";
+export type CutSceneNarration = LocalizedText | LocalizedText[];
 
 export type ActiveCutScene = {
   src: string;
   audioSrc?: string;
   loop?: boolean;
-  narrate?: LocalizedText;
+  narrate?: CutSceneNarration;
   showSpeedControl?: boolean;
   endFrame?: number;
   fps?: number;
@@ -194,7 +195,7 @@ export type CutSceneCommand = {
   src: string;
   audioSrc?: string;
   loop?: boolean;
-  narrate?: LocalizedText;
+  narrate?: CutSceneNarration;
   showSpeedControl?: boolean;
   endFrame?: number;
   fps?: number;
@@ -212,7 +213,7 @@ export type CutSceneSelection = {
   src: string;
   audioSrc?: string;
   loop?: boolean;
-  narrate?: LocalizedText;
+  narrate?: CutSceneNarration;
   showSpeedControl?: boolean;
   enabled?: boolean;
   endFrame?: number;

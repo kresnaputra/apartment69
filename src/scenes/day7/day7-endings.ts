@@ -222,12 +222,20 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecialScene1,
         loop: true,
         audioSrc: mayaSpecialSceneSound1,
-        narrate: tx({
-          id: "Arka: Niat awalku malam ini cuma murni mau jadi sandaran biar dia bisa tidur tenang. Nggak ada niat buat ngambil kesempatan waktu dia lagi rapuh-rapuhnya begini.",
-          en: "Arka: My initial intention tonight was simply to be a support so she could sleep peacefully. I had no intention of taking advantage of her while she's in such a fragile state.",
-          ja: "アルカ：今夜の俺の本来の意図は、ただ彼女が安心して眠れるように支えになることだけだった。こんなに脆弱な状態の彼女につけ込むつもりなんて全くなかった。",
-          ko: "아르카: 오늘 밤 내 원래 의도는 순수하게 그녀가 편안히 잠들 수 있도록 의지가 되어주는 것뿐이었어. 그녀가 이렇게 취약한 상태일 때 기회를 이용할 생각은 전혀 없었어.",
-        }),
+        narrate: [
+          tx({
+            id: "Maya: Mmmghh... Arka... jangan cuma diam. Biarin aku rasain kamu. Aku udah nggak sabar...",
+            en: "Maya: Mmmghh... Arka... don't just stay still. Let me feel you. I can't wait anymore...",
+            ja: "Maya: んんっ... アルカ... じっとしてないで。あなたを感じさせて。もう待てない...",
+            ko: "Maya: 음... 아르카... 가만히 있지만 마. 너를 느끼게 해줘. 더 이상 못 참겠어...",
+          }),
+          tx({
+            id: "Arka: Nggak usah buru-buru. Aku yang ngatur temponya malam ini. Layanin dulu yang benar.",
+            en: "Arka: Don't rush. I'll set the tempo tonight. Let's do it properly first.",
+            ja: "アルカ：急がなくていい。今日はテンポを私がコントロールする。まずはちゃんとやろう。",
+            ko: "아르카: 서둘 필요 없어. 오늘은 템포를 내가 조절할게. 먼저 제대로 해보자.",
+          }),
+        ],
       },
       {
         id: "maya-special-scene-2",
@@ -241,10 +249,10 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         loop: true,
         audioSrc: mayaSpecialSceneSound2,
         narrate: tx({
-          id: "Tapi batas antara rasa peduli, kasihan, dan hasrat ternyata tipis banget. Apalagi waktu dia natap aku kayak gitu. Tatapan orang yang lagi nyari pelampung di tengah badai, dan dia milih aku buat jadi pelampungnya.",
-          en: "But the line between care, pity, and desire is surprisingly thin. Especially when she looks at me like that. The look of someone desperately seeking a lifeline in the middle of a storm, and she chose me to be her lifeline.",
-          ja: "でも、思いやりと同情と欲望の境界線は驚くほど薄い。特に彼女があんな風に俺を見つめる時は。嵐の中で必死に救命具を探している人の眼差し、そして彼女は俺をその救命具に選んだ。",
-          ko: "하지만 배려와 동정, 그리고 욕망 사이의 경계선은 놀라울 정도로 얇다. 특히 그녀가 나를 그렇게 바라볼 때는. 폭풍 속에서 필사적으로 구명줄을 찾는 사람의 눈빛, 그리고 그녀는 나를 그 구명줄로 선택했다.",
+          id: "Arka: Sumpah, perubahannya bikin merinding. Mahasiswi kedokteran yang kaku dan selalu ketakutan itu udah mati. Yang ada di bawahku sekarang cuma cewek binal yang kehilangan akal sehatnya. Tatapannya bener-bener kayak orang sakau, dan obatnya cuma aku.",
+          en: "Arka: Seriously, the change is chilling. The rigid medical student who was always scared is dead. What's under me now is just a nymphomaniac who lost her sanity. Her gaze is absolutely like a drowning person's, and the only cure is me.",
+          ja: "アルカ：本当に変化はぞっとする。いつも怯えていた医療学生はもう死んでいる。今、私の中にあるのはただの性欲の暴走した女だ。彼女の視線はまさに溺れる人のようだ。その唯一の薬は私だ。",
+          ko: "아르카: 진짜 변하는 게 뼈저리다. 항상 두려워했던 의과대학생은 이미 죽었다. 지금 저 아래 있는 건 그냥 정신을 잃은 성욕의 폭주자다. 그녀의 시선은 마치 물에 빠진 사람 같고, 유일한 약은 나뿐이다.",
         }),
       },
       {
@@ -260,12 +268,20 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         endFrame: 120,
         fps: 120,
         loop: true,
-        narrate: tx({
-          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
-          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
-          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
-          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
-        }),
+        narrate: [
+          tx({
+            id: "Arka: Siapa yang nyangka cewek paling pintar di apartemen ini ternyata lebih suka berlutut dan ngemis kayak gini?",
+            en: "Arka: Who would've thought the smartest girl in this apartment actually prefers to kneel and beg like this?",
+            ja: "アルカ：このアパートで一番頭のいい女が、実はこうやって跪いて懇願するのが好きだなんて誰が思っただろう？",
+            ko: "아르카: 이 아파트에서 가장 똑똑한 여자가 사실은 이렇게 무릎 꿇고 애원하는 걸 더 좋아한다니 누가 생각이나 했겠어?",
+          }),
+          tx({
+            id: "Maya: Haaah... Kepintaran nggak ada gunanya, Arka! Otakku udah rusak... ahh! Cuma kamu yang bisa bikin aku ngerasa hidup! Rusak aku sekalian malam ini!",
+            en: "Maya: Haaah... Intelligence is useless, Arka! My brain is already broken... ahh! Only you can make me feel alive! Ruin me completely tonight!",
+            ja: "Maya: はぁ... 頭の良さなんて意味ない、アルカ！私の脳はもう壊れてる... あっ！あなただけが私を生きてると感じさせてくれる！今夜は完全に私を壊して！",
+            ko: "Maya: 하아... 똑똑한 건 아무 소용없어, 아르카! 내 뇌는 이미 망가졌어... 아! 너만이 날 살아있다고 느끼게 해줄 수 있어! 오늘 밤 날 완전히 망가뜨려줘!",
+          }),
+        ],
       },
       {
         id: "maya-special-scene-4",
@@ -278,12 +294,20 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecialScene4,
         audioSrc: mayaSpecialSceneSound4,
         loop: true,
-        narrate: tx({
-          id: "Nggak ada lagi Maya si mahasiswi kedokteran yang kaku dan tertutup. Di bawah lampu remang ini, dia cuma perempuan biasa yang butuh validasi kalau dia itu berharga. Dan entah kenapa, ngasih dia rasa aman itu... ngasih aku kepuasan yang nggak bisa dijelasin.",
-          en: "No more of that stiff, closed-off med student Maya. Under this dim light, she's just an ordinary girl who needs validation that she's worth something. And somehow, giving her that sense of safety... it gives me a satisfaction I can't explain.",
-          ja: "もう堅苦しくて閉ざされた医学生のマヤはいない。この薄暗い明かりの下で、彼女はただ自分に価値があると認めてもらいたい普通の女の子だ。そしてなぜか、彼女に安心感を与えること...それが俺に説明できない満足感を与えてくれる。",
-          ko: "이제 딱딱하고 폐쇄적인 의대생 마야는 없다. 이 희미한 불빛 아래에서, 그녀는 그저 자신이 가치 있다는 확인이 필요한 평범한 여자일 뿐이다. 그리고 왠지, 그녀에게 안정감을 주는 것... 그게 나한테 설명할 수 없는 만족감을 준다.",
-        }),
+        narrate: [
+          tx({
+            id: "Maya: Ahhh! Mmm... Arka, tolong... aku udah nggak tahan kalau cuma main di luar begini! Hancurin aku sekarang... masukin, please!",
+            en: "Maya: Ahhh! Mmm... Arka, please... I can't take it anymore if you just play outside like this! Destroy me now... put it in, please!",
+            ja: "Maya: あぁっ！んん... アルカ、お願い... こんな外だけで遊ばれるのもう耐えられない！今すぐ私を壊して... 入れて、お願い！",
+            ko: "Maya: 아아! 음... 아르카, 제발... 이렇게 밖에서만 놀면 더 이상 못 참겠어! 지금 날 망가뜨려줘... 넣어줘, 제발!",
+          }),
+          tx({
+            id: "Arka: Nggak ada alasan buat nahan diri lagi. Kalau dia memang minta dihancurkan, aku bakal kasih apa yang dia mau.",
+            en: "Arka: There's no reason to hold back anymore. If she really wants to be destroyed, I'll give her what she wants.",
+            ja: "アルカ：もう我慢する理由がない。もし彼女が本当に壊れたいなら、彼女に欲しいものを与えるしかない。",
+            ko: "아르카: 더 이상 참을 이유가 없다. 만약 그녀가 정말로 망가지고 싶다면, 그녀에게 원하는 것을 줄 수밖에 없다.",
+          }),
+        ],
       },
     ],
     "maya-special-2",
@@ -301,12 +325,26 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene1,
         audioSrc: mayaBadEndingSound,
         loop: true,
-        narrate: tx({
-          id: "Arka: Niat awalku malam ini cuma murni mau jadi sandaran biar dia bisa tidur tenang. Nggak ada niat buat ngambil kesempatan waktu dia lagi rapuh-rapuhnya begini.",
-          en: "Arka: My initial intention tonight was simply to be a support so she could sleep peacefully. I had no intention of taking advantage of her while she's in such a fragile state.",
-          ja: "アルカ：今夜の俺の本来の意図は、ただ彼女が安心して眠れるように支えになることだけだった。こんなに脆弱な状態の彼女につけ込むつもりなんて全くなかった。",
-          ko: "아르카: 오늘 밤 내 원래 의도는 순수하게 그녀가 편안히 잠들 수 있도록 의지가 되어주는 것뿐이었어. 그녀가 이렇게 취약한 상태일 때 기회를 이용할 생각은 전혀 없었어.",
-        }),
+        narrate: [
+          tx({
+            id: 'Maya: "AAHH!! Iya!! Kayak gitu, Arka!! Haaah... lebih keras lagi!! Jangan kasih ampun!"',
+            en: 'Maya: "AAHH!! Yes!! Like that, Arka!! Haaah... harder!! Don\'t hold back!"',
+            ja: 'Maya: 「ああっ!! そう!! そんな感じ、アルカ!! はぁ... もっと激しく!! 容赦しないで!」',
+            ko: 'Maya: "아아!! 그래!! 그렇게, 아르카!! 하아... 더 세게!! 봐주지 마!"',
+          }),
+          tx({
+            id: 'Arka: (Napas mulai memburu, menahan pinggul Maya) "Gila. Di depan jendela begini, kamu bener-bener udah nggak peduli ada yang lihat dari luar, ya?"',
+            en: 'Arka: (Breathing heavily, holding Maya\'s hips) "Crazy. In front of the window like this, you really don\'t care if anyone sees from outside, huh?"',
+            ja: 'アルカ：（息が荒くなり、マヤの腰を掴む）「狂ってる。こんな窓の前で、外から誰かに見られても本当に気にしないんだな？」',
+            ko: 'Arka: (숨이 거칠어지며, 마야의 엉덩이를 잡고) "미쳤네. 이렇게 창문 앞에서, 밖에서 누가 보든 정말 신경 안 쓰는 거야?"',
+          }),
+          tx({
+            id: 'Maya: "Biarin mereka lihat!! Ahh! Biar satu gedung tahu kalau aku cuma mainanmu! Haaah!"',
+            en: 'Maya: "Let them see!! Ahh! Let the whole building know that I\'m just your toy! Haaah!"',
+            ja: 'Maya: 「見せてやって!! あっ! ビル全体に私があなたのおもちゃだって知らせて! はぁっ!」',
+            ko: 'Maya: "보게 내버려둬!! 아! 건물 전체가 내가 네 장난감일 뿐이라는 걸 알게 해줘! 하아!"',
+          }),
+        ],
       },
       {
         id: "maya-special-2-scene-2",
@@ -322,10 +360,10 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         endFrame: 120,
         fps: 120,
         narrate: tx({
-          id: "Tapi batas antara rasa peduli, kasihan, dan hasrat ternyata tipis banget. Apalagi waktu dia natap aku kayak gitu. Tatapan orang yang lagi nyari pelampung di tengah badai, dan dia milih aku buat jadi pelampungnya.",
-          en: "But the line between care, pity, and desire is surprisingly thin. Especially when she looks at me like that. The look of someone desperately seeking a lifeline in the middle of a storm, and she chose me to be her lifeline.",
-          ja: "でも、思いやりと同情と欲望の境界線は驚くほど薄い。特に彼女があんな風に俺を見つめる時は。嵐の中で必死に救命具を探している人の眼差し、そして彼女は俺をその救命具に選んだ。",
-          ko: "하지만 배려와 동정, 그리고 욕망 사이의 경계선은 놀라울 정도로 얇다. 특히 그녀가 나를 그렇게 바라볼 때는. 폭풍 속에서 필사적으로 구명줄을 찾는 사람의 눈빛, 그리고 그녀는 나를 그 구명줄로 선택했다.",
+          id: "Arka: Nggak ada lagi sisa-sisa harga diri. Kaca di depannya sampai berembun karena napasnya yang putus-putus. Dia menerima kehancuran ini dengan sangat sukarela. Ngelihat tubuhnya se-binal ini pasrah di depanku... egoku rasanya bener-bener dipuasin sampai ke akar",
+          en: "Arka: No trace of self-respect left. The glass in front of her is fogged up from her ragged breathing. She accepts this destruction so willingly. Seeing her body this lustful and submissive before me... my ego feels truly satisfied to the core",
+          ja: "アルカ：もう自尊心のかけらもない。彼女の前のガラスは途切れ途切れの息で曇っている。彼女はこの破壊を非常に自発的に受け入れている。こんなに淫らで従順な彼女の体を目の前にして... 俺のエゴは本当に根底まで満たされる",
+          ko: "아르카: 자존심의 흔적도 남지 않았다. 그녀 앞의 유리는 끊어지는 숨결로 김이 서려 있다. 그녀는 이 파괴를 너무나 자발적으로 받아들인다. 이렇게 음란하고 순종적인 그녀의 몸을 내 앞에서 보니... 내 자아가 정말 뿌리까지 만족스럽다",
         }),
       },
       {
@@ -339,12 +377,26 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene3,
         audioSrc: mayaBadEndingSound3,
         loop: true,
-        narrate: tx({
-          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
-          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
-          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
-          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
-        }),
+        narrate: [
+          tx({
+            id: 'Maya: "Mmmghh!! Arka... benturkan aku ke kaca! Lakukan apa aja!! Ahhh! Tandai badanku sampai nggak ada cowok lain yang mau lihat aku selain kamu!"',
+            en: 'Maya: "Mmmghh!! Arka... slam me against the glass! Do whatever you want!! Ahhh! Mark my body so no other guy will want to look at me except you!"',
+            ja: "Maya: 「んんっ!! アルカ... ガラスに叩きつけて！何でもして!! あぁっ！私の体に印をつけて、あなた以外の男が私を見たくなくなるまで！」",
+            ko: 'Maya: "음!! 아르카... 날 유리에 부딪혀! 뭐든지 해!! 아아! 내 몸에 표시를 남겨서 너 말고 다른 남자는 날 보고 싶어하지 않게 해줘!"',
+          }),
+          tx({
+            id: 'Arka: "Kamu bener-bener udah gila, Maya."',
+            en: 'Arka: "You\'re really crazy, Maya."',
+            ja: "アルカ：「お前、本当に狂ってるな、マヤ。」",
+            ko: '아르카: "너 정말 미쳤구나, 마야."',
+          }),
+          tx({
+            id: 'Maya: "Gila karena kamu!! Haaah... cepat, Arka... hancurkan sisa-sisa kewarasanku!"',
+            en: 'Maya: "Crazy because of you!! Haaah... hurry, Arka... destroy the last remnants of my self-respect!"',
+            ja: 'マヤ：「君のために狂ってる!! はぁ... 早く、アルカ... 私の自尊心の残りを壊して!!"',
+            ko: '마야: "너 때문에 미쳤어!! 하아... 서둘러, 아르카... 나의 자존심의 잔해를 부수어!!"',
+          }),
+        ],
       },
       {
         id: "maya-special-2-scene-4",
@@ -357,12 +409,20 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene4,
         audioSrc: mayaBadEndingSound4,
         loop: true,
-        narrate: tx({
-          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
-          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
-          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
-          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
-        }),
+        narrate: [
+          tx({
+            id: 'Maya: "AAH!! AAH!! ARKA!! Ya Tuhan... terlalu dalam... haaah!! Terus... jangan berhenti!!"',
+            en: 'Maya: "AAH!! AAH!! ARKA!! Oh God... too deep... haaah!! Keep going... don\'t stop!!"',
+            ja: 'マヤ：「ああっ!! ああっ!! アルカッ!! ああ... すごく奥まで... はぁっ!! 続けて... 止めないで!!"',
+            ko: '마야: "아아!! 아아!! 아르카!! 오 신님... 너무 깊어... 하아!! 계속해... 멈추지마!!"',
+          }),
+          tx({
+            id: 'Arka: "Bagus. Teriak yang kencang. Buktikan kalau kamu emang cuma hidup buat ini sekarang."',
+            en: 'Arka: "Good. Shout loudly. Prove that you\'re only alive for this now."',
+            ja: "アルカ：「いいね。大声で叫んで。今、これが俺の為に生きていることを証明しろ。」",
+            ko: '아르카: "좋아. 큰 소리로 외쳐라. 지금 이 순간만을 위해 살아가는 것을 증명해라."',
+          }),
+        ],
       },
       {
         id: "maya-special-2-scene-5",
@@ -375,12 +435,38 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene5,
         audioSrc: mayaBadEndingSound5,
         loop: true,
-        narrate: tx({
-          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
-          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
-          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
-          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
-        }),
+        narrate: [
+          tx({
+            id: "Arka (Monolog):\nSensasinya bener-bener di luar nalar. Posisi ini bikin aku masuk lebih dalam dari sebelumnya. Dia terus memundurkan pinggulnya secara agresif, nyari sentuhanku dengan liar. Tarikannya terlalu kuat, aku udah benar-benar di ambang batas sekarang.",
+            en: "Arka (Monologue):\nThe sensation is truly beyond reason. This position makes me go deeper than before. She keeps pushing her hips back aggressively, seeking my touch wildly. The pull is too strong, I'm really at the edge now.",
+            ja: "アルカ（独白）：\nこの感覚は本当に理性を超えている。この体位は以前よりも深く入り込ませる。彼女は攻撃的に腰を後ろに押し続け、荒々しく俺の触れ合いを求めている。引きが強すぎる、俺は今本当に限界だ。",
+            ko: "아르카 (독백):\n이 감각은 정말 이성을 초월한다. 이 자세는 이전보다 더 깊이 들어가게 만든다. 그녀는 계속해서 공격적으로 엉덩이를 뒤로 밀며, 거칠게 내 접촉을 찾고 있다. 당김이 너무 강해서, 나는 지금 정말 한계에 다다랐다.",
+          }),
+          tx({
+            id: 'Arka: "Maya... aku udah mau keluar!"',
+            en: 'Arka: "Maya... I\'m about to come!"',
+            ja: "アルカ：「マヤ... もう出る！」",
+            ko: '아르카: "마야... 나 이제 나올 것 같아!"',
+          }),
+          tx({
+            id: 'Maya: "NGGAK BOLEH!! JANGAN DI LUAR!! Penuhi aku, Arka!! Kasih aku semuanya!! Hamilin aku sekalian biar Papa bener-bener buang aku!!"',
+            en: 'Maya: "NO!! DON\'T PULL OUT!! Fill me up, Arka!! Give me everything!! Get me pregnant so Papa will really throw me away!!"',
+            ja: "Maya: 「ダメ!! 外に出さないで!! 私を満たして、アルカ!! 全部ちょうだい!! 私を妊娠させて、パパが本当に私を捨てるように!!」",
+            ko: 'Maya: "안 돼!! 밖에 빼지 마!! 날 채워줘, 아르카!! 전부 다 줘!! 날 임신시켜서 아빠가 정말로 날 버리게 해줘!!"',
+          }),
+          tx({
+            id: 'Arka: "Kamu bener-bener sinting!"',
+            en: 'Arka: "You\'re really insane!"',
+            ja: "アルカ：「お前、本当に狂ってる！」",
+            ko: '아르카: "너 정말 미쳤어!"',
+          }),
+          tx({
+            id: 'Maya: "PENUHI AKU!! AAHH!! SEKARANG, ARKA!!"',
+            en: 'Maya: "FILL ME UP!! AAHH!! NOW, ARKA!!"',
+            ja: "Maya: 「私を満たして!! ああっ!! 今、アルカ!!」",
+            ko: 'Maya: "날 채워줘!! 아아!! 지금, 아르카!!"',
+          }),
+        ],
       },
       {
         id: "maya-special-2-scene-6",
@@ -393,12 +479,20 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene6,
         audioSrc: mayaBadEndingSound6,
         loop: true,
-        narrate: tx({
-          id: "Tangan yang biasanya selalu tegang pegang buku tebal atau gemetar karena takut dimarahi bapaknya... malam ini meluk punggungku erat banget. Seolah aku satu-satunya hal nyata yang bisa dia pegang dan dia percaya.",
-          en: "The hands that are usually tense holding thick books or trembling from fear of her father's anger... tonight they hold my back so tightly. As if I'm the only real thing she can hold onto and trust.",
-          ja: "いつもは分厚い本を握りしめて緊張していたり、父親に叱られる恐怖で震えていたりする手が...今夜は俺の背中を強く抱きしめている。まるで俺が彼女が掴んで信じられる唯一の現実であるかのように。",
-          ko: "평소에는 두꺼운 책을 쥐며 긴장하거나 아버지에게 혼날까 봐 떨고 있던 손이... 오늘 밤은 내 등을 너무나 꽉 껴안고 있다. 마치 내가 그녀가 붙잡고 믿을 수 있는 유일한 현실인 것처럼.",
-        }),
+        narrate: [
+          tx({
+            id: "Arka: Kamu bener-bener nggak bisa diselamatin lagi, Maya.",
+            en: "Arka: You really can't be saved anymore, Maya.",
+            ja: "アルカ：お前、もう本当に救いようがないな、マヤ。",
+            ko: "아르카: 너 정말 더 이상 구원받을 수 없어, 마야.",
+          }),
+          tx({
+            id: "Maya: Siapa yang butuh diselamatin? Malam ini baru permulaan, Arka. Besok... kamu harus rusak aku lebih parah lagi.",
+            en: "Maya: Who needs to be saved? Tonight is just the beginning, Arka. Tomorrow... you have to ruin me even worse.",
+            ja: "Maya: 誰が救われる必要があるの？今夜はただの始まりよ、アルカ。明日は... もっとひどく私を壊さなきゃ。",
+            ko: "Maya: 누가 구원받을 필요가 있어? 오늘 밤은 시작일 뿐이야, 아르카. 내일은... 날 더 심하게 망가뜨려야 해.",
+          }),
+        ],
       },
     ],
     "maya-bed-3",

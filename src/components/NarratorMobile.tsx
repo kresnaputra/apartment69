@@ -19,7 +19,7 @@ export const NarratorMobile = ({
     <div className="relative w-[55%] max-w-xs">
       {/* left-side dark fade */}
       <div className="absolute -inset-x-8 -inset-y-6 pointer-events-none -z-10"
-        style={{ background: "linear-gradient(90deg,rgba(0,0,0,0.58) 0%,rgba(0,0,0,0.3) 55%,transparent 100%)", filter: "blur(6px)" }}
+        style={{ background: "linear-gradient(90deg,rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.54) 52%,rgba(0,0,0,0.14) 78%,transparent 100%)", filter: "blur(8px)" }}
       />
       <p className="m-0 text-[0.82rem] leading-[1.65] italic text-white/95 whitespace-pre-wrap"
         style={{ textShadow: "0 1px 0 rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.24)" }}
