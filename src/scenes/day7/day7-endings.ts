@@ -50,6 +50,7 @@ import mayaSpecialSceneNormalSound3 from "@/voice/maya/maya-special-scene-normal
 import mayaSpecialSceneNormalSound4 from "@/voice/maya/maya-special-scene-normal-4.wav";
 import mayaSpecialSceneNormalSound5 from "@/voice/maya/maya-special-scene-normal-5.wav";
 import mayaSpecialSceneNormalSound6 from "@/voice/maya/maya-special-scene-normal-6.wav";
+import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   bg(
@@ -101,7 +102,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
     position: "center",
     enterFrom: "fade",
     xOffset: 0.02,
-    scale: 3.3
+    scale: isMobileDevice() ? 3.1 : 3.3,
   }),
   narrate(
     tx({
