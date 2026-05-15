@@ -215,8 +215,14 @@ export const MainMenuMobile = ({
               APARTMENTS
             </span>
             <span
-              className="text-white"
-              style={{ fontFamily: '"Mr De Haviland", cursive', fontSize: "clamp(3.4rem, 9vw, 6.5rem)", fontWeight: 400, lineHeight: 0.85 }}
+              className="text-[#ffd6a0]"
+              style={{
+                fontFamily: '"Mr De Haviland", cursive',
+                fontSize: "clamp(3.4rem, 9vw, 6.5rem)",
+                fontWeight: 400,
+                lineHeight: 0.85,
+                textShadow: "0 0 18px rgba(255, 214, 160, 0.18)",
+              }}
             >
               69
             </span>
