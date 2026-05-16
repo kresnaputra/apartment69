@@ -27,6 +27,7 @@ import type {
   VisualNovelScript,
 } from "@/types/novel";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
+import { persistGalleryUnlockFlag } from "@/lib/runtime/galleryUnlocks";
 
 type NovelStore = {
   bundles: Record<string, LoadedCharacterBundle>;
@@ -450,6 +451,7 @@ const runScriptUntilPause = (state: NovelStore) => {
         break;
 
       case "setFlag":
+        persistGalleryUnlockFlag(command.name, command.value);
         nextState.flags = {
           ...nextState.flags,
           [command.name]: command.value,

@@ -19,6 +19,7 @@ import { ConfigOverlay } from "@/components/ConfigOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, uiText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
+import { readGalleryUnlockFlags } from "@/lib/runtime/galleryUnlocks";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
 import type { SceneBounds } from "@/types/sbn";
@@ -1336,6 +1337,8 @@ const App = () => {
   const currentLabel = useNovelStore((state) => state.currentLabel);
   const currentIndex = useNovelStore((state) => state.currentIndex);
   const flags = useNovelStore((state) => state.flags);
+  const persistedGalleryFlags = readGalleryUnlockFlags();
+  const galleryFlags = { ...persistedGalleryFlags, ...flags };
 
   const [revealedCount, setRevealedCount] = useState(0);
   const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
@@ -1947,8 +1950,8 @@ const App = () => {
 
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={flags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
-          : <MainMenu bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={flags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          : <MainMenu bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
       )}
       <main
         className="vn-root"
