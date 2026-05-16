@@ -6,12 +6,14 @@ import {
   menu,
   minigame,
   narrate,
+  playSfx,
   say,
   setFlag,
   show,
 } from "@/scenes/scriptTypes";
 import elevator from "@/background/elevator.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
+import lift from "@/sfx/lift.wav"
 
 export const elevatorMeetingScene: VisualNovelCommand[] = [
   bg(
@@ -38,6 +40,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     { hideName: true, voice: mayaDay1To4Voices[0] },
   ),
   minigame("elevator-button"),
+  playSfx(lift),
   say(
     "maya",
     "worried",

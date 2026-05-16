@@ -8,6 +8,7 @@ import {
   jumpIf,
   multiCutScene,
   narrate,
+  playBgm,
   say,
   scene,
   setFlag,
@@ -51,8 +52,10 @@ import mayaSpecialSceneNormalSound4 from "@/voice/maya/maya-special-scene-normal
 import mayaSpecialSceneNormalSound5 from "@/voice/maya/maya-special-scene-normal-5.wav";
 import mayaSpecialSceneNormalSound6 from "@/voice/maya/maya-special-scene-normal-6.wav";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
+import day7Bgm from "@/music/day7.mp3";
 
 export const day7IntroScene: VisualNovelCommand[] = [
+  playBgm(day7Bgm),
   bg(
     bedroomNightUrl,
     tx({
@@ -329,19 +332,19 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
           tx({
             id: 'Maya: "AAHH!! Iya!! Kayak gitu, Arka!! Haaah... lebih keras lagi!! Jangan kasih ampun!"',
             en: 'Maya: "AAHH!! Yes!! Like that, Arka!! Haaah... harder!! Don\'t hold back!"',
-            ja: 'Maya: 「ああっ!! そう!! そんな感じ、アルカ!! はぁ... もっと激しく!! 容赦しないで!」',
+            ja: "Maya: 「ああっ!! そう!! そんな感じ、アルカ!! はぁ... もっと激しく!! 容赦しないで!」",
             ko: 'Maya: "아아!! 그래!! 그렇게, 아르카!! 하아... 더 세게!! 봐주지 마!"',
           }),
           tx({
             id: 'Arka: (Napas mulai memburu, menahan pinggul Maya) "Gila. Di depan jendela begini, kamu bener-bener udah nggak peduli ada yang lihat dari luar, ya?"',
-            en: 'Arka: (Breathing heavily, holding Maya\'s hips) "Crazy. In front of the window like this, you really don\'t care if anyone sees from outside, huh?"',
-            ja: 'アルカ：（息が荒くなり、マヤの腰を掴む）「狂ってる。こんな窓の前で、外から誰かに見られても本当に気にしないんだな？」',
+            en: "Arka: (Breathing heavily, holding Maya's hips) \"Crazy. In front of the window like this, you really don't care if anyone sees from outside, huh?\"",
+            ja: "アルカ：（息が荒くなり、マヤの腰を掴む）「狂ってる。こんな窓の前で、外から誰かに見られても本当に気にしないんだな？」",
             ko: 'Arka: (숨이 거칠어지며, 마야의 엉덩이를 잡고) "미쳤네. 이렇게 창문 앞에서, 밖에서 누가 보든 정말 신경 안 쓰는 거야?"',
           }),
           tx({
             id: 'Maya: "Biarin mereka lihat!! Ahh! Biar satu gedung tahu kalau aku cuma mainanmu! Haaah!"',
             en: 'Maya: "Let them see!! Ahh! Let the whole building know that I\'m just your toy! Haaah!"',
-            ja: 'Maya: 「見せてやって!! あっ! ビル全体に私があなたのおもちゃだって知らせて! はぁっ!」',
+            ja: "Maya: 「見せてやって!! あっ! ビル全体に私があなたのおもちゃだって知らせて! はぁっ!」",
             ko: 'Maya: "보게 내버려둬!! 아! 건물 전체가 내가 네 장난감일 뿐이라는 걸 알게 해줘! 하아!"',
           }),
         ],

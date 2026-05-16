@@ -7,6 +7,8 @@ import {
   menu,
   minigame,
   narrate,
+  playBgm,
+  playSfx,
   say,
   setFlag,
   show,
@@ -14,8 +16,11 @@ import {
 import bedroomUrl from "@/background/bedroom.png";
 import hallwayUrl from "@/background/hallway.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
+import knockSound from "@/sfx/knock.wav";
+import day6Bgm from "@/music/day6.mp3";
 
 export const day6PapaConfrontationScene: VisualNovelCommand[] = [
+  playBgm(day6Bgm),
   bg(
     bedroomUrl,
     tx({
@@ -37,12 +42,13 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "조용한 아침. 아르카는 PC 앞에서 여유롭게 앉아 있었다. 딱히 할 일도 없었다.",
     }),
   ),
+  playSfx(knockSound),
   narrate(
     tx({
-      id: "Tiba-tiba HP-nya bergetar berkali-kali. Panggilan masuk dari Maya mati sebelum sempat diangkat, disusul rentetan chat panik.",
-      en: "Then his phone starts buzzing nonstop. A call from Maya cuts out before he can pick it up, followed immediately by a rapid string of panicked messages.",
-      ja: "突然、スマホが何度も振動し始めた。マヤからの着信は出る前に切れ、続けざまにパニック状態のメッセージが届く。",
-      ko: "갑자기 핸드폰이 연달아 진동했다. 마야의 전화는 받기도 전에 끊겼고, 뒤이어 다급한 메시지들이 쏟아졌다.",
+      id: "Tiba-tiba Maya mengetuk pintu kamar.",
+      en: "Suddenly, Maya knocks on the door.",
+      ja: "突然、マヤが部屋のドアをノックした。",
+      ko: "갑자기 마야가 방 문을 두드리더니。",
     }),
   ),
   show("maya-day6-papa-confrontation", "maya", "worried", {

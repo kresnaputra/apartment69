@@ -1,15 +1,19 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, menu, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, menu, narrate, playSfx, say, show } from "@/scenes/scriptTypes";
 import hallway from "@/background/hallway.png";
+import lift from "@/sfx/lift.wav";
 
 export const saraHallwayScene: VisualNovelCommand[] = [
-  bg(hallway, tx({
-    id: "Lentera Apartments - Lorong Lantai 3",
-    en: "Lentera Apartments - 3rd Floor Hallway",
-    ja: "レンテラ・アパートメント - 3階の廊下",
-    ko: "렌테라 아파트 - 3층 복도",
-  })),
+  bg(
+    hallway,
+    tx({
+      id: "Lentera Apartments - Lorong Lantai 3",
+      en: "Lentera Apartments - 3rd Floor Hallway",
+      ja: "レンテラ・アパートメント - 3階の廊下",
+      ko: "렌테라 아파트 - 3층 복도",
+    }),
+  ),
   hide("nadia-balcony"),
   hide("arka-balcony"),
   show("arka-hallway", "arka", "neutral", {
@@ -24,11 +28,7 @@ export const saraHallwayScene: VisualNovelCommand[] = [
       ko: "누구지? 저 태도만 봐도 이 층 주민은 아닌 것 같다. 3층은 보통 일반 유닛이지, 스위트룸이 있는 층이 아니다.",
     }),
   ),
-  show("sara-hallway", "sara", "neutral", {
-    position: "center",
-    enterFrom: "right",
-    xOffset: 0.0,
-  }),
+  playSfx(lift),
   say(
     "sara",
     "neutral",
@@ -40,6 +40,11 @@ export const saraHallwayScene: VisualNovelCommand[] = [
     }),
     { hideName: true },
   ),
+  show("sara-hallway", "sara", "neutral", {
+    position: "center",
+    enterFrom: "fade",
+    xOffset: 0.0,
+  }),
   say(
     "arka",
     "serious",
@@ -88,33 +93,36 @@ export const saraHallwayScene: VisualNovelCommand[] = [
       ko: "어쩌면. 내 유닛 자동화 시스템이 중앙 허브랑 동기화가 안 되고 있어. 건물 관리 쪽에서는 메인 벤더 승인 때문에 3일 걸린다는데, 넌 30분이면 끝낼 수 있을 것 같아.",
     }),
   ),
-  menu(tx({
-    id: "Jadi, kamu mau bagaimana?",
-    en: "So, what do you wanna do?",
-    ja: "さて、どうする？",
-    ko: "그래서, 어떻게 할래?",
-  }), [
-    {
-      id: "help-sara",
-      label: tx({
-        id: "Bantu dia",
-        en: "Help her",
-        ja: "手伝う",
-        ko: "도와준다",
-      }),
-      next: "sara-help",
-    },
-    {
-      id: "refuse-sara",
-      label: tx({
-        id: "Tolak",
-        en: "Turn her down",
-        ja: "断る",
-        ko: "거절한다",
-      }),
-      next: "sara-refuse",
-    },
-  ]),
+  menu(
+    tx({
+      id: "Jadi, kamu mau bagaimana?",
+      en: "So, what do you wanna do?",
+      ja: "さて、どうする？",
+      ko: "그래서, 어떻게 할래?",
+    }),
+    [
+      {
+        id: "help-sara",
+        label: tx({
+          id: "Bantu dia",
+          en: "Help her",
+          ja: "手伝う",
+          ko: "도와준다",
+        }),
+        next: "sara-help",
+      },
+      {
+        id: "refuse-sara",
+        label: tx({
+          id: "Tolak",
+          en: "Turn her down",
+          ja: "断る",
+          ko: "거절한다",
+        }),
+        next: "sara-refuse",
+      },
+    ],
+  ),
 ];
 
 export const saraHelpScene: VisualNovelCommand[] = [

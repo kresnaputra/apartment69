@@ -9,8 +9,10 @@ import { unknownSpeakerIds } from "@/types/novel";
 import type {
   ActiveCutScene,
   ActiveMultiCutScene,
+  ActiveBackgroundMusic,
   ActiveInterstitial,
   ActiveMinigame,
+  ActiveSoundEffect,
   BackgroundVideo,
   BlackScreenState,
   CharacterDefinition,
@@ -49,6 +51,8 @@ type NovelStore = {
   activeCutScene: ActiveCutScene | null;
   activeMultiCutScene: ActiveMultiCutScene | null;
   activeInterstitial: ActiveInterstitial | null;
+  activeBackgroundMusic: ActiveBackgroundMusic | null;
+  activeSoundEffect: ActiveSoundEffect | null;
   activeVoice: string | null;
   line: LocalizedText;
   lineSize: "hero" | "sub";
@@ -110,6 +114,8 @@ const emptyState = {
   activeCutScene: null,
   activeMultiCutScene: null,
   activeInterstitial: null,
+  activeBackgroundMusic: null,
+  activeSoundEffect: null,
   activeVoice: null,
   line: "",
   lineSize: "hero" as const,
@@ -337,6 +343,8 @@ const runScriptUntilPause = (state: NovelStore) => {
     activeCutScene: state.activeCutScene,
     activeMultiCutScene: state.activeMultiCutScene,
     activeInterstitial: state.activeInterstitial,
+    activeBackgroundMusic: state.activeBackgroundMusic,
+    activeSoundEffect: null,
     activeVoice: state.activeVoice,
     line: state.line,
     lineSize: state.lineSize,
@@ -545,6 +553,23 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.ready = true;
         return nextState;
 
+      case "playSoundEffect":
+        nextState.activeSoundEffect = {
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          src: command.src,
+          options: command.options,
+        };
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        break;
+
+      case "playBackgroundMusic":
+        nextState.activeBackgroundMusic = {
+          src: command.src,
+          options: command.options,
+        };
+        nextState.currentIndex = (nextState.currentIndex ?? 0) + 1;
+        break;
+
       case "blackScreen":
         nextState.blackScreen = command.active
           ? {
@@ -663,6 +688,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       activeCutScene: null,
       activeMultiCutScene: null,
       activeInterstitial: null,
+      activeBackgroundMusic: null,
       activeVoice: null,
     }),
 

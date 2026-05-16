@@ -18,9 +18,13 @@ import type {
   MoveCharacterCommand,
   MultiCutSceneCommand,
   ParallaxLayer,
+  PlayBackgroundMusicCommand,
+  PlaySoundEffectCommand,
+  BackgroundMusicOptions,
   SayCommand,
   SceneCommand,
   SetFlagCommand,
+  SoundEffectOptions,
   SpeakerId,
   ShowCharacterCommand,
   VisualNovelCommand,
@@ -227,6 +231,18 @@ export const jumpIf = (
 export const minigame = (minigameId: MinigameId, options?: Record<string, unknown>): VisualNovelCommand => ({
   type: "minigame",
   minigameId,
+  options,
+});
+
+export const playSfx = (src: string, options?: SoundEffectOptions): PlaySoundEffectCommand => ({
+  type: "playSoundEffect",
+  src,
+  options,
+});
+
+export const playBgm = (src: string, options?: BackgroundMusicOptions): PlayBackgroundMusicCommand => ({
+  type: "playBackgroundMusic",
+  src,
   options,
 });
 

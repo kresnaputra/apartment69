@@ -6,10 +6,13 @@ import {
   jump,
   menu,
   narrate,
+  playSfx,
   say,
   show,
 } from "@/scenes/scriptTypes";
 import frontOfficeUrl from "@/background/front-office.png";
+import lift from "@/sfx/lift.wav";
+import breakSound from "@/sfx/break.wav";
 
 export const elenaEncounterScene: VisualNovelCommand[] = [
   bg(frontOfficeUrl, tx({
@@ -28,6 +31,7 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
       ko: "엘리베이터 문이 열리고, 아르카가 복도로 나서는 순간 날카로운 목소리가 정적을 가른다.",
     }),
   ),
+  playSfx(lift),
   say(
     "elena",
     "neutral",
@@ -39,6 +43,7 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
     }),
     { hideName: true },
   ),
+  playSfx(breakSound),
   show("arka-hallway", "arka", "neutral", {
     position: "left",
     enterFrom: "left",

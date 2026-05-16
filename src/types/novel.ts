@@ -51,6 +51,27 @@ export type ActiveInterstitial = {
   startedAt: number;
 };
 
+export type SoundEffectOptions = {
+  volume?: number;
+  playbackRate?: number;
+  loop?: boolean;
+};
+
+export type ActiveSoundEffect = {
+  id: string;
+  src: string;
+  options?: SoundEffectOptions;
+};
+
+export type BackgroundMusicOptions = {
+  volume?: number;
+};
+
+export type ActiveBackgroundMusic = {
+  src: string;
+  options?: BackgroundMusicOptions;
+};
+
 export type BlackScreenState = {
   active: boolean;
   background: string;
@@ -224,6 +245,18 @@ export type InterstitialCommand = {
   type: "interstitial";
 };
 
+export type PlaySoundEffectCommand = {
+  type: "playSoundEffect";
+  src: string;
+  options?: SoundEffectOptions;
+};
+
+export type PlayBackgroundMusicCommand = {
+  type: "playBackgroundMusic";
+  src: string;
+  options?: BackgroundMusicOptions;
+};
+
 export type BlackScreenCommand = {
   type: "blackScreen";
   active: boolean;
@@ -246,6 +279,8 @@ export type VisualNovelCommand =
   | CutSceneCommand
   | MultiCutSceneCommand
   | InterstitialCommand
+  | PlaySoundEffectCommand
+  | PlayBackgroundMusicCommand
   | BlackScreenCommand;
 
 export type VisualNovelScript = {

@@ -17,6 +17,8 @@ import {
   setFlag,
   show,
   cutScene,
+  playBgm,
+  playSfx,
 } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import hospitalUrl from "@/background/hospital.png";
@@ -37,11 +39,12 @@ import mayaBed6 from "@/cut-scene/maya-bed-6.webm?url";
 import mayaBedSound6 from "@/voice/maya/maya-bed-6.wav";
 import mayaBed7 from "@/cut-scene/maya-bed-7.webm?url";
 import mayaBedSound7 from "@/voice/maya/maya-bed-7.wav";
-import mayaBed8 from "@/cut-scene/maya-bed-8.webm?url";
-import mayaBedSound8 from "@/voice/maya/maya-bed-8.wav";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
+import day4Bgm from "@/music/day4.mp3";
+import breakSound from "@/sfx/break.wav";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
+  playBgm(day4Bgm),
   bg(
     hallwayUrl,
     tx({
@@ -722,6 +725,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
       ko: "마야는 아르카를 붙잡아 그대로 침대 쪽으로 끌어당긴다.",
     }),
   ),
+  playSfx(breakSound),
   blackScreen(),
   say(
     "arka",

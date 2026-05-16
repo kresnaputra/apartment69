@@ -6,6 +6,7 @@ import mainMenuSbnUrl from "@/assets/main-menu.sbn?url";
 import rainCityMusic from "@/music/rain-city.mp3";
 import nropLogo from "@/assets/logo-nrop.png";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
+import { sharedSoundEffects } from "@/lib/runtime/soundEffects";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
@@ -59,17 +60,26 @@ const MainMenuFigure = ({ graphicsQuality }: { graphicsQuality: GraphicsQuality 
       if (cancelled) return;
 
       const renderer = rendererRef.current;
+      const container = containerRef.current;
       if (renderer) {
         await renderer.preloadProject(bundle.project);
       }
 
       if (cancelled) return;
 
+      const rect = container?.getBoundingClientRect();
+      const viewportWidth = rect && rect.width > 0 ? rect.width : MENU_SBN_VIEWPORT.width;
+      const viewportHeight = rect && rect.height > 0 ? rect.height : MENU_SBN_VIEWPORT.height;
+
+      if (renderer && rect && rect.width > 0 && rect.height > 0) {
+        renderer.resize(rect.width, rect.height, 1, true, graphicsQuality);
+      }
+
       bundleRef.current = bundle;
       cameraRef.current = fitCameraToScene(
         bundle.project,
-        MENU_SBN_VIEWPORT.width,
-        MENU_SBN_VIEWPORT.height,
+        viewportWidth,
+        viewportHeight,
       );
       setIsReady(true);
     };
@@ -83,7 +93,7 @@ const MainMenuFigure = ({ graphicsQuality }: { graphicsQuality: GraphicsQuality 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [graphicsQuality]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -266,7 +276,23 @@ export const MainMenu = ({
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
     bgMusicRef.current.play(rainCityMusic, bgVolume);
+
+    let unlocked = false;
+    const unlock = () => {
+      if (unlocked) return;
+      unlocked = true;
+      bgMusicRef.current?.resumeAfterUnlock();
+      sharedSoundEffects.resumeAfterUnlock();
+      document.removeEventListener("touchstart", unlock, true);
+      document.removeEventListener("click", unlock, true);
+    };
+
+    document.addEventListener("touchstart", unlock, true);
+    document.addEventListener("click", unlock, true);
+
     return () => {
+      document.removeEventListener("touchstart", unlock, true);
+      document.removeEventListener("click", unlock, true);
       bgMusicRef.current?.dispose();
     };
   }, []);

@@ -28,6 +28,7 @@ import { characterBundleRegistry } from "@/character";
 import type { SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
+import { playSfx as playRuntimeSfx, sharedSoundEffects } from "@/lib/runtime/soundEffects";
 import {
   ANIMATION_FRAME_RATE_STORAGE_KEY,
   DEFAULT_ANIMATION_FRAME_RATE,
@@ -1308,6 +1309,8 @@ const App = () => {
   const activeCutScene = useNovelStore((state) => state.activeCutScene);
   const activeMultiCutScene = useNovelStore((state) => state.activeMultiCutScene);
   const activeInterstitial = useNovelStore((state) => state.activeInterstitial);
+  const activeBackgroundMusic = useNovelStore((state) => state.activeBackgroundMusic);
+  const activeSoundEffect = useNovelStore((state) => state.activeSoundEffect);
   const activeVoice = useNovelStore((state) => state.activeVoice);
   const line = useNovelStore((state) => state.line);
   const lineSize = useNovelStore((state) => state.lineSize);
@@ -1504,6 +1507,11 @@ const App = () => {
   }, [activeVoice]);
 
   useEffect(() => {
+    if (!activeSoundEffect) return;
+    playRuntimeSfx(activeSoundEffect.src, activeSoundEffect.options);
+  }, [activeSoundEffect]);
+
+  useEffect(() => {
     initializeAdMob().catch(() => {});
   }, []);
 
@@ -1535,6 +1543,7 @@ const App = () => {
       }
 
       bgMusicRef.current?.resumeAfterUnlock();
+      sharedSoundEffects.resumeAfterUnlock();
 
       document.removeEventListener("touchstart", unlock, true);
       document.removeEventListener("click", unlock, true);
@@ -1551,11 +1560,13 @@ const App = () => {
 
   useEffect(() => {
     if (phase === "story") {
-      bgMusicRef.current?.play(gameplayMusic, bgVolume);
+      const musicSrc = activeBackgroundMusic?.src ?? gameplayMusic;
+      const musicVolume = bgVolume * (activeBackgroundMusic?.options?.volume ?? 1);
+      bgMusicRef.current?.play(musicSrc, musicVolume);
     } else {
       bgMusicRef.current?.stop();
     }
-  }, [bgVolume, phase]);
+  }, [activeBackgroundMusic, bgVolume, phase]);
 
   useEffect(() => {
     if (phase !== "loading" || hasStartedBundleLoadRef.current) return;

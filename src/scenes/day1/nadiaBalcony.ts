@@ -8,11 +8,12 @@ import {
   narrate,
   say,
   show,
-  moveTo,
   cutScene,
+  playSfx,
 } from "@/scenes/scriptTypes";
 import bedroom from "@/background/bedroom-afteroon.png";
 import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url";
+import breakSound from "@/sfx/break.wav";
 
 export const nadiaBalconyScene: VisualNovelCommand[] = [
   bg(bedroom, tx({
@@ -35,6 +36,7 @@ export const nadiaBalconyScene: VisualNovelCommand[] = [
     position: "left",
     enterFrom: "left",
   }),
+  playSfx(breakSound),
   say(
     "nadia",
     "neutral",

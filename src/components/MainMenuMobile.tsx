@@ -4,6 +4,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import mainMenuBg from "@/background/main-menu.png";
 import rainCityMusic from "@/music/rain-city.mp3";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
+import { sharedSoundEffects } from "@/lib/runtime/soundEffects";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
@@ -103,6 +104,7 @@ export const MainMenuMobile = ({
       if (unlocked) return;
       unlocked = true;
       bgMusicRef.current?.resumeAfterUnlock();
+      sharedSoundEffects.resumeAfterUnlock();
       document.removeEventListener("touchstart", unlock, true);
       document.removeEventListener("click", unlock, true);
     };
