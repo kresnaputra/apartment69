@@ -134,6 +134,36 @@ const emptyState = {
   isEnded: false,
 };
 
+const clearedSceneState = {
+  background: emptyState.background,
+  backgroundVideo: emptyState.backgroundVideo,
+  parallaxLayers: emptyState.parallaxLayers,
+  backgroundAnimation: emptyState.backgroundAnimation,
+  blackScreen: emptyState.blackScreen,
+  location: emptyState.location,
+  textPresentation: emptyState.textPresentation,
+  speaker: emptyState.speaker,
+  activeCharacterId: emptyState.activeCharacterId,
+  sceneTransitionDuration: emptyState.sceneTransitionDuration,
+  sceneTransitionToken: emptyState.sceneTransitionToken,
+  pendingSceneContinuation: emptyState.pendingSceneContinuation,
+  activeMinigame: emptyState.activeMinigame,
+  activeCutScene: emptyState.activeCutScene,
+  activeMultiCutScene: emptyState.activeMultiCutScene,
+  activeInterstitial: emptyState.activeInterstitial,
+  activeBackgroundMusic: emptyState.activeBackgroundMusic,
+  activeSoundEffect: emptyState.activeSoundEffect,
+  activeVoice: emptyState.activeVoice,
+  line: emptyState.line,
+  lineSize: emptyState.lineSize,
+  lineTypingSpeed: emptyState.lineTypingSpeed,
+  choices: emptyState.choices,
+  choicePrompt: emptyState.choicePrompt,
+  characters: emptyState.characters,
+  ready: false,
+  isEnded: false,
+};
+
 const MAX_STEPS_PER_PASS = 100;
 
 const positionToX = (position: CharacterStagePosition) => {
@@ -680,21 +710,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
 
   setStatusMessage: (message) => set({ statusMessage: message }),
 
-  clearScene: () =>
-    set({
-      characters: {},
-      line: "",
-      speaker: null,
-      activeCharacterId: null,
-      blackScreen: null,
-      choices: [],
-      activeMinigame: null,
-      activeCutScene: null,
-      activeMultiCutScene: null,
-      activeInterstitial: null,
-      activeBackgroundMusic: null,
-      activeVoice: null,
-    }),
+  clearScene: () => set(clearedSceneState),
 
   startStory: () =>
     set((state) =>

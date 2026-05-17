@@ -1691,6 +1691,7 @@ const App = () => {
       bgMusicRef.current?.play(musicSrc, musicVolume);
     } else {
       bgMusicRef.current?.stop();
+      sharedSoundEffects.stopAll();
     }
   }, [activeBackgroundMusic, bgVolume, phase]);
 
@@ -2082,27 +2083,28 @@ const App = () => {
           ? <MainMenuMobile bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
           : <MainMenu bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
       )}
-      <main
-        className="vn-root"
-        style={{ visibility: phase === "story" ? "visible" : "hidden" }}
-        onClick={() => {
-          if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
-            suppressAdvanceOnceRef.current = false;
-            return;
-          }
-          if (activeMinigame) return;
-          if (choices.length > 0) return;
-          if (isEnded) {
-            setPhase("menu");
-            return;
-          }
-          if (isTyping) {
-            setRevealedCount(resolvedLine.length);
-            return;
-          }
-          advance();
-        }}
-      >
+      {phase === "story" ? (
+        <main
+          className="vn-root"
+          onClick={() => {
+            if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
+              suppressAdvanceOnceRef.current = false;
+              return;
+            }
+            if (activeMinigame) return;
+            if (choices.length > 0) return;
+            if (isEnded) {
+              clearScene();
+              setPhase("menu");
+              return;
+            }
+            if (isTyping) {
+              setRevealedCount(resolvedLine.length);
+              return;
+            }
+            advance();
+          }}
+        >
         {!isVideoCutSceneActive && backgroundVideo ? (
           <video
             key={`${backgroundVideo.src}-${sceneTransitionKey}`}
@@ -2340,7 +2342,8 @@ const App = () => {
           </div>
         ) : null}
 
-      </main>
+        </main>
+      ) : null}
 
       {showLog && (
         <LogOverlay

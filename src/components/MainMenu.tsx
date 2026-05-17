@@ -19,6 +19,26 @@ import type { FlagMap } from "@/types/novel";
 import type { LoadedSbnBundle, SceneBounds } from "@/types/sbn";
 
 const MENU_SBN_VIEWPORT = { width: 720, height: 980 };
+let mainMenuBundlePromise: Promise<LoadedSbnBundle> | null = null;
+
+const getMainMenuBundle = async () => {
+  if (!mainMenuBundlePromise) {
+    mainMenuBundlePromise = (async () => {
+      const response = await fetch(mainMenuSbnUrl);
+      if (!response.ok) {
+        throw new Error(`Gagal memuat bundle main menu: ${mainMenuSbnUrl}`);
+      }
+
+      const source = await response.blob();
+      return loadSbnBundle(source, "main-menu.sbn");
+    })().catch((error) => {
+      mainMenuBundlePromise = null;
+      throw error;
+    });
+  }
+
+  return mainMenuBundlePromise;
+};
 
 const MainMenuFigure = ({ graphicsQuality }: { graphicsQuality: GraphicsQuality }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -50,13 +70,7 @@ const MainMenuFigure = ({ graphicsQuality }: { graphicsQuality: GraphicsQuality 
     let cancelled = false;
 
     const load = async () => {
-      const response = await fetch(mainMenuSbnUrl);
-      if (!response.ok) {
-        throw new Error(`Gagal memuat bundle main menu: ${mainMenuSbnUrl}`);
-      }
-
-      const source = await response.blob();
-      const bundle = await loadSbnBundle(source, "main-menu.sbn");
+      const bundle = await getMainMenuBundle();
       if (cancelled) return;
 
       const renderer = rendererRef.current;
@@ -93,7 +107,7 @@ const MainMenuFigure = ({ graphicsQuality }: { graphicsQuality: GraphicsQuality 
     return () => {
       cancelled = true;
     };
-  }, [graphicsQuality]);
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
