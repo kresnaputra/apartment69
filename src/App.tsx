@@ -1025,37 +1025,21 @@ const CutSceneOverlay = ({
         cursor: shouldHandleOverlayClick && (hasNarration || videoEnded || loop) ? "pointer" : "default",
       }}
     >
-      <video
-        ref={videoRef}
-        key={`${src}:${endFrame ?? "full"}:${fps ?? "auto"}`}
+      <CutSceneMediaLayer
         src={src}
-        autoPlay
-        playsInline
-        preload="auto"
-        controls={false}
-        disablePictureInPicture
+        audioSrc={audioSrc}
         loop={loop}
-        onEnded={() => setVideoEnded(true)}
-        onPlaying={() => setVideoStarted(true)}
-        onTimeUpdate={handleVideoTimeUpdate}
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
-          pointerEvents: "none",
-          opacity: fadingOut || !visible || !videoStarted ? 0 : 1,
-          transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
-        }}
+        endFrame={endFrame}
+        fps={fps}
+        fadingOut={fadingOut}
+        visible={visible}
+        videoStarted={videoStarted}
+        videoRef={videoRef}
+        audioRef={audioRef}
+        handleVideoTimeUpdate={handleVideoTimeUpdate}
+        onVideoEnded={() => setVideoEnded(true)}
+        onVideoPlaying={() => setVideoStarted(true)}
       />
-      {audioSrc ? (
-        <audio
-          ref={audioRef}
-          key={`${src}:${audioSrc}:${endFrame ?? "full"}:${fps ?? "auto"}`}
-          src={audioSrc}
-          autoPlay
-          playsInline
-        />
-      ) : null}
       {visibleNarrateBlocks.length > 0 && (
         <div className={`vn-narrator-shell ${narrationClassName ?? ""}`} style={{
           opacity: fadingOut || !visible ? 0 : 1,
@@ -1155,11 +1139,76 @@ const CutSceneOverlay = ({
   );
 };
 
+const CutSceneMediaLayer = memo(({
+  src,
+  audioSrc,
+  loop,
+  endFrame,
+  fps,
+  fadingOut,
+  visible,
+  videoStarted,
+  videoRef,
+  audioRef,
+  handleVideoTimeUpdate,
+  onVideoEnded,
+  onVideoPlaying,
+}: {
+  src: string;
+  audioSrc?: string;
+  loop?: boolean;
+  endFrame?: number;
+  fps?: number;
+  fadingOut: boolean;
+  visible: boolean;
+  videoStarted: boolean;
+  videoRef: { current: HTMLVideoElement | null };
+  audioRef: { current: HTMLAudioElement | null };
+  handleVideoTimeUpdate: () => void;
+  onVideoEnded: () => void;
+  onVideoPlaying: () => void;
+}) => (
+  <>
+    <video
+      ref={videoRef}
+      key={`${src}:${endFrame ?? "full"}:${fps ?? "auto"}`}
+      src={src}
+      autoPlay
+      playsInline
+      preload="auto"
+      controls={false}
+      disablePictureInPicture
+      loop={loop}
+      onEnded={onVideoEnded}
+      onPlaying={onVideoPlaying}
+      onTimeUpdate={handleVideoTimeUpdate}
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "contain",
+        pointerEvents: "none",
+        opacity: fadingOut || !visible || !videoStarted ? 0 : 1,
+        transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
+      }}
+    />
+    {audioSrc ? (
+      <audio
+        ref={audioRef}
+        key={`${src}:${audioSrc}:${endFrame ?? "full"}:${fps ?? "auto"}`}
+        src={audioSrc}
+        autoPlay
+        playsInline
+      />
+    ) : null}
+  </>
+));
+
 const MultiCutSceneOverlay = ({
   selections,
   initialSelectionId,
   language,
   labels,
+  isMobile = false,
   textSpeed = 1,
   onComplete,
 }: {
@@ -1177,6 +1226,7 @@ const MultiCutSceneOverlay = ({
     normalPlayback: string;
     slowPlayback: string;
   };
+  isMobile?: boolean;
   textSpeed?: number;
   onComplete: () => void;
 }) => {
@@ -1255,7 +1305,9 @@ const MultiCutSceneOverlay = ({
           faster: labels.fasterPlayback,
         }}
         textSpeed={textSpeed}
-        narrationClassName="vn-multicut-narrator-shell"
+        narrationClassName={isMobile
+          ? "vn-multicut-narrator-shell vn-cutscene-narrator-shell-mobile"
+          : "vn-multicut-narrator-shell"}
         onComplete={onComplete}
       />
       <div
@@ -1940,6 +1992,7 @@ const App = () => {
     bgMusicRef.current?.setVolume(value);
   };
 
+  const isVideoCutSceneActive = activeCutScene !== null || activeMultiCutScene !== null;
   const renderCharacters = Object.values(characters)
     .filter((character) => character.visible || character.isExiting)
     .sort((left, right) => left.y - right.y);
@@ -1999,7 +2052,7 @@ const App = () => {
           advance();
         }}
       >
-        {backgroundVideo ? (
+        {!isVideoCutSceneActive && backgroundVideo ? (
           <video
             key={`${backgroundVideo.src}-${sceneTransitionKey}`}
             className="absolute inset-0 h-full w-full object-cover"
@@ -2024,7 +2077,7 @@ const App = () => {
               node.playbackRate = backgroundVideo.playbackRate ?? 1;
             }}
           />
-        ) : (
+        ) : !isVideoCutSceneActive ? (
           <div
             className="vn-background"
             style={{
@@ -2039,11 +2092,13 @@ const App = () => {
               } as CSSProperties)),
             }}
           />
+        ) : (
+          <div className="vn-background" style={{ background: "#000" }} />
         )}
         <div className="vn-vignette" />
         <div className="vn-stage">
           <div className="vn-lighting" />
-          {parallaxLayers.map((layer, i) => (
+          {!isVideoCutSceneActive && parallaxLayers.map((layer, i) => (
             <div
               // eslint-disable-next-line react/no-array-index-key
               key={i}
@@ -2073,7 +2128,8 @@ const App = () => {
             />
           ) : null}
 
-          {!isSceneTransitioning &&
+          {!isVideoCutSceneActive &&
+            !isSceneTransitioning &&
             renderCharacters.map((character) => {
               const bundle = bundles[character.bundleId];
               if (!bundle) return null;
@@ -2196,6 +2252,7 @@ const App = () => {
               faster: labels.fasterPlayback,
             }}
             textSpeed={textSpeed}
+            narrationClassName={isMobile ? "vn-cutscene-narrator-shell-mobile" : undefined}
             onComplete={completeCutScene}
           />
         ) : null}
@@ -2218,6 +2275,7 @@ const App = () => {
               continueStory: labels.continueStory,
               lockedScene: labels.lockedScene,
             }}
+            isMobile={isMobile}
             onComplete={completeMultiCutScene}
           />
         ) : null}

@@ -781,7 +781,7 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
         }),
         src: mayaBed5,
         audioSrc: mayaBedSound5,
-        loop: false,
+        loop: true,
         narrate: tx({
           id: "Tapi batas antara rasa peduli, kasihan, dan hasrat ternyata tipis banget. Apalagi waktu dia natap aku kayak gitu. Tatapan orang yang lagi nyari pelampung di tengah badai, dan dia milih aku buat jadi pelampungnya.",
           en: "But the line between care, pity, and desire is surprisingly thin. Especially when she looks at me like that. The look of someone desperately seeking a lifeline in the middle of a storm, and she chose me to be her lifeline.",

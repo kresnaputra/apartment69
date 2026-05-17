@@ -1396,6 +1396,49 @@ textarea {
 
 /* Mobile portrait */
 @media (max-width: 600px) {
+  .vn-cutscene-narrator-shell-mobile {
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2rem 1.25rem 8rem;
+  }
+
+  .vn-cutscene-narrator-shell-mobile .vn-narrator-box {
+    width: 55%;
+    max-width: 20rem;
+    min-width: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    backdrop-filter: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .vn-cutscene-narrator-shell-mobile .vn-narrator-box::before {
+    top: -1.5rem;
+    right: -2rem;
+    bottom: -1.5rem;
+    left: -2rem;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.54) 52%, rgba(0, 0, 0, 0.14) 78%, transparent 100%);
+    filter: blur(8px);
+    border-radius: 0;
+  }
+
+  .vn-cutscene-narrator-shell-mobile .vn-narrator-line {
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.24);
+  }
+
+  .vn-cutscene-narrator-shell-mobile .vn-narrator-hint {
+    margin-top: 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    color: rgba(232, 214, 194, 0.75);
+  }
+
   .vn-narrator-shell {
     align-items: center;
     padding: 2rem 1.25rem 8rem;

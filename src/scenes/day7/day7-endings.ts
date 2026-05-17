@@ -440,6 +440,8 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         }),
         src: mayaSpecial2Scene5,
         audioSrc: mayaBadEndingSound5,
+        endFrame: 120,
+        fps: 120,
         loop: true,
         narrate: [
           tx({
