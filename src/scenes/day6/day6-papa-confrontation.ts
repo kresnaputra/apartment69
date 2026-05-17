@@ -220,9 +220,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "추가 시험? 그게 학업 기록에 남잖아! 아빠가 네 대학 등록금에 얼마나 많은 돈을 썼는데, 이게 네 대답이야? 옆집이랑 사귀면서 시험은 빠지고?!",
     }),
   ),
-  say(
-    "mayasFather",
-    "angry",
+  narrate(
     tx({
       id: "Papa Maya menunjuk wajah Maya dengan marah. Maya menunduk ketakutan, nyaris menangis lagi. Arka berdiri di antara mereka.",
       en: "Maya's dad jabs a finger toward her face. Maya shrinks back, terrified, on the verge of tears again. Arka stands between them.",
@@ -385,7 +383,7 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "calm",
+    "angry",
     tx({
       id: "Nggak, Pa.",
       en: "No, Dad.",
@@ -406,7 +404,7 @@ export const day6SupportiveScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "calm",
+    "angry",
     tx({
       id: "Maya bilang nggak. Maya nggak mau pulang. Maya bakal tetap di sini, selesain kuliah ini dengan cara Maya sendiri. Kalau Papa mau stop biayain, silakan. Maya bisa cari kerja sambilan.",
       en: "I said no. I'm not going home. I'm staying here and finishing school my own way. If you want to cut me off, go ahead. I can find a part-time job.",
@@ -484,7 +482,7 @@ export const day6AftermathScene: VisualNovelCommand[] = [
   ),
   say(
     "maya",
-    "blush",
+    "sad",
     tx({
       id: "Aku... aku baru aja ngelawan Papa. Kakiku gemeteran banget, Arka. Tapi rasanya lega banget.",
       en: "I... I just stood up to my dad. My legs won't stop shaking, Arka. But I feel so relieved.",

@@ -81,6 +81,8 @@ type NovelStore = {
     location: LocalizedText,
     characters: Record<string, CharacterInstance>,
     flags?: FlagMap,
+    activeBackgroundMusic?: ActiveBackgroundMusic | null,
+    activeSoundEffect?: ActiveSoundEffect | null,
   ) => void;
   advance: () => void;
   choose: (nextLabel: string) => void;
@@ -345,7 +347,7 @@ const runScriptUntilPause = (state: NovelStore) => {
     activeMultiCutScene: state.activeMultiCutScene,
     activeInterstitial: state.activeInterstitial,
     activeBackgroundMusic: state.activeBackgroundMusic,
-    activeSoundEffect: null,
+    activeSoundEffect: state.activeSoundEffect,
     activeVoice: state.activeVoice,
     line: state.line,
     lineSize: state.lineSize,
@@ -717,7 +719,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
       }),
     ),
 
-  loadFromSave: (label, index, background, backgroundVideo, location, characters, flags) =>
+  loadFromSave: (label, index, background, backgroundVideo, location, characters, flags, activeBackgroundMusic, activeSoundEffect) =>
     set((state) =>
       runScriptUntilPause({
         ...state,
@@ -731,6 +733,8 @@ export const useNovelStore = create<NovelStore>((set) => ({
         location,
         characters,
         flags: flags ?? {},
+        activeBackgroundMusic: activeBackgroundMusic ?? null,
+        activeSoundEffect: activeSoundEffect ?? null,
       }),
     ),
 

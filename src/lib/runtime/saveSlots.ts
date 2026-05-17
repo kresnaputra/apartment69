@@ -1,4 +1,10 @@
-import type { BackgroundVideo, CharacterInstance, FlagMap } from "@/types/novel";
+import type {
+  ActiveBackgroundMusic,
+  ActiveSoundEffect,
+  BackgroundVideo,
+  CharacterInstance,
+  FlagMap,
+} from "@/types/novel";
 
 export type SaveSlot = {
   currentLabel: string;
@@ -11,6 +17,8 @@ export type SaveSlot = {
   savedAt: number;
   characters: Record<string, CharacterInstance>;
   flags?: FlagMap;
+  activeBackgroundMusic?: ActiveBackgroundMusic | null;
+  activeSoundEffect?: ActiveSoundEffect | null;
 };
 
 export const SLOT_COUNT = 3;

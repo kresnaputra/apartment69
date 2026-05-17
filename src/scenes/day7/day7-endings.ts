@@ -2,7 +2,9 @@ import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
 import {
   bg,
+  blackScreen,
   centeredText,
+  clearBlackScreen,
   cutScene,
   hide,
   jumpIf,
@@ -32,6 +34,7 @@ import mayaSpecialSceneNormal3 from "@/cut-scene/maya-special-scene-normal-3.web
 import mayaSpecialSceneNormal4 from "@/cut-scene/maya-special-scene-normal-4.webm?url";
 import mayaSpecialSceneNormal5 from "@/cut-scene/maya-special-scene-normal-5.webm?url";
 import mayaSpecialSceneNormal6 from "@/cut-scene/maya-special-scene-normal-6.webm?url";
+import mayaSpecialSceneNormal7 from "@/cut-scene/maya-special-scene-normal-7.webm?url";
 
 // Sound
 import mayaBadEndingSound from "@/voice/maya/maya-special-2-scene-1.wav";
@@ -606,17 +609,7 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       ko: "마야가 침대 가장자리에서 일어나 아르카 쪽으로 걸어온다. 그녀는 아르카를 따뜻한 눈빛으로 바라본다.",
     }),
   ),
-  say(
-    "maya",
-    "blush",
-    tx({
-      id: "Makasih ya, Arka. Kamu nggak pernah maksa aku, kamu cuma bantu aku nemuin keberanian yang selama ini hilang. Aku bangga bisa jadi diriku sendiri sekarang.",
-      en: "Thank you, Arka. You never pushed me. You just helped me find the courage I'd been missing this whole time. I'm proud of who I am now.",
-      ja: "ありがとう、アルカ。あなたは一度も強制しなかった。ただ、ずっと見失っていた勇気を見つける手助けをしてくれた。今の自分が誇らしい。",
-      ko: "고마워, 아르카. 넌 한 번도 강요하지 않았어. 그냥 내가 잃었던 용기를 찾도록 도와줬을 뿐이야. 지금의 내가 자랑스러워.",
-    }),
-    { voice: mayaDay1To4Voices[47] },
-  ),
+  
   narrate(
     tx({
       id: "Maya menarik tangan Arka, mengajaknya berdiri, lalu memeluknya erat. Arka membalas pelukan itu, menyadari bahwa gadis di pelukannya kini sudah menjadi wanita yang kuat dan mandiri.",
@@ -625,63 +618,62 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       ko: "마야가 아르카의 손을 잡고 일으켜 세우더니 꽉 끌어안는다. 아르카가 안아주면서, 품 안의 그녀가 이제 강하고 독립적인 여성이 되었다는 걸 깨닫는다.",
     }),
   ),
-  narrate(
-    tx({
-      id: "Malam itu, mereka melakukan hubungan badan dengan ritme yang lambat dan sangat emosional. Tidak ada yang mendominasi atau didominasi; mereka melakukannya sebagai dua orang yang setara dan saling mencintai. Setiap ciuman dan sentuhan adalah bentuk rasa syukur dan janji bahwa mereka akan terus saling mendukung dalam keadaan sesulit apa pun.",
-      en: "That night, they move together slowly, emotionally. Neither dominating nor being dominated — just two equals who love each other. Every kiss and touch is gratitude, and a promise to keep holding each other up no matter what comes.",
-      ja: "その夜、ふたりはゆっくりと、感情を込めて寄り添った。支配する者も支配される者もなく、ただ対等に愛し合うふたりとして。それぞれのキスと触れ合いは感謝であり、どんな困難があっても支え合い続けるという誓いだった。",
-      ko: "그날 밤, 둘은 천천히, 감정적으로 함께했다. 지배하거나 지배당하는 것 없이, 서로를 사랑하는 두 동등한 사람으로. 모든 키스와 접촉은 감사이자, 어떤 상황에서도 서로를 계속 지지하겠다는 약속이었다.",
-    }),
-  ),
-  say(
-    "maya",
-    "blush",
-    tx({
-      id: "Aku sayang kamu, Arka. Jangan pernah pergi ya.",
-      en: "I love you, Arka. Promise you'll never leave.",
-      ja: "大好きだよ、アルカ。絶対にどこにも行かないでね。",
-      ko: "사랑해, 아르카. 절대 떠나지 마.",
-    }),
-    { voice: mayaDay1To4Voices[48] },
-  ),
-  say(
-    "arka",
-    "gentle",
-    tx({
-      id: "Nggak akan. Aku bakal terus di sini.",
-      en: "I won't. I'm staying right here.",
-      ja: "どこにも行かない。ずっとここにいる。",
-      ko: "안 갈게. 계속 여기 있을게.",
-    }),
-  ),
-  narrate(
-    tx({
-      id: "Bapaknya mungkin udah buang dia, tapi dia malah nemuin versi terbaik dari dirinya sendiri. Maya yang sekarang mandiri, keras kepala, tapi beneran hidup.",
-      en: "Her dad may have cast her off, but she found the best version of herself because of it. The Maya right now is independent, stubborn, and genuinely alive.",
-      ja: "お父さんは彼女を捨てたかもしれないけど、彼女はそのことで自分の最高の姿を見つけた。今のマヤは自立していて、頑固で、本当に生き生きとしている。",
-      ko: "아버지는 그녀를 버렸을지 몰라도, 그 덕에 그녀는 자신의 가장 좋은 모습을 찾았다. 지금의 마야는 독립적이고, 고집 세고, 진짜로 살아 있다.",
-    }),
-    "arka",
-  ),
-  narrate(
-    tx({
-      id: "Malam ini kita ngikat janji tanpa perlu banyak ngomong. Apapun yang terjadi besok — masalah uang kuliah atau capeknya kerja part-time — aku tahu kita bakal baik-baik aja selama kita bareng.",
-      en: "Tonight we made a promise without needing many words. Whatever tomorrow brings — tuition problems, grueling part-time shifts — I know we'll be okay as long as we have each other.",
-      ja: "今夜、多くの言葉を必要とせずに誓いを結んだ。明日何が起きようとも——学費の問題や、アルバイトの辛さがあっても——一緒にいる限り、きっと大丈夫だとわかっている。",
-      ko: "오늘 밤 우린 말이 많지 않아도 약속을 맺었다. 내일 무슨 일이 오든 — 등록금 문제든, 알바의 고됨이든 — 함께 있는 한 괜찮을 거라는 걸 알고 있다.",
-    }),
-    "arka",
-  ),
   hide("maya-day7-promise"),
   hide("arka-day7"),
-  cutScene(mayaSpecialSceneNormal1, true),
+  cutScene(mayaSpecialSceneNormal1, true, [
+    tx({
+      id: "Maya: Urusanku di kampus udah aman. Aku barusan telepon pihak fakultas buat ngajuin beasiswa keringanan biaya. Terus besok aku mau mulai kerja part-time di kafe bawah.",
+      en: "Maya: My campus matters are settled. I just called the faculty office to apply for a tuition waiver scholarship. And tomorrow I'm starting a part-time job at the café downstairs.",
+      ja: "マヤ：大学のことは大丈夫になった。さっき学部に電話して学費免除の奨学金を申請したの。それで明日から下のカフェでバイトを始めるわ。",
+      ko: "마야: 캠퍼스 일은 다 해결됐어. 방금 학부에 전화해서 학비 감면 장학금 신청했어. 그리고 내일부터 아래층 카페에서 아르바이트 시작할 거야.",
+    }),
+    tx({
+      id: "Arka: (Tersenyum kecil, memutar kursinya menghadap Maya) Bagus. Aku tahu kamu pasti bisa ngelewatin ini.",
+      en: "Arka: (Smiles slightly, turning his chair to face Maya) Good. I knew you could get through this.",
+      ja: "アルカ：(少し微笑んで、椅子をマヤの方に向ける) よかった。君なら乗り越えられると思ってたよ。",
+      ko: "아르카: (살짝 미소 지으며 의자를 마야 쪽으로 돌린다) 좋아. 네가 이겨낼 수 있을 거라는 걸 알고 있었어.",
+    }),
+    tx({
+      id: "(Maya Berdiri dan melangkah mendekati Arka. Dia menatap Arka dengan tatapan yang jernih dan penuh kasih sayang) Makasih ya, Arka. Kamu nggak pernah maksa aku jadi apa pun, kamu cuma bantu aku nemuin keberanian yang selama ini hilang. Aku bangga bisa jadi diriku sendiri sekarang.",
+      en: "(Maya Stands and steps closer to Arka. She looks at Arka with a clear and affectionate gaze) Thank you, Arka. You never forced me to be anything, you just helped me find the courage I'd lost. I'm proud to be myself now.",
+      ja: "(マヤ 立ち上がってアルカに近づく。澄んだ愛情に満ちた眼差しでアルカを見つめる) ありがとう、アルカ。あなたは私に何かになることを強要したことは一度もなかった。ただ、失っていた勇気を見つける手助けをしてくれた。今、自分自身でいられることを誇りに思う。",
+      ko: "(마야 일어나서 아르카에게 다가간다. 맑고 애정 어린 눈빛으로 아르카를 바라본다) 고마워, 아르카. 넌 나한테 뭔가가 되라고 강요한 적이 없었어. 그저 내가 잃어버렸던 용기를 찾도록 도와줬을 뿐이야. 지금 나 자신이 될 수 있다는 게 자랑스러워.",
+    }),
+    tx({
+      id: "Ayahnya mungkin sudah membuang dia, tapi gadis di pelukanku ini justru menemukan versi terbaik dari dirinya sendiri. Maya yang sekarang mandiri, keras kepala, tapi benar-benar hidup. Malam itu saat dia sakit, dia menciumku karena butuh pelampung di tengah badai. Tapi malam ini... sentuhannya benar-benar berbeda. Ini bukan pelarian. Ini murni karena dia memilih untuk ada di sini, bersamaku.",
+      en: "Her father may have abandoned her, but the girl in my arms has found the best version of herself. Maya now is independent, stubborn, but truly alive. That night when she was sick, she kissed me because she needed a lifeline in the storm. But tonight... her touch is completely different. This isn't an escape. This is purely because she chose to be here, with me.",
+      ja: "父親は彼女を捨てたかもしれないが、僕の腕の中にいるこの少女は自分自身の最高のバージョンを見つけた。今のマヤは自立していて、頑固だけど、本当に生きている。あの夜、彼女が病気だった時、嵐の中で救命具が必要だったから僕にキスをした。でも今夜は……彼女の触れ方が全く違う。これは逃避じゃない。純粋に彼女がここに、僕と一緒にいることを選んだからだ。",
+      ko: "아버지가 그녀를 버렸을지 모르지만, 내 품 안의 이 소녀는 자신의 최고의 모습을 찾았다. 지금의 마야는 독립적이고, 고집스럽지만, 진정으로 살아있다. 그날 밤 그녀가 아팠을 때, 폭풍 속에서 구명줄이 필요했기 때문에 나에게 키스했다. 하지만 오늘 밤은... 그녀의 손길이 완전히 다르다. 이건 도피가 아니다. 순수하게 그녀가 여기, 나와 함께 있기로 선택했기 때문이다.",
+    }),
+  ]),
   cutScene(
     mayaSpecialSceneNormal2,
     true,
-    undefined,
+    [
+      tx({
+        id: "Arka: Kamu yakin? Nggak capek habis ngurusin urusan kampus dan nyari kerja seharian?",
+        en: "Arka: Are you sure? Aren't you tired from dealing with campus matters and looking for work all day?",
+        ja: "アルカ：本当にいいの？一日中キャンパスの用事や仕事探しで疲れてない？",
+        ko: "아르카: 정말 그래? 하루 종일 캠퍼스 일이나 일 찾느라 지치지 않았어?",
+      }),
+      tx({
+        id: "Maya: Sama sekali nggak. Malam ini... aku di sini bukan karena aku takut sendirian. Aku di sini karena aku mau sama kamu.",
+        en: "Maya: Not at all. Tonight... I'm here not because I'm afraid of being alone. I'm here because I want to be with you.",
+        ja: "マヤ：全然疲れてないわ。今夜は……一人でいるのが怖くてここにいるわけじゃないの。あなたといたいからここにいるの。",
+        ko: "마야: 전혀 지치지 않았어. 오늘 밤은…… 혼자 있는 것이 두렵기 때문에 여기 있는 게 아니야. 너와 함께하고 싶어서 여기 있는 거야.",
+      }),
+    ],
     undefined,
     mayaSpecialSceneNormalSound2,
   ),
+  blackScreen(),
+  narrate({
+    id: "(Mendengar itu, Arka membalas senyumannya dan mengangkat tubuh Maya perlahan, membaringkannya di atas kasur. Dinamika malam ini terasa sangat seimbang. Tidak ada yang mendominasi atau didominasi. Setiap sentuhan dilakukan dengan ritme yang lambat dan emosional.)",
+    en: "(Hearing that, Arka smiles back and gently lifts Maya's body, laying her down on the bed. The dynamic of this night feels very balanced. Neither dominates nor is dominated. Every touch is done with a slow and emotional rhythm.)",
+    ja: "(それを聞いて、アルカは微笑み返し、マヤの体をそっと持ち上げ、ベッドに横たえます。この夜のダイナミックはとてもバランスが取れているように感じられます。どちらも支配したり、従ったりするのではなく、すべての触り方がゆっくりで感情的です。)",
+    ko: "(그렇게 들으니 아르카는 미소를 지으며 마야의 몸을 부드럽게 들고 베드에 눕혀준다. 이 밤의 동적인 상황은 매우 균형 잡혀 있는 것 같다. 누구도 지배하지도 않고, 따르지도 않는다. 모든 만지는 느리고 감정적인 리듬으로 이루어진다.)",
+  }),
+  clearBlackScreen(),
   multiCutScene([
     {
       src: mayaSpecialSceneNormal3,
@@ -689,6 +681,32 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       label: "",
       loop: true,
       audioSrc: mayaSpecialSceneNormalSound3,
+      narrate: [
+        {
+          id: "Maya: (Napasnya mulai memburu, menatap langsung ke mata Arka) Mmm... pelan-pelan, Arka. Rasanya beda dari waktu itu...",
+          en: "Maya: (Her breathing quickens, looking directly into Arka's eyes) Mmm... slowly, Arka. It feels different from that time...",
+          ja: "マヤ：(息が荒くなり、アルカの目を直接見つめる) んん……ゆっくり、アルカ。あの時とは違う感じ……",
+          ko: "마야: (숨이 가빠지며 아르카의 눈을 똑바로 바라본다) 음... 천천히, 아르카. 그때와는 다른 느낌이야...",
+        },
+        {
+          id: "Arka: (Menahan gerakannya sejenak) Sakit?",
+          en: "Arka: (Pausing his movement for a moment) Does it hurt?",
+          ja: "アルカ：(動きを一瞬止めて) 痛い？",
+          ko: "아르카: (잠시 움직임을 멈춘다) 아파?",
+        },
+        {
+          id: "Maya: (Menggeleng pelan, wajahnya memerah tapi dia membalas tatapan Arka dengan berani) Nggak, ini... lebih hangat. Aku suka kamu natap aku kayak gini....",
+          en: "Maya: (Shakes her head gently, her face flushed but she returns Arka's gaze boldly) No, this... is warmer. I like it when you look at me like this....",
+          ja: "マヤ：(そっと首を横に振り、顔を赤らめながらも大胆にアルカの視線を返す) ううん、これは……もっと温かい。こんな風に私を見てくれるのが好き……",
+          ko: "마야: (부드럽게 고개를 젓고, 얼굴이 붉어지지만 대담하게 아르카의 시선을 받아친다) 아니, 이건... 더 따뜻해. 이렇게 날 바라봐 주는 게 좋아....",
+        },
+        {
+          id: "Maya: Mmmghh!! Haaah... Arka...",
+          en: "Maya: Mmmghh!! Haaah... Arka...",
+          ja: "マヤ：んんっ!! はぁ……アルカ……",
+          ko: "마야: 음으!! 하아... 아르카...",
+        },
+      ],
     },
     {
       src: mayaSpecialSceneNormal4,
@@ -696,6 +714,12 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       label: "",
       loop: true,
       audioSrc: mayaSpecialSceneNormalSound4,
+      narrate: {
+        id: "Arka (Monolog): Nggak ada rasa canggung atau terburu-buru. Kami berdua sadar sepenuhnya dengan apa yang kami lakukan. Melihat wajahnya yang memerah dan senyum tipis di sela-sela napasnya, aku tahu keputusan untuk membiarkan dia mengambil kendali atas hidupnya sendiri adalah hal paling tepat yang pernah dia buat. ",
+        en: "Arka (Monolog): There's no awkwardness or rushing. We're both fully aware of what we're doing. Seeing her flushed face and the faint smile between her breaths, I know the decision to let her take control of her own life was the right one.",
+        ja: "アルカ（独白）：恥ずかしさや急ぎは全くない。私たちはどちらも何をしているのかを完全に理解している。顔を赤らめて息を整えながらも微笑む彼女の様子を見て、彼女自身の人生を自分で切り開くことを選んだのは、これまでで最も正しい選択だったと確信している。",
+        ko: "아르카(독백): 부끄러움도 급할 것도 없다. 우리 둘 다 무엇을 하고 있는지 완전히 이해하고 있다. 얼굴이 붉어지고 숨을 고르며 미소를 짓는 그 모습을 보니, 그녀가 자신의 삶을 스스로 주도하게 허락한 것이 지금까지 가장 옳은 결정이라는 것을 알겠다.",
+      },
     },
     {
       src: mayaSpecialSceneNormal5,
@@ -705,6 +729,20 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       audioSrc: mayaSpecialSceneNormalSound5,
       endFrame: 120,
       fps: 120,
+      narrate: [
+        {
+          id: "Arka: (Mengeratkan genggaman tangannya, napasnya semakin berat) Maya... aku udah di batas... aku...",
+          en: "Arka: (Tightens his grip on her hand, his breathing growing heavier) Maya... I'm at my limit... I...",
+          ja: "アルカ：(彼女の手を強く握り、息がますます荒くなる) マヤ……もう限界だ……僕は……",
+          ko: "아르카: (그녀의 손을 더 꽉 쥐고, 숨이 점점 거칠어진다) 마야... 나 이제 한계야... 나...",
+        },
+        {
+          id: "Maya: Di dalam aja, Arka... Aku mau semuanya dari kamu. Jangan ditahan.",
+          en: "Maya: Inside, Arka... I want all of you. Don't hold back.",
+          ja: "マヤ：中に、アルカ……あなたの全てが欲しい。我慢しないで。",
+          ko: "마야: 안에, 아르카... 너의 모든 걸 원해. 참지 마.",
+        },
+      ],
     },
     {
       src: mayaSpecialSceneNormal6,
@@ -715,6 +753,28 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
     },
   ]),
 
+  cutScene(mayaSpecialSceneNormal7, true, [
+    tx({
+      id: "Maya: Aah... Haaah... Aku sayang kamu, Arka. Jangan pernah pergi ya.",
+      en: "Maya: Aah... Haaah... I love you, Arka. Don't ever leave me.",
+      ja: "マヤ：ああ…はぁ…あなたが好きだよ、アルカ。絶対にいらないから。",
+      ko: "마야: 아아... 하아... 너를 사랑해, 아르카. 절대 떠나지 마.",
+    }),
+    tx({
+      id: "Arka: (Mengecup dahi Maya dalam-dalam) Nggak akan. Aku bakal terus di sini.",
+      en: "Arka: (Kisses Maya's forehead deeply) I won't. I'll always be here.",
+      ja: "アルカ：(マヤの額に深くキスをする) 離れないよ。ずっとここにいる。",
+      ko: "아르카: (마야의 이마에 깊게 키스한다) 안 떠날 거야. 계속 여기 있을게.",
+    }),
+  ]),
+  blackScreen(),
+  narrate({
+    id: "Malam itu mereka mengikat janji tanpa perlu banyak bicara. Apapun yang terjadi besok, masalah uang kuliah yang terhenti atau lelahnya kerja paruh waktu, mereka tahu semuanya akan baik-baik saja selama mereka saling mendukung sebagai dua orang yang setara.",
+    en: "That night they sealed a promise without many words. Whatever happened tomorrow—tuition troubles or the exhaustion of part-time work—they knew everything would be fine as long as they supported each other as equals.",
+    ja: "その夜、彼らは多くの言葉を必要とせずに約束を結んだ。明日起こるどんなことがあっても、学費の問題やバイトの疲労があっても、二人が平等に支え合っている限り、すべては大丈夫だと分かっていた。",
+    ko: "그날 밤 그들은 많은 말 없이 약속을 맺었다. 내일 무슨 일이 생기든, 학자금 문제나 아르바이트로 인한 피로가 있든, 둘이 평등하게 서로를 지지하고 있다면 모든 것이 괜찮을 거라고 알고 있었다.",
+  }),
+  clearBlackScreen(),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
     tx({

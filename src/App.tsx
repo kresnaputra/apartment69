@@ -12,10 +12,10 @@ import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRend
 import { loadCharacterBundle } from "@/lib/rendering/loadCharacterBundle";
 import { MainMenu } from "@/components/MainMenu";
 import { MainMenuMobile } from "@/components/MainMenuMobile";
+import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { NarratorMobile } from "@/components/NarratorMobile";
 import { DialogueMobile } from "@/components/DialogueMobile";
 import { LogOverlay } from "@/components/LogOverlay";
-import { ConfigOverlay } from "@/components/ConfigOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, uiText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
@@ -68,7 +68,7 @@ const VIRTUAL_CHARACTER_HEIGHT = 470;
 const CHARACTER_MAX_STAGE_HEIGHT_RATIO = 0.78;
 const CHARACTER_MIN_STAGE_HEIGHT_RATIO = 0.58;
 const BG_VOLUME_STORAGE_KEY = "apartment69:bg-volume";
-const DEFAULT_BG_VOLUME = 0.4;
+const DEFAULT_BG_VOLUME = 0.5;
 
 type CharacterSpriteProps = {
   bundle: LoadedCharacterBundle;
@@ -183,19 +183,6 @@ const SbnLoadingScreen = ({ loadingLabel, phaseState, statusMessage }: SbnLoadin
     </section>
   </div>
 );
-
-const sliceNarrationBlocks = (blocks: string[], revealedCount: number) => {
-  let remaining = revealedCount;
-
-  return blocks
-    .map((block) => {
-      if (remaining <= 0) return "";
-      const visible = block.slice(0, remaining);
-      remaining -= block.length;
-      return visible;
-    })
-    .filter((block) => block.length > 0);
-};
 
 const useCharacterStageSizing = (character: CharacterInstance, aspectRatio: number) => {
   const [windowSize, setWindowSize] = useState(() => ({
@@ -800,6 +787,7 @@ const CutSceneOverlay = ({
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
+  const [currentNarrateIndex, setCurrentNarrateIndex] = useState(0);
   const [revealedCount, setRevealedCount] = useState(0);
   const [currentSpeed, setCurrentSpeed] = useState(1);
   const completedRef = useRef(false);
@@ -810,10 +798,13 @@ const CutSceneOverlay = ({
   const resolvedNarrateBlocks = narrate
     ? (Array.isArray(narrate) ? narrate : [narrate]).map((entry) => resolveText(entry, language))
     : [];
-  const resolvedNarrate = resolvedNarrateBlocks.join("");
-  const visibleNarrateBlocks = resolvedNarrate
-    ? sliceNarrationBlocks(resolvedNarrateBlocks, revealedCount)
+  const currentNarrateBlock = resolvedNarrateBlocks[currentNarrateIndex] ?? "";
+  const visibleNarrateBlocks = currentNarrateBlock
+    ? [currentNarrateBlock.slice(0, revealedCount)]
     : [];
+  const hasNarration = resolvedNarrateBlocks.length > 0;
+  const isCurrentBlockFullyRevealed = revealedCount >= currentNarrateBlock.length;
+  const hasMoreNarrationBlocks = currentNarrateIndex < resolvedNarrateBlocks.length - 1;
   const endTime = typeof endFrame === "number" && typeof fps === "number" && fps > 0
     ? endFrame / fps
     : null;
@@ -832,20 +823,21 @@ const CutSceneOverlay = ({
   }, []);
 
   useEffect(() => {
+    setCurrentNarrateIndex(0);
     setRevealedCount(0);
     setVideoEnded(false);
     setVideoStarted(false);
     setCurrentSpeed(1);
     completedRef.current = false;
     previousVideoTimeRef.current = 0;
-  }, [endFrame, fps, resolvedNarrate, src]);
+  }, [endFrame, fps, narrate, src]);
 
   useEffect(() => {
-    if (!resolvedNarrate) return;
+    if (!currentNarrateBlock) return;
 
     const timer = window.setInterval(() => {
       setRevealedCount((current) => {
-        if (current >= resolvedNarrate.length) {
+        if (current >= currentNarrateBlock.length) {
           window.clearInterval(timer);
           return current;
         }
@@ -854,7 +846,7 @@ const CutSceneOverlay = ({
     }, BASE_TEXT_SPEED / textSpeed);
 
     return () => window.clearInterval(timer);
-  }, [resolvedNarrate, textSpeed]);
+  }, [currentNarrateBlock, textSpeed]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -933,7 +925,30 @@ const CutSceneOverlay = ({
     setCurrentSpeed(speed);
   };
 
+  const handleNarrationAdvance = useCallback(() => {
+    if (!hasNarration) return false;
+
+    if (!isCurrentBlockFullyRevealed) {
+      setRevealedCount(currentNarrateBlock.length);
+      return true;
+    }
+
+    if (hasMoreNarrationBlocks) {
+      setCurrentNarrateIndex((current) => current + 1);
+      setRevealedCount(0);
+      return true;
+    }
+
+    return false;
+  }, [
+    currentNarrateBlock.length,
+    hasMoreNarrationBlocks,
+    hasNarration,
+    isCurrentBlockFullyRevealed,
+  ]);
+
   const handleExit = useCallback(() => {
+    if (handleNarrationAdvance()) return;
     if (completedRef.current) return;
     // Allow exit if video ended OR if loop is enabled
     if (!allowDirectExit) return;
@@ -941,7 +956,9 @@ const CutSceneOverlay = ({
     completedRef.current = true;
     setFadingOut(true);
     window.setTimeout(onComplete, CUTSCENE_FADE_MS);
-  }, [allowDirectExit, loop, onComplete, videoEnded]);
+  }, [allowDirectExit, handleNarrationAdvance, loop, onComplete, videoEnded]);
+
+  const shouldHandleOverlayClick = allowDirectExit || hasNarration;
 
   const handleVideoTimeUpdate = useCallback(() => {
     const videoNode = videoRef.current;
@@ -987,17 +1004,16 @@ const CutSceneOverlay = ({
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       if (e.key !== " " && e.key !== "Enter") return;
-      if (!allowDirectExit) return;
       e.preventDefault();
       handleExit();
     };
     window.addEventListener("keydown", onKeydown);
     return () => window.removeEventListener("keydown", onKeydown);
-  }, [allowDirectExit, handleExit]);
+  }, [handleExit]);
 
   return (
     <div
-      onClick={allowDirectExit ? handleExit : undefined}
+      onClick={shouldHandleOverlayClick ? handleExit : undefined}
       style={{
         position: "fixed",
         inset: 0,
@@ -1006,7 +1022,7 @@ const CutSceneOverlay = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        cursor: allowDirectExit && (videoEnded || loop) ? "pointer" : "default",
+        cursor: shouldHandleOverlayClick && (hasNarration || videoEnded || loop) ? "pointer" : "default",
       }}
     >
       <video
@@ -1055,6 +1071,9 @@ const CutSceneOverlay = ({
                 {block}
               </div>
             ))}
+            {isCurrentBlockFullyRevealed && hasMoreNarrationBlocks ? (
+              <div className="vn-narrator-hint">{continueHint}</div>
+            ) : null}
           </div>
         </div>
       )}
@@ -1148,6 +1167,7 @@ const MultiCutSceneOverlay = ({
   initialSelectionId?: string;
   language: LanguageCode;
   labels: {
+    clickToContinue: string;
     fastPlayback: string;
     fasterPlayback: string;
     previousScene: string;
@@ -1227,7 +1247,7 @@ const MultiCutSceneOverlay = ({
         language={language}
         allowDirectExit={false}
         speedControlBottom="168px"
-        continueHint=""
+        continueHint={labels.clickToContinue}
         speedLabels={{
           slow: labels.slowPlayback,
           normal: labels.normalPlayback,
@@ -1370,8 +1390,7 @@ const App = () => {
   });
   const [bgVolume, setBgVolume] = useState(() => {
     if (typeof window === "undefined") return DEFAULT_BG_VOLUME;
-    const saved = Number(window.localStorage.getItem(BG_VOLUME_STORAGE_KEY));
-    return Number.isFinite(saved) ? Math.min(1, Math.max(0, saved)) : DEFAULT_BG_VOLUME;
+    return DEFAULT_BG_VOLUME;
   });
   const [textSpeed, setTextSpeed] = useState(1);
   const [saveToast, setSaveToast] = useState(false);
@@ -1412,6 +1431,7 @@ const App = () => {
     ...option,
     label: resolveText(option.label, language),
   }));
+  const bundleList = Object.values(bundles);
   const labels = {
     auto: resolveText(uiText.auto, language),
     clickToContinue: resolveText(uiText.clickToContinue, language),
@@ -1571,51 +1591,58 @@ const App = () => {
     }
   }, [activeBackgroundMusic, bgVolume, phase]);
 
-  useEffect(() => {
-    if (phase !== "loading" || hasStartedBundleLoadRef.current) return;
+  const loadCharacterBundles = useCallback(async (returnToMenuAfterLoad: boolean) => {
+    if (hasStartedBundleLoadRef.current) return;
 
     hasStartedBundleLoadRef.current = true;
     setShowLoadingOverlay(true);
-    let cancelled = false;
+    try {
+      setStatusMessage(uiText.bundlesLoading);
+      const bundleEntries = Object.entries(characterBundleRegistry);
 
-    const load = async () => {
-      try {
-        setStatusMessage(uiText.bundlesLoading);
-        const bundleEntries = Object.entries(characterBundleRegistry);
+      const loadedBundles = await Promise.all(
+        bundleEntries.map(async ([bundleId, bundlePath]) => {
+          const bundle = await loadCharacterBundle(bundleId, bundlePath);
+          return [bundleId, bundle] as const;
+        }),
+      );
 
-        const loadedBundles = await Promise.all(
-          bundleEntries.map(async ([bundleId, bundlePath]) => {
-            const bundle = await loadCharacterBundle(bundleId, bundlePath);
-            return [bundleId, bundle] as const;
-          }),
-        );
-
-        if (cancelled) return;
-
-        for (const [bundleId, bundle] of loadedBundles) {
-          registerBundle(bundleId, bundle);
-        }
-
-        setBundlesReady(true);
-        setLoadingPhaseState("exit");
-        setPhase("menu");
-        window.setTimeout(() => {
-          setShowLoadingOverlay(false);
-          setLoadingPhaseState("enter");
-        }, 900);
-      } catch (error) {
-        const message = error instanceof Error ? error.message : "Gagal memuat visual novel.";
-        setStatusMessage(message);
-        hasStartedBundleLoadRef.current = false;
+      for (const [bundleId, bundle] of loadedBundles) {
+        registerBundle(bundleId, bundle);
       }
-    };
 
-    void load();
+      hasStartedBundleLoadRef.current = false;
+      setBundlesReady(true);
+      setLoadingPhaseState("exit");
+      if (returnToMenuAfterLoad) {
+        setPhase("menu");
+      }
+      window.setTimeout(() => {
+        setShowLoadingOverlay(false);
+        setLoadingPhaseState("enter");
+      }, 900);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Gagal memuat visual novel.";
+      setStatusMessage(message);
+      hasStartedBundleLoadRef.current = false;
+    }
+  }, [registerBundle, setStatusMessage]);
 
-    return () => {
-      cancelled = true;
-    };
-  }, [phase, registerBundle, setStatusMessage]);
+  useEffect(() => {
+    if (phase !== "loading") return;
+    void loadCharacterBundles(true);
+  }, [loadCharacterBundles, phase]);
+
+  useEffect(() => {
+    if (phase !== "story") return;
+    if (bundleList.length > 0) {
+      setBundlesReady(true);
+      return;
+    }
+
+    setBundlesReady(false);
+    void loadCharacterBundles(false);
+  }, [bundleList.length, loadCharacterBundles, phase]);
 
   useLayoutEffect(() => {
     if (previousSceneTransitionTokenRef.current === null) {
@@ -1676,14 +1703,7 @@ const App = () => {
       return;
     }
 
-    setBlackScreenVisible(false);
-    const raf = window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        setBlackScreenVisible(true);
-      });
-    });
-
-    return () => window.cancelAnimationFrame(raf);
+    setBlackScreenVisible(true);
   }, [blackScreenState?.active, blackScreenState?.background]);
 
   // Auto-advance: when enabled, advance to the next line 1.5s after text finishes typing.
@@ -1788,16 +1808,18 @@ const App = () => {
     return () => window.removeEventListener("keydown", handler);
   }, [choose, phase]);
 
-  // Gamepad/keyboard: Escape (B button) closes overlays or deselects focused control
+  // Gamepad/keyboard: Escape (B button) toggles config and closes overlays first
   useEffect(() => {
     if (phase !== "story") return;
     const handler = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
+      event.preventDefault();
       if (showLogRef.current) { setShowLog(false); return; }
       if (showConfigRef.current) { setShowConfig(false); return; }
       if (showSaveSlotsRef.current) { setShowSaveSlots(false); return; }
       // Deselect focused control button if any
       if (focusedControlIndexRef.current >= 0) { setFocusedControlIndex(-1); return; }
+      setShowConfig(true);
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
@@ -1888,6 +1910,8 @@ const App = () => {
       savedAt: Date.now(),
       characters,
       flags,
+      activeBackgroundMusic,
+      activeSoundEffect,
     };
     writeSlot(slotIndex, slot);
     setSlots(readAllSlots());
@@ -1905,6 +1929,8 @@ const App = () => {
       slot.location,
       slot.characters ?? {},
       slot.flags ?? {},
+      slot.activeBackgroundMusic ?? null,
+      slot.activeSoundEffect ?? null,
     );
     setPhase("story");
   };
@@ -1914,7 +1940,6 @@ const App = () => {
     bgMusicRef.current?.setVolume(value);
   };
 
-  const bundleList = Object.values(bundles);
   const renderCharacters = Object.values(characters)
     .filter((character) => character.visible || character.isExiting)
     .sort((left, right) => left.y - right.y);
@@ -2183,6 +2208,7 @@ const App = () => {
             language={language}
             textSpeed={textSpeed}
             labels={{
+              clickToContinue: labels.clickToContinue,
               slowPlayback: labels.slowPlayback,
               normalPlayback: labels.normalPlayback,
               fastPlayback: labels.fastPlayback,
@@ -2218,19 +2244,28 @@ const App = () => {
       )}
 
       {showConfig && (
-        <ConfigOverlay
+        <MainMenuSettingsOverlay
           bgVolume={bgVolume}
           bgVolumeLabel={labels.volumeBgm}
+          closeLabel={labels.close}
+          frameRate={frameRate}
+          frameRateLabel={labels.frameRate}
+          frameRateOptions={frameRateOptions}
+          graphicsQuality={graphicsQuality}
+          graphicsQualityLabel={labels.graphicsQuality}
+          graphicsQualityOptions={resolvedGraphicsQualityOptions}
           textSpeed={textSpeed}
-          textSpeedLabel={resolveText(uiText.textSpeed, language)}
-          configLabel={labels.config}
+          textSpeedLabel={labels.textSpeed}
           language={language}
           languageLabel={labels.language}
           languageOptions={languageOptions}
+          onFrameRateChange={setFrameRate}
+          onGraphicsQualityChange={setGraphicsQuality}
           onLanguageChange={setLanguage}
           onBgVolumeChange={handleBgVolumeChange}
           onTextSpeedChange={setTextSpeed}
           onClose={() => setShowConfig(false)}
+          title={labels.mainMenuSettings}
         />
       )}
 
