@@ -1306,8 +1306,8 @@ const MultiCutSceneOverlay = ({
         }}
         textSpeed={textSpeed}
         narrationClassName={isMobile
-          ? "vn-multicut-narrator-shell vn-cutscene-narrator-shell-mobile"
-          : "vn-multicut-narrator-shell"}
+          ? "vn-multicut-narrator-shell vn-cutscene-narrator-shell vn-cutscene-narrator-shell-mobile"
+          : "vn-multicut-narrator-shell vn-cutscene-narrator-shell"}
         onComplete={onComplete}
       />
       <div
@@ -2252,7 +2252,9 @@ const App = () => {
               faster: labels.fasterPlayback,
             }}
             textSpeed={textSpeed}
-            narrationClassName={isMobile ? "vn-cutscene-narrator-shell-mobile" : undefined}
+            narrationClassName={isMobile
+              ? "vn-cutscene-narrator-shell vn-cutscene-narrator-shell-mobile"
+              : "vn-cutscene-narrator-shell"}
             onComplete={completeCutScene}
           />
         ) : null}

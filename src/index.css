@@ -209,6 +209,28 @@ textarea {
   color: rgba(232, 214, 194, 0.8);
 }
 
+.vn-cutscene-narrator-shell .vn-narrator-box {
+  width: min(26rem, 34vw);
+  min-width: min(18rem, 34vw);
+  padding: 0.55rem 0.65rem 0.5rem 0.5rem;
+}
+
+.vn-cutscene-narrator-shell .vn-narrator-box::before {
+  inset: -1.1rem -1.4rem -1.1rem -1.8rem;
+  filter: blur(8px);
+}
+
+.vn-cutscene-narrator-shell .vn-narrator-line {
+  font-size: clamp(0.82rem, 1.08vw, 0.96rem);
+  line-height: 1.52;
+}
+
+.vn-cutscene-narrator-shell .vn-narrator-hint {
+  margin-top: 0.5rem;
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+}
+
 .vn-multicut-narrator-shell {
   padding-bottom: 9.25rem;
 }
@@ -1403,8 +1425,8 @@ textarea {
   }
 
   .vn-cutscene-narrator-shell-mobile .vn-narrator-box {
-    width: 55%;
-    max-width: 20rem;
+    width: 48%;
+    max-width: 16rem;
     min-width: 0;
     padding: 0;
     background: transparent;
@@ -1426,16 +1448,16 @@ textarea {
   }
 
   .vn-cutscene-narrator-shell-mobile .vn-narrator-line {
-    font-size: 0.82rem;
-    line-height: 1.65;
+    font-size: 0.72rem;
+    line-height: 1.58;
     color: rgba(255, 255, 255, 0.95);
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 4px 14px rgba(0, 0, 0, 0.24);
   }
 
   .vn-cutscene-narrator-shell-mobile .vn-narrator-hint {
     margin-top: 0.5rem;
-    font-size: 0.6rem;
-    letter-spacing: 0.16em;
+    font-size: 0.54rem;
+    letter-spacing: 0.14em;
     color: rgba(232, 214, 194, 0.75);
   }
 
