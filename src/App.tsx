@@ -1,4 +1,4 @@
-import { type CSSProperties, memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorButtonMinigameMobile";
@@ -787,24 +787,14 @@ const CutSceneOverlay = ({
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
-  const [currentNarrateIndex, setCurrentNarrateIndex] = useState(0);
-  const [revealedCount, setRevealedCount] = useState(0);
   const [currentSpeed, setCurrentSpeed] = useState(1);
   const completedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const narrationRef = useRef<CutSceneNarrationHandle | null>(null);
   const previousVideoTimeRef = useRef(0);
 
-  const resolvedNarrateBlocks = narrate
-    ? (Array.isArray(narrate) ? narrate : [narrate]).map((entry) => resolveText(entry, language))
-    : [];
-  const currentNarrateBlock = resolvedNarrateBlocks[currentNarrateIndex] ?? "";
-  const visibleNarrateBlocks = currentNarrateBlock
-    ? [currentNarrateBlock.slice(0, revealedCount)]
-    : [];
-  const hasNarration = resolvedNarrateBlocks.length > 0;
-  const isCurrentBlockFullyRevealed = revealedCount >= currentNarrateBlock.length;
-  const hasMoreNarrationBlocks = currentNarrateIndex < resolvedNarrateBlocks.length - 1;
+  const hasNarration = Array.isArray(narrate) ? narrate.length > 0 : Boolean(narrate);
   const endTime = typeof endFrame === "number" && typeof fps === "number" && fps > 0
     ? endFrame / fps
     : null;
@@ -823,30 +813,12 @@ const CutSceneOverlay = ({
   }, []);
 
   useEffect(() => {
-    setCurrentNarrateIndex(0);
-    setRevealedCount(0);
     setVideoEnded(false);
     setVideoStarted(false);
     setCurrentSpeed(1);
     completedRef.current = false;
     previousVideoTimeRef.current = 0;
-  }, [endFrame, fps, narrate, src]);
-
-  useEffect(() => {
-    if (!currentNarrateBlock) return;
-
-    const timer = window.setInterval(() => {
-      setRevealedCount((current) => {
-        if (current >= currentNarrateBlock.length) {
-          window.clearInterval(timer);
-          return current;
-        }
-        return current + 1;
-      });
-    }, BASE_TEXT_SPEED / textSpeed);
-
-    return () => window.clearInterval(timer);
-  }, [currentNarrateBlock, textSpeed]);
+  }, [endFrame, fps, src]);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -925,30 +897,8 @@ const CutSceneOverlay = ({
     setCurrentSpeed(speed);
   };
 
-  const handleNarrationAdvance = useCallback(() => {
-    if (!hasNarration) return false;
-
-    if (!isCurrentBlockFullyRevealed) {
-      setRevealedCount(currentNarrateBlock.length);
-      return true;
-    }
-
-    if (hasMoreNarrationBlocks) {
-      setCurrentNarrateIndex((current) => current + 1);
-      setRevealedCount(0);
-      return true;
-    }
-
-    return false;
-  }, [
-    currentNarrateBlock.length,
-    hasMoreNarrationBlocks,
-    hasNarration,
-    isCurrentBlockFullyRevealed,
-  ]);
-
   const handleExit = useCallback(() => {
-    if (handleNarrationAdvance()) return;
+    if (narrationRef.current?.advance()) return;
     if (completedRef.current) return;
     // Allow exit if video ended OR if loop is enabled
     if (!allowDirectExit) return;
@@ -956,7 +906,7 @@ const CutSceneOverlay = ({
     completedRef.current = true;
     setFadingOut(true);
     window.setTimeout(onComplete, CUTSCENE_FADE_MS);
-  }, [allowDirectExit, handleNarrationAdvance, loop, onComplete, videoEnded]);
+  }, [allowDirectExit, loop, onComplete, videoEnded]);
 
   const shouldHandleOverlayClick = allowDirectExit || hasNarration;
 
@@ -1040,28 +990,17 @@ const CutSceneOverlay = ({
         onVideoEnded={() => setVideoEnded(true)}
         onVideoPlaying={() => setVideoStarted(true)}
       />
-      {visibleNarrateBlocks.length > 0 && (
-        <div className={`vn-narrator-shell ${narrationClassName ?? ""}`} style={{
-          opacity: fadingOut || !visible ? 0 : 1,
-          transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
-        }}>
-          <div className="vn-narrator-box">
-            {visibleNarrateBlocks.map((block, index) => (
-              <div
-                key={`${index}-${block.length}`}
-                className="vn-narrator-line"
-                style={index > 0 ? { marginTop: "1rem" } : undefined}
-              >
-                {block}
-              </div>
-            ))}
-            {isCurrentBlockFullyRevealed && hasMoreNarrationBlocks ? (
-              <div className="vn-narrator-hint">{continueHint}</div>
-            ) : null}
-          </div>
-        </div>
-      )}
-      {visibleNarrateBlocks.length === 0 && allowDirectExit && (videoEnded || loop) ? (
+      <CutSceneNarrationLayer
+        ref={narrationRef}
+        narrate={narrate}
+        language={language}
+        continueHint={continueHint}
+        textSpeed={textSpeed}
+        fadingOut={fadingOut}
+        visible={visible}
+        narrationClassName={narrationClassName}
+      />
+      {!hasNarration && allowDirectExit && (videoEnded || loop) ? (
         <div
           style={{
             position: "absolute",
@@ -1203,6 +1142,118 @@ const CutSceneMediaLayer = memo(({
   </>
 ));
 
+type CutSceneNarrationHandle = {
+  advance: () => boolean;
+};
+
+type CutSceneNarrationLayerProps = {
+  narrate?: CutSceneNarration;
+  language: LanguageCode;
+  continueHint: string;
+  textSpeed?: number;
+  fadingOut: boolean;
+  visible: boolean;
+  narrationClassName?: string;
+};
+
+const CutSceneNarrationLayer = memo(forwardRef<CutSceneNarrationHandle, CutSceneNarrationLayerProps>(function CutSceneNarrationLayer({
+  narrate,
+  language,
+  continueHint,
+  textSpeed = 1,
+  fadingOut,
+  visible,
+  narrationClassName,
+}, ref) {
+  const [currentNarrateIndex, setCurrentNarrateIndex] = useState(0);
+  const [revealedCount, setRevealedCount] = useState(0);
+
+  const resolvedNarrateBlocks = narrate
+    ? (Array.isArray(narrate) ? narrate : [narrate]).map((entry) => resolveText(entry, language))
+    : [];
+  const currentNarrateBlock = resolvedNarrateBlocks[currentNarrateIndex] ?? "";
+  const hasNarration = resolvedNarrateBlocks.length > 0;
+  const visibleNarrateBlocks = currentNarrateBlock
+    ? [currentNarrateBlock.slice(0, revealedCount)]
+    : [];
+  const isCurrentBlockFullyRevealed = revealedCount >= currentNarrateBlock.length;
+  const hasMoreNarrationBlocks = currentNarrateIndex < resolvedNarrateBlocks.length - 1;
+
+  useEffect(() => {
+    setCurrentNarrateIndex(0);
+    setRevealedCount(0);
+  }, [language, narrate]);
+
+  useEffect(() => {
+    if (!currentNarrateBlock) return;
+
+    const timer = window.setInterval(() => {
+      setRevealedCount((current) => {
+        if (current >= currentNarrateBlock.length) {
+          window.clearInterval(timer);
+          return current;
+        }
+        return current + 1;
+      });
+    }, BASE_TEXT_SPEED / textSpeed);
+
+    return () => window.clearInterval(timer);
+  }, [currentNarrateBlock, textSpeed]);
+
+  useImperativeHandle(ref, () => ({
+    advance: () => {
+      if (!hasNarration) return false;
+
+      if (!isCurrentBlockFullyRevealed) {
+        setRevealedCount(currentNarrateBlock.length);
+        return true;
+      }
+
+      if (hasMoreNarrationBlocks) {
+        setCurrentNarrateIndex((current) => current + 1);
+        setRevealedCount(0);
+        return true;
+      }
+
+      return false;
+    },
+  }), [
+    currentNarrateBlock.length,
+    hasMoreNarrationBlocks,
+    hasNarration,
+    isCurrentBlockFullyRevealed,
+  ]);
+
+  if (visibleNarrateBlocks.length === 0) {
+    return null;
+  }
+
+  return (
+    <div
+      className={`vn-narrator-shell ${narrationClassName ?? ""}`}
+      style={{
+        opacity: fadingOut || !visible ? 0 : 1,
+        transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
+      }}
+    >
+      <div className="vn-narrator-box">
+        {visibleNarrateBlocks.map((block, index) => (
+          <div
+            key={`${index}-${block.length}`}
+            className="vn-narrator-line"
+            style={index > 0 ? { marginTop: "1rem" } : undefined}
+          >
+            {block}
+          </div>
+        ))}
+        {isCurrentBlockFullyRevealed && hasMoreNarrationBlocks ? (
+          <div className="vn-narrator-hint">{continueHint}</div>
+        ) : null}
+      </div>
+    </div>
+  );
+}));
+
 const MultiCutSceneOverlay = ({
   selections,
   initialSelectionId,
@@ -1306,8 +1357,8 @@ const MultiCutSceneOverlay = ({
         }}
         textSpeed={textSpeed}
         narrationClassName={isMobile
-          ? "vn-multicut-narrator-shell vn-cutscene-narrator-shell vn-cutscene-narrator-shell-mobile"
-          : "vn-multicut-narrator-shell vn-cutscene-narrator-shell"}
+          ? "vn-multicut-narrator-shell vn-cutscene-narrator-shell-mobile"
+          : "vn-multicut-narrator-shell"}
         onComplete={onComplete}
       />
       <div
@@ -2252,9 +2303,7 @@ const App = () => {
               faster: labels.fasterPlayback,
             }}
             textSpeed={textSpeed}
-            narrationClassName={isMobile
-              ? "vn-cutscene-narrator-shell vn-cutscene-narrator-shell-mobile"
-              : "vn-cutscene-narrator-shell"}
+            narrationClassName={isMobile ? "vn-cutscene-narrator-shell-mobile" : undefined}
             onComplete={completeCutScene}
           />
         ) : null}
