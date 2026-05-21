@@ -19,10 +19,10 @@ export const bedroomDay1Scene: VisualNovelCommand[] = [
     "arka",
     "neutral",
     tx({
-      id: "Baru sehari aku di sini, tapi tempat ini udah jauh lebih ramai dari yang kubayangin. Aku datang buat cari tenang, ngoding, dan bertahan dari urusan kuliah... tapi somehow aku malah udah dapet empat kontak baru. Gila juga.",
-      en: "I've only been here a day, and this place is already way busier than I expected. I came here to chill, grind some code, and survive college stuff... and somehow I already ended up with four new contacts. Wild.",
-      ja: "まだ来て一日なのに、この場所は思ってたよりずっと騒がしい。静かに過ごして、コードを書いて、大学生活をやり過ごすために来たはずなのに…気づけばもう四人も新しい連絡先が増えてる。何それ。",
-      ko: "여기 온 지 하루밖에 안 됐는데, 벌써 예상보다 훨씬 정신없다. 난 그냥 조용히 지내면서 코딩하고, 대학 생활이나 버티려 왔을 뿐인데... 어쩌다 보니 연락처가 벌써 네 명이나 늘었다. 진짜 어이없네.",
+      id: "Baru sehari aku di sini, tapi tempat ini udah jauh lebih ramai dari yang kubayangin. Aku datang buat cari tenang, ngoding, dan bertahan dari urusan kuliah... tapi somehow aku malah udah kenal banyak orang. Gila juga.",
+      en: "I've only been here a day, and this place is already way busier than I expected. I came here to chill, grind some code, and survive college stuff... and somehow I already ended up getting to know way too many people. Wild.",
+      ja: "まだ来て一日なのに、この場所は思ってたよりずっと騒がしい。静かに過ごして、コードを書いて、大学生活をやり過ごすために来たはずなのに…気づけばもうずいぶん色んな人と関わってる。何それ。",
+      ko: "여기 온 지 하루밖에 안 됐는데, 벌써 예상보다 훨씬 정신없다. 난 그냥 조용히 지내면서 코딩하고, 대학 생활이나 버티려 왔을 뿐인데... 어쩌다 보니 벌써 너무 많은 사람들과 얽혀 버렸다. 진짜 어이없네.",
     }),
   ),
   say(
@@ -91,7 +91,7 @@ export const bedroomDay1ElenaScene: VisualNovelCommand[] = [
     }),
   ),
   hide("arka-bedroom"),
-  jump("day2-bedroom"),
+  jump("day1-complate"),
 ];
 
 export const bedroomDay1NadiaScene: VisualNovelCommand[] = [
@@ -114,7 +114,7 @@ export const bedroomDay1NadiaScene: VisualNovelCommand[] = [
     }),
   ),
   hide("arka-bedroom"),
-  jump("day2-bedroom"),
+  jump("day1-complate"),
 ];
 
 export const bedroomDay1SaraScene: VisualNovelCommand[] = [
@@ -137,5 +137,5 @@ export const bedroomDay1SaraScene: VisualNovelCommand[] = [
     }),
   ),
   hide("arka-bedroom"),
-  jump("day2-bedroom"),
+  jump("day1-complate"),
 ];

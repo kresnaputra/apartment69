@@ -8,6 +8,7 @@ import {
   narrate,
   playSfx,
   say,
+  setFlag,
   show,
 } from "@/scenes/scriptTypes";
 import frontOfficeUrl from "@/background/front-office.png";
@@ -105,6 +106,7 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
 ];
 
 export const ignoreElenaScene: VisualNovelCommand[] = [
+  setFlag("elenaAcceptedNumber", false),
   say("arka", "serious", tx({
     id: "Mending jangan ikut campur urusan orang lain...",
     en: "Better not get involved in other people's problems...",
@@ -193,5 +195,12 @@ export const helpElenaScene: VisualNovelCommand[] = [
       ko: "...좋아요. 어차피 다른 선택지도 없으니까. 이름은 엘레나. 303호로 와요. 진심이면 오늘 밤에. 너무 기다리게 하진 말고.",
     }),
   ),
+  say("arka", "gentle", tx({
+    id: "Oke. Nomormu kusimpan. Nanti malam aku mampir.",
+    en: "Alright. I'll save your number. I'll stop by tonight.",
+    ja: "わかった。連絡先は保存しておく。今夜寄るよ。",
+    ko: "알겠어. 네 번호 저장해 둘게. 오늘 밤에 들를게.",
+  })),
+  setFlag("elenaAcceptedNumber", true),
   jump("nadia-balcony"),
 ];

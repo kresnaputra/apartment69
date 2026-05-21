@@ -1,5 +1,6 @@
 import type { LanguageCode, LocalizedText } from "@/lib/i18n";
 import { resolveText } from "@/lib/i18n";
+import type { FlagMap } from "@/types/novel";
 
 export type SmartphoneContactId = "maya" | "elena" | "nadia" | "sara" | "sleep";
 
@@ -27,6 +28,32 @@ export type ResolvedSmartphoneContactOption = {
   icon?: string;
 };
 
+export const smartphoneContactFlagMap: Partial<Record<SmartphoneContactId, string>> = {
+  maya: "mayaAcceptedNumber",
+  elena: "elenaAcceptedNumber",
+  nadia: "nadiaAcceptedNumber",
+  sara: "saraAcceptedNumber",
+};
+
+export const resolveLockedSmartphoneContacts = (
+  flags: FlagMap,
+  disabledContacts: string[] = [],
+): SmartphoneContactId[] => {
+  const resolvedDisabledContacts = new Set<SmartphoneContactId>(
+    disabledContacts.filter((contactId): contactId is SmartphoneContactId =>
+      contactId in smartphoneContactFlagMap || contactId === "sleep",
+    ),
+  );
+
+  (Object.entries(smartphoneContactFlagMap) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
+    if (!flags[flagName]) {
+      resolvedDisabledContacts.add(contactId);
+    }
+  });
+
+  return [...resolvedDisabledContacts];
+};
+
 export const smartphoneContactOptions: SmartphoneContactOption[] = [
   {
     id: "maya",
@@ -44,7 +71,6 @@ export const smartphoneContactOptions: SmartphoneContactOption[] = [
       ko: "옆집 이웃. 대학 스트레스로 완전히 지쳐 보였다.",
     },
     next: "bedroom-day1-maya",
-    disabled: false,
   },
   {
     id: "elena",
@@ -62,7 +88,6 @@ export const smartphoneContactOptions: SmartphoneContactOption[] = [
       ko: "복도 맞은편. 차갑고 예민하지만, 분명 이것저것 많이 안고 있다.",
     },
     next: "bedroom-day1-elena",
-    disabled: true,
   },
   {
     id: "nadia",
@@ -80,7 +105,6 @@ export const smartphoneContactOptions: SmartphoneContactOption[] = [
       ko: "완전 혼돈 그 자체. 에너지가 넘쳐나고, 아마 아직도 안 자고 있을 거다.",
     },
     next: "bedroom-day1-nadia",
-    disabled: true,
   },
   {
     id: "sara",
@@ -98,7 +122,6 @@ export const smartphoneContactOptions: SmartphoneContactOption[] = [
       ko: "펜트하우스 거주자. 빠른 답을 기대하는 타입이 확실하다.",
     },
     next: "bedroom-day1-sara",
-    disabled: true,
   },
   {
     id: "sleep",

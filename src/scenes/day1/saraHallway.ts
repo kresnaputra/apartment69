@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, menu, narrate, playSfx, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, menu, narrate, playSfx, say, setFlag, show } from "@/scenes/scriptTypes";
 import hallway from "@/background/hallway.png";
 import lift from "@/sfx/lift.wav";
 
@@ -130,12 +130,13 @@ export const saraHelpScene: VisualNovelCommand[] = [
     "arka",
     "gentle",
     tx({
-      id: "Boleh. Simpan aja nomorku, nanti kalau ada waktu aku lihat apa yang bisa aku lakukan.",
-      en: "Sure. Just save my number, and I'll see what I can do when I have the chance.",
-      ja: "いいよ。とりあえず番号を保存しておいて。時間ができたら見てみる。",
-      ko: "좋아. 내 번호 저장해 둬. 시간 나면 내가 한번 봐줄게.",
+      id: "Boleh. Kasih aku nomormu, nanti kalau ada waktu aku lihat apa yang bisa aku lakukan.",
+      en: "Sure. Give me your number, and I'll see what I can do when I have the chance.",
+      ja: "いいよ。連絡先を教えて。時間ができたら見てみる。",
+      ko: "좋아. 네 번호 줘. 시간 나면 내가 한번 봐줄게.",
     }),
   ),
+  setFlag("saraAcceptedNumber", true),
   say(
     "sara",
     "neutral",
@@ -169,6 +170,7 @@ export const saraHelpScene: VisualNovelCommand[] = [
 ];
 
 export const saraRefuseScene: VisualNovelCommand[] = [
+  setFlag("saraAcceptedNumber", false),
   say(
     "arka",
     "serious",
@@ -210,16 +212,31 @@ export const saraRefuseScene: VisualNovelCommand[] = [
   say(
     "sara",
     "neutral",
-    "A wise choice. I don't need guarantees, Womanizer. I only need someone I can rely on when I call.",
+    tx({
+      id: "Kalau begitu, kabari aku kalau kamu memang sempat. Aku nggak suka menunggu tanpa kepastian.",
+      en: "In that case, let me know if you actually find the time. I don't like waiting without certainty.",
+      ja: "それなら、本当に時間ができた時だけ連絡して。はっきりしないまま待たされるのは好きじゃないの。",
+      ko: "그렇다면 정말 시간이 날 때만 연락해. 확실하지도 않은 채 기다리는 건 싫으니까.",
+    }),
   ),
   say(
-    "sara",
+    "arka",
     "neutral",
-    "Don't take too long checking your schedule. The view from up there is much better than it is down here. I'll be waiting.",
+    tx({
+      id: "Iya. Kalau memang jadi, aku yang cari kamu duluan.",
+      en: "Yeah. If it happens, I'll be the one to come find you first.",
+      ja: "ああ。本当に行けそうなら、こっちから君を探すよ。",
+      ko: "그래. 정말 가게 되면 내가 먼저 널 찾아갈게.",
+    }),
   ),
   hide("sara-hallway", "fadeAway"),
   narrate(
-    "The private elevator opens. Sarah steps inside and disappears behind the tightly sealed silver doors. Arka remains alone in the corridor, with a trace of her perfume still lingering in the air.",
+    tx({
+      id: "Lift privat itu terbuka. Sarah masuk ke dalam dan menghilang di balik pintu perak yang tertutup rapat. Arka kembali sendirian di lorong, dengan rasa bahwa urusan itu belum benar-benar selesai.",
+      en: "The private elevator opens. Sarah steps inside and disappears behind the tightly sealed silver doors. Arka is left alone in the corridor, with the feeling that the matter still isn't really settled.",
+      ja: "専用エレベーターが開き、サラは銀色の扉の向こうへ消えていく。廊下に一人残されたアルカは、その件がまだ完全には終わっていないような感覚だけを残された。",
+      ko: "전용 엘리베이터 문이 열리고, 사라는 은빛 문 너머로 사라진다. 복도에 홀로 남은 아르카에게는 그 일이 아직 완전히 끝난 게 아니라는 느낌만 남는다.",
+    }),
   ),
   jump("bedroom-day1"),
 ];

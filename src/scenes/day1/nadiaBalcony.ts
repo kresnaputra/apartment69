@@ -10,6 +10,7 @@ import {
   show,
   cutScene,
   playSfx,
+  setFlag,
 } from "@/scenes/scriptTypes";
 import bedroom from "@/background/bedroom-afteroon.png";
 import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url";
@@ -196,6 +197,7 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
     ja: "わかった、取っておくよ。",
     ko: "알겠어, 챙겨둘게.",
   })),
+  setFlag("nadiaAcceptedNumber", true),
   narrate(
     tx({
       id: "Mungkin... lain kali aku bakal hubungi dia.",
@@ -209,6 +211,7 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
 ];
 
 export const nadiaAdviceRefuseScene: VisualNovelCommand[] = [
+  setFlag("nadiaAcceptedNumber", false),
   say(
     "arka",
     "serious",

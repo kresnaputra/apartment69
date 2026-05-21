@@ -27,6 +27,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useGamepad } from "@/hooks/useGamepad";
 import { characterBundleRegistry } from "@/character";
 import type { SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
+import { resolveLockedSmartphoneContacts } from "@/components/minigames/smartphoneContacts";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { playSfx as playRuntimeSfx, sharedSoundEffects } from "@/lib/runtime/soundEffects";
@@ -1462,6 +1463,9 @@ const App = () => {
   const flags = useNovelStore((state) => state.flags);
   const persistedGalleryFlags = readGalleryUnlockFlags();
   const galleryFlags = { ...persistedGalleryFlags, ...flags };
+  const smartphoneDisabledContacts = activeMinigame?.id === "smartphone-contacts"
+    ? resolveLockedSmartphoneContacts(flags, activeMinigame.options?.disabledContacts as string[] | undefined)
+    : [];
 
   const [revealedCount, setRevealedCount] = useState(0);
   const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
@@ -2265,7 +2269,7 @@ const App = () => {
                 language={language}
                 showSleepOption={activeMinigame.options?.showSleepOption as boolean}
                 sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
-                disabledContacts={activeMinigame.options?.disabledContacts as string[]}
+                disabledContacts={smartphoneDisabledContacts}
                 title={activeMinigame.options?.title as LocalizedText}
                 subtitle={activeMinigame.options?.subtitle as LocalizedText}
                 contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
@@ -2275,7 +2279,7 @@ const App = () => {
                 language={language}
                 showSleepOption={activeMinigame.options?.showSleepOption as boolean}
                 sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
-                disabledContacts={activeMinigame.options?.disabledContacts as string[]}
+                disabledContacts={smartphoneDisabledContacts}
                 title={activeMinigame.options?.title as LocalizedText}
                 subtitle={activeMinigame.options?.subtitle as LocalizedText}
                 contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
