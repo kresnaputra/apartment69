@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
 import bedroom from "@/background/bedroom-afteroon.png";
 
 export const bedroomDay1Scene: VisualNovelCommand[] = [
@@ -49,6 +49,7 @@ export const bedroomDay1Scene: VisualNovelCommand[] = [
 ];
 
 export const bedroomDay1MayaScene: VisualNovelCommand[] = [
+  setFlag("day1PriorityRoute", "maya"),
   say(
     "arka",
     "gentle",
@@ -72,6 +73,7 @@ export const bedroomDay1MayaScene: VisualNovelCommand[] = [
 ];
 
 export const bedroomDay1ElenaScene: VisualNovelCommand[] = [
+  setFlag("day1PriorityRoute", "elena"),
   say(
     "arka",
     "serious",
@@ -95,6 +97,7 @@ export const bedroomDay1ElenaScene: VisualNovelCommand[] = [
 ];
 
 export const bedroomDay1NadiaScene: VisualNovelCommand[] = [
+  setFlag("day1PriorityRoute", "nadia"),
   say(
     "arka",
     "surprised",
@@ -118,6 +121,7 @@ export const bedroomDay1NadiaScene: VisualNovelCommand[] = [
 ];
 
 export const bedroomDay1SaraScene: VisualNovelCommand[] = [
+  setFlag("day1PriorityRoute", "sara"),
   say(
     "arka",
     "neutral",

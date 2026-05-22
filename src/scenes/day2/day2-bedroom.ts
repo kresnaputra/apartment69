@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, jump, narrate, playBgm } from "@/scenes/scriptTypes";
+import { bg, jump, jumpIf, narrate, playBgm } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
 import bgm from "@/music/day2.mp3";
 
@@ -12,6 +12,7 @@ export const day2BedroomScene: VisualNovelCommand[] = [
     ja: "Apartment 69 - 2日目",
     ko: "Apartment 69 - 2일차",
   })),
+  jumpIf("day1PriorityRoute", "day2-elena-hallway", { value: "elena" }),
   narrate(
     tx({
       id: "Sesuai rencanaku semalam, pagi ini aku memutuskan buat cek tetangga sebelah. Kemarin dia kelihatan pucat banget, aku bahkan nggak yakin dia sempat sarapan.",
