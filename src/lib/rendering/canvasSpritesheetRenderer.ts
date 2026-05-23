@@ -20,6 +20,17 @@ export class CanvasSpritesheetRenderer {
     }
   }
 
+  dispose() {
+    if (this.ctx && this.canvas) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvas.width = 0;
+      this.canvas.height = 0;
+    }
+
+    this.canvas = null;
+    this.ctx = null;
+  }
+
   resize(width: number, height: number, resolutionScale = 1) {
     if (!this.canvas || !this.ctx || width <= 0 || height <= 0) return;
 

@@ -303,6 +303,10 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
 
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();
+    return () => {
+      rendererRef.current?.dispose();
+      rendererRef.current = null;
+    };
   }, []);
 
   useEffect(() => {
@@ -412,6 +416,10 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
 
   useEffect(() => {
     rendererRef.current = new CanvasSbnRenderer();
+    return () => {
+      rendererRef.current?.dispose();
+      rendererRef.current = null;
+    };
   }, []);
 
   useEffect(() => {

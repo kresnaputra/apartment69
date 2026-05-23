@@ -32,6 +32,20 @@ export class CanvasSbnRenderer {
     }
   }
 
+  dispose() {
+    if (this.ctx && this.canvas) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.canvas.width = 0;
+      this.canvas.height = 0;
+    }
+
+    this.canvas = null;
+    this.ctx = null;
+    this.backingWidth = 0;
+    this.backingHeight = 0;
+    this.pixelRatio = 1;
+  }
+
   resize(
     width: number,
     height: number,

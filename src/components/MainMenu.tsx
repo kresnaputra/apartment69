@@ -56,6 +56,8 @@ const MainMenuFigure = ({ graphicsQuality }: { graphicsQuality: GraphicsQuality 
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
+      rendererRef.current?.dispose();
+      rendererRef.current = null;
     };
   }, []);
 

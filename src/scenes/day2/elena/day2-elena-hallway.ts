@@ -1,11 +1,22 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import {
+  bg,
+  hide,
+  minigame,
+  narrate,
+  say,
+  setFlag,
+  show,
+} from "@/scenes/scriptTypes";
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaHallwayOpenUrl from "@/background/elena-hallway-open.png";
 import plumbUrl from "@/background/plumb.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import underPlumbUrl from "@/background/under-plumb.png";
+import elenaPlumpVideoUrl from "@/cut-scene/elena-plump.webm?url";
+import elenaPlumpEmptyVideoUrl from "@/cut-scene/elena-plumb-empty.webm?url";
+import elenaPlumpVideoUrl2 from "@/cut-scene/elena-plumb2.webm?url";
 
 export const day2ElenaHallwayScene: VisualNovelCommand[] = [
   bg(
@@ -136,10 +147,6 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ko: "아르카가 고개를 돌린다.",
     }),
   ),
-  show("elena-day2-plumb", "elena", "angry", {
-    position: "center",
-    enterFrom: "fade",
-  }),
   narrate(
     tx({
       id: "Pintu terbuka lebih lebar, dan Elena masuk sambil membawa beberapa barang kecil di tangannya. Wajahnya tampak lelah dan kesal seperti biasa.",
@@ -253,7 +260,15 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "Apartment 69 - 洗面台の下",
       ko: "Apartment 69 - 세면대 아래",
     }),
+    {
+      backgroundVideo: {
+        src: elenaPlumpEmptyVideoUrl,
+        loop: true,
+        muted: true,
+      },
+    },
   ),
+  hide("elena-day2-plumb"),
   say(
     "arka",
     "serious",
@@ -314,6 +329,22 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ko: "아르카는 더 바짝 세면대 아래쪽으로 몸을 밀착시킨다.",
     }),
   ),
+  bg(
+    underPlumbUrl,
+    tx({
+      id: "Apartment 69 - Bawah Wastafel",
+      en: "Apartment 69 - Under the Sink",
+      ja: "Apartment 69 - 洗面台の下",
+      ko: "Apartment 69 - 세면대 아래",
+    }),
+    {
+      backgroundVideo: {
+        src: elenaPlumpVideoUrl,
+        loop: true,
+        muted: true,
+      },
+    },
+  ),
   narrate(
     tx({
       id: "Elena berhenti di depan wastafel. Ember kecil diletakkan di lantai.",
@@ -362,15 +393,6 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       en: "There isn't a single leaking drip.",
       ja: "漏れ落ちる水滴はひとつもない。",
       ko: "새는 물방울은 하나도 없다.",
-    }),
-  ),
-  bg(
-    elenaBadroomUrl,
-    tx({
-      id: "Apartment 69 - Kamar Elena",
-      en: "Apartment 69 - Elena's Room",
-      ja: "Apartment 69 - エレナの部屋",
-      ko: "Apartment 69 - 엘레나의 방",
     }),
   ),
   narrate(
@@ -454,6 +476,22 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "もうこれは必要なさそうね。",
       ko: "이건 이제 필요 없을 것 같네.",
     }),
+  ),
+  bg(
+    underPlumbUrl,
+    tx({
+      id: "Apartment 69 - Bawah Wastafel",
+      en: "Apartment 69 - Under the Sink",
+      ja: "Apartment 69 - 洗面台の下",
+      ko: "Apartment 69 - 세면대 아래",
+    }),
+    {
+      backgroundVideo: {
+        src: elenaPlumpVideoUrl2,
+        loop: true,
+        muted: true,
+      },
+    },
   ),
   narrate(
     tx({
