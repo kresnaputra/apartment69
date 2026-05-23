@@ -33,7 +33,11 @@ import type { LocalizedText } from "@/lib/i18n";
 import type { LanguageCode } from "@/lib/i18n";
 import type { SayCommand, VisualNovelCommand, VisualNovelScript } from "@/types/novel";
 import { day1ComplateScene } from "@/scenes/day1/day1-complate";
-import { day2BedroomScene } from "@/scenes/day2/day2-bedroom";
+import {
+  day2BedroomScene,
+  day2RouteElenaScene,
+  day2RouteMayaScene,
+} from "@/scenes/day2/day2-bedroom";
 import { day2FreeTimeScene } from "@/scenes/day2/day2-free-time";
 import { day2HallwayScene } from "@/scenes/day2/day2-hallway";
 import { day2MayaBedroomScene } from "@/scenes/day2/day2-maya-bedroom";
@@ -45,6 +49,7 @@ import {
   mayaPhoneCallEmpathyScene,
 } from "@/scenes/day3/day3-mayaPhoneCall";
 import {
+  day3BedroomScene,
   day3RouteSelectionScene,
   day3Slot2ElenaScene,
   day3Slot2NadiaScene,
@@ -170,7 +175,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "day2-elena-hallway",
+  startLabel: "opening",
   labels: {
     "gallery-return": [],
     "sbn-maya-test": sbnTestScene,
@@ -198,12 +203,15 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day1-complate": day1ComplateScene,
     // Day 2
     "day2-bedroom": day2BedroomScene,
+    "day2-route-maya": day2RouteMayaScene,
+    "day2-route-elena": day2RouteElenaScene,
     "day2-hallway": day2HallwayScene,
     "day2-maya-bedroom": day2MayaBedroomScene,
     "day2-elena-hallway": day2ElenaHallwayScene,
     "day2-free-time": day2FreeTimeScene,
     "day2-complate": day2ComplateScene,
     // Day 3
+    "day3-bedroom": day3BedroomScene,
     "day3-maya-phone-call": mayaPhoneCallScene,
     "maya-phone-call-logical": mayaPhoneCallLogicalScene,
     "maya-phone-call-empathy": mayaPhoneCallEmpathyScene,

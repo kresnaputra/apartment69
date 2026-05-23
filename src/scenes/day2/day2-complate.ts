@@ -34,5 +34,5 @@ export const day2ComplateScene: VisualNovelCommand[] = [
     { size: "hero", typingSpeed: 0.3 },
   ),
   interstitial(),
-  jump("day3-maya-phone-call"),
+  jump("day3-bedroom"),
 ];

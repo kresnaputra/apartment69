@@ -26,7 +26,7 @@ import type { SceneBounds } from "@/types/sbn";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useGamepad } from "@/hooks/useGamepad";
 import { characterBundleRegistry } from "@/character";
-import type { SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
+import type { SmartphoneContactId, SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
 import { resolveLockedSmartphoneContacts } from "@/components/minigames/smartphoneContacts";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
@@ -1464,7 +1464,28 @@ const App = () => {
   const persistedGalleryFlags = readGalleryUnlockFlags();
   const galleryFlags = { ...persistedGalleryFlags, ...flags };
   const smartphoneDisabledContacts = activeMinigame?.id === "smartphone-contacts"
-    ? resolveLockedSmartphoneContacts(flags, activeMinigame.options?.disabledContacts as string[] | undefined)
+    ? (() => {
+        const baseDisabledContacts = resolveLockedSmartphoneContacts(
+          flags,
+          activeMinigame.options?.disabledContacts as string[] | undefined,
+        );
+        const conditionalDisabledContacts = activeMinigame.options?.conditionalDisabledContacts as
+          | Partial<Record<SmartphoneContactId, string>>
+          | undefined;
+
+        if (!conditionalDisabledContacts) {
+          return baseDisabledContacts;
+        }
+
+        const resolvedDisabledContacts = new Set(baseDisabledContacts);
+        (Object.entries(conditionalDisabledContacts) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
+          if (flags[flagName]) {
+            resolvedDisabledContacts.add(contactId);
+          }
+        });
+
+        return [...resolvedDisabledContacts];
+      })()
     : [];
 
   const [revealedCount, setRevealedCount] = useState(0);

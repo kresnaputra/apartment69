@@ -35,5 +35,33 @@ export const day2FreeTimeScene: VisualNovelCommand[] = [
     }),
     "arka",
   ),
-  minigame("smartphone-contacts", { showSleepOption: true, sleepOptionNext: "day2-complate", disabledContacts: ["maya", "elena", "nadia", "sara"] }),
+  minigame("smartphone-contacts", {
+    showSleepOption: true,
+    sleepOptionNext: "day2-complate",
+    disabledContacts: ["nadia", "sara"],
+    conditionalDisabledContacts: {
+      maya: "day2MayaCompleted",
+      elena: "day2ElenaCompleted",
+    },
+    title: tx({
+      id: "Lanjutkan Hari 2",
+      en: "Continue Day 2",
+      ja: "2日目を続ける",
+      ko: "2일차 계속하기",
+    }),
+    subtitle: tx({
+      id: "Kalau masih ada waktu, pilih lagi siapa yang mau kamu cek sebelum hari ini selesai.",
+      en: "If there's still time left, choose who else you want to check on before the day ends.",
+      ja: "まだ時間があるなら、今日は終わる前に次に誰を見に行くか選ぼう。",
+      ko: "아직 시간이 남았다면 오늘이 끝나기 전에 다음에 누구를 보러 갈지 고르자.",
+    }),
+    contactOverrides: {
+      maya: {
+        next: "day2-route-maya",
+      },
+      elena: {
+        next: "day2-route-elena",
+      },
+    },
+  }),
 ];

@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaHallwayOpenUrl from "@/background/elena-hallway-open.png";
 import plumbUrl from "@/background/plumb.png";
@@ -127,6 +127,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ko: "그는 연결 부위를 조이기 시작한다. 작업을 시작한 지 얼마 되지 않아 복도에서 발소리가 들려온다.",
     }),
   ),
+  minigame("pipe-connection"),
   narrate(
     tx({
       id: "Arka menoleh.",
@@ -583,4 +584,32 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ko: "흠, 지금 바로 나가는 게 좋겠다.",
     }),
   ),
+  bg(elenaHallwayUrl),
+  hide("arka-day2-elena-hallway"),
+  setFlag("day2ElenaCompleted", true),
+  minigame("smartphone-contacts", {
+    showSleepOption: true,
+    sleepOptionNext: "day2-complate",
+    disabledContacts: ["elena", "nadia", "sara"],
+    conditionalDisabledContacts: {
+      maya: "day2MayaCompleted",
+    },
+    title: tx({
+      id: "Lanjutkan Hari 2",
+      en: "Continue Day 2",
+      ja: "2日目を続ける",
+      ko: "2일차 계속하기",
+    }),
+    subtitle: tx({
+      id: "Elena sudah beres. Kalau masih ada waktu, pilih siapa lagi yang mau dicek.",
+      en: "Elena is done. If there's still time left, choose who else to check on.",
+      ja: "エレナの件は終わった。まだ時間があるなら、次に誰を見るか選ぼう。",
+      ko: "엘레나 쪽은 끝났다. 아직 시간이 남았다면 다음에 누구를 볼지 고르자.",
+    }),
+    contactOverrides: {
+      maya: {
+        next: "day2-route-maya",
+      },
+    },
+  }),
 ];

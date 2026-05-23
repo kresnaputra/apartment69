@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
 import bedroom from "@/background/bedroom-afteroon.png";
 
 export const bedroomDay1Scene: VisualNovelCommand[] = [
@@ -39,13 +39,22 @@ export const bedroomDay1Scene: VisualNovelCommand[] = [
     "arka",
     "serious",
     tx({
-      id: "Masalahnya, besok nggak mungkin aku ketemu semuanya sekaligus. Jadi ya... aku harus nentuin dulu besok mau cek siapa pertama.",
-      en: "Thing is, there's no way I'm gonna run into all of them at the same time tomorrow. So yeah... I gotta figure out who I'm checking in on first.",
-      ja: "問題は、明日あいつら全員と一気に会うなんて無理ってことだ。だからまあ…誰から先に様子を見るか決めないとな。",
-      ko: "문제는 내일 그들 전부를 한 번에 만날 수는 없다는 거다. 그러니까... 누구부터 챙길지 정해야 한다.",
+      id: "Buat malam ini, cukup istirahat dulu. Besok pagi baru kupikirin mau mulai dari siapa.",
+      en: "For tonight, I just need to rest. Tomorrow morning I'll figure out who to start with.",
+      ja: "今夜はもう休もう。誰から行くかは、明日の朝に決めればいい。",
+      ko: "오늘 밤은 일단 쉬자. 누구부터 갈지는 내일 아침에 정하면 된다.",
     }),
   ),
-  minigame("smartphone-contacts"),
+  narrate(
+    tx({
+      id: "Arka meletakkan ponselnya di samping bantal, mematikan lampu, lalu membiarkan tubuhnya tenggelam ke kasur.",
+      en: "Arka sets his phone beside the pillow, turns off the light, and lets his body sink into the mattress.",
+      ja: "アルカはスマホを枕元に置き、明かりを消して、そのままベッドへ身を沈めた。",
+      ko: "아르카는 휴대폰을 베개 옆에 내려두고 불을 끈 뒤 그대로 침대에 몸을 맡긴다.",
+    }),
+  ),
+  hide("arka-bedroom"),
+  jump("day1-complate"),
 ];
 
 export const bedroomDay1MayaScene: VisualNovelCommand[] = [

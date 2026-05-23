@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, minigame, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
 import mayaBedroom from "@/background/maya-bedroom.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 
@@ -92,6 +92,7 @@ export const day2MayaBedroomScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[11] },
   ),
+  setFlag("day2MayaCompleted", true),
   hide("arka-day2-bedroom"),
   hide("maya-day2-bedroom"),
   jump("day2-free-time"),

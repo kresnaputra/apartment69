@@ -10,7 +10,96 @@ import {
   setFlag,
   show,
 } from "@/scenes/scriptTypes";
+import apartmentUrl from "@/background/apartment.png";
 import universityUrl from "@/background/university.png";
+
+export const day3BedroomScene: VisualNovelCommand[] = [
+  bg(apartmentUrl, tx({
+    id: "Apartment 69 Hari 3",
+    en: "Apartment 69 Day 3",
+    ja: "Apartment 69 - 3日目",
+    ko: "Apartment 69 - 3일차",
+  })),
+  show("arka-day3-bedroom", "arka", "neutral", {
+    position: "left",
+    enterFrom: "fade",
+  }),
+  narrate(
+    tx({
+      id: "Pagi Hari 3 dimulai pelan. Arka meraih ponselnya sambil menata kepala yang masih berat, lalu membuka daftar kontak seperti kemarin.",
+      en: "Day 3 starts quietly. Arka reaches for his phone while trying to wake up properly, then opens his contact list like he did yesterday.",
+      ja: "3日目の朝は静かに始まった。アルカはまだ重い頭を整えながらスマホを手に取り、昨日と同じように連絡先を開く。",
+      ko: "3일차 아침은 조용히 시작된다. 아르카는 아직 무거운 머리를 추스르며 휴대폰을 집어 들고, 어제처럼 연락처 목록을 연다.",
+    }),
+  ),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Lihat dulu... pagi ini aku mulai dari mana?",
+      en: "Let's see... where am I starting this morning?",
+      ja: "さて…今朝はどこから始める？",
+      ko: "어디 보자... 오늘 아침은 어디서 시작하지?",
+    }),
+  ),
+  hide("arka-day3-bedroom"),
+  minigame("smartphone-contacts", {
+    title: tx({
+      id: "Pilih Tujuan Pagi Ini",
+      en: "Choose This Morning's Stop",
+      ja: "今朝の行き先を選ぶ",
+      ko: "오늘 아침 목적지 선택",
+    }),
+    subtitle: tx({
+      id: "Untuk pagi ini cuma ada satu hal yang langsung menarik perhatian Arka.",
+      en: "This morning, only one thing immediately pulls Arka's attention.",
+      ja: "今朝のアルカの意識をすぐに引いたのは、一つだけだった。",
+      ko: "오늘 아침 아르카의 시선을 곧바로 끄는 건 하나뿐이다.",
+    }),
+    disabledContacts: ["elena", "nadia", "sara", "sleep"],
+    contactOverrides: {
+      maya: {
+        next: "day3-maya-phone-call",
+        blurb: tx({
+          id: "Sejak kemarin kondisi Maya kelihatan rapuh. Kalau ada yang aneh dari kamarnya pagi ini, aku nggak enak kalau pura-pura nggak sadar.",
+          en: "Maya has looked fragile since yesterday. If something feels off in her room this morning, I can't just ignore it.",
+          ja: "昨日からマヤの様子は危うかった。今朝あの部屋で何か異変があるなら、見て見ぬふりはできない。",
+          ko: "어제부터 마야 상태는 위태로워 보였다. 오늘 아침 그 방에서 뭔가 이상하다면 그냥 못 본 척할 수는 없다.",
+        }),
+      },
+      elena: {
+        blurb: tx({
+          id: "Bukan sekarang. Pagi ini ada hal lain yang lebih mendesak.",
+          en: "Not now. Something else is more urgent this morning.",
+          ja: "今は違う。今朝はもっと優先すべきことがある。",
+          ko: "지금은 아니다. 오늘 아침은 더 급한 일이 있다.",
+        }),
+      },
+      nadia: {
+        blurb: tx({
+          id: "Nadia belum muncul pagi-pagi begini.",
+          en: "Nadia hasn't surfaced this early in the morning.",
+          ja: "こんな朝早くからナディアが動いている気はしない。",
+          ko: "이렇게 이른 아침부터 나디아가 움직이고 있을 것 같진 않다.",
+        }),
+      },
+      sara: {
+        name: tx({
+          id: "Sarah",
+          en: "Sarah",
+          ja: "サラ",
+          ko: "사라",
+        }),
+        blurb: tx({
+          id: "Sarah jelas bukan tipe yang dihubungi pagi-pagi tanpa alasan kuat.",
+          en: "Sarah definitely isn't the type to call first thing in the morning without a very good reason.",
+          ja: "サラは、よほどの理由もなく朝一番に連絡する相手じゃない。",
+          ko: "사라는 아주 확실한 이유 없이 아침 일찍 먼저 연락할 타입은 아니다.",
+        }),
+      },
+    },
+  }),
+];
 
 export const day3RouteSelectionScene: VisualNovelCommand[] = [
   bg(universityUrl, tx({
