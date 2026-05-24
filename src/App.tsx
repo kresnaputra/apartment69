@@ -1480,17 +1480,34 @@ const App = () => {
         const conditionalDisabledContacts = activeMinigame.options?.conditionalDisabledContacts as
           | Partial<Record<SmartphoneContactId, string>>
           | undefined;
-
-        if (!conditionalDisabledContacts) {
-          return baseDisabledContacts;
-        }
+        const conditionalEnabledContacts = activeMinigame.options?.conditionalEnabledContacts as
+          | Partial<Record<SmartphoneContactId, string>>
+          | undefined;
+        const requiredCompletionFlags = activeMinigame.options?.requiredCompletionFlags as
+          | string[]
+          | undefined;
 
         const resolvedDisabledContacts = new Set(baseDisabledContacts);
-        (Object.entries(conditionalDisabledContacts) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
-          if (flags[flagName]) {
-            resolvedDisabledContacts.add(contactId);
-          }
-        });
+
+        if (conditionalDisabledContacts) {
+          (Object.entries(conditionalDisabledContacts) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
+            if (flags[flagName]) {
+              resolvedDisabledContacts.add(contactId);
+            }
+          });
+        }
+
+        if (conditionalEnabledContacts) {
+          (Object.entries(conditionalEnabledContacts) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
+            if (flags[flagName]) {
+              resolvedDisabledContacts.delete(contactId);
+            }
+          });
+        }
+
+        if (requiredCompletionFlags?.some((flagName) => !flags[flagName])) {
+          resolvedDisabledContacts.add("sleep");
+        }
 
         return [...resolvedDisabledContacts];
       })()

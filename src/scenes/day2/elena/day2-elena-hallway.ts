@@ -628,6 +628,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
   minigame("smartphone-contacts", {
     showSleepOption: true,
     sleepOptionNext: "day2-complate",
+    requiredCompletionFlags: ["day2MayaCompleted", "day2ElenaCompleted"],
     disabledContacts: ["elena", "nadia", "sara"],
     conditionalDisabledContacts: {
       maya: "day2MayaCompleted",

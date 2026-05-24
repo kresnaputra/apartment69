@@ -158,8 +158,8 @@ export const resolveSmartphoneContactOptions = ({
   sleepOptionNext = "epilogue",
   disabledContacts = [],
   overrides = {},
-}: ResolveSmartphoneContactOptionsInput): ResolvedSmartphoneContactOption[] =>
-  smartphoneContactOptions
+}: ResolveSmartphoneContactOptionsInput): ResolvedSmartphoneContactOption[] => {
+  const resolvedOptions = smartphoneContactOptions
     .filter((option) => option.id !== "sleep" || showSleepOption)
     .map((option) => {
       const override = overrides[option.id] ?? {};
@@ -176,3 +176,15 @@ export const resolveSmartphoneContactOptions = ({
         disabled: disabledContacts.includes(option.id) || override.disabled || option.disabled,
       };
     });
+
+  const hasAvailableCharacterOption = resolvedOptions.some((option) => option.id !== "sleep" && !option.disabled);
+
+  return resolvedOptions.map((option) => (
+    option.id === "sleep"
+      ? {
+          ...option,
+          disabled: hasAvailableCharacterOption || option.disabled,
+        }
+      : option
+  ));
+};

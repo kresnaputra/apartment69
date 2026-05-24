@@ -38,6 +38,7 @@ export const day2FreeTimeScene: VisualNovelCommand[] = [
   minigame("smartphone-contacts", {
     showSleepOption: true,
     sleepOptionNext: "day2-complate",
+    requiredCompletionFlags: ["day2MayaCompleted", "day2ElenaCompleted"],
     disabledContacts: ["nadia", "sara"],
     conditionalDisabledContacts: {
       maya: "day2MayaCompleted",

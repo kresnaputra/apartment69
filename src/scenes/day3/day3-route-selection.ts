@@ -51,12 +51,15 @@ export const day3BedroomScene: VisualNovelCommand[] = [
       ko: "오늘 아침 목적지 선택",
     }),
     subtitle: tx({
-      id: "Untuk pagi ini cuma ada satu hal yang langsung menarik perhatian Arka.",
-      en: "This morning, only one thing immediately pulls Arka's attention.",
-      ja: "今朝のアルカの意識をすぐに引いたのは、一つだけだった。",
-      ko: "오늘 아침 아르카의 시선을 곧바로 끄는 건 하나뿐이다.",
+      id: "Kalau masih ada yang mengganjal sejak kemarin, pagi ini saatnya Arka menentukan mau mulai dari siapa.",
+      en: "If something from yesterday is still unresolved, this morning is when Arka decides who to start with.",
+      ja: "昨日から引っかかっていることがあるなら、今朝こそ誰から向き合うか決める時間だ。",
+      ko: "어제부터 마음에 걸리는 일이 남아 있다면, 오늘 아침이야말로 누구부터 볼지 정할 때다.",
     }),
     disabledContacts: ["elena", "nadia", "sara", "sleep"],
+    conditionalEnabledContacts: {
+      elena: "day2ElenaCompleted",
+    },
     contactOverrides: {
       maya: {
         next: "day3-maya-phone-call",
@@ -68,11 +71,12 @@ export const day3BedroomScene: VisualNovelCommand[] = [
         }),
       },
       elena: {
+        next: "day3-elena-morning",
         blurb: tx({
-          id: "Bukan sekarang. Pagi ini ada hal lain yang lebih mendesak.",
-          en: "Not now. Something else is more urgent this morning.",
-          ja: "今は違う。今朝はもっと優先すべきことがある。",
-          ko: "지금은 아니다. 오늘 아침은 더 급한 일이 있다.",
+          id: "Setelah kejadian wastafel semalam, rasanya percakapan dengan Elena belum benar-benar selesai.",
+          en: "After everything that happened with the sink last night, it feels like things with Elena still aren't fully settled.",
+          ja: "昨夜の洗面台の件のあとだ。エレナとの話は、まだ完全には終わっていない気がする。",
+          ko: "어젯밤 세면대 사건 이후로, 엘레나와의 일은 아직 완전히 끝난 것 같지 않다.",
         }),
       },
       nadia: {
@@ -144,6 +148,7 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
   hide("arka-campus"),
   minigame("smartphone-contacts", {
     showSleepOption: true,
+    requiredCompletionFlags: ["day3Slot2ElenaCompleted", "day3Slot2NadiaCompleted", "day3Slot2SarahCompleted"],
     disabledContacts: ["maya"],
     title: tx({
       id: "Pilih rute berikutnya",
@@ -224,6 +229,7 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
 
 export const day3Slot2ElenaScene: VisualNovelCommand[] = [
   setFlag("slot2Route", "elena"),
+  setFlag("day3Slot2ElenaCompleted", true),
   say(
     "arka",
     "serious",
@@ -239,6 +245,7 @@ export const day3Slot2ElenaScene: VisualNovelCommand[] = [
 
 export const day3Slot2NadiaScene: VisualNovelCommand[] = [
   setFlag("slot2Route", "nadia"),
+  setFlag("day3Slot2NadiaCompleted", true),
   say(
     "arka",
     "surprised",
@@ -254,6 +261,7 @@ export const day3Slot2NadiaScene: VisualNovelCommand[] = [
 
 export const day3Slot2SarahScene: VisualNovelCommand[] = [
   setFlag("slot2Route", "sarah"),
+  setFlag("day3Slot2SarahCompleted", true),
   say(
     "arka",
     "neutral",
