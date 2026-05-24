@@ -22,6 +22,7 @@ export type SaveSlot = {
 };
 
 export const SLOT_COUNT = 3;
+const AUTO_SAVE_KEY = "vne-autosave";
 
 const key = (index: number) => `vne-save-${index}`;
 
@@ -40,3 +41,16 @@ export const writeSlot = (index: number, slot: SaveSlot) => {
 
 export const readAllSlots = (): (SaveSlot | null)[] =>
   Array.from({ length: SLOT_COUNT }, (_, i) => readSlot(i));
+
+export const readAutoSave = (): SaveSlot | null => {
+  try {
+    const raw = localStorage.getItem(AUTO_SAVE_KEY);
+    return raw ? (JSON.parse(raw) as SaveSlot) : null;
+  } catch {
+    return null;
+  }
+};
+
+export const writeAutoSave = (slot: SaveSlot) => {
+  localStorage.setItem(AUTO_SAVE_KEY, JSON.stringify(slot));
+};

@@ -43,15 +43,17 @@ import { day2HallwayScene } from "@/scenes/day2/day2-hallway";
 import { day2MayaBedroomScene } from "@/scenes/day2/day2-maya-bedroom";
 import { day2ComplateScene } from "@/scenes/day2/day2-complate";
 import { day2ElenaHallwayScene } from "@/scenes/day2/elena/day2-elena-hallway";
-import { day3ElenaMorningScene } from "@/scenes/day2/elena/day2-elena-morning";
+import { day3ElenaMorningScene } from "@/scenes/day3/elena/day3-elena-morning";
 import {
   mayaPhoneCallScene,
   mayaPhoneCallLogicalScene,
   mayaPhoneCallEmpathyScene,
 } from "@/scenes/day3/day3-mayaPhoneCall";
 import {
+  day3AfterMayaPhoneScene,
   day3BedroomScene,
   day3RouteSelectionScene,
+  day3Slot2CompleteScene,
   day3Slot2ElenaScene,
   day3Slot2NadiaScene,
   day3Slot2SarahScene,
@@ -214,10 +216,12 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day2-complate": day2ComplateScene,
     // Day 3
     "day3-bedroom": day3BedroomScene,
+    "day3-after-maya-phone": day3AfterMayaPhoneScene,
     "day3-maya-phone-call": mayaPhoneCallScene,
     "maya-phone-call-logical": mayaPhoneCallLogicalScene,
     "maya-phone-call-empathy": mayaPhoneCallEmpathyScene,
     "day3-route-selection": day3RouteSelectionScene,
+    "day3-slot2-complete": day3Slot2CompleteScene,
     "day3-slot2-elena": day3Slot2ElenaScene,
     "day3-slot2-nadia": day3Slot2NadiaScene,
     "day3-slot2-sarah": day3Slot2SarahScene,

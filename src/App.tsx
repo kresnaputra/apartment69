@@ -18,7 +18,7 @@ import { DialogueMobile } from "@/components/DialogueMobile";
 import { LogOverlay } from "@/components/LogOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, uiText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
-import { readAllSlots, writeSlot } from "@/lib/runtime/saveSlots";
+import { readAllSlots, readAutoSave, writeAutoSave, writeSlot } from "@/lib/runtime/saveSlots";
 import { readGalleryUnlockFlags } from "@/lib/runtime/galleryUnlocks";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
@@ -1548,7 +1548,10 @@ const App = () => {
   const [textSpeed, setTextSpeed] = useState(1);
   const [saveToast, setSaveToast] = useState(false);
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
+  const [autoSaveSlot, setAutoSaveSlot] = useState<SaveSlot | null>(readAutoSave);
   const [autoOpenGalleryOnMenu, setAutoOpenGalleryOnMenu] = useState(false);
+  const [menuSessionKey, setMenuSessionKey] = useState(0);
+  const lastAutoSaveKeyRef = useRef<string | null>(null);
   const audioRef = useRef<NovelAudioEngine | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
   const hasStartedBundleLoadRef = useRef(false);
@@ -2031,6 +2034,19 @@ const App = () => {
     setPhase("story");
   };
 
+  const handleExitToMenu = useCallback(() => {
+    setIsAuto(false);
+    setShowLog(false);
+    setShowConfig(false);
+    setShowSaveSlots(false);
+    setFocusedChoiceIndex(-1);
+    setFocusedControlIndex(-1);
+    setRevealedCount(0);
+    clearScene();
+    setMenuSessionKey((current) => current + 1);
+    setPhase("menu");
+  }, [clearScene]);
+
   const handleAuto = () => setIsAuto((prev) => !prev);
 
   const handleSkip = () => {
@@ -2048,11 +2064,10 @@ const App = () => {
     else if (idx === 2) setShowLog(true);
     else if (idx === 3) setShowSaveSlots(true);
     else if (idx === 4) setShowConfig(true);
-    else if (idx === 5) { clearScene(); setPhase("menu"); }
+    else if (idx === 5) { handleExitToMenu(); }
   };
 
-  const handleSaveToSlot = (slotIndex: number) => {
-    const slot: SaveSlot = {
+  const buildSaveSlot = useCallback((): SaveSlot => ({
       currentLabel,
       // currentIndex is already past the say command; step back to re-display it on load
       currentIndex: Math.max(0, currentIndex - 1),
@@ -2066,13 +2081,41 @@ const App = () => {
       flags,
       activeBackgroundMusic,
       activeSoundEffect,
-    };
+    }), [
+      activeBackgroundMusic,
+      activeSoundEffect,
+      background,
+      backgroundVideo,
+      characters,
+      currentIndex,
+      currentLabel,
+      flags,
+      resolvedLine,
+      resolvedLocation,
+      speaker,
+    ]);
+
+  const handleSaveToSlot = (slotIndex: number) => {
+    const slot = buildSaveSlot();
     writeSlot(slotIndex, slot);
     setSlots(readAllSlots());
     setShowSaveSlots(false);
     setSaveToast(true);
     window.setTimeout(() => setSaveToast(false), 2000);
   };
+
+  useEffect(() => {
+    if (phase !== "story") return;
+    if (currentLabel !== "day4-maya-collapse") return;
+
+    const autoSaveKey = `${currentLabel}:${currentIndex}:${String(flags.day3MayaMorningCompleted)}:${String(flags.day3Slot2ElenaCompleted)}`;
+    if (lastAutoSaveKeyRef.current === autoSaveKey) return;
+
+    const slot = buildSaveSlot();
+    writeAutoSave(slot);
+    setAutoSaveSlot(readAutoSave());
+    lastAutoSaveKeyRef.current = autoSaveKey;
+  }, [buildSaveSlot, currentIndex, currentLabel, flags.day3MayaMorningCompleted, flags.day3Slot2ElenaCompleted, phase]);
 
   const handleLoadFromMenu = (slot: SaveSlot) => {
     loadFromSave(
@@ -2087,6 +2130,11 @@ const App = () => {
       slot.activeSoundEffect ?? null,
     );
     setPhase("story");
+  };
+
+  const handleContinueFromMenu = () => {
+    if (!autoSaveSlot) return;
+    handleLoadFromMenu(autoSaveSlot);
   };
 
   const handleBgVolumeChange = (value: number) => {
@@ -2130,8 +2178,8 @@ const App = () => {
 
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
-          : <MainMenu bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          ? <MainMenuMobile key={`menu-mobile-${menuSessionKey}`} bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onContinue={handleContinueFromMenu} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} autoSaveSlot={autoSaveSlot} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          : <MainMenu key={`menu-desktop-${menuSessionKey}`} bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onContinue={handleContinueFromMenu} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} autoSaveSlot={autoSaveSlot} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
       )}
       {phase === "story" ? (
         <main
@@ -2144,8 +2192,7 @@ const App = () => {
             if (activeMinigame) return;
             if (choices.length > 0) return;
             if (isEnded) {
-              clearScene();
-              setPhase("menu");
+              handleExitToMenu();
               return;
             }
             if (isTyping) {
@@ -2297,7 +2344,7 @@ const App = () => {
           onLog={() => setShowLog(true)}
           onSave={() => setShowSaveSlots(true)}
           onConfig={() => setShowConfig(true)}
-          onExit={() => { clearScene(); setPhase("menu"); }}
+          onExit={handleExitToMenu}
         />
 
         {activeMinigame?.id === "elevator-button" ? (

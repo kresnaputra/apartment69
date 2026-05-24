@@ -88,6 +88,7 @@ export const nadiaBalconyScene: VisualNovelCommand[] = [
         ko: "조언한다",
       }),
       next: "nadia-advice-help",
+      disabled: true,
     },
     {
       id: "refuse-help",

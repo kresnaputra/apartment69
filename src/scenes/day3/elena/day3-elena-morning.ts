@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import { bg, hide, jumpIf, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 
 export const day3ElenaMorningScene: VisualNovelCommand[] = [
@@ -26,7 +26,7 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
     }),
   ),
   show("elena-elena-morning", "elena", "neutral", {
-    position: "right",
+    position: "center",
     enterFrom: "fade",
   }),
   narrate(
@@ -376,29 +376,33 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
   hide("elena-elena-morning"),
   hide("arka-elena-morning"),
   setFlag("day2ElenaCompleted", true),
+  setFlag("day3Slot2ElenaCompleted", true),
+  jumpIf("day3MayaMorningCompleted", "day3-route-selection"),
   minigame("smartphone-contacts", {
     showSleepOption: true,
-    sleepOptionNext: "day2-complate",
-    requiredCompletionFlags: ["day2MayaCompleted", "day2ElenaCompleted"],
-    disabledContacts: ["elena", "nadia", "sara"],
-    conditionalDisabledContacts: {
-      maya: "day2MayaCompleted",
-    },
+    sleepOptionNext: "day3-complete",
+    requiredCompletionFlags: ["day3Slot2NadiaCompleted", "day3Slot2SarahCompleted"],
+    disabledContacts: ["maya", "elena"],
     title: tx({
-      id: "Lanjutkan Hari 2",
-      en: "Continue Day 2",
-      ja: "2日目を続ける",
-      ko: "2일차 계속하기",
+      id: "Lanjutkan Hari 3",
+      en: "Continue Day 3",
+      ja: "3日目を続ける",
+      ko: "3일차 계속하기",
     }),
     subtitle: tx({
-      id: "Percakapan dengan Elena sudah selesai. Kalau masih ada waktu, pilih siapa lagi yang mau kamu cek.",
-      en: "Your conversation with Elena is done. If there's still time left, choose who else you want to check on.",
-      ja: "エレナとの会話は終わった。まだ時間があるなら、次に誰を見に行くか選ぼう。",
-      ko: "엘레나와의 대화는 끝났다. 아직 시간이 남았다면 다음에 누구를 보러 갈지 고르자.",
+      id: "Percakapan dengan Elena sudah selesai. Hari masih lanjut, jadi pilih tujuan berikutnya untuk sore ini.",
+      en: "Your conversation with Elena is over. The day is still moving, so pick the next stop for this afternoon.",
+      ja: "エレナとの会話は終わった。まだ一日は続くから、このあと午後にどこへ向かうか選ぼう。",
+      ko: "엘레나와의 대화는 끝났다. 하루는 아직 계속되니, 이번 오후에 어디로 갈지 다음 목적지를 고르자.",
     }),
     contactOverrides: {
-      maya: {
-        next: "day2-route-maya",
+      nadia: {
+        next: "day3-slot2-nadia",
+        disabled: false,
+      },
+      sara: {
+        next: "day3-slot2-sarah",
+        disabled: false,
       },
     },
   }),

@@ -220,6 +220,7 @@ type MainMenuProps = {
   bgVolume: number;
   labels: {
     close: string;
+    continueStory: string;
     exit: string;
     frameRate: string;
     gallery: string;
@@ -250,9 +251,11 @@ type MainMenuProps = {
   onBgVolumeChange: (value: number) => void;
   onTextSpeedChange: (value: number) => void;
   onStart: () => void;
+  onContinue: () => void;
   onOpenGalleryScene: (label: string) => void;
   onLoad: (slot: SaveSlot) => void;
   slots: (SaveSlot | null)[];
+  autoSaveSlot: SaveSlot | null;
   isReady: boolean;
   flags: FlagMap;
   autoOpenGallery?: boolean;
@@ -274,9 +277,11 @@ export const MainMenu = ({
   onBgVolumeChange,
   onTextSpeedChange,
   onStart,
+  onContinue,
   onOpenGalleryScene,
   onLoad,
   slots,
+  autoSaveSlot,
   isReady,
   flags,
   autoOpenGallery = false,
@@ -334,6 +339,12 @@ export const MainMenu = ({
     window.setTimeout(() => onStart(), 640);
   };
 
+  const handleContinue = () => {
+    if (!autoSaveSlot) return;
+    setExiting(true);
+    window.setTimeout(() => onContinue(), 640);
+  };
+
   const handleLoadSlot = (index: number) => {
     const slot = slots[index];
     if (!slot) return;
@@ -381,6 +392,14 @@ export const MainMenu = ({
         <hr className="vn-menu-rule" />
 
         <nav className="vn-menu-nav">
+          <button
+            type="button"
+            disabled={!autoSaveSlot}
+            className="vn-menu-btn"
+            onClick={handleContinue}
+          >
+            {labels.continueStory}
+          </button>
           <button
             type="button"
             disabled={!isReady}

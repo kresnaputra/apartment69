@@ -4,6 +4,7 @@ import {
   bg,
   hide,
   jump,
+  jumpIf,
   minigame,
   narrate,
   say,
@@ -105,6 +106,71 @@ export const day3BedroomScene: VisualNovelCommand[] = [
   }),
 ];
 
+export const day3AfterMayaPhoneScene: VisualNovelCommand[] = [
+  jumpIf("day3Slot2ElenaCompleted", "day3-route-selection"),
+  bg(apartmentUrl, tx({
+    id: "Apartment 69 Hari 3",
+    en: "Apartment 69 Day 3",
+    ja: "Apartment 69 - 3日目",
+    ko: "Apartment 69 - 3일차",
+  })),
+  show("arka-day3-after-maya", "arka", "neutral", {
+    position: "left",
+    enterFrom: "fade",
+  }),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Sebelum berangkat ke kampus... mungkin masih ada satu hal lagi yang perlu kupastikan.",
+      en: "Before I head to campus... there might still be one more thing I need to clear up.",
+      ja: "大学へ行く前に…まだ一つ、確認しておきたいことがあるかもしれない。",
+      ko: "학교로 가기 전에... 아직 하나 더 확인해야 할 일이 있을지도 모른다.",
+    }),
+  ),
+  hide("arka-day3-after-maya"),
+  minigame("smartphone-contacts", {
+    showSleepOption: true,
+    sleepOptionNext: "day3-route-selection",
+    disabledContacts: ["maya", "nadia", "sara"],
+    conditionalDisabledContacts: {
+      elena: "day3Slot2ElenaCompleted",
+    },
+    title: tx({
+      id: "Sebelum ke Kampus",
+      en: "Before Heading to Campus",
+      ja: "大学へ行く前に",
+      ko: "캠퍼스로 가기 전에",
+    }),
+    subtitle: tx({
+      id: "Maya butuh ruang untuk fokus. Kalau masih ada yang ingin kamu selesaikan dengan Elena, ini kesempatan terakhir sebelum hari lanjut.",
+      en: "Maya needs space to focus. If there's still something you want to settle with Elena, this is the last chance before the day moves on.",
+      ja: "マヤには集中する時間が必要だ。エレナとまだ片づけたいことがあるなら、一日が先へ進む前の最後の機会だ。",
+      ko: "마야에게는 집중할 시간이 필요하다. 엘레나와 아직 정리할 일이 있다면, 하루가 더 진행되기 전 마지막 기회다.",
+    }),
+    contactOverrides: {
+      elena: {
+        next: "day3-elena-morning",
+        disabled: false,
+      },
+      sleep: {
+        name: tx({
+          id: "Lanjut ke Kampus",
+          en: "Continue to Campus",
+          ja: "大学へ向かう",
+          ko: "캠퍼스로 이동",
+        }),
+        blurb: tx({
+          id: "Akhiri urusan pagi ini dan lanjutkan hari ke area kampus.",
+          en: "Wrap up the morning and continue the day at campus.",
+          ja: "朝の用事はここまでにして、大学で一日を続ける。",
+          ko: "아침 일을 여기서 마무리하고, 캠퍼스에서 하루를 이어 간다.",
+        }),
+      },
+    },
+  }),
+];
+
 export const day3RouteSelectionScene: VisualNovelCommand[] = [
   bg(universityUrl, tx({
     id: "Area Parkir Kampus - 16:00",
@@ -148,8 +214,7 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
   hide("arka-campus"),
   minigame("smartphone-contacts", {
     showSleepOption: true,
-    requiredCompletionFlags: ["day3Slot2ElenaCompleted", "day3Slot2NadiaCompleted", "day3Slot2SarahCompleted"],
-    disabledContacts: ["maya"],
+    disabledContacts: ["maya", "elena", "nadia", "sara"],
     title: tx({
       id: "Pilih rute berikutnya",
       en: "Pick the next route",
@@ -157,10 +222,10 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
       ko: "다음 루트 선택",
     }),
     subtitle: tx({
-      id: "Slot 2 · Sore menuju malam. Maya untuk sekarang nggak bisa dipilih, jadi tentukan siapa yang mau kamu hampiri.",
-      en: "Slot 2 · Late afternoon into night. Maya's off the board for now, so pick someone else to check on.",
-      ja: "スロット2・夕方から夜。今のところマヤは選べないから、別の相手を選ぼう。",
-      ko: "슬롯 2 · 늦은 오후부터 밤. 지금은 마야를 선택할 수 없으니 다른 사람을 골라 보자.",
+      id: "Slot 2 · Sore menuju malam. Untuk hari ini, nggak ada rute lain yang perlu dijalankan di kampus.",
+      en: "Slot 2 · Late afternoon into night. There aren't any other routes to take at campus today.",
+      ja: "スロット2・夕方から夜。今日はキャンパスで進める別ルートはもうない。",
+      ko: "슬롯 2 · 늦은 오후부터 밤. 오늘 캠퍼스에서 진행할 다른 루트는 더 없다.",
     }),
     contactOverrides: {
       maya: {
@@ -173,23 +238,19 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
       },
       elena: {
         blurb: tx({
-          id: "Sikap dinginnya itu anehnya bikin penasaran. Mungkin aku bisa cari alasan buat ngobrol lagi dan lihat reaksinya seperti apa.",
-          en: "That cold attitude of hers is weirdly interesting. Maybe I can find an excuse to talk to her again and see how she reacts.",
-          ja: "あの冷たい態度、妙に気になるんだよな。もう一度話す口実を作って、どんな反応するか見てみるのもありかも。",
-          ko: "그 차가운 태도가 이상하게 신경 쓰인다. 다시 말을 걸 핑계를 만들어서 어떤 반응을 보일지 보는 것도 괜찮겠다.",
+          id: "Bukan sekarang. Setelah pindah ke kampus, urusan dengan Elena untuk hari ini sudah selesai.",
+          en: "Not now. Once the day moves to campus, Elena's route for today is already done.",
+          ja: "今は違う。キャンパスへ移った時点で、今日のエレナ関連はもう終わっている。",
+          ko: "지금은 아니다. 캠퍼스로 넘어온 시점에서 오늘 엘레나와의 일은 이미 끝났다.",
         }),
-        next: "day3-slot2-elena",
-        disabled: false,
       },
       nadia: {
         blurb: tx({
-          id: "Dia ngajak ketemu di kafe bawah. Gratis kopi setelah seharian kuliah dan ngangkat-ngangkat barang? Jelas menggoda sih.",
-          en: "She asked me to meet her at the cafe downstairs. Free coffee after a day of classes and hauling boxes around? Yeah, that's tempting.",
-          ja: "下のカフェで会おうって言われてる。授業と荷物運びのあとに無料のコーヒーか。そりゃちょっと惹かれる。",
-          ko: "아래 카페에서 보자고 했다. 하루 종일 수업 듣고 짐까지 나른 뒤에 무료 커피라니, 솔직히 꽤 끌린다.",
+          id: "Nadia tidak jadi route aktif di fase kampus hari ini.",
+          en: "Nadia isn't an active route in the campus phase today.",
+          ja: "今日のキャンパスパートでナディアのルートは進まない。",
+          ko: "오늘 캠퍼스 파트에서는 나디아 루트가 진행되지 않는다.",
         }),
-        next: "day3-slot2-nadia",
-        disabled: false,
       },
       sara: {
         name: tx({
@@ -199,13 +260,11 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
           ko: "사라",
         }),
         blurb: tx({
-          id: "Kerjaan di penthouse itu kedengarannya seperti uang tambahan yang gampang. Lagian aku juga penasaran, sistem macam apa yang rusak sampai dia turun tangan sendiri.",
-          en: "That penthouse job sounds like easy extra cash. Plus, I'm curious what kind of system is so busted that she's handling it herself.",
-          ja: "あのペントハウスの仕事、手軽な副収入になりそうだ。それに、彼女が自分で動くほど壊れてるシステムって何なのかもちょっと気になる。",
-          ko: "그 펜트하우스 일은 괜찮은 부수입이 될 것 같다. 게다가 그녀가 직접 나설 정도로 망가진 시스템이 뭔지도 궁금하다.",
+          id: "Sarah juga tidak punya route lanjutan setelah perpindahan ke kampus hari ini.",
+          en: "Sarah doesn't have a follow-up route after the move to campus today either.",
+          ja: "サラも、今日キャンパスへ移ってから先のルートはない。",
+          ko: "사라도 오늘 캠퍼스로 넘어온 뒤에는 추가 루트가 없다.",
         }),
-        next: "day3-slot2-sarah",
-        disabled: false,
       },
       sleep: {
         name: tx({
@@ -273,4 +332,8 @@ export const day3Slot2SarahScene: VisualNovelCommand[] = [
     }),
   ),
   jump("day3-slot2-complete"),
+];
+
+export const day3Slot2CompleteScene: VisualNovelCommand[] = [
+  jump("day3-route-selection"),
 ];

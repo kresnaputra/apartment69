@@ -237,9 +237,10 @@ export const mayaPhoneCallLogicalScene: VisualNovelCommand[] = [
   ),
 
   setFlag("maya-love", 1),
+  setFlag("day3MayaMorningCompleted", true),
   hide("maya-bedroom"),
   hide("arka-hallway"),
-  jump("day3-route-selection"),
+  jump("day3-after-maya-phone"),
 ];
 
 export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
@@ -308,7 +309,8 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
   ),
 
   setFlag("maya-love", 2),
+  setFlag("day3MayaMorningCompleted", true),
   hide("maya-bedroom"),
   hide("arka-hallway"),
-  jump("day3-route-selection"),
+  jump("day3-after-maya-phone"),
 ];

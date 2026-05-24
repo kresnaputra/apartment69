@@ -16,6 +16,7 @@ type MainMenuMobileProps = {
   bgVolume: number;
   labels: {
     close: string;
+    continueStory: string;
     exit: string;
     frameRate: string;
     gallery: string;
@@ -46,9 +47,11 @@ type MainMenuMobileProps = {
   onBgVolumeChange: (value: number) => void;
   onTextSpeedChange: (value: number) => void;
   onStart: () => void;
+  onContinue: () => void;
   onOpenGalleryScene: (label: string) => void;
   onLoad: (slot: SaveSlot) => void;
   slots: (SaveSlot | null)[];
+  autoSaveSlot: SaveSlot | null;
   isReady: boolean;
   flags: FlagMap;
   autoOpenGallery?: boolean;
@@ -70,9 +73,11 @@ export const MainMenuMobile = ({
   onBgVolumeChange,
   onTextSpeedChange,
   onStart,
+  onContinue,
   onOpenGalleryScene,
   onLoad,
   slots,
+  autoSaveSlot,
   isReady,
   flags,
   autoOpenGallery = false,
@@ -135,7 +140,7 @@ export const MainMenuMobile = ({
 
   // Gamepad/keyboard navigation for main menu buttons and overlays
   useEffect(() => {
-    const MENU_COUNT = 5; // Start, Load, Gallery, Settings, Exit
+    const MENU_COUNT = 6; // Continue, Start, Load, Gallery, Settings, Exit
     const handler = (event: KeyboardEvent) => {
       // B button (Escape) closes any open overlay
       if (event.key === "Escape") {
@@ -172,6 +177,12 @@ export const MainMenuMobile = ({
     if (!isReady) return;
     setExiting(true);
     window.setTimeout(() => onStart(), 640);
+  };
+
+  const handleContinue = () => {
+    if (!autoSaveSlot) return;
+    setExiting(true);
+    window.setTimeout(() => onContinue(), 640);
   };
 
   const handleLoadSlot = (index: number) => {
@@ -245,15 +256,26 @@ export const MainMenuMobile = ({
 
         {/* Right: buttons */}
         <div className="flex flex-col items-center gap-2.5 w-[clamp(160px,28vw,260px)]">
-          {/* Start — primary (index 0) */}
           <button
             id="main-menu-btn-0"
+            type="button"
+            disabled={!autoSaveSlot}
+            onClick={handleContinue}
+            className={focusedMenuIndex === 0 && autoSaveSlot ? btnFocused : `${btnActive} disabled:opacity-40 disabled:cursor-default`}
+            style={fontStyle}
+          >
+            {labels.continueStory}
+          </button>
+
+          {/* Start — primary (index 1) */}
+          <button
+            id="main-menu-btn-1"
             type="button"
             disabled={!isReady}
             onClick={handleStart}
             className={[
               "w-full rounded-full font-semibold tracking-[0.03em] py-3 px-6 transition-all duration-200 cursor-pointer disabled:cursor-default",
-              focusedMenuIndex === 0 && isReady
+              focusedMenuIndex === 1 && isReady
                 ? "bg-[#ffd6a0] text-[#1a1a1a] -translate-y-0.5 shadow-[0_6px_24px_rgba(255,214,173,0.35)] disabled:opacity-55"
                 : "bg-white text-[#1a1a1a] disabled:opacity-55 enabled:hover:-translate-y-0.5 enabled:hover:shadow-[0_6px_24px_rgba(255,255,255,0.18)] enabled:active:translate-y-0",
             ].join(" ")}
@@ -269,29 +291,29 @@ export const MainMenuMobile = ({
             )}
           </button>
 
-          {/* Load (index 1) */}
+          {/* Load (index 2) */}
           <button
-            id="main-menu-btn-1"
+            id="main-menu-btn-2"
             type="button"
             onClick={() => setShowLoadSlots(true)}
-            className={focusedMenuIndex === 1 ? btnFocused : btnActive}
+            className={focusedMenuIndex === 2 ? btnFocused : btnActive}
             style={fontStyle}
           >
             {labels.load}
           </button>
 
-          {/* Gallery (index 2) */}
-          <button id="main-menu-btn-2" type="button" onClick={() => setShowGallery(true)} className={focusedMenuIndex === 2 ? btnFocused : btnActive} style={fontStyle}>
+          {/* Gallery (index 3) */}
+          <button id="main-menu-btn-3" type="button" onClick={() => setShowGallery(true)} className={focusedMenuIndex === 3 ? btnFocused : btnActive} style={fontStyle}>
             {labels.gallery}
           </button>
 
-          {/* Settings (index 3) */}
-          <button id="main-menu-btn-3" type="button" onClick={() => setShowSettings(true)} className={focusedMenuIndex === 3 ? btnFocused : btnActive} style={fontStyle}>
+          {/* Settings (index 4) */}
+          <button id="main-menu-btn-4" type="button" onClick={() => setShowSettings(true)} className={focusedMenuIndex === 4 ? btnFocused : btnActive} style={fontStyle}>
             {labels.settings}
           </button>
 
-          {/* Exit (index 4) */}
-          <button id="main-menu-btn-4" type="button" onClick={handleExit} className={focusedMenuIndex === 4 ? btnFocused : btnActive} style={fontStyle}>
+          {/* Exit (index 5) */}
+          <button id="main-menu-btn-5" type="button" onClick={handleExit} className={focusedMenuIndex === 5 ? btnFocused : btnActive} style={fontStyle}>
             {labels.exit}
           </button>
         </div>
