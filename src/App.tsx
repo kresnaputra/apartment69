@@ -20,6 +20,7 @@ import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, uiText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import { readAllSlots, readAutoSave, writeAutoSave, writeSlot } from "@/lib/runtime/saveSlots";
 import { readGalleryUnlockFlags } from "@/lib/runtime/galleryUnlocks";
+import { isVoiceActingEnabled } from "@/lib/runtime/buildFlags";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
 import type { SceneBounds } from "@/types/sbn";
@@ -70,6 +71,7 @@ const CHARACTER_MAX_STAGE_HEIGHT_RATIO = 0.78;
 const CHARACTER_MIN_STAGE_HEIGHT_RATIO = 0.58;
 const BG_VOLUME_STORAGE_KEY = "apartment69:bg-volume";
 const DEFAULT_BG_VOLUME = 0.5;
+const VOICE_ACTING_ENABLED = isVoiceActingEnabled();
 
 type CharacterSpriteProps = {
   bundle: LoadedCharacterBundle;
@@ -1348,7 +1350,7 @@ const MultiCutSceneOverlay = ({
       <CutSceneOverlay
         key={activeSelection.id}
         src={activeSelection.src}
-        audioSrc={activeSelection.audioSrc}
+        audioSrc={VOICE_ACTING_ENABLED ? activeSelection.audioSrc : undefined}
         loop={activeSelection.loop}
         narrate={activeSelection.narrate}
         showSpeedControl={false}
@@ -1668,6 +1670,7 @@ const App = () => {
       voiceRef.current = null;
     }
 
+    if (!VOICE_ACTING_ENABLED) return;
     if (!activeVoice) return;
 
     const audio = new Audio(activeVoice);
@@ -2387,7 +2390,7 @@ const App = () => {
           <CutSceneOverlay
             key={`${activeCutScene.src}:${activeCutScene.loop ? "loop" : "once"}:${activeCutScene.endFrame ?? "full"}:${activeCutScene.fps ?? "auto"}`}
             src={activeCutScene.src}
-            audioSrc={activeCutScene.audioSrc}
+            audioSrc={VOICE_ACTING_ENABLED ? activeCutScene.audioSrc : undefined}
             loop={activeCutScene.loop}
             narrate={activeCutScene.narrate}
             showSpeedControl={activeCutScene.showSpeedControl}

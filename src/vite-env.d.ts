@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_ENABLE_ADMOB?: string;
+  readonly VITE_ENABLE_VOICE_ACTOR?: string;
   readonly VITE_ADMOB_ANDROID_INTERSTITIAL_ID?: string;
 }
 
