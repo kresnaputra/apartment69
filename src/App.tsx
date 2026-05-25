@@ -2106,16 +2106,18 @@ const App = () => {
 
   useEffect(() => {
     if (phase !== "story") return;
-    if (currentLabel !== "day4-maya-collapse") return;
+    const isDay4Start = currentLabel === "day4-bedroom";
+    const isDay4ElenaCheckpoint = currentLabel === "day4-elena-door" && flags.day4ElenaCompleted === true;
+    if (!isDay4Start && !isDay4ElenaCheckpoint) return;
 
-    const autoSaveKey = `${currentLabel}:${currentIndex}:${String(flags.day3MayaMorningCompleted)}:${String(flags.day3Slot2ElenaCompleted)}`;
+    const autoSaveKey = `${currentLabel}:${currentIndex}:${String(flags.day3MayaMorningCompleted)}:${String(flags.day3Slot2ElenaCompleted)}:${String(flags.day4ElenaCompleted)}`;
     if (lastAutoSaveKeyRef.current === autoSaveKey) return;
 
     const slot = buildSaveSlot();
     writeAutoSave(slot);
     setAutoSaveSlot(readAutoSave());
     lastAutoSaveKeyRef.current = autoSaveKey;
-  }, [buildSaveSlot, currentIndex, currentLabel, flags.day3MayaMorningCompleted, flags.day3Slot2ElenaCompleted, phase]);
+  }, [buildSaveSlot, currentIndex, currentLabel, flags.day3MayaMorningCompleted, flags.day3Slot2ElenaCompleted, flags.day4ElenaCompleted, phase]);
 
   const handleLoadFromMenu = (slot: SaveSlot) => {
     loadFromSave(

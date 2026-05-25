@@ -828,5 +828,5 @@ export const day4MayaForceRestScene: VisualNovelCommand[] = [
     ],
     "maya-bed-3",
   ),
-  jump("day4-complate"),
+  jump("day4-after-route-phone"),
 ];

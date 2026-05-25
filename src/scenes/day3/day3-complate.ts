@@ -16,5 +16,5 @@ export const day3ComplateScene: VisualNovelCommand[] = [
     ko: "3일차 완료",
   }), { size: "hero", typingSpeed: 0.3 }),
   interstitial(),
-  jump("day4-maya-collapse"),
+  jump("day4-bedroom"),
 ];

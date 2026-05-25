@@ -64,6 +64,8 @@ import {
   day4MayaCollapseScene,
   day4MayaForceRestScene,
 } from "@/scenes/day4/day4-maya-collapse";
+import { day4AfterRoutePhoneScene, day4BedroomScene } from "@/scenes/day4/day4-bedroom";
+import { day4ElenaDoorScene } from "@/scenes/day4/elena/day4-elena-door";
 import {
   day5MayaMorningScene,
   day5LobbyFarewellScene,
@@ -227,6 +229,9 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day3-slot2-sarah": day3Slot2SarahScene,
     "day3-complete": day3ComplateScene,
     // Day 4
+    "day4-bedroom": day4BedroomScene,
+    "day4-after-route-phone": day4AfterRoutePhoneScene,
+    "day4-elena-door": day4ElenaDoorScene,
     "day4-maya-collapse": day4MayaCollapseScene,
     "day4-maya-bad-ending": day4MayaBadEndingScene,
     "day4-maya-force-rest": day4MayaForceRestScene,
