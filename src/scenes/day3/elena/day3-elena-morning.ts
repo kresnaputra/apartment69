@@ -1,7 +1,17 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jumpIf, minigame, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import {
+  bg,
+  hide,
+  jumpIf,
+  minigame,
+  narrate,
+  say,
+  setFlag,
+  show,
+} from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
+import { elenaDay1To3Voices } from "@/voice/elena/day1to3";
 
 export const day3ElenaMorningScene: VisualNovelCommand[] = [
   bg(
@@ -45,12 +55,16 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "그녀를 본 아르카는 순간 걸음을 멈췄다.",
     }),
   ),
-  say("arka", "neutral", tx({
-    id: "Pagi.",
-    en: "Morning.",
-    ja: "おはよう。",
-    ko: "좋은 아침.",
-  })),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Pagi.",
+      en: "Morning.",
+      ja: "おはよう。",
+      ko: "좋은 아침.",
+    }),
+  ),
   narrate(
     tx({
       id: "Elena menoleh. Tatapannya jatuh ke Arka, lalu diam beberapa detik seolah sedang menimbang sesuatu.",
@@ -59,12 +73,17 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "엘레나는 고개를 돌려 아르카를 바라본 채 몇 초간 말이 없었다. 무언가를 재고 있는 것처럼 보였다.",
     }),
   ),
-  say("elena", "neutral", tx({
-    id: "Pagi.",
-    en: "Morning.",
-    ja: "おはよう。",
-    ko: "좋은 아침.",
-  })),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Pagi.",
+      en: "Morning.",
+      ja: "おはよう。",
+      ko: "좋은 아침.",
+    }),
+    { voice: elenaDay1To3Voices[14] },
+  ),
   narrate(
     tx({
       id: "Arka sempat mengira percakapan itu selesai. Ia baru mau melangkah ke arah tangga ketika suara Elena menghentikannya.",
@@ -73,24 +92,38 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "아르카는 그걸로 대화가 끝난 줄 알았다. 계단 쪽으로 가려던 순간, 엘레나가 그를 불러 세웠다.",
     }),
   ),
-  say("elena", "neutral", tx({
-    id: "Arka.",
-    en: "Arka.",
-    ja: "アルカ。",
-    ko: "아르카.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Iya?",
-    en: "Yeah?",
-    ja: "ん？",
-    ko: "응?",
-  })),
-  say("elena", "neutral", tx({
-    id: "Pipa wastafelku sudah normal.",
-    en: "My sink pipe is normal again.",
-    ja: "洗面台の配管、もう普通に戻ってた。",
-    ko: "내 세면대 배관, 이제 정상으로 돌아왔어.",
-  })),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Arka.",
+      en: "Arka.",
+      ja: "アルカ。",
+      ko: "아르카.",
+    }),
+    { voice: elenaDay1To3Voices[15] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Iya?",
+      en: "Yeah?",
+      ja: "ん？",
+      ko: "응?",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Pipa wastafelku sudah normal.",
+      en: "My sink pipe is normal again.",
+      ja: "洗面台の配管、もう普通に戻ってた。",
+      ko: "내 세면대 배관, 이제 정상으로 돌아왔어.",
+    }),
+    { voice: elenaDay1To3Voices[16] },
+  ),
   narrate(
     tx({
       id: "Arka berusaha menjaga wajahnya tetap datar.",
@@ -99,36 +132,58 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "아르카는 표정을 최대한 무심하게 유지하려 했다.",
     }),
   ),
-  say("arka", "serious", tx({
-    id: "Bagus, berarti akhirnya beres.",
-    en: "Good. Then it's finally fixed.",
-    ja: "よかった。じゃあ、ちゃんと直ったんだな。",
-    ko: "다행이네. 그럼 결국 제대로 고쳐진 거네.",
-  })),
-  say("elena", "serious", tx({
-    id: "Iya. Aneh sekali, karena tadi malam belum ada teknisi yang datang.",
-    en: "Yes. Strange, considering no technician came last night.",
-    ja: "ええ。不思議よね。昨夜はまだ技師なんて来てなかったのに。",
-    ko: "그래. 이상하지. 어젯밤에는 기술자도 안 왔는데.",
-  })),
-  say("arka", "shy", tx({
-    id: "Mungkin... keajaiban saluran air.",
-    en: "Maybe... a plumbing miracle.",
-    ja: "たぶん…配管の奇跡とか。",
-    ko: "어쩌면... 배관의 기적일지도.",
-  })),
-  say("elena", "angry", tx({
-    id: "Aku tidak suka bercanda pagi-pagi.",
-    en: "I don't like jokes this early in the morning.",
-    ja: "朝から冗談を聞く趣味はないわ。",
-    ko: "아침부터 농담 듣는 취미는 없어.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Sayang sekali, itu stok komedi terbaikku.",
-    en: "Too bad. That was my best material.",
-    ja: "残念。それが今朝の俺の一番いいネタだったんだけど。",
-    ko: "아쉽네. 그게 내 최고의 아침 개그였는데.",
-  })),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Bagus, berarti akhirnya beres.",
+      en: "Good. Then it's finally fixed.",
+      ja: "よかった。じゃあ、ちゃんと直ったんだな。",
+      ko: "다행이네. 그럼 결국 제대로 고쳐진 거네.",
+    }),
+  ),
+  say(
+    "elena",
+    "serious",
+    tx({
+      id: "Iya. Aneh sekali, karena tadi malam belum ada teknisi yang datang.",
+      en: "Yes. Strange, considering no technician came last night.",
+      ja: "ええ。不思議よね。昨夜はまだ技師なんて来てなかったのに。",
+      ko: "그래. 이상하지. 어젯밤에는 기술자도 안 왔는데.",
+    }),
+    { voice: elenaDay1To3Voices[17] },
+  ),
+  say(
+    "arka",
+    "shy",
+    tx({
+      id: "Mungkin... keajaiban saluran air.",
+      en: "Maybe... a plumbing miracle.",
+      ja: "たぶん…配管の奇跡とか。",
+      ko: "어쩌면... 배관의 기적일지도.",
+    }),
+  ),
+  say(
+    "elena",
+    "angry",
+    tx({
+      id: "Aku tidak suka bercanda pagi-pagi.",
+      en: "I don't like jokes this early in the morning.",
+      ja: "朝から冗談を聞く趣味はないわ。",
+      ko: "아침부터 농담 듣는 취미는 없어.",
+    }),
+    { voice: elenaDay1To3Voices[18] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Sayang sekali, itu stok komedi terbaikku.",
+      en: "Too bad. That was my best material.",
+      ja: "残念。それが今朝の俺の一番いいネタだったんだけど。",
+      ko: "아쉽네. 그게 내 최고의 아침 개그였는데.",
+    }),
+  ),
   narrate(
     tx({
       id: "Elena menatapnya beberapa detik lebih lama. Tidak marah, tapi jelas sedang mengamati reaksinya.",
@@ -137,84 +192,143 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "엘레나는 몇 초 더 그를 바라봤다. 화가 난 건 아니었지만, 분명 반응을 살피고 있었다.",
     }),
   ),
-  say("elena", "serious", tx({
-    id: "Waktu aku bangun, panel bawah wastafel juga terpasang lebih rapi daripada biasanya. Dan mur sambungannya jelas baru dikencangkan.",
-    en: "When I woke up, the panel under the sink was fitted more neatly than usual. And the connector nut had obviously just been tightened.",
-    ja: "今朝起きたら、洗面台の下のパネルまでいつもより綺麗に戻されてた。しかも接続ナットは、明らかに締め直されたばかりだった。",
-    ko: "아침에 일어나 보니 세면대 아래 패널도 평소보다 더 깔끔하게 닫혀 있었어. 연결 너트도 누가 방금 조인 것처럼 보였고.",
-  })),
-  say("elena", "neutral", tx({
-    id: "Jadi aku tanya sekali saja. Kamu masuk ke unitku semalam?",
-    en: "So I'll ask just once. Did you go into my unit last night?",
-    ja: "だから一回だけ聞くわ。昨夜、私の部屋に入った？",
-    ko: "그러니까 한 번만 물을게. 어젯밤 내 방에 들어왔어?",
-  })),
-  say("arka", "serious", tx({
-    id: "Aku datang karena kamu sendiri yang suruh datang malam kalau serius.",
-    en: "I came because you were the one who said to come at night if I was serious.",
-    ja: "本気なら夜に来いって言ったの、そっちだろ。",
-    ko: "진심이면 밤에 오라고 한 건 너였잖아.",
-  })),
-  say("elena", "angry", tx({
-    id: "Itu bukan jawaban.",
-    en: "That wasn't an answer.",
-    ja: "それは答えになってない。",
-    ko: "그건 대답이 아니야.",
-  })),
-  say("arka", "serious", tx({
-    id: "Iya. Aku datang.",
-    en: "Yeah. I did.",
-    ja: "ああ。入った。",
-    ko: "응. 들어갔어.",
-  })),
-  say("elena", "neutral", tx({
-    id: "Kupikir juga begitu.",
-    en: "That's what I thought.",
-    ja: "やっぱりそうだと思った。",
-    ko: "역시 그럴 줄 알았어.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Pintumu kebuka. Aku panggil dua kali. Nggak ada jawaban. Terus kudengar pipanya masih bocor, jadi aku masuk dan coba benerin.",
-    en: "Your door was open. I called out twice. No answer. Then I heard the pipe still leaking, so I went in and tried to fix it.",
-    ja: "ドアが開いてた。二回呼んだけど返事がなかった。まだ水漏れの音もしてたから、中に入って直そうとした。",
-    ko: "문이 열려 있었어. 두 번 불렀는데 대답이 없었고. 배관도 계속 새고 있길래 들어가서 고치려 했어.",
-  })),
-  say("elena", "serious", tx({
-    id: "Dan kamu pergi tanpa bilang apa-apa.",
-    en: "And then you left without saying anything.",
-    ja: "それで、何も言わずに出ていったのね。",
-    ko: "그리고 아무 말도 없이 가버렸고.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Iya.",
-    en: "Yeah.",
-    ja: "うん。",
-    ko: "응.",
-  })),
-  say("elena", "neutral", tx({
-    id: "Kenapa?",
-    en: "Why?",
-    ja: "どうして？",
-    ko: "왜?",
-  })),
-  say("arka", "shy", tx({
-    id: "Karena situasinya sudah telanjur aneh.",
-    en: "Because the situation had already gotten way too weird.",
-    ja: "状況がもう、手遅れなくらい変だったから。",
-    ko: "상황이 이미 너무 이상해져 버렸으니까.",
-  })),
-  say("elena", "neutral", tx({
-    id: "Itu jawaban paling masuk akal yang pernah keluar dari situasi tidak masuk akal.",
-    en: "That's the most reasonable answer anyone could give in a completely unreasonable situation.",
-    ja: "どうしようもなくおかしな状況に対しては、一番まともな答えかもしれないわね。",
-    ko: "말도 안 되는 상황에서 나온 대답치고는 제일 그럴듯하네.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Aku anggap itu kemajuan.",
-    en: "I'll take that as progress.",
-    ja: "それは進歩ってことで受け取っておく。",
-    ko: "그럼 그건 진전으로 받아들일게.",
-  })),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Waktu aku bangun, panel bawah wastafel juga terpasang lebih rapi daripada biasanya. Dan mur sambungannya jelas baru dikencangkan.",
+      en: "When I woke up, the panel under the sink was fitted more neatly than usual. And the connector nut had obviously just been tightened.",
+      ja: "今朝起きたら、洗面台の下のパネルまでいつもより綺麗に戻されてた。しかも接続ナットは、明らかに締め直されたばかりだった。",
+      ko: "아침에 일어나 보니 세면대 아래 패널도 평소보다 더 깔끔하게 닫혀 있었어. 연결 너트도 누가 방금 조인 것처럼 보였고.",
+    }),
+    { voice: elenaDay1To3Voices[19] },
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Jadi aku tanya sekali saja. Kamu masuk ke unitku semalam?",
+      en: "So I'll ask just once. Did you go into my unit last night?",
+      ja: "だから一回だけ聞くわ。昨夜、私の部屋に入った？",
+      ko: "그러니까 한 번만 물을게. 어젯밤 내 방에 들어왔어?",
+    }),
+    { voice: elenaDay1To3Voices[20] },
+  ),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Aku datang karena kamu sendiri yang suruh datang malam kalau serius.",
+      en: "I came because you were the one who said to come at night if I was serious.",
+      ja: "本気なら夜に来いって言ったの、そっちだろ。",
+      ko: "진심이면 밤에 오라고 한 건 너였잖아.",
+    }),
+  ),
+  say(
+    "elena",
+    "angry",
+    tx({
+      id: "Itu bukan jawaban.",
+      en: "That wasn't an answer.",
+      ja: "それは答えになってない。",
+      ko: "그건 대답이 아니야.",
+    }),
+    { voice: elenaDay1To3Voices[21] },
+  ),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Iya. Aku datang.",
+      en: "Yeah. I did.",
+      ja: "ああ。入った。",
+      ko: "응. 들어갔어.",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Kupikir juga begitu.",
+      en: "That's what I thought.",
+      ja: "やっぱりそうだと思った。",
+      ko: "역시 그럴 줄 알았어.",
+    }),
+    { voice: elenaDay1To3Voices[22] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Pintumu kebuka. Aku panggil dua kali. Nggak ada jawaban. Terus kudengar pipanya masih bocor, jadi aku masuk dan coba benerin.",
+      en: "Your door was open. I called out twice. No answer. Then I heard the pipe still leaking, so I went in and tried to fix it.",
+      ja: "ドアが開いてた。二回呼んだけど返事がなかった。まだ水漏れの音もしてたから、中に入って直そうとした。",
+      ko: "문이 열려 있었어. 두 번 불렀는데 대답이 없었고. 배관도 계속 새고 있길래 들어가서 고치려 했어.",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Dan kamu pergi tanpa bilang apa-apa.",
+      en: "And then you left without saying anything.",
+      ja: "それで、何も言わずに出ていったのね。",
+      ko: "그리고 아무 말도 없이 가버렸고.",
+    }),
+    { voice: elenaDay1To3Voices[23] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Iya.",
+      en: "Yeah.",
+      ja: "うん。",
+      ko: "응.",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Kenapa?",
+      en: "Why?",
+      ja: "どうして？",
+      ko: "왜?",
+    }),
+    { voice: elenaDay1To3Voices[24] },
+  ),
+  say(
+    "arka",
+    "shy",
+    tx({
+      id: "Karena situasinya sudah telanjur aneh.",
+      en: "Because the situation had already gotten way too weird.",
+      ja: "状況がもう、手遅れなくらい変だったから。",
+      ko: "상황이 이미 너무 이상해져 버렸으니까.",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Itu jawaban paling masuk akal yang pernah keluar dari situasi tidak masuk akal.",
+      en: "That's the most reasonable answer anyone could give in a completely unreasonable situation.",
+      ja: "どうしようもなくおかしな状況に対しては、一番まともな答えかもしれないわね。",
+      ko: "말도 안 되는 상황에서 나온 대답치고는 제일 그럴듯하네.",
+    }),
+    { voice: elenaDay1To3Voices[25] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Aku anggap itu kemajuan.",
+      en: "I'll take that as progress.",
+      ja: "それは進歩ってことで受け取っておく。",
+      ko: "그럼 그건 진전으로 받아들일게.",
+    }),
+  ),
   narrate(
     tx({
       id: "Beberapa detik hening lewat di antara mereka. Dari ujung lorong, terdengar samar suara lift bergerak naik.",
@@ -223,36 +337,59 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "잠시 조용한 시간이 흘렀다. 복도 끝에서는 엘리베이터가 올라오는 소리가 희미하게 들렸다.",
     }),
   ),
-  say("elena", "neutral", tx({
-    id: "Tapi wastafelnya memang beres.",
-    en: "But the sink is fixed.",
-    ja: "でも、洗面台はちゃんと直ってた。",
-    ko: "그래도 세면대는 제대로 고쳐졌어.",
-  })),
-  say("arka", "serious", tx({
-    id: "Harusnya aman sekarang. Kalau bocor lagi, berarti ulirnya sudah aus dan harus ganti sambungan.",
-    en: "It should be fine now. If it leaks again, the threading is probably worn out and the connector will need replacing.",
-    ja: "今はたぶん大丈夫。もしまた漏れるなら、ネジ山が摩耗してて接続部ごと交換だ。",
-    ko: "이제는 괜찮을 거야. 또 새면 나사산이 닳은 거니까 연결 부품 자체를 갈아야 해.",
-  })),
-  say("elena", "surprised", tx({
-    id: "Kamu ternyata benar-benar tahu yang kamu kerjakan.",
-    en: "So you actually do know what you're doing.",
-    ja: "本当に、ちゃんと分かってやってるのね。",
-    ko: "너, 진짜 네가 뭘 하는지는 알고 있었네.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Aku nggak cukup bodoh buat bongkar pipa orang tanpa tahu dasar-dasarnya.",
-    en: "I'm not dumb enough to take apart someone else's plumbing without knowing the basics.",
-    ja: "他人の配管を、基礎も知らずにいじるほど馬鹿じゃないよ。",
-    ko: "기본도 모르면서 남의 배관을 건드릴 만큼 멍청하진 않아.",
-  })),
-  say("elena", "angry", tx({
-    id: "Kau menghinaku?",
-    en: "Are you insulting me?",
-    ja: "それ、私を馬鹿にしてる？",
-    ko: "지금 나 비꼬는 거야?",
-  })),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Tapi wastafelnya memang beres.",
+      en: "But the sink is fixed.",
+      ja: "でも、洗面台はちゃんと直ってた。",
+      ko: "그래도 세면대는 제대로 고쳐졌어.",
+    }),
+    { voice: elenaDay1To3Voices[26] },
+  ),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Harusnya aman sekarang. Kalau bocor lagi, berarti ulirnya sudah aus dan harus ganti sambungan.",
+      en: "It should be fine now. If it leaks again, the threading is probably worn out and the connector will need replacing.",
+      ja: "今はたぶん大丈夫。もしまた漏れるなら、ネジ山が摩耗してて接続部ごと交換だ。",
+      ko: "이제는 괜찮을 거야. 또 새면 나사산이 닳은 거니까 연결 부품 자체를 갈아야 해.",
+    }),
+  ),
+  say(
+    "elena",
+    "surprised",
+    tx({
+      id: "Kamu ternyata benar-benar tahu yang kamu kerjakan.",
+      en: "So you actually do know what you're doing.",
+      ja: "本当に、ちゃんと分かってやってるのね。",
+      ko: "너, 진짜 네가 뭘 하는지는 알고 있었네.",
+    }),
+    { voice: elenaDay1To3Voices[27] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Aku nggak cukup bodoh buat bongkar pipa orang tanpa tahu dasar-dasarnya.",
+      en: "I'm not dumb enough to take apart someone else's plumbing without knowing the basics.",
+      ja: "他人の配管を、基礎も知らずにいじるほど馬鹿じゃないよ。",
+      ko: "기본도 모르면서 남의 배관을 건드릴 만큼 멍청하진 않아.",
+    }),
+  ),
+  say(
+    "elena",
+    "angry",
+    tx({
+      id: "Kau menghinaku?",
+      en: "Are you insulting me?",
+      ja: "それ、私を馬鹿にしてる？",
+      ko: "지금 나 비꼬는 거야?",
+    }),
+    { voice: elenaDay1To3Voices[28] },
+  ),
   narrate(
     tx({
       id: "Arka terkekeh pelan.",
@@ -261,54 +398,90 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "아르카는 작게 웃음을 흘렸다.",
     }),
   ),
-  say("elena", "neutral", tx({
-    id: "Lupakan. Aku harus pergi.",
-    en: "Forget it. I have to go.",
-    ja: "もういい。私、行かないと。",
-    ko: "됐어. 나 가봐야 해.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Oke.",
-    en: "Okay.",
-    ja: "わかった。",
-    ko: "알겠어.",
-  })),
-  say("elena", "neutral", tx({
-    id: "Arka.",
-    en: "Arka.",
-    ja: "アルカ。",
-    ko: "아르카.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Hmm?",
-    en: "Hmm?",
-    ja: "ん？",
-    ko: "응?",
-  })),
-  say("elena", "serious", tx({
-    id: "Lain kali, jangan masuk ke unitku tanpa izin. Walaupun pintunya terbuka.",
-    en: "Next time, don't enter my unit without permission. Even if the door is open.",
-    ja: "今度からは、たとえドアが開いていても勝手に入らないで。",
-    ko: "다음부터는 문이 열려 있어도 허락 없이 내 방에 들어오지 마.",
-  })),
-  say("arka", "serious", tx({
-    id: "Nggak akan.",
-    en: "I won't.",
-    ja: "もうしない。",
-    ko: "안 그럴게.",
-  })),
-  say("elena", "serious", tx({
-    id: "Dan kalau mau bantu, bilang langsung. Jangan bikin aku harus main tebak-tebakan pagi-pagi.",
-    en: "And if you want to help, say it directly. Don't make me play guessing games first thing in the morning.",
-    ja: "それと、助けるならちゃんと言って。朝から推理ゲームをさせないで。",
-    ko: "그리고 도와줄 거면 바로 말해. 아침부터 추리 게임하게 만들지 말고.",
-  })),
-  say("arka", "serious", tx({
-    id: "Iya. Maaf.",
-    en: "Yeah. Sorry.",
-    ja: "うん。悪かった。",
-    ko: "응. 미안.",
-  })),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Lupakan. Aku harus pergi.",
+      en: "Forget it. I have to go.",
+      ja: "もういい。私、行かないと。",
+      ko: "됐어. 나 가봐야 해.",
+    }),
+    { voice: elenaDay1To3Voices[29] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Oke.",
+      en: "Okay.",
+      ja: "わかった。",
+      ko: "알겠어.",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Arka.",
+      en: "Arka.",
+      ja: "アルカ。",
+      ko: "아르카.",
+    }),
+    { voice: elenaDay1To3Voices[30] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Hmm?",
+      en: "Hmm?",
+      ja: "ん？",
+      ko: "응?",
+    }),
+  ),
+  say(
+    "elena",
+    "serious",
+    tx({
+      id: "Lain kali, jangan masuk ke unitku tanpa izin. Walaupun pintunya terbuka.",
+      en: "Next time, don't enter my unit without permission. Even if the door is open.",
+      ja: "今度からは、たとえドアが開いていても勝手に入らないで。",
+      ko: "다음부터는 문이 열려 있어도 허락 없이 내 방에 들어오지 마.",
+    }),
+    { voice: elenaDay1To3Voices[31] },
+  ),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Nggak akan.",
+      en: "I won't.",
+      ja: "もうしない。",
+      ko: "안 그럴게.",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Dan kalau mau bantu, bilang langsung. Jangan bikin aku harus main tebak-tebakan pagi-pagi.",
+      en: "And if you want to help, say it directly. Don't make me play guessing games first thing in the morning.",
+      ja: "それと、助けるならちゃんと言って。朝から推理ゲームをさせないで。",
+      ko: "그리고 도와줄 거면 바로 말해. 아침부터 추리 게임하게 만들지 말고.",
+    }),
+    { voice: elenaDay1To3Voices[32] },
+  ),
+  say(
+    "arka",
+    "serious",
+    tx({
+      id: "Iya. Maaf.",
+      en: "Yeah. Sorry.",
+      ja: "うん。悪かった。",
+      ko: "응. 미안.",
+    }),
+  ),
   narrate(
     tx({
       id: "Elena menatapnya sebentar, seolah memastikan permintaan maaf itu tulus. Lalu ekspresinya sedikit melunak.",
@@ -317,30 +490,48 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "엘레나는 그 사과가 진심인지 확인하듯 잠깐 바라보다가, 조금 표정을 누그러뜨렸다.",
     }),
   ),
-  say("elena", "neutral", tx({
-    id: "...Tapi terima kasih.",
-    en: "...But thank you.",
-    ja: "…でも、ありがとう。",
-    ko: "...그래도 고마워.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Untuk pipanya?",
-    en: "For the pipe?",
-    ja: "配管のこと？",
-    ko: "배관 때문?",
-  })),
-  say("elena", "neutral", tx({
-    id: "Untuk pipanya. Bukan untuk cara kamu menangani situasinya.",
-    en: "For the pipe. Not for the way you handled the situation.",
-    ja: "配管についてよ。状況の処理の仕方についてじゃない。",
-    ko: "배관 때문에. 네가 상황 처리한 방식 말고.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Adil.",
-    en: "Fair.",
-    ja: "妥当だな。",
-    ko: "공정하네.",
-  })),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "...Tapi terima kasih.",
+      en: "...But thank you.",
+      ja: "…でも、ありがとう。",
+      ko: "...그래도 고마워.",
+    }),
+    { voice: elenaDay1To3Voices[33] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Untuk pipanya?",
+      en: "For the pipe?",
+      ja: "配管のこと？",
+      ko: "배관 때문?",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Untuk pipanya. Bukan untuk cara kamu menangani situasinya.",
+      en: "For the pipe. Not for the way you handled the situation.",
+      ja: "配管についてよ。状況の処理の仕方についてじゃない。",
+      ko: "배관 때문에. 네가 상황 처리한 방식 말고.",
+    }),
+    { voice: elenaDay1To3Voices[34] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Adil.",
+      en: "Fair.",
+      ja: "妥当だな。",
+      ko: "공정하네.",
+    }),
+  ),
   narrate(
     tx({
       id: "Saat Elena mulai terlihat lebih santai, ponselnya kembali bergetar. Nama Arthur muncul di layar.",
@@ -349,30 +540,49 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
       ko: "엘레나가 조금 더 풀린 듯 보이던 순간, 그녀의 휴대폰이 다시 진동했다. 화면에는 Arthur라는 이름이 떠 있었다.",
     }),
   ),
-  say("elena", "serious", tx({
-    id: "Kalau penting, dia bisa menulis email.",
-    en: "If it's important, he can write an email.",
-    ja: "大事な用なら、メールを書けばいい。",
-    ko: "중요한 일이면 이메일을 쓰면 돼.",
-  })),
-  say("arka", "neutral", tx({
-    id: "Kalau tidak penting?",
-    en: "And if it isn't important?",
-    ja: "じゃあ重要じゃないなら？",
-    ko: "안 중요하면?",
-  })),
-  say("elena", "neutral", tx({
-    id: "Biasanya tetap dia tulis panjang.",
-    en: "He usually writes something long anyway.",
-    ja: "たいてい、それでも長文を書いてくるわ。",
-    ko: "보통은 그래도 길게 써 보내.",
-  })),
-  say("elena", "neutral", tx({
-    id: "Lupakanlah. Aku ingin pergi sekarang.",
-    en: "Forget it. I want to leave now.",
-    ja: "もういいわ。私はもう行く。",
-    ko: "됐어. 이제 가고 싶어.",
-  })),
+  say(
+    "elena",
+    "serious",
+    tx({
+      id: "Kalau penting, dia bisa menulis email.",
+      en: "If it's important, he can write an email.",
+      ja: "大事な用なら、メールを書けばいい。",
+      ko: "중요한 일이면 이메일을 쓰면 돼.",
+    }),
+    { voice: elenaDay1To3Voices[35] },
+  ),
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Kalau tidak penting?",
+      en: "And if it isn't important?",
+      ja: "じゃあ重要じゃないなら？",
+      ko: "안 중요하면?",
+    }),
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Biasanya tetap dia tulis panjang.",
+      en: "He usually writes something long anyway.",
+      ja: "たいてい、それでも長文を書いてくるわ。",
+      ko: "보통은 그래도 길게 써 보내.",
+    }),
+    { voice: elenaDay1To3Voices[36] },
+  ),
+  say(
+    "elena",
+    "neutral",
+    tx({
+      id: "Lupakanlah. Aku ingin pergi sekarang.",
+      en: "Forget it. I want to leave now.",
+      ja: "もういいわ。私はもう行く。",
+      ko: "됐어. 이제 가고 싶어.",
+    }),
+    { voice: elenaDay1To3Voices[37] },
+  ),
   hide("elena-elena-morning"),
   hide("arka-elena-morning"),
   setFlag("day2ElenaCompleted", true),
@@ -380,29 +590,44 @@ export const day3ElenaMorningScene: VisualNovelCommand[] = [
   jumpIf("day3MayaMorningCompleted", "day3-route-selection"),
   minigame("smartphone-contacts", {
     showSleepOption: true,
-    sleepOptionNext: "day3-complete",
-    requiredCompletionFlags: ["day3Slot2NadiaCompleted", "day3Slot2SarahCompleted"],
-    disabledContacts: ["maya", "elena"],
+    sleepOptionNext: "day3-route-selection",
+    disabledContacts: ["elena", "nadia", "sara"],
     title: tx({
-      id: "Lanjutkan Hari 3",
-      en: "Continue Day 3",
-      ja: "3日目を続ける",
-      ko: "3일차 계속하기",
+      id: "Sebelum ke Kampus",
+      en: "Before Heading to Campus",
+      ja: "大学へ行く前に",
+      ko: "캠퍼스로 가기 전에",
     }),
     subtitle: tx({
-      id: "Percakapan dengan Elena sudah selesai. Hari masih lanjut, jadi pilih tujuan berikutnya untuk sore ini.",
-      en: "Your conversation with Elena is over. The day is still moving, so pick the next stop for this afternoon.",
-      ja: "エレナとの会話は終わった。まだ一日は続くから、このあと午後にどこへ向かうか選ぼう。",
-      ko: "엘레나와의 대화는 끝났다. 하루는 아직 계속되니, 이번 오후에 어디로 갈지 다음 목적지를 고르자.",
+      id: "Urusan dengan Elena sudah selesai. Kalau masih mau cek Maya sebelum berangkat ke kampus, sekarang waktunya.",
+      en: "Things with Elena are settled. If you still want to check on Maya before heading to campus, now's the time.",
+      ja: "エレナとの件は片づいた。大学へ向かう前に、まだマヤの様子を見たいなら今がその時間だ。",
+      ko: "엘레나와의 일은 정리됐다. 캠퍼스로 가기 전에 아직 마야를 확인하고 싶다면 지금이다.",
     }),
     contactOverrides: {
-      nadia: {
-        next: "day3-slot2-nadia",
+      maya: {
+        next: "day3-maya-phone-call",
         disabled: false,
+        blurb: tx({
+          id: "Pagi tadi Maya terlihat rapuh. Kalau masih ada yang mengganjal, sekarang kesempatan terakhir sebelum hari pindah ke kampus.",
+          en: "Maya looked fragile this morning. If something still feels unresolved, this is the last chance before the day shifts to campus.",
+          ja: "今朝のマヤは危うく見えた。まだ気になることがあるなら、大学パートへ移る前の最後の機会だ。",
+          ko: "오늘 아침 마야는 위태로워 보였다. 아직 마음에 걸리는 게 있다면, 캠퍼스 파트로 넘어가기 전 마지막 기회다.",
+        }),
       },
-      sara: {
-        next: "day3-slot2-sarah",
-        disabled: false,
+      sleep: {
+        name: tx({
+          id: "Lanjut ke Kampus",
+          en: "Continue to Campus",
+          ja: "大学へ向かう",
+          ko: "캠퍼스로 이동",
+        }),
+        blurb: tx({
+          id: "Akhiri urusan pagi ini dan lanjutkan hari ke area kampus.",
+          en: "Wrap up the morning and continue the day at campus.",
+          ja: "朝の用事はここまでにして、大学で一日を続ける。",
+          ko: "아침 일을 여기서 마무리하고, 캠퍼스에서 하루를 이어 간다.",
+        }),
       },
     },
   }),

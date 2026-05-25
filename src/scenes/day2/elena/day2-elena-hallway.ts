@@ -17,6 +17,7 @@ import underPlumbUrl from "@/background/under-plumb.png";
 import elenaPlumpVideoUrl from "@/cut-scene/elena-plump.webm?url";
 import elenaPlumpEmptyVideoUrl from "@/cut-scene/elena-plumb-empty.webm?url";
 import elenaPlumpVideoUrl2 from "@/cut-scene/elena-plumb2.webm?url";
+import { elenaDay1To3Voices } from "@/voice/elena/day1to3";
 
 export const day2ElenaHallwayScene: VisualNovelCommand[] = [
   bg(
@@ -173,6 +174,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "やっと見つかった…",
       ko: "드디어 찾았네...",
     }),
+    { voice: elenaDay1To3Voices[6] },
   ),
   narrate(
     tx({
@@ -225,6 +227,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "もう一回トイレのほうを確認してみる。",
       ko: "화장실을 다시 한번 확인해봐야겠어.",
     }),
+    { voice: elenaDay1To3Voices[7] },
   ),
   narrate(
     tx({
@@ -304,6 +307,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "今夜もまだ漏れるようなら、本気で我慢の限界よ…",
       ko: "오늘 밤에도 또 새면, 나 정말 인내심 바닥날 거야...",
     }),
+    { voice: elenaDay1To3Voices[8] },
   ),
   narrate(
     tx({
@@ -362,6 +366,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "お願いだから、もうこれ以上問題を起こさないで。",
       ko: "제발 더 이상 문제를 일으키지 마.",
     }),
+    { voice: elenaDay1To3Voices[9] },
   ),
   narrate(
     tx({
@@ -412,6 +417,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "えっ？",
       ko: "어?",
     }),
+    { voice: elenaDay1To3Voices[10] },
   ),
   narrate(
     tx({
@@ -430,6 +436,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "さっきまで…普通じゃなかったのに？",
       ko: "방금 전까지는... 아니었잖아?",
     }),
+    { voice: elenaDay1To3Voices[11] },
   ),
   narrate(
     tx({
@@ -458,6 +465,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "まさか、この配管が勝手に直ったっていうの？",
       ko: "설마 이 배관이 저절로 고쳐진 건 아니겠지.",
     }),
+    { voice: elenaDay1To3Voices[12] },
   ),
   narrate(
     tx({
@@ -476,6 +484,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "もうこれは必要なさそうね。",
       ko: "이건 이제 필요 없을 것 같네.",
     }),
+    { voice: elenaDay1To3Voices[13] },
   ),
   bg(
     underPlumbUrl,
@@ -544,6 +553,7 @@ export const day2ElenaHallwayScene: VisualNovelCommand[] = [
       ko: "아르카는 방문을 힐끗 본 뒤, 이제 완전히 조용해진 세면대를 다시 바라본다.",
     }),
   ),
+  bg(elenaBadroomUrl),
   say(
     "arka",
     "gentle",
