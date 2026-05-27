@@ -4,6 +4,7 @@ import { bg, hide, jump, narrate, say, setFlag, show } from "@/scenes/scriptType
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaHallwayOpenUrl from "@/background/elena-hallway-open.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
+import { elenaDay4Voices } from "@/voice/elena/day4";
 
 export const day4ElenaDoorScene: VisualNovelCommand[] = [
   bg(
@@ -50,6 +51,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "入りなさい。ドアはわざと開けてあるの。",
       ko: "들어와. 문은 일부러 열어둔 거야.",
     }),
+    { voice: elenaDay4Voices[0] },
   ),
   hide("arka-day4-elena-door"),
   hide("elena-day4-elena-door"),
@@ -97,6 +99,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "実際、戦争中よ。相手は締め切りと学生のレポート。",
       ko: "실제로 전쟁 중이야. 상대는 마감과 학생들 보고서고.",
     }),
+    { voice: elenaDay4Voices[1] },
   ),
   narrate(
     tx({
@@ -133,6 +136,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "本気で？",
       ko: "진심이야?",
     }),
+    { voice: elenaDay4Voices[2] },
   ),
   say(
     "arka",
@@ -161,6 +165,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "あなたの勘が当たるの、嫌いだわ。",
       ko: "네 추측이 맞아떨어질 때마다 기분 나빠.",
     }),
+    { voice: elenaDay4Voices[3] },
   ),
   narrate(
     tx({
@@ -189,6 +194,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "何を？",
       ko: "뭘?",
     }),
+    { voice: elenaDay4Voices[4] },
   ),
   say(
     "arka",
@@ -217,6 +223,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "クラスごとに分けて。3学期分を上、5学期分を下。絶対に混ぜないで。",
       ko: "반별로 나눠. 3학기는 위, 5학기는 아래. 절대 섞지 마.",
     }),
+    { voice: elenaDay4Voices[5] },
   ),
   say(
     "arka",
@@ -237,6 +244,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "そこまで怖くないわ。",
       ko: "나 그렇게까지 무섭진 않아.",
     }),
+    { voice: elenaDay4Voices[6] },
   ),
   say(
     "arka",
@@ -257,6 +265,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "その手伝い、今すぐ取り消してもいいのよ。",
       ko: "도와주게 한 거 지금 바로 취소할 수도 있어.",
     }),
+    { voice: elenaDay4Voices[7] },
   ),
   narrate(
     tx({
@@ -283,6 +292,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "最初は、ただ自信過剰で暇を持て余してるだけの人だと思ってた。",
       ko: "처음엔 네가 그냥 근거 없는 자신감만 넘치는 한가한 사람인 줄 알았어.",
     }),
+    { voice: elenaDay4Voices[8] },
   ),
   say(
     "arka",
@@ -303,6 +313,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "今は…まだ確信が持てない。",
       ko: "지금은... 아직 확신이 안 서.",
     }),
+    { voice: elenaDay4Voices[9] },
   ),
   say(
     "arka",
@@ -339,6 +350,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "ありがとう。配管のことだけじゃなくて。",
       ko: "고마워. 배관 때문만은 아니야.",
     }),
+    { voice: elenaDay4Voices[10] },
   ),
   say(
     "arka",
@@ -367,6 +379,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "今日は本当に長い一日だった。",
       ko: "오늘은 정말 긴 하루였어.",
     }),
+    { voice: elenaDay4Voices[11] },
   ),
   say(
     "arka",
@@ -395,6 +408,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "授業、会議、学生、他の教員…それにアーサー。",
       ko: "수업, 회의, 학생들, 다른 교수들... 그리고 아서.",
     }),
+    { voice: elenaDay4Voices[12] },
   ),
   say(
     "arka",
@@ -415,6 +429,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "同僚よ。言葉遣いは丁寧なのに、一言一言に棘じゃなくて釣り針がついてるタイプ。",
       ko: "직장 동료야. 겉으론 공손한데, 말 한마디마다 갈고리가 달린 타입이지.",
     }),
+    { voice: elenaDay4Voices[13] },
   ),
   narrate(
     tx({
@@ -433,6 +448,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "問題のある学生がいるの。私は提出物どおりに評価した。でもその家族は大口の寄付者で、何人かが私に『調整』しろと言ってきた。",
       ko: "문제 있는 학생이 하나 있어. 나는 그 과제에 맞는 점수를 줬어. 그런데 그 학생 가족이 큰 후원자라서, 몇몇 사람들이 내게 점수를 '조정'하라고 해.",
     }),
+    { voice: elenaDay4Voices[14] },
   ),
   say(
     "arka",
@@ -461,6 +477,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "ええ。",
       ko: "그래.",
     }),
+    { voice: elenaDay4Voices[15] },
   ),
   narrate(
     tx({
@@ -479,6 +496,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "アーサーは、もっと柔軟になるべきだって言った。私がそんなに頑なでいなければ、まだキャリアは救えるって。",
       ko: "아서는 내가 좀 더 유연해야 한다고 했어. 너무 고집부리지 않으면 내 커리어도 아직 살릴 수 있다면서.",
     }),
+    { voice: elenaDay4Voices[16] },
   ),
   say(
     "arka",
@@ -499,6 +517,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "成績。規則。自尊心。",
       ko: "점수. 규정. 자존심.",
     }),
+    { voice: elenaDay4Voices[17] },
   ),
   narrate(
     tx({
@@ -517,6 +536,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "疲れるのは、間違ったことをしろと言われるからだけじゃないの。間違いに加わらない私のほうが問題みたいに感じさせられること。",
       ko: "지치는 건 그들이 내게 잘못된 일을 하라고 해서만이 아니야. 잘못에 동참하지 않으려는 내가 오히려 문제인 것처럼 느끼게 만든다는 거지.",
     }),
+    { voice: elenaDay4Voices[18] },
   ),
   narrate(
     tx({
@@ -563,6 +583,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "あなた、人を見すぎるのよ。",
       ko: "너는 사람을 너무 많이 관찰해.",
     }),
+    { voice: elenaDay4Voices[19] },
   ),
   say(
     "arka",
@@ -591,6 +612,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "今日…本当に折れそうだった。",
       ko: "오늘은... 정말 포기할 뻔했어.",
     }),
+    { voice: elenaDay4Voices[20] },
   ),
   say(
     "arka",
@@ -611,6 +633,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "説教はいらない。ただ少し静かにしていたいだけ。",
       ko: "설교는 하지 마. 그냥 잠깐 조용히 있고 싶어.",
     }),
+    { voice: elenaDay4Voices[21] },
   ),
   narrate(
     tx({
@@ -655,6 +678,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "でも、まだ行かないで。",
       ko: "그래도 아직은 가지 마.",
     }),
+    { voice: elenaDay4Voices[22] },
   ),
   say(
     "arka",
@@ -683,6 +707,7 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ja: "やっぱり今は、一人になる時間が必要かもしれない。",
       ko: "지금은 혼자 있을 시간이 필요한 것 같아.",
     }),
+    { voice: elenaDay4Voices[23] },
   ),
   narrate(
     tx({
