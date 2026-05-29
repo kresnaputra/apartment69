@@ -1,9 +1,18 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import {
+  bg,
+  hide,
+  jump,
+  narrate,
+  say,
+  setFlag,
+  show,
+} from "@/scenes/scriptTypes";
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaHallwayOpenUrl from "@/background/elena-hallway-open.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
+import elenaArkaWork from "@/background/elena-arka-work.png";
 import { elenaDay4Voices } from "@/voice/elena/day4";
 
 export const day4ElenaDoorScene: VisualNovelCommand[] = [
@@ -275,6 +284,17 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ko: "아르카는 바로 조용해졌다.",
     }),
   ),
+  hide("arka-day4-elena-room"),
+  hide("elena-day4-elena-room"),
+  bg(elenaArkaWork, undefined, {
+    backgroundAnimation: {
+      zoom: 1.08,
+      panX: 8,
+      panY: 0,
+      duration: 14,
+    },
+    transitionDuration: 900,
+  }),
   narrate(
     tx({
       id: "Beberapa waktu berlalu dengan suara kertas, ketikan laptop, dan teguran kecil Elena setiap kali Arka salah menaruh berkas. Perlahan, tumpukan di meja mulai rapi.",
@@ -283,6 +303,23 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
       ko: "종이 넘기는 소리와 노트북 타이핑 소리, 그리고 아르카가 서류를 잘못 놓을 때마다 들리는 엘레나의 작은 지적이 이어진다. 그러는 사이 책상 위 더미는 천천히 정리되기 시작한다.",
     }),
   ),
+  bg(
+    elenaBadroomUrl,
+    tx({
+      id: "Apartment 69 - Unit Elena",
+      en: "Apartment 69 - Elena's Unit",
+      ja: "Apartment 69 - エレナの部屋",
+      ko: "Apartment 69 - 엘레나의 유닛",
+    }),
+  ),
+  show("arka-day4-elena-room", "arka", "neutral", {
+    position: "left",
+    enterFrom: "left",
+  }),
+  show("elena-day4-elena-room", "elena", "neutral", {
+    position: "center",
+    enterFrom: "fade",
+  }),
   say(
     "elena",
     "neutral",

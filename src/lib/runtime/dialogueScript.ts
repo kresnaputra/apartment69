@@ -71,6 +71,7 @@ import {
   day5LobbyFarewellScene,
 } from "@/scenes/day5/day5-maya-morning";
 import { day5ComplateScene } from "@/scenes/day5/day5-complate";
+import { day5ElenaHallwayScene } from "@/scenes/day5/elena/day5-elena-hallway";
 import {
   day6PapaConfrontationScene,
   day6ProtectiveScene,
@@ -238,6 +239,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day4-complate": day4ComplateScene,
     // Day 5
     "day5-maya-morning": day5MayaMorningScene,
+    "day5-elena-hallway": day5ElenaHallwayScene,
     "day5-lobby-farewell": day5LobbyFarewellScene,
     "day5-complate": day5ComplateScene,
     // Day 6
