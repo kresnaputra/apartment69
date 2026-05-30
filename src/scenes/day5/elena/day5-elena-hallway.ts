@@ -5,6 +5,7 @@ import apartmentNightUrl from "@/background/apartment-night.png";
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import handVideo from "@/cut-scene/hand.webm?url";
+import { elenaDay5Voices } from "@/voice/elena/day5";
 
 export const day5ElenaHallwayScene: VisualNovelCommand[] = [
   bg(
@@ -69,6 +70,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "邪魔しないで。今、ドアを開けてるところなの。",
       ko: "방해하지 마. 지금 문 여는 중이야.",
     }),
+    { voice: elenaDay5Voices[0] },
   ),
   say(
     "arka",
@@ -97,6 +99,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "わかってる。ドアの方を試してるの。",
       ko: "알아. 지금 문을 시험해보는 거야.",
     }),
+    { voice: elenaDay5Voices[1] },
   ),
   narrate(
     tx({
@@ -133,6 +136,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "私は講師よ。",
       ko: "나는 교수야.",
     }),
+    { voice: elenaDay5Voices[2] },
   ),
   say(
     "arka",
@@ -153,6 +157,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "講師だって人間なの。",
       ko: "교수도 사람이야.",
     }),
+    { voice: elenaDay5Voices[3] },
   ),
   narrate(
     tx({
@@ -181,6 +186,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "自分でできる。",
       ko: "혼자 할 수 있어.",
     }),
+    { voice: elenaDay5Voices[4] },
   ),
   narrate(
     tx({
@@ -218,6 +224,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "あなたを試してたのよ。",
       ko: "너를 시험해본 거야.",
     }),
+    { voice: elenaDay5Voices[5] },
   ),
   narrate(
     tx({
@@ -236,6 +243,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "早くして。でも調子に乗らないで。",
       ko: "빨리. 하지만 너무 좋아하진 마.",
     }),
+    { voice: elenaDay5Voices[6] },
   ),
   narrate(
     tx({
@@ -289,6 +297,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "私が怖い？",
       ko: "내가 무서워?",
     }),
+    { voice: elenaDay5Voices[7] },
   ),
   say(
     "arka",
@@ -317,6 +326,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "今日は本当に長かった。",
       ko: "오늘은 정말 길었어.",
     }),
+    { voice: elenaDay5Voices[8] },
   ),
   say(
     "arka",
@@ -345,6 +355,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "授業、会議、学生、ほかの講師…みんな『ちょっとだけ』って言うのに、ちょっとで済むものなんて一つもない。",
       ko: "수업, 회의, 학생, 다른 교수들... 다들 잠깐이면 된다고 해. 잠깐인 건 하나도 없어.",
     }),
+    { voice: elenaDay5Voices[9] },
   ),
   say(
     "arka",
@@ -373,6 +384,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "少しだけ。",
       ko: "조금.",
     }),
+    { voice: elenaDay5Voices[10] },
   ),
   say(
     "arka",
@@ -401,6 +413,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "もう忘れた人の基準で。",
       ko: "이미 잊어버린 사람 기준으로.",
     }),
+    { voice: elenaDay5Voices[11] },
   ),
   narrate(
     tx({
@@ -437,6 +450,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "そもそも怪しいのよ、この床。",
       ko: "애초에 이 바닥이 수상해.",
     }),
+    { voice: elenaDay5Voices[12] },
   ),
   narrate(
     tx({
@@ -463,6 +477,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "勝手に入ってきちゃだめ。",
       ko: "네가 함부로 들어오면 안 돼.",
     }),
+    { voice: elenaDay5Voices[13] },
   ),
   say(
     "arka",
@@ -491,6 +506,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "座るまでだけ。",
       ko: "내가 앉을 때까지만.",
     }),
+    { voice: elenaDay5Voices[14] },
   ),
   say(
     "arka",
@@ -511,6 +527,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "それと水。",
       ko: "그리고 물.",
     }),
+    { voice: elenaDay5Voices[15] },
   ),
   say(
     "arka",
@@ -557,6 +574,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "口うるさい。",
       ko: "너 잔소리 많아.",
     }),
+    { voice: elenaDay5Voices[16] },
   ),
   say(
     "arka",
@@ -577,6 +595,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "疲れてるだけ。",
       ko: "난 피곤한 거야.",
     }),
+    { voice: elenaDay5Voices[17] },
   ),
   say(
     "arka",
@@ -605,6 +624,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "酔ってる相手に口論で勝つのはずるい。",
       ko: "취한 사람이랑 말싸움 이기는 건 치사해.",
     }),
+    { voice: elenaDay5Voices[18] },
   ),
   narrate(
     tx({
@@ -649,6 +669,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "いつも疲れていないように見せなきゃいけない人間でいるの、もう疲れた。",
       ko: "항상 안 지친 척해야 하는 사람으로 사는 게 지쳤어.",
     }),
+    { voice: elenaDay5Voices[19] },
   ),
   narrate(
     tx({
@@ -685,6 +706,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "あなた、いい人みたいなこと言うのね。",
       ko: "넌 꼭 좋은 사람처럼 말하네.",
     }),
+    { voice: elenaDay5Voices[20] },
   ),
   say(
     "arka",
@@ -705,6 +727,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "あなたが本当にいい人かどうかは、まだ決めてない。",
       ko: "네가 진짜 좋은 사람인지는 아직 결정 안 했어.",
     }),
+    { voice: elenaDay5Voices[21] },
   ),
   say(
     "arka",
@@ -733,6 +756,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "まだ。",
       ko: "아직.",
     }),
+    { voice: elenaDay5Voices[22] },
   ),
   narrate(
     tx({
@@ -769,6 +793,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "待って。",
       ko: "잠깐.",
     }),
+    { voice: elenaDay5Voices[23] },
   ),
   narrate(
     tx({
@@ -795,6 +820,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "少しだけ、隣に座ってくれる？",
       ko: "잠깐만 내 옆에 앉아줄래?",
     }),
+    { voice: elenaDay5Voices[24] },
   ),
   narrate(
     tx({
@@ -831,6 +857,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "少しだけ。",
       ko: "잠깐만.",
     }),
+    { voice: elenaDay5Voices[25] },
   ),
   narrate(
     tx({
@@ -865,6 +892,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "今は、まだ一人になりたくないだけ。",
       ko: "지금은 그냥 혼자 있고 싶지 않을 뿐이야.",
     }),
+    { voice: elenaDay5Voices[26] },
   ),
   narrate(
     tx({
@@ -883,6 +911,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "強いふりも、怒ってるふりも、誰も必要ないふりも、もう疲れた。",
       ko: "강한 척하는 것도, 화난 척하는 것도, 누구도 필요 없다고 가장하는 것도 다 지쳤어.",
     }),
+    { voice: elenaDay5Voices[27] },
   ),
   say(
     "arka",
@@ -911,6 +940,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "そんなふうに優しく言わないで。",
       ko: "그렇게 다정하게 말하지 마.",
     }),
+    { voice: elenaDay5Voices[28] },
   ),
   say(
     "arka",
@@ -931,6 +961,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "信じてしまうから。",
       ko: "그러면 내가 믿어버릴 테니까.",
     }),
+    { voice: elenaDay5Voices[29] },
   ),
   narrate(
     tx({
@@ -957,6 +988,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "忘れて。",
       ko: "잊어.",
     }),
+    { voice: elenaDay5Voices[30] },
   ),
   say(
     "arka",
@@ -1027,6 +1059,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "黙ってて。",
       ko: "가만히 있어.",
     }),
+    { voice: elenaDay5Voices[31] },
   ),
   say(
     "arka",
@@ -1047,6 +1080,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "動かないで。",
       ko: "움직이지 마.",
     }),
+    { voice: elenaDay5Voices[32] },
   ),
   say(
     "arka",
@@ -1109,6 +1143,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "あなた、いつも慎重ね。",
       ko: "넌 항상 조심스럽지.",
     }),
+    { voice: elenaDay5Voices[33] },
   ),
   say(
     "arka",
@@ -1137,6 +1172,7 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "少しだけでいいの。",
       ko: "잠깐만이야.",
     }),
+    { voice: elenaDay5Voices[34] },
   ),
   narrate(
     tx({
