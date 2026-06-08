@@ -155,6 +155,49 @@ export const sampleBonesAtFrame = (project: SbnProject, frame: number) => {
   return bones;
 };
 
+export const sampleMeshDeformAtFrame = (
+  project: SbnProject,
+  frame: number,
+): Record<string, Array<{ x: number; y: number }>> => {
+  const mdk = project.meshDeformKeyframes;
+  if (!mdk) return {};
+
+  const result: Record<string, Array<{ x: number; y: number }>> = {};
+
+  for (const [key, frameData] of Object.entries(mdk)) {
+    const frames = Object.keys(frameData).map(Number).sort((a, b) => a - b);
+    if (frames.length === 0) continue;
+
+    let prevFrame: number | null = null;
+    let nextFrame: number | null = null;
+    for (const kf of frames) {
+      if (kf <= frame) prevFrame = kf;
+      if (kf >= frame && nextFrame === null) nextFrame = kf;
+    }
+
+    if (prevFrame === null && nextFrame !== null) {
+      result[key] = frameData[String(nextFrame)].vertices;
+      continue;
+    }
+    if (prevFrame !== null && nextFrame === null) {
+      result[key] = frameData[String(prevFrame)].vertices;
+      continue;
+    }
+    if (prevFrame === null || nextFrame === null) continue;
+
+    const from = frameData[String(prevFrame)].vertices;
+    const to = frameData[String(nextFrame)].vertices;
+    const t = prevFrame === nextFrame ? 1 : (frame - prevFrame) / (nextFrame - prevFrame);
+
+    result[key] = from.map((v, i) => ({
+      x: v.x + (to[i].x - v.x) * t,
+      y: v.y + (to[i].y - v.y) * t,
+    }));
+  }
+
+  return result;
+};
+
 export const resolveSceneDrawables = (
   project: SbnProject,
   bones: WorldBone[],

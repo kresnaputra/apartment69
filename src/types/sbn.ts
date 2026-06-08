@@ -44,6 +44,13 @@ export type SbnSlot = {
   drawOrder: number;
 };
 
+export type SbnMeshVertex = {
+  x: number;
+  y: number;
+  u: number;
+  v: number;
+};
+
 export type SbnAttachment = {
   name: string;
   type: string;
@@ -66,6 +73,9 @@ export type SbnAttachment = {
   imageIsCropped?: boolean;
   assetPath?: string;
   imageData?: string;
+  meshVertices?: SbnMeshVertex[];
+  meshTriangles?: number[][];
+  meshGrid?: { columns: number; rows: number };
 };
 
 export type SbnSkin = {
@@ -97,6 +107,7 @@ export type SbnProject = {
   slots: SbnSlot[];
   attachments: SbnAttachment[];
   keyframes?: Record<string, Record<string, SbnKeyframe>>;
+  meshDeformKeyframes?: Record<string, Record<string, { vertices: Array<{ x: number; y: number }> }>>;
   duration: number;
   fps?: number;
   backgroundImage?: string | null;

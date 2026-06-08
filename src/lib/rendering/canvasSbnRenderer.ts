@@ -1,4 +1,4 @@
-import { resolveSceneDrawables, sampleBonesAtFrame } from "@/lib/sbn/sampling";
+import { resolveSceneDrawables, sampleBonesAtFrame, sampleMeshDeformAtFrame } from "@/lib/sbn/sampling";
 import type { GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import type { SceneBounds, SbnAttachment, SbnProject, WorldBone } from "@/types/sbn";
 
@@ -200,15 +200,137 @@ export class CanvasSbnRenderer {
     );
   }
 
+  private drawTexturedTriangle(
+    sx0: number, sy0: number,
+    sx1: number, sy1: number,
+    sx2: number, sy2: number,
+    tu0: number, tv0: number,
+    tu1: number, tv1: number,
+    tu2: number, tv2: number,
+    image: HTMLImageElement,
+  ) {
+    if (!this.ctx) return;
+
+    const det = tu0 * (tv1 - tv2) + tu1 * (tv2 - tv0) + tu2 * (tv0 - tv1);
+    if (Math.abs(det) < 1e-10) return;
+
+    const a = (sx0 * (tv1 - tv2) + sx1 * (tv2 - tv0) + sx2 * (tv0 - tv1)) / det;
+    const b = (sy0 * (tv1 - tv2) + sy1 * (tv2 - tv0) + sy2 * (tv0 - tv1)) / det;
+    const c = (tu0 * (sx1 - sx2) + tu1 * (sx2 - sx0) + tu2 * (sx0 - sx1)) / det;
+    const d = (tu0 * (sy1 - sy2) + tu1 * (sy2 - sy0) + tu2 * (sy0 - sy1)) / det;
+    const e = (sx0 * (tu1 * tv2 - tu2 * tv1) - sx1 * (tu0 * tv2 - tu2 * tv0) + sx2 * (tu0 * tv1 - tu1 * tv0)) / det;
+    const f = (sy0 * (tu1 * tv2 - tu2 * tv1) - sy1 * (tu0 * tv2 - tu2 * tv0) + sy2 * (tu0 * tv1 - tu1 * tv0)) / det;
+
+    // Crop drawImage to only the triangle's UV bounding box — avoids drawing the full image per triangle
+    const srcX = Math.max(0, Math.floor(Math.min(tu0, tu1, tu2)) - 1);
+    const srcY = Math.max(0, Math.floor(Math.min(tv0, tv1, tv2)) - 1);
+    const srcX2 = Math.min(image.naturalWidth, Math.ceil(Math.max(tu0, tu1, tu2)) + 1);
+    const srcY2 = Math.min(image.naturalHeight, Math.ceil(Math.max(tv0, tv1, tv2)) + 1);
+    const srcW = srcX2 - srcX;
+    const srcH = srcY2 - srcY;
+    if (srcW <= 0 || srcH <= 0) return;
+
+    // Expand clip triangle 1px outward from centroid to close sub-pixel seam artifacts
+    const cx = (sx0 + sx1 + sx2) / 3;
+    const cy = (sy0 + sy1 + sy2) / 3;
+    const expandVert = (sx: number, sy: number) => {
+      const dx = sx - cx;
+      const dy = sy - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist < 1e-5) return { x: sx, y: sy };
+      return { x: sx + dx / dist, y: sy + dy / dist };
+    };
+    const p0 = expandVert(sx0, sy0);
+    const p1 = expandVert(sx1, sy1);
+    const p2 = expandVert(sx2, sy2);
+
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.moveTo(p0.x, p0.y);
+    this.ctx.lineTo(p1.x, p1.y);
+    this.ctx.lineTo(p2.x, p2.y);
+    this.ctx.closePath();
+    this.ctx.clip();
+    // Adjust translation for source crop offset
+    this.ctx.transform(a, b, c, d, e + a * srcX + c * srcY, f + b * srcX + d * srcY);
+    this.ctx.drawImage(image, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
+    this.ctx.restore();
+  }
+
+  private drawMeshAttachment(
+    attachment: SbnAttachment,
+    bone: WorldBone,
+    image: HTMLImageElement,
+    input: RenderInput,
+    meshDeforms: Record<string, Array<{ x: number; y: number }>>,
+  ) {
+    if (!this.ctx || !attachment.meshVertices || !attachment.meshTriangles) return;
+
+    const { viewportWidth, viewportHeight, camera, scale } = input;
+    const totalScaleX = attachment.scaleX * bone.scaleX;
+    const totalScaleY = attachment.scaleY * bone.scaleY;
+    const totalRotRad = ((bone._wrot + attachment.rotation) * Math.PI) / 180;
+    const cosR = Math.cos(totalRotRad);
+    const sinR = Math.sin(totalRotRad);
+
+    const deformKey = `${attachment.slotId}:${attachment.name}`;
+    const deformedPositions = meshDeforms[deformKey];
+
+    // Compute screen position for every mesh vertex
+    const screenVerts = attachment.meshVertices.map((v, i) => {
+      const vx = deformedPositions ? deformedPositions[i].x : v.x;
+      const vy = deformedPositions ? deformedPositions[i].y : v.y;
+      // Vertex in bone-rotated world-unit space (image pixels * 0.5 = world unit)
+      const lx = attachment.x + vx * totalScaleX * 0.5;
+      const ly = attachment.y + vy * totalScaleY * 0.5;
+      const worldX = bone._wx + lx * cosR - ly * sinR;
+      const worldY = bone._wy + lx * sinR + ly * cosR;
+      return this.worldToScreen(worldX, worldY, viewportWidth, viewportHeight, camera, scale);
+    });
+
+    const opacity = attachment.opacity ?? 1;
+    this.ctx.save();
+    if (opacity < 1) this.ctx.globalAlpha = opacity;
+
+    for (const tri of attachment.meshTriangles) {
+      const [i0, i1, i2] = tri;
+      const sv0 = screenVerts[i0];
+      const sv1 = screenVerts[i1];
+      const sv2 = screenVerts[i2];
+      const mv0 = attachment.meshVertices[i0];
+      const mv1 = attachment.meshVertices[i1];
+      const mv2 = attachment.meshVertices[i2];
+
+      this.drawTexturedTriangle(
+        sv0.x, sv0.y,
+        sv1.x, sv1.y,
+        sv2.x, sv2.y,
+        mv0.u * image.naturalWidth, mv0.v * image.naturalHeight,
+        mv1.u * image.naturalWidth, mv1.v * image.naturalHeight,
+        mv2.u * image.naturalWidth, mv2.v * image.naturalHeight,
+        image,
+      );
+    }
+
+    this.ctx.restore();
+  }
+
   private drawAttachment(
     attachment: SbnAttachment,
     bone: WorldBone,
     input: RenderInput,
+    meshDeforms: Record<string, Array<{ x: number; y: number }>> = {},
   ) {
     if (!attachment.imageData || !this.ctx) return;
 
     const image = this.getImage(attachment.imageData);
     if (!image) return;
+
+    if (attachment.type === "mesh" && attachment.meshVertices && attachment.meshTriangles) {
+      this.drawMeshAttachment(attachment, bone, image, input, meshDeforms);
+      return;
+    }
+
     const screenPos = this.worldToScreen(
       bone._wx,
       bone._wy,
@@ -268,9 +390,10 @@ export class CanvasSbnRenderer {
 
     const bones = sampleBonesAtFrame(input.project, input.frame);
     const drawables = resolveSceneDrawables(input.project, bones);
+    const meshDeforms = sampleMeshDeformAtFrame(input.project, input.frame);
 
     for (const drawable of drawables) {
-      this.drawAttachment(drawable.attachment, drawable.bone, input);
+      this.drawAttachment(drawable.attachment, drawable.bone, input, meshDeforms);
     }
 
     if (input.dimmed) {
