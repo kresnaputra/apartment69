@@ -1,11 +1,32 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, cutScene, narrate, say, show } from "@/scenes/scriptTypes";
+import {
+  bg,
+  cutScene,
+  multiCutScene,
+  narrate,
+  say,
+  show,
+} from "@/scenes/scriptTypes";
 import apartmentNightUrl from "@/background/apartment-night.png";
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import handVideo from "@/cut-scene/hand.webm?url";
 import { elenaDay5Voices } from "@/voice/elena/day5";
+import elenaSpecialScene1 from "@/cut-scene/elena-special-scene-1.webm?url";
+import elenaSpecialSceneSound1 from "@/voice/elena/elena-special-scene-1.wav";
+import elenaSpecialScene2 from "@/cut-scene/elena-special-scene-2.webm?url";
+import elenaSpecialSceneSound2 from "@/voice/elena/elena-special-scene-2.wav";
+import elenaSpecialScene3 from "@/cut-scene/elena-special-scene-3.webm?url";
+import elenaSpecialSceneSound3 from "@/voice/elena/elena-special-scene-3.wav";
+import elenaSpecialScene4 from "@/cut-scene/elena-special-scene-4.webm?url";
+import elenaSpecialSceneSound4 from "@/voice/elena/elena-special-scene-4.wav";
+import elenaSpecialScene5 from "@/cut-scene/elena-special-scene-5.webm?url";
+import elenaSpecialSceneSound5 from "@/voice/elena/elena-special-scene-5.wav";
+import elenaSpecialScene6 from "@/cut-scene/elena-special-scene-6.webm?url";
+import elenaSpecialSceneSound6 from "@/voice/elena/elena-special-scene-6.wav";
+import elenaSpecialScene7 from "@/cut-scene/elena-special-scene-7.webm?url";
+import elenaSpecialSceneSound7 from "@/voice/elena/elena-special-scene-7.wav";
 
 export const day5ElenaHallwayScene: VisualNovelCommand[] = [
   bg(
@@ -1191,5 +1212,159 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
       ja: "わかった。少しだけ。",
       ko: "알겠어. 잠깐만.",
     }),
+  ),
+  cutScene(
+    elenaSpecialScene1,
+    true,
+    undefined,
+    undefined,
+    elenaSpecialSceneSound1,
+  ),
+  cutScene(
+    elenaSpecialScene2,
+    true,
+    undefined,
+    undefined,
+    elenaSpecialSceneSound2,
+  ),
+  cutScene(
+    elenaSpecialScene3,
+    true,
+    undefined,
+    undefined,
+    elenaSpecialSceneSound3,
+  ),
+  multiCutScene(
+    [
+      {
+        id: "elena-special-scene-4",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: elenaSpecialScene4,
+        audioSrc: elenaSpecialSceneSound4,
+        loop: true,
+        narrate: [
+          tx({
+            id: 'Elena: "AAHH!! Iya!! Kayak gitu, Arka!! Haaah... lebih keras lagi!! Jangan kasih ampun!"',
+            en: 'Elena: "AAHH!! Yes!! Like that, Arka!! Haaah... harder!! Don\'t hold back!"',
+            ja: "Elena: 「ああっ!! そう!! そんな感じ、アルカ!! はぁ... もっと激しく!! 容赦しないで!」",
+            ko: 'Elena: "아아!! 그래!! 그렇게, 아르카!! 하아... 더 세게!! 봐주지 마!"',
+          }),
+          tx({
+            id: 'Arka: (Napas mulai memburu, menahan pinggul Maya) "Gila. Di depan jendela begini, kamu bener-bener udah nggak peduli ada yang lihat dari luar, ya?"',
+            en: "Arka: (Breathing heavily, holding Maya's hips) \"Crazy. In front of the window like this, you really don't care if anyone sees from outside, huh?\"",
+            ja: "アルカ：（息が荒くなり、マヤの腰を掴む）「狂ってる。こんな窓の前で、外から誰かに見られても本当に気にしないんだな？」",
+            ko: 'Arka: (숨이 거칠어지며, 마야의 엉덩이를 잡고) "미쳤네. 이렇게 창문 앞에서, 밖에서 누가 보든 정말 신경 안 쓰는 거야?"',
+          }),
+          tx({
+            id: 'elena: "Biarin mereka lihat!! Ahh! Biar satu gedung tahu kalau aku cuma mainanmu! Haaah!"',
+            en: 'elena: "Let them see!! Ahh! Let the whole building know that I\'m just your toy! Haaah!"',
+            ja: "elena: 「見せてやって!! あっ! ビル全体に私があなたのおもちゃだって知らせて! はぁっ!」",
+            ko: 'elena: "보게 내버려둬!! 아! 건물 전체가 내가 네 장난감일 뿐이라는 걸 알게 해줘! 하아!"',
+          }),
+        ],
+      },
+      {
+        id: "elena-special-scene-5",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: elenaSpecialScene5,
+        audioSrc: elenaSpecialSceneSound5,
+        loop: true,
+        narrate: [
+          tx({
+            id: 'Elena: "AAHH!! Iya!! Kayak gitu, Arka!! Haaah... lebih keras lagi!! Jangan kasih ampun!"',
+            en: 'Elena: "AAHH!! Yes!! Like that, Arka!! Haaah... harder!! Don\'t hold back!"',
+            ja: "Elena: 「ああっ!! そう!! そんな感じ、アルカ!! はぁ... もっと激しく!! 容赦しないで!」",
+            ko: 'Elena: "아아!! 그래!! 그렇게, 아르카!! 하아... 더 세게!! 봐주지 마!"',
+          }),
+          tx({
+            id: 'Arka: (Napas mulai memburu, menahan pinggul Maya) "Gila. Di depan jendela begini, kamu bener-bener udah nggak peduli ada yang lihat dari luar, ya?"',
+            en: "Arka: (Breathing heavily, holding Maya's hips) \"Crazy. In front of the window like this, you really don't care if anyone sees from outside, huh?\"",
+            ja: "アルカ：（息が荒くなり、マヤの腰を掴む）「狂ってる。こんな窓の前で、外から誰かに見られても本当に気にしないんだな？」",
+            ko: 'Arka: (숨이 거칠어지며, 마야의 엉덩이를 잡고) "미쳤네. 이렇게 창문 앞에서, 밖에서 누가 보든 정말 신경 안 쓰는 거야?"',
+          }),
+          tx({
+            id: 'elena: "Biarin mereka lihat!! Ahh! Biar satu gedung tahu kalau aku cuma mainanmu! Haaah!"',
+            en: 'elena: "Let them see!! Ahh! Let the whole building know that I\'m just your toy! Haaah!"',
+            ja: "elena: 「見せてやって!! あっ! ビル全体に私があなたのおもちゃだって知らせて! はぁっ!」",
+            ko: 'elena: "보게 내버려둬!! 아! 건물 전체가 내가 네 장난감일 뿐이라는 걸 알게 해줘! 하아!"',
+          }),
+        ],
+      },
+      {
+        id: "elena-special-scene-6",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: elenaSpecialScene6,
+        audioSrc: elenaSpecialSceneSound6,
+        loop: true,
+        narrate: [
+          tx({
+            id: 'Elena: "AAHH!! Iya!! Kayak gitu, Arka!! Haaah... lebih keras lagi!! Jangan kasih ampun!"',
+            en: 'Elena: "AAHH!! Yes!! Like that, Arka!! Haaah... harder!! Don\'t hold back!"',
+            ja: "Elena: 「ああっ!! そう!! そんな感じ、アルカ!! はぁ... もっと激しく!! 容赦しないで!」",
+            ko: 'Elena: "아아!! 그래!! 그렇게, 아르카!! 하아... 더 세게!! 봐주지 마!"',
+          }),
+          tx({
+            id: 'Arka: (Napas mulai memburu, menahan pinggul Maya) "Gila. Di depan jendela begini, kamu bener-bener udah nggak peduli ada yang lihat dari luar, ya?"',
+            en: "Arka: (Breathing heavily, holding Maya's hips) \"Crazy. In front of the window like this, you really don't care if anyone sees from outside, huh?\"",
+            ja: "アルカ：（息が荒くなり、マヤの腰を掴む）「狂ってる。こんな窓の前で、外から誰かに見られても本当に気にしないんだな？」",
+            ko: 'Arka: (숨이 거칠어지며, 마야의 엉덩이를 잡고) "미쳤네. 이렇게 창문 앞에서, 밖에서 누가 보든 정말 신경 안 쓰는 거야?"',
+          }),
+          tx({
+            id: 'elena: "Biarin mereka lihat!! Ahh! Biar satu gedung tahu kalau aku cuma mainanmu! Haaah!"',
+            en: 'elena: "Let them see!! Ahh! Let the whole building know that I\'m just your toy! Haaah!"',
+            ja: "elena: 「見せてやって!! あっ! ビル全体に私があなたのおもちゃだって知らせて! はぁっ!」",
+            ko: 'elena: "보게 내버려둬!! 아! 건물 전체가 내가 네 장난감일 뿐이라는 걸 알게 해줘! 하아!"',
+          }),
+        ],
+      },
+      {
+        id: "elena-special-scene-7",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: elenaSpecialScene7,
+        audioSrc: elenaSpecialSceneSound7,
+        loop: true,
+        narrate: [
+          tx({
+            id: 'Elena: "AAHH!! Iya!! Kayak gitu, Arka!! Haaah... lebih keras lagi!! Jangan kasih ampun!"',
+            en: 'Elena: "AAHH!! Yes!! Like that, Arka!! Haaah... harder!! Don\'t hold back!"',
+            ja: "Elena: 「ああっ!! そう!! そんな感じ、アルカ!! はぁ... もっと激しく!! 容赦しないで!」",
+            ko: 'Elena: "아아!! 그래!! 그렇게, 아르카!! 하아... 더 세게!! 봐주지 마!"',
+          }),
+          tx({
+            id: 'Arka: (Napas mulai memburu, menahan pinggul Maya) "Gila. Di depan jendela begini, kamu bener-bener udah nggak peduli ada yang lihat dari luar, ya?"',
+            en: "Arka: (Breathing heavily, holding Maya's hips) \"Crazy. In front of the window like this, you really don't care if anyone sees from outside, huh?\"",
+            ja: "アルカ：（息が荒くなり、マヤの腰を掴む）「狂ってる。こんな窓の前で、外から誰かに見られても本当に気にしないんだな？」",
+            ko: 'Arka: (숨이 거칠어지며, 마야의 엉덩이를 잡고) "미쳤네. 이렇게 창문 앞에서, 밖에서 누가 보든 정말 신경 안 쓰는 거야?"',
+          }),
+          tx({
+            id: 'elena: "Biarin mereka lihat!! Ahh! Biar satu gedung tahu kalau aku cuma mainanmu! Haaah!"',
+            en: 'elena: "Let them see!! Ahh! Let the whole building know that I\'m just your toy! Haaah!"',
+            ja: "elena: 「見せてやって!! あっ! ビル全体に私があなたのおもちゃだって知らせて! はぁっ!」",
+            ko: 'elena: "보게 내버려둬!! 아! 건물 전체가 내가 네 장난감일 뿐이라는 걸 알게 해줘! 하아!"',
+          }),
+        ],
+      },
+    ],
+    "elena-bed-1",
   ),
 ];
