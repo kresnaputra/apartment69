@@ -86,6 +86,7 @@ import {
 } from "@/scenes/day7/day7-endings";
 import { day4ComplateScene } from "@/scenes/day4/day4-complate";
 import { sbnTestScene } from "@/scenes/sbnTestScene";
+import { day4ElenaComplateScene } from "@/scenes/day4/elena/day4-elena-complate";
 
 const splitSentences = (text: string) => {
   const trimmed = text.trim();
@@ -237,6 +238,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day4-maya-bad-ending": day4MayaBadEndingScene,
     "day4-maya-force-rest": day4MayaForceRestScene,
     "day4-complate": day4ComplateScene,
+    "day4-elena-complate": day4ElenaComplateScene,
     // Day 5
     "day5-maya-morning": day5MayaMorningScene,
     "day5-elena-hallway": day5ElenaHallwayScene,

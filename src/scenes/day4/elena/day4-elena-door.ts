@@ -784,4 +784,5 @@ export const day4ElenaDoorScene: VisualNovelCommand[] = [
     }),
   ),
   setFlag("day4ElenaCompleted", true),
+  jump("day4-elena-complate"),
 ];
