@@ -9,6 +9,7 @@ import {
   jumpIf,
   multiCutScene,
   narrate,
+  playBgm,
   say,
   scene,
   setFlag,
@@ -34,7 +35,10 @@ import elenaSpecialSceneSound6 from "@/voice/elena/elena-special-scene-6.wav";
 import elenaSpecialScene7 from "@/cut-scene/elena-special-scene-7.webm?url";
 import elenaSpecialSceneSound7 from "@/voice/elena/elena-special-scene-7.wav";
 
+import bgm from "@/music/day-5-elena.mp3";
+
 export const day5ElenaHallwayScene: VisualNovelCommand[] = [
+  playBgm(bgm),
   bg(
     apartmentNightUrl,
     tx({
