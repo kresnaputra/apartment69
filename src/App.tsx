@@ -1346,7 +1346,7 @@ const MultiCutSceneOverlay = ({
   if (!activeSelection) return null;
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, pointerEvents: "none" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, pointerEvents: "auto" }}>
       <CutSceneOverlay
         key={activeSelection.id}
         src={activeSelection.src}

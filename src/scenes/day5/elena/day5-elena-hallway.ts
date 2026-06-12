@@ -6,10 +6,12 @@ import {
   centeredText,
   clearBlackScreen,
   cutScene,
+  jumpIf,
   multiCutScene,
   narrate,
   say,
   scene,
+  setFlag,
   show,
 } from "@/scenes/scriptTypes";
 import apartmentNightUrl from "@/background/apartment-night.png";
@@ -1485,10 +1487,10 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
   ),
   narrate(
     tx({
-      id: "Arka (Monolog): Malam ini dia melepas semua gengsinya. Besok pagi tembok esnya mungkin akan kembali tinggi, tapi setidaknya malam ini aku melihat sisi Elena yang sebenarnya.",
-      en: "Arka (Monologue): Tonight she let go of all her pride. Tomorrow morning her walls of ice might rise again, but at least tonight I saw the real Elena.",
-      ja: "アルカ（独白）：今夜、彼女はすべてのプライドを脱ぎ捨てた。明日の朝にはまた氷の壁が高くそびえるかもしれないが、少なくとも今夜は本当のエレナを見た。",
-      ko: "아르카 (독백): 오늘 밤 그녀는 모든 자존심을 내려놓았다. 내일 아침이면 얼음 벽이 다시 높이 세워질지도 모르지만, 적어도 오늘 밤은 진짜 엘레나를 봤다.",
+      id: "Arka: Malam ini dia melepas semua gengsinya. Besok pagi tembok esnya mungkin akan kembali tinggi, tapi setidaknya malam ini aku melihat sisi Elena yang sebenarnya.",
+      en: "Arka: Tonight she let go of all her pride. Tomorrow morning her walls of ice might rise again, but at least tonight I saw the real Elena.",
+      ja: "アルカ：今夜、彼女はすべてのプライドを脱ぎ捨てた。明日の朝にはまた氷の壁が高くそびえるかもしれないが、少なくとも今夜は本当のエレナを見た。",
+      ko: "아르카: 오늘 밤 그녀는 모든 자존심을 내려놓았다. 내일 아침이면 얼음 벽이 다시 높이 세워질지도 모르지만, 적어도 오늘 밤은 진짜 엘레나를 봤다.",
     }),
   ),
   clearBlackScreen(),
@@ -1511,4 +1513,8 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
     }),
     { size: "sub" },
   ),
+  setFlag("gallerySceneElena1Unlocked", true),
+  jumpIf("galleryMode", "gallery-return", {
+    value: true,
+  }),
 ];
