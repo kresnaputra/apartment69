@@ -13,7 +13,7 @@ export const visitRouteScene: VisualNovelCommand[] = [
     }),
   ),
   show("maya-main", "maya", "worried", { position: "right", enterFrom: "none" }),
-  moveTo("maya-main", "center", { duration: 760, easing: "ease-in-out", xOffset: 0.03 }),
+  moveTo("maya-main", "center", 0, { duration: 760, easing: "ease-in-out" }),
   say("arka", "shy", tx({
     id: "Kalau begitu jangan beri aku janji. Duduklah sebentar, dengarkan ceritaku, lalu pergilah tanpa merasa berutang apa pun.",
     en: "Then don't give me a promise. Sit with me for a bit, hear my story, then leave without feeling like you owe me anything.",

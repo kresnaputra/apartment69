@@ -192,11 +192,13 @@ export const menu = (prompt: LocalizedText, options: ChoiceOption[]): VisualNove
 export const moveTo = (
   id: string,
   position: MoveCharacterCommand["position"],
-  overrides?: Omit<MoveCharacterCommand, "type" | "id" | "position">,
+  xOffset?: number,
+  overrides?: Omit<MoveCharacterCommand, "type" | "id" | "position" | "xOffset">,
 ): MoveCharacterCommand => ({
   type: "moveCharacter",
   id,
   position,
+  xOffset,
   ...overrides,
 });
 

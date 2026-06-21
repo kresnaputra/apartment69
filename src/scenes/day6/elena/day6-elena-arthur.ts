@@ -10,8 +10,10 @@ import {
   playBgm,
   playSfx,
   say,
+  scene,
   setFlag,
   show,
+  moveTo
 } from "@/scenes/scriptTypes";
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
@@ -877,6 +879,12 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
     }),
   ),
   hide("arthur-day6-elena", "fadeAway"),
+  moveTo("elena-day6-arthur", "center", -0.01),
+  // show("elena-day6-arthur", "elena", "neutral", {
+  //   position: "center",
+  //   enterFrom: "right",
+  //   xOffset: -0.01
+  // }),
   narrate(
     tx({
       id: "Arthur keluar. Pintu tertutup. Elena berdiri diam beberapa detik, lalu bahunya turun. Napasnya berat.",
@@ -1203,6 +1211,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ko: '아르카: "나는 하마터면 그녀 앞에 설 뻔했어. 하지만 엘레나는 마치 깨지기 쉬운 도자기처럼 구해져야 할 사람이 아니야. 그녀는 그저 무릎이 거의 꺾이려 할 때도 아직 혼자 설 수 있다고 믿어주는 사람이 필요할 뿐이야."',
     }),
   ),
+  scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
     tx({
       id: "RELATIONSHIP UPDATE: ELENA MEMBUKA DIRI — KEPERCAYAAN TUMBUH",
