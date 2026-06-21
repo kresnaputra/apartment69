@@ -78,6 +78,11 @@ import {
   day6SupportiveScene,
   day6AftermathScene,
 } from "@/scenes/day6/day6-papa-confrontation";
+import {
+  day6ElenaArthurScene,
+  day6ElenaProtectScene,
+  day6ElenaStandScene,
+} from "@/scenes/day6/elena/day6-elena-arthur";
 import { day6ComplateScene } from "@/scenes/day6/day6-complate";
 import {
   day7IntroScene,
@@ -182,7 +187,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "opening",
+  startLabel: "day6-elena-arthur",
   labels: {
     "gallery-return": [],
     "sbn-maya-test": sbnTestScene,
@@ -245,6 +250,9 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day5-lobby-farewell": day5LobbyFarewellScene,
     "day5-complate": day5ComplateScene,
     // Day 6
+    "day6-elena-arthur": day6ElenaArthurScene,
+    "day6-elena-protect": day6ElenaProtectScene,
+    "day6-elena-stand": day6ElenaStandScene,
     "day6-papa-confrontation": day6PapaConfrontationScene,
     "day6-protective": day6ProtectiveScene,
     "day6-supportive": day6SupportiveScene,

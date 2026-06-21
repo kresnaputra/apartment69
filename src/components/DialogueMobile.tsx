@@ -54,9 +54,9 @@ export const DialogueMobile = ({
   onExit,
 }: DialogueMobileProps) => (
   <div
-    className={`absolute left-0 right-0 bottom-2 z-30 w-[58vw] mx-auto pointer-events-none transition-opacity duration-[160ms] ${isSceneTransitioning ? "opacity-0" : "opacity-100"}`}
+    className={`absolute left-0 right-0 bottom-2 z-30 pointer-events-none transition-opacity duration-[160ms] ${isSceneTransitioning ? "opacity-0" : "opacity-100"}`}
   >
-    <div className="w-full rounded-2xl px-4 pt-3 pb-2.5 min-h-[7rem]"
+    <div className="w-[58vw] mx-auto rounded-2xl px-4 pt-3 pb-2.5 min-h-[7rem]"
       style={{ background: "linear-gradient(180deg,rgba(9,10,16,0.55),rgba(5,6,12,0.1))", textAlign: "center" }}
     >
       {speaker ? (
@@ -104,44 +104,45 @@ export const DialogueMobile = ({
           })}
         </div>
       ) : (
-        <div className="flex items-center justify-between gap-2 mt-2">
-          <span className="text-[0.62rem] tracking-[0.02em] text-[#ccb9a9] shrink-0">
-            {isTyping ? finishHint : continueHint}
-          </span>
-          <div
-            className="flex gap-1 pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {[
-              { label: controlLabels.auto, handler: onAuto, active: isAuto },
-              { label: controlLabels.skip, handler: onSkip, active: false },
-              { label: controlLabels.log, handler: onLog, active: false },
-              { label: controlLabels.save, handler: onSave, active: false },
-              { label: controlLabels.config, handler: onConfig, active: false },
-              { label: controlLabels.exit, handler: onExit, active: false },
-            ].map(({ label, handler, active }, idx) => {
-              const isFocused = focusedControlIndex === idx;
-              return (
-              <button
-                key={label}
-                type="button"
-                onClick={handler}
-                className={[
-                  "rounded px-2 py-1 text-[0.6rem] tracking-[0.02em] border backdrop-blur-sm transition-all duration-150 active:scale-95",
-                  active
-                    ? "text-[#d2a456] border-[rgba(210,164,86,0.4)] bg-[rgba(210,164,86,0.12)]"
-                    : isFocused
-                    ? "text-white border-white/50 bg-[rgba(255,255,255,0.14)] scale-105"
-                    : "text-white/65 border-white/15 bg-[rgba(10,8,13,0.45)] hover:text-white/90 hover:border-white/30",
-                ].join(" ")}
-              >
-                {label}
-              </button>
-              );
-            })}
-          </div>
-        </div>
+        <p className="mt-1.5 m-0 text-[0.62rem] tracking-[0.02em] text-[#ccb9a9]">
+          {isTyping ? finishHint : continueHint}
+        </p>
       )}
     </div>
+
+    {choices.length === 0 ? (
+      <div
+        className="flex justify-center gap-1 flex-wrap mt-1.5 pointer-events-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {[
+          { label: controlLabels.auto, handler: onAuto, active: isAuto },
+          { label: controlLabels.skip, handler: onSkip, active: false },
+          { label: controlLabels.log, handler: onLog, active: false },
+          { label: controlLabels.save, handler: onSave, active: false },
+          { label: controlLabels.config, handler: onConfig, active: false },
+          { label: controlLabels.exit, handler: onExit, active: false },
+        ].map(({ label, handler, active }, idx) => {
+          const isFocused = focusedControlIndex === idx;
+          return (
+          <button
+            key={label}
+            type="button"
+            onClick={handler}
+            className={[
+              "rounded px-2 py-1 text-[0.6rem] tracking-[0.02em] border backdrop-blur-sm transition-all duration-150 active:scale-95",
+              active
+                ? "text-[#d2a456] border-[rgba(210,164,86,0.4)] bg-[rgba(210,164,86,0.12)]"
+                : isFocused
+                ? "text-white border-white/50 bg-[rgba(255,255,255,0.14)] scale-105"
+                : "text-white/65 border-white/15 bg-[rgba(10,8,13,0.45)] hover:text-white/90 hover:border-white/30",
+            ].join(" ")}
+          >
+            {label}
+          </button>
+          );
+        })}
+      </div>
+    ) : null}
   </div>
 );

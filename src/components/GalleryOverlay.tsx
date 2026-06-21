@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import sceneMaya1 from "@/gallery/scene-maya-1.png";
 import sceneMaya2 from "@/gallery/scene-maya-2.png";
 import sceneMaya3 from "@/gallery/scene-maya-3.png";
-import sceneElena1 from "@/gallery/scene-elena-1.png";
+import sceneElena1 from "@/gallery/scene-maya-1.png";
 import type { FlagMap } from "@/types/novel";
 
 type GalleryOverlayProps = {

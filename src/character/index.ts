@@ -4,6 +4,7 @@ import { elenaBundleRegistry, elenaCharacter } from "@/character/elena/character
 import { nadiaBundleRegistry, nadiaCharacter } from "@/character/nadia/character";
 import { saraBundleRegistry, saraCharacter } from "@/character/sara/character";
 import { mayasFatherBundleRegistry, mayasFatherCharacter } from "@/character/mayas-father/character";
+import { arthurBundleRegistry, arthurCharacter } from "@/character/arthur/character";
 import type { CharacterDefinition } from "@/types/novel";
 
 export const characterRegistry: Record<string, CharacterDefinition> = {
@@ -13,6 +14,7 @@ export const characterRegistry: Record<string, CharacterDefinition> = {
   [nadiaCharacter.id]: nadiaCharacter,
   [saraCharacter.id]: saraCharacter,
   [mayasFatherCharacter.id]: mayasFatherCharacter,
+  [arthurCharacter.id]: arthurCharacter,
 };
 
 export const characterBundleRegistry: Record<string, string> = {
@@ -22,4 +24,5 @@ export const characterBundleRegistry: Record<string, string> = {
   ...nadiaBundleRegistry,
   ...saraBundleRegistry,
   ...mayasFatherBundleRegistry,
+  ...arthurBundleRegistry,
 };
