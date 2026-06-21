@@ -13,7 +13,7 @@ import {
   scene,
   setFlag,
   show,
-  moveTo
+  moveTo,
 } from "@/scenes/scriptTypes";
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
@@ -493,6 +493,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
     }),
   ),
   hide("arthur-day6-elena", "fadeAway"),
+  moveTo("elena-day6-arthur", "center", -0.01),
   narrate(
     tx({
       id: "Arthur keluar. Pintu tertutup.",
@@ -645,6 +646,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
       ko: '아르카: "그녀를 지킨다는 게 그녀 앞에 서는 거라고 생각했어. 하지만 엘레나는 자신의 길을 막아주는 사람이 필요한 게 아니야. 그녀 스스로 아직 걸을 수 있다고 믿어주는 사람이 필요해."',
     }),
   ),
+  scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
     tx({
       id: "RELATIONSHIP UPDATE: ELENA MERASA DIKONTROL — KEPERCAYAAN TERGUNCANG",
@@ -880,11 +882,6 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
   ),
   hide("arthur-day6-elena", "fadeAway"),
   moveTo("elena-day6-arthur", "center", -0.01),
-  // show("elena-day6-arthur", "elena", "neutral", {
-  //   position: "center",
-  //   enterFrom: "right",
-  //   xOffset: -0.01
-  // }),
   narrate(
     tx({
       id: "Arthur keluar. Pintu tertutup. Elena berdiri diam beberapa detik, lalu bahunya turun. Napasnya berat.",
