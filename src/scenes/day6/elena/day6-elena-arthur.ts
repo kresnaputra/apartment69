@@ -17,6 +17,7 @@ import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import knockSound from "@/sfx/knock.wav";
 import day6Bgm from "@/music/day6.mp3";
+import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 export const day6ElenaArthurScene: VisualNovelCommand[] = [
   playBgm(day6Bgm),
@@ -258,11 +259,12 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
     }),
   ),
   show("elena-day6-arthur", "elena", "neutral", {
-    position: "center",
+    position: "right",
     enterFrom: "fade",
+    xOffset: isMobileDevice() ? 0.0 : 0.05,
   }),
   show("arthur-day6-elena", "arthur", "neutral", {
-    position: "right",
+    position: "center",
     enterFrom: "fade",
   }),
   narrate(
@@ -401,20 +403,20 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       {
         id: "protect",
         label: tx({
-          id: '[PROTECT HER] "Sekolah seperti itu tidak pantas untukmu. Kamu berhenti saja."',
-          en: '[PROTECT HER] "A place like that doesn\'t deserve you. Just quit."',
-          ja: "[PROTECT HER]「そんな学校はお前に相応しくない。辞めてしまえ。」",
-          ko: '[PROTECT HER] "그런 학교는 너한테 어울리지 않아. 그냥 그만둬."',
+          id: '"Sekolah seperti itu tidak pantas untukmu. Kamu berhenti saja."',
+          en: '"A place like that doesn\'t deserve you. Just quit."',
+          ja: "「そんな学校はお前に相応しくない。辞めてしまえ。」",
+          ko: '"그런 학교는 너한테 어울리지 않아. 그냥 그만둬."',
         }),
         next: "day6-elena-protect",
       },
       {
         id: "stand",
         label: tx({
-          id: '[STAND BESIDE HER] "Keputusannya tetap di tanganmu. Tapi kalau kamu mau melawan, aku berdiri di sampingmu."',
-          en: '[STAND BESIDE HER] "The decision is still yours. But if you want to fight, I\'m standing right beside you."',
-          ja: "[STAND BESIDE HER]「決断はお前自身のものだ。でも戦いたいなら、俺はお前の隣に立つ。」",
-          ko: '[STAND BESIDE HER] "결정은 여전히 네 것이야. 하지만 싸우고 싶다면, 나는 네 옆에 서 있을게."',
+          id: '"Keputusannya tetap di tanganmu. Tapi kalau kamu mau melawan, aku berdiri di sampingmu."',
+          en: '"The decision is still yours. But if you want to fight, I\'m standing right beside you."',
+          ja: "「決断はお前自身のものだ。でも戦いたいなら、俺はお前の隣に立つ。」",
+          ko: '"결정은 여전히 네 것이야. 하지만 싸우고 싶다면, 나는 네 옆에 서 있을게."',
         }),
         next: "day6-elena-stand",
       },
