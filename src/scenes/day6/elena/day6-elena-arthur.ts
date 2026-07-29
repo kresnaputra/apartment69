@@ -760,7 +760,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
   ),
   narrate(
     tx({
-      id: "Arka mengangkat ponselnya. Arthur terdiam.",
+      id: "Arka mengangkat ponselnya dan mulai mengarahkan kameranya ke Arthur. Arthur terdiam.",
       en: "Arka raised his phone. Arthur went silent.",
       ja: "アルカがスマートフォンを持ち上げた。アーサーが沈黙した。",
       ko: "아르카가 휴대폰을 들어 올렸다. 아서가 침묵했다.",

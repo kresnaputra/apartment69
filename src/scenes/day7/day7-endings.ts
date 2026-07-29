@@ -59,6 +59,9 @@ import day7Bgm from "@/music/day7.mp3";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   playBgm(day7Bgm),
+  jumpIf("elenaRelationshipStrengthened", "day7-elena-good-ending", {
+    value: true,
+  }),
   bg(
     bedroomNightUrl,
     tx({

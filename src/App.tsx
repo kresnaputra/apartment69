@@ -1575,6 +1575,7 @@ const App = () => {
   useGamepad();
   const resolvedLine = resolveText(line, language);
   const resolvedLocation = resolveText(location, language);
+  const hasResolvedLocation = resolvedLocation.trim().length > 0;
   const resolvedStatusMessage = resolveText(statusMessage, language);
   const visibleLine = resolvedLine.slice(0, revealedCount);
   const isTyping = revealedCount < resolvedLine.length;
@@ -2302,17 +2303,17 @@ const App = () => {
               );
             })}
 
-          {isMobile ? (
+          {hasResolvedLocation && (isMobile ? (
             <div className="absolute top-3 right-3 z-20">
               <div className="border border-white/10 bg-[rgba(11,10,18,0.36)] backdrop-blur-[14px] rounded-full px-3 py-1.5 text-[0.6rem] tracking-[0.32em] uppercase text-[#ccb9a9]">
-                {resolvedLocation || "\u00a0"}
+                {resolvedLocation}
               </div>
             </div>
           ) : (
             <div className="vn-caption">
-              <div className="vn-location">{resolvedLocation || " "}</div>
+              <div className="vn-location">{resolvedLocation}</div>
             </div>
-          )}
+          ))}
         </div>
 
         {blackScreenState?.active ? (
