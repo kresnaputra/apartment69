@@ -20,6 +20,7 @@ import elenaHallwayOpenUrl from "@/background/elena-hallway-open.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import bedroomNightUrl from "@/background/bedroom-night.png";
 import knockSound from "@/sfx/knock.wav";
+import { elenaDay7Voices } from "@/voice/elena/day7";
 import elenaG1Url from "@/cut-scene/elena-g1.png";
 import elenaG2Url from "@/cut-scene/elena-g2.png";
 import elenaG3Url from "@/cut-scene/elena-g3.png";
@@ -119,6 +120,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "入って。わざと開けておいたの。",
       ko: "들어와. 일부러 문을 열어둔 거야.",
     }),
+    { voice: elenaDay7Voices[0] },
   ),
   bg(
     elenaBadroomUrl,
@@ -164,6 +166,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "まだ聞くの？",
       ko: "아직도 물어봐?",
     }),
+    { voice: elenaDay7Voices[1] },
   ),
   say(
     "arka",
@@ -184,6 +187,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "入って。",
       ko: "들어와.",
     }),
+    { voice: elenaDay7Voices[2] },
   ),
   narrate(
     tx({
@@ -202,6 +206,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "ブラックコーヒー？",
       ko: "쓴 커피?",
     }),
+    { voice: elenaDay7Voices[3] },
   ),
   say(
     "arka",
@@ -222,6 +227,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "命令なんてしてない。",
       ko: "명령한 적 없어.",
     }),
+    { voice: elenaDay7Voices[4] },
   ),
   say(
     "arka",
@@ -276,6 +282,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "解雇はされなかった。その学生の成績はDのまま。件は再調査される。学科長は注意を受けた。",
       ko: "그들은 나를 해고하지 않았어. 그 학생의 성적은 D 그대로야. 사건은 재검토되고, 학과장은 경고를 받았어.",
     }),
+    { voice: elenaDay7Voices[5] },
   ),
   say(
     "arka",
@@ -296,6 +303,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "一時停職。",
       ko: "임시 정직이야.",
     }),
+    { voice: elenaDay7Voices[6] },
   ),
   narrate(
     tx({
@@ -322,6 +330,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "彼は私が講師だってことを忘れていた。私が怒ると、報告書を書くの。",
       ko: "그는 내가 교수라는 걸 잊었어. 내가 화나면 보고서를 쓰거든.",
     }),
+    { voice: elenaDay7Voices[7] },
   ),
   say(
     "arka",
@@ -342,6 +351,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "整然として、体系的で、痛烈よ。",
       ko: "깔끔하고, 체계적이고, 아프게 찌르지.",
     }),
+    { voice: elenaDay7Voices[8] },
   ),
   narrate(
     tx({
@@ -360,6 +370,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "でも、全部が終わったわけじゃない。キャンパスでの道はもっと厳しくなるかもしれない。",
       ko: "하지만 모든 게 끝난 건 아니야. 캠퍼스에서 내 길은 더 힘들어질지도 몰라.",
     }),
+    { voice: elenaDay7Voices[9] },
   ),
   say(
     "arka",
@@ -388,6 +399,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "さっき、ほとんど諦めかけた。でもあなたの言葉を思い出した。",
       ko: "아까 거의 포기할 뻔했어. 하지만 네 말을 떠올렸어.",
     }),
+    { voice: elenaDay7Voices[10] },
   ),
   say(
     "arka",
@@ -408,6 +420,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "決めるのは私。でも私が戦いたいなら、あなたは隣に立ってくれる。",
       ko: "결정은 내 손에 있어. 하지만 내가 싸우고 싶다면, 네가 내 곁에 서 있어 주겠다고.",
     }),
+    { voice: elenaDay7Voices[11] },
   ),
   narrate(
     tx({
@@ -426,6 +439,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "会議の間ずっと、それを考えていた。戦うことだけじゃない。奪い取らず、押しつけず、去らない人がいるということを。",
       ko: "회의 내내 그 말을 생각했어. 단지 싸우는 것만이 아니라, 빼앗지 않고, 강요하지 않고, 떠나지 않는 사람이 있다는 것에 대해서.",
     }),
+    { voice: elenaDay7Voices[12] },
   ),
   narrate(
     tx({
@@ -454,6 +468,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "手を差し出しているのは私よ、ばか。",
       ko: "손을 내민 건 나야, 바보야.",
     }),
+    { voice: elenaDay7Voices[13] },
   ),
   narrate(
     tx({
@@ -488,6 +503,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "これから全部変わってしまうのが怖い。",
       ko: "이제 모든 게 변할까 봐 무서워.",
     }),
+    { voice: elenaDay7Voices[14] },
   ),
   say(
     "arka",
@@ -508,6 +524,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "信じるのは得意じゃない。",
       ko: "나는 믿는 걸 잘 못해.",
     }),
+    { voice: elenaDay7Voices[15] },
   ),
   say(
     "arka",
@@ -528,6 +545,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "こっちに来て。",
       ko: "이리 와.",
     }),
+    { voice: elenaDay7Voices[16] },
   ),
   say(
     "arka",
@@ -548,6 +566,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ja: "確かよ。今日、私はあなたを選ぶ。",
       ko: "확신해. 오늘 나는 너를 선택해.",
     }),
+    { voice: elenaDay7Voices[17] },
   ),
   hide("arka-day7-elena-good", "fadeAway"),
   hide("elena-day7-elena-good", "fadeAway"),
@@ -1095,7 +1114,7 @@ export const day7ElenaBadEndingScene: VisualNovelCommand[] = [
             ko: "엘레나가 아서의 등을 움켜쥔다. 손톱이 피부에 살짝 파고든다.",
           },
         ],
-        speed: "3x"
+        speed: "2x"
       },
       {
         id: "elena-6",
@@ -1146,6 +1165,7 @@ export const day7ElenaBadEndingScene: VisualNovelCommand[] = [
             ko: "아서: “조금만 더 참아.”",
           },
         ],
+        speed: "3x"
       },
       {
         id: "elena-7",

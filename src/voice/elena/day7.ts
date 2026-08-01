@@ -13,6 +13,9 @@ import elena140 from "@/voice/elena/elena140.mp3";
 import elena141 from "@/voice/elena/elena141.mp3";
 import elena142 from "@/voice/elena/elena142.mp3";
 import elena143 from "@/voice/elena/elena143.mp3";
+import elena144 from "@/voice/elena/elena144.mp3";
+import elena145 from "@/voice/elena/elena145.mp3";
+import elena146 from "@/voice/elena/elena146.mp3";
 
 export const elenaDay7Voices = [
   elena129,
@@ -30,4 +33,7 @@ export const elenaDay7Voices = [
   elena141,
   elena142,
   elena143,
+  elena144,
+  elena145,
+  elena146,
 ] as const;

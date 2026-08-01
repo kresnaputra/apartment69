@@ -841,12 +841,14 @@ const CutSceneOverlay = ({
     previousVideoTimeRef.current = 0;
   }, [endFrame, fps, src]);
 
+  // Only the video is sped up; the audio track always plays at its natural rate
+  // so voices/music never come out pitch-shifted.
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = forcedPlaybackSpeed ?? currentSpeed;
     }
     if (audioRef.current) {
-      audioRef.current.playbackRate = forcedPlaybackSpeed ?? currentSpeed;
+      audioRef.current.playbackRate = 1;
     }
   }, [currentSpeed, forcedPlaybackSpeed]);
 
@@ -931,6 +933,11 @@ const CutSceneOverlay = ({
 
   const shouldHandleOverlayClick = allowDirectExit || hasNarration;
 
+  // At 1x the audio is restarted in step with each video loop. When the video is
+  // sped up it wraps sooner than the audio does, so the audio is left to loop on
+  // its own clock instead of being cut short every wrap.
+  const audioFollowsVideoLoop = (forcedPlaybackSpeed ?? currentSpeed) === 1;
+
   const handleVideoTimeUpdate = useCallback(() => {
     const videoNode = videoRef.current;
     const audioNode = audioRef.current;
@@ -943,7 +950,7 @@ const CutSceneOverlay = ({
     if (playbackEndTime !== null && currentTime >= Math.max(0, playbackEndTime - 0.01)) {
       if (loop) {
         videoNode.currentTime = 0;
-        if (audioNode) {
+        if (audioNode && audioFollowsVideoLoop) {
           audioNode.currentTime = 0;
           void audioNode.play().catch(() => {});
         }
@@ -964,13 +971,13 @@ const CutSceneOverlay = ({
       return;
     }
 
-    if (loop && audioSrc && audioNode && currentTime + 0.2 < previousTime) {
+    if (loop && audioSrc && audioNode && audioFollowsVideoLoop && currentTime + 0.2 < previousTime) {
       audioNode.currentTime = 0;
       void audioNode.play().catch(() => {});
     }
 
     previousVideoTimeRef.current = currentTime;
-  }, [audioSrc, endTime, loop, videoEnded]);
+  }, [audioFollowsVideoLoop, audioSrc, endTime, loop, videoEnded]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
@@ -1158,6 +1165,7 @@ const CutSceneMediaLayer = memo(({
         src={audioSrc}
         autoPlay
         playsInline
+        loop={loop}
       />
     ) : null}
   </>

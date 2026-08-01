@@ -19,6 +19,7 @@ import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import knockSound from "@/sfx/knock.wav";
 import day6Bgm from "@/music/day6.mp3";
+import { elenaDay6Voices } from "@/voice/elena/day6";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 export const day6ElenaArthurScene: VisualNovelCommand[] = [
@@ -71,6 +72,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       ja: "招いた覚えはない。",
       ko: "난 너를 들어오라고 하지 않았어.",
     }),
+    { voice: elenaDay6Voices[0] },
   ),
   say(
     "arthur",
@@ -91,6 +93,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       ja: "それは許可じゃない。",
       ko: "그게 허락은 아니야.",
     }),
+    { voice: elenaDay6Voices[1] },
   ),
   narrate(
     tx({
@@ -137,6 +140,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       ja: "それで、感謝してほしいわけ？",
       ko: "그러니까 나한테 감사하라고?",
     }),
+    { voice: elenaDay6Voices[2] },
   ),
   say(
     "arthur",
@@ -157,6 +161,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       ja: "あの子はカンニングをした。",
       ko: "그 학생은 컨닝을 했어.",
     }),
+    { voice: elenaDay6Voices[3] },
   ),
   say(
     "arthur",
@@ -178,6 +183,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       ja: "圧力で成績を変えたら、私は自分の誠実さを失う。",
       ko: "압력 때문에 성적을 바꾸면 나는 내 성실함을 잃는 거야.",
     }),
+    { voice: elenaDay6Voices[4] },
   ),
   say(
     "arthur",
@@ -198,6 +204,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       ja: "部屋から出て行って。",
       ko: "내 유닛에서 나가.",
     }),
+    { voice: elenaDay6Voices[5] },
   ),
   say(
     "arthur",
@@ -218,6 +225,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
       ja: "断ったら？",
       ko: "그리고 내가 거부하면?",
     }),
+    { voice: elenaDay6Voices[6] },
   ),
   say(
     "arthur",
@@ -309,6 +317,7 @@ export const day6ElenaArthurScene: VisualNovelCommand[] = [
     "elena",
     "neutral",
     tx({ id: "Masuk.", en: "Come in.", ja: "入って。", ko: "들어와." }),
+    { voice: elenaDay6Voices[7] },
   ),
   narrate(
     tx({
@@ -481,6 +490,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
       ja: "アーサー。出て行って。",
       ko: "아서. 나가.",
     }),
+    { voice: elenaDay6Voices[8] },
   ),
   say(
     "arthur",
@@ -534,6 +544,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
       ja: "今自分が何をしたかわかってる？",
       ko: "방금 네가 무슨 짓을 한 건지 알아?",
     }),
+    { voice: elenaDay6Voices[9] },
   ),
   say(
     "arka",
@@ -554,6 +565,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
       ja: "違う。あなたは乗っ取ったの。",
       ko: "아니. 넌 장악했어.",
     }),
+    { voice: elenaDay6Voices[10] },
   ),
   narrate(
     tx({
@@ -572,6 +584,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
       ja: "最初から私が制御を失う姿を見たがっていた人間の前で、あなたは私の人生の決断を下した。",
       ko: "처음부터 나를 무너뜨리려 했던 사람 앞에서, 넌 내 인생에 대한 결정을 내렸어.",
     }),
+    { voice: elenaDay6Voices[11] },
   ),
   say(
     "arka",
@@ -592,6 +605,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
       ja: "確かにもう少しで崩れそうだった。でも、守るという名目で私の尊厳を奪わないで。",
       ko: "나는 정말 거의 무너졌어. 하지만 날 보호한다는 명목으로 내 자존심을 빼앗지 마.",
     }),
+    { voice: elenaDay6Voices[12] },
   ),
   narrate(
     tx({
@@ -605,6 +619,7 @@ export const day6ElenaProtectScene: VisualNovelCommand[] = [
     "elena",
     "neutral",
     tx({ id: "Pulanglah.", en: "Go home.", ja: "帰って。", ko: "돌아가." }),
+    { voice: elenaDay6Voices[13] },
   ),
   narrate(
     tx({
@@ -793,6 +808,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "明日、会議に行く。",
       ko: "내일 회의에 나갈게.",
     }),
+    { voice: elenaDay6Voices[14] },
   ),
   narrate(
     tx({
@@ -821,6 +837,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "成績を修正するためじゃない。",
       ko: "성적을 수정하러 가는 게 아니야.",
     }),
+    { voice: elenaDay6Voices[15] },
   ),
   narrate(
     tx({
@@ -839,6 +856,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "正式な報告書を持って行く。成績変更の圧力、寄付者の介入、そして無断で私の住居に来たことについて。",
       ko: "나는 공식 보고서를 들고 갈 거야. 성적 변경 압박, 기부자 개입, 그리고 네가 내 거주지에 무단으로 온 것에 대해서.",
     }),
+    { voice: elenaDay6Voices[16] },
   ),
   say(
     "arthur",
@@ -859,6 +877,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "そうかもしれない。でも自分の判断を売り渡して維持するくらいなら、もう自分を失っている。",
       ko: "아마도. 하지만 내 판단을 팔아서 지킨다면, 나는 이미 나 자신을 먼저 잃은 거야.",
     }),
+    { voice: elenaDay6Voices[17] },
   ),
   say(
     "arthur",
@@ -879,6 +898,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "違う。その橋が間違った場所に繋がっていると、今気づいただけ。",
       ko: "아니. 나는 그 다리가 잘못된 곳으로 이어진다는 걸 방금 깨달았을 뿐이야.",
     }),
+    { voice: elenaDay6Voices[18] },
   ),
   hide("arthur-day6-elena", "fadeAway"),
   moveTo("elena-day6-arthur", "center", -0.01),
@@ -899,6 +919,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "本当に録音してたの？",
       ko: "진짜로 녹음하고 있었어?",
     }),
+    { voice: elenaDay6Voices[19] },
   ),
   narrate(
     tx({
@@ -940,6 +961,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "ほんとに馬鹿ね。",
       ko: "너 진짜 멍청하다.",
     }),
+    { voice: elenaDay6Voices[20] },
   ),
   say(
     "arka",
@@ -978,6 +1000,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "ダメ。でも五分前よりはマシ。",
       ko: "아니. 하지만 5분 전보다는 나아.",
     }),
+    { voice: elenaDay6Voices[21] },
   ),
   narrate(
     tx({
@@ -1006,6 +1029,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "それでも持ってきたの？",
       ko: "그래도 가져왔어?",
     }),
+    { voice: elenaDay6Voices[22] },
   ),
   say(
     "arka",
@@ -1034,6 +1058,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "テーブルに置いて。",
       ko: "테이블에 놔.",
     }),
+    { voice: elenaDay6Voices[23] },
   ),
   narrate(
     tx({
@@ -1052,6 +1077,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "さっきは… ありがとう。",
       ko: "아까… 고마워.",
     }),
+    { voice: elenaDay6Voices[24] },
   ),
   say(
     "arka",
@@ -1072,6 +1098,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "それで十分だった。",
       ko: "그게 내가 필요했던 거야.",
     }),
+    { voice: elenaDay6Voices[25] },
   ),
   narrate(
     tx({
@@ -1090,6 +1117,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "私の代わりに決断してくれる人は必要ない。",
       ko: "나는 내 대신 결정해주는 사람이 필요하지 않아.",
     }),
+    { voice: elenaDay6Voices[26] },
   ),
   say(
     "arka",
@@ -1105,6 +1133,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "でも… いつも一人で立たなくてもいいのかもしれない。",
       ko: "하지만 어쩌면… 매번 혼자 서 있을 필요는 없는 것 같기도 해.",
     }),
+    { voice: elenaDay6Voices[27] },
   ),
   say(
     "arka",
@@ -1146,6 +1175,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
     "elena",
     "neutral",
     tx({ id: "Pahit.", en: "Bitter.", ja: "苦い。", ko: "써." }),
+    { voice: elenaDay6Voices[28] },
   ),
   say(
     "arka",
@@ -1166,6 +1196,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "まあまあね。",
       ko: "나쁘지 않네.",
     }),
+    { voice: elenaDay6Voices[29] },
   ),
   say(
     "arka",
@@ -1186,6 +1217,7 @@ export const day6ElenaStandScene: VisualNovelCommand[] = [
       ja: "雰囲気を壊さないで。",
       ko: "분위기 망치지 마.",
     }),
+    { voice: elenaDay6Voices[30] },
   ),
   say(
     "arka",
