@@ -1316,5 +1316,61 @@ export const day7ElenaBadEndingScene: VisualNovelCommand[] = [
     "elena-3",
   ),
 
+  bg(elenaHallwayOpenUrl),
+  narrate(
+    tx({
+      id: "Arka mundur pelan dari pintu kamar. Langkahnya terasa berat. Ia keluar dari unit 303 tanpa suara.",
+      en: "Arka slowly steps back from the bedroom door. His steps feel heavy. He leaves Unit 303 without a sound.",
+      ja: "アルカは寝室のドアからゆっくり後ずさる。足取りは重い。彼は音もなく303号室を出ていく。",
+      ko: "아르카는 침실 문에서 천천히 물러난다. 발걸음이 무겁게 느껴진다. 그는 아무 소리 없이 303호를 빠져나간다.",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Malam ini Elena benar-benar menyerahkan tubuhnya kepada Arthur. Bukan karena dipaksa. Tapi karena aku sendiri yang mendorongnya ke jurang itu. Dia memilih menjual dirinya demi karier yang dia bangun bertahun-tahun… dan aku hanya bisa menonton dari balik pintu.",
+      en: "Tonight, Elena truly gave her body to Arthur. Not because she was forced. But because I was the one who pushed her into that abyss. She chose to sell herself for the career she had built for years… and all I could do was watch from behind the door.",
+      ja: "今夜、エレナは本当に自分の体をアーサーに差し出した。無理やりではない。けれど、彼女をその崖へ追いやったのは俺自身だった。彼女は何年もかけて築いてきたキャリアのために自分を売ることを選び…俺はドアの向こうから見ていることしかできなかった。",
+      ko: "오늘 밤 엘레나는 정말로 자신의 몸을 아서에게 내주었다. 강요당해서가 아니었다. 하지만 그녀를 그 벼랑 끝으로 밀어 넣은 건 나 자신이었다. 그녀는 수년 동안 쌓아온 커리어를 위해 자신을 팔기로 선택했고… 나는 문 뒤에서 지켜볼 수밖에 없었다.",
+    }),
+    "arka",
+  ),
+  scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
+  centeredText(
+    tx({
+      id: "BAD ENDING - ELENA ROUTE: BROKEN INTEGRITY",
+      en: "BAD ENDING - ELENA ROUTE: BROKEN INTEGRITY",
+      ja: "バッドエンディング - エレナルート：壊れた誠実さ",
+      ko: "배드 엔딩 - 엘레나 루트: 무너진 신념",
+    }),
+    { size: "hero" },
+  ),
+  centeredText(
+    tx({
+      id: "SYSTEM: RELATIONSHIP WITH ELENA TERMINATED",
+      en: "SYSTEM: RELATIONSHIP WITH ELENA TERMINATED",
+      ja: "SYSTEM: エレナとの関係は終了しました",
+      ko: "SYSTEM: 엘레나와의 관계가 종료되었습니다",
+    }),
+    { size: "sub" },
+  ),
+  centeredText(
+    tx({
+      id: "ELENA HAS SURRENDERED TO ARTHUR",
+      en: "ELENA HAS SURRENDERED TO ARTHUR",
+      ja: "エレナはアーサーに屈しました",
+      ko: "엘레나는 아서에게 굴복했습니다",
+    }),
+    { size: "sub" },
+  ),
+  centeredText(
+    tx({
+      id: "ARTHUR PERMANENTLY CLAIMED ELENA",
+      en: "ARTHUR PERMANENTLY CLAIMED ELENA",
+      ja: "アーサーはエレナを永続的に手に入れました",
+      ko: "아서는 엘레나를 영구적으로 차지했습니다",
+    }),
+    { size: "sub" },
+  ),
+
   setFlag("elenaBadEndingCompleted", true),
 ];

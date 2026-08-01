@@ -917,6 +917,21 @@ const CutSceneOverlay = ({
     };
   }, [audioSrc, endTime, src]);
 
+  // React only detaches the media nodes on unmount; it never pauses them, and a
+  // detached element still held by a ref keeps playing. Without this the cutscene
+  // audio bleeds into whatever scene comes next.
+  useEffect(() => {
+    const videoNode = videoRef.current;
+    const audioNode = audioRef.current;
+    return () => {
+      videoNode?.pause();
+      if (audioNode) {
+        audioNode.pause();
+        audioNode.currentTime = 0;
+      }
+    };
+  }, []);
+
   const handleSpeedChange = (speed: number) => {
     setCurrentSpeed(speed);
   };
