@@ -813,6 +813,7 @@ const CutSceneOverlay = ({
   const audioRef = useRef<HTMLAudioElement>(null);
   const narrationRef = useRef<CutSceneNarrationHandle | null>(null);
   const previousVideoTimeRef = useRef(0);
+  const lastAudioRestartRef = useRef(0);
 
   const hasNarration = Array.isArray(narrate) ? narrate.length > 0 : Boolean(narrate);
   const endTime = typeof endFrame === "number" && typeof fps === "number" && fps > 0
@@ -933,10 +934,18 @@ const CutSceneOverlay = ({
 
   const shouldHandleOverlayClick = allowDirectExit || hasNarration;
 
-  // At 1x the audio is restarted in step with each video loop. When the video is
-  // sped up it wraps sooner than the audio does, so the audio is left to loop on
-  // its own clock instead of being cut short every wrap.
-  const audioFollowsVideoLoop = (forcedPlaybackSpeed ?? currentSpeed) === 1;
+  // The video is the clock: every time it wraps the audio jumps back to 0, even
+  // if it was still mid-playback. Both the frame callback and timeupdate can spot
+  // the same wrap, so restarts are debounced to keep it to one seek.
+  const restartAudio = useCallback(() => {
+    const audioNode = audioRef.current;
+    if (!audioNode) return;
+    const now = performance.now();
+    if (now - lastAudioRestartRef.current < 120) return;
+    lastAudioRestartRef.current = now;
+    audioNode.currentTime = 0;
+    void audioNode.play().catch(() => {});
+  }, []);
 
   const handleVideoTimeUpdate = useCallback(() => {
     const videoNode = videoRef.current;
@@ -950,9 +959,8 @@ const CutSceneOverlay = ({
     if (playbackEndTime !== null && currentTime >= Math.max(0, playbackEndTime - 0.01)) {
       if (loop) {
         videoNode.currentTime = 0;
-        if (audioNode && audioFollowsVideoLoop) {
-          audioNode.currentTime = 0;
-          void audioNode.play().catch(() => {});
+        if (audioNode) {
+          restartAudio();
         }
         previousVideoTimeRef.current = 0;
         return;
@@ -971,13 +979,40 @@ const CutSceneOverlay = ({
       return;
     }
 
-    if (loop && audioSrc && audioNode && audioFollowsVideoLoop && currentTime + 0.2 < previousTime) {
-      audioNode.currentTime = 0;
-      void audioNode.play().catch(() => {});
+    if (loop && audioSrc && audioNode && currentTime + 0.2 < previousTime) {
+      restartAudio();
     }
 
     previousVideoTimeRef.current = currentTime;
-  }, [audioFollowsVideoLoop, audioSrc, endTime, loop, videoEnded]);
+  }, [audioSrc, endTime, loop, restartAudio, videoEnded]);
+
+  // timeupdate only fires ~4x/sec, so on its own it can notice a wrap up to 250ms
+  // late — a quarter of the whole cycle once the video is sped up. The frame
+  // callback sees the wrap on the very frame it happens.
+  useEffect(() => {
+    const videoNode = videoRef.current;
+    if (!videoNode || !loop || !audioSrc) return;
+    if (typeof videoNode.requestVideoFrameCallback !== "function") return;
+
+    let handle = 0;
+    let cancelled = false;
+
+    const onFrame: VideoFrameRequestCallback = (_now, metadata) => {
+      if (cancelled) return;
+      const mediaTime = metadata.mediaTime;
+      if (mediaTime + 0.2 < previousVideoTimeRef.current) {
+        restartAudio();
+      }
+      previousVideoTimeRef.current = mediaTime;
+      handle = videoNode.requestVideoFrameCallback(onFrame);
+    };
+
+    handle = videoNode.requestVideoFrameCallback(onFrame);
+    return () => {
+      cancelled = true;
+      videoNode.cancelVideoFrameCallback?.(handle);
+    };
+  }, [audioSrc, loop, restartAudio, src]);
 
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
