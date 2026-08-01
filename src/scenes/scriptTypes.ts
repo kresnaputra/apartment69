@@ -10,6 +10,7 @@ import type {
   CutSceneCommand,
   CutSceneNarration,
   CutSceneSelection,
+  CutSceneSpeed,
   FlagValue,
   HideCharacterCommand,
   JumpIfCommand,
@@ -266,6 +267,7 @@ export const cutScene = (
   audioSrc?: string,
   endFrame?: number,
   fps?: number,
+  speed?: CutSceneSpeed,
 ): CutSceneCommand => ({
   type: "cutScene",
   src,
@@ -273,6 +275,7 @@ export const cutScene = (
   loop,
   narrate,
   showSpeedControl,
+  speed,
   endFrame,
   fps,
 });

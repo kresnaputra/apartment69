@@ -26,12 +26,19 @@ export type FlagMap = Record<string, FlagValue>;
 export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts" | "laptop-cleanup" | "email-compose";
 export type CutSceneNarration = LocalizedText | LocalizedText[];
 
+/**
+ * Fixed playback speed for a cut scene, set in the script rather than by the
+ * player. Accepts the shorthand "2x" or the plain number 2.
+ */
+export type CutSceneSpeed = "1x" | "2x" | "3x" | "4x" | 1 | 2 | 3 | 4;
+
 export type ActiveCutScene = {
   src: string;
   audioSrc?: string;
   loop?: boolean;
   narrate?: CutSceneNarration;
   showSpeedControl?: boolean;
+  speed?: CutSceneSpeed;
   endFrame?: number;
   fps?: number;
 };
@@ -218,6 +225,7 @@ export type CutSceneCommand = {
   loop?: boolean;
   narrate?: CutSceneNarration;
   showSpeedControl?: boolean;
+  speed?: CutSceneSpeed;
   endFrame?: number;
   fps?: number;
 };
@@ -236,6 +244,7 @@ export type CutSceneSelection = {
   loop?: boolean;
   narrate?: CutSceneNarration;
   showSpeedControl?: boolean;
+  speed?: CutSceneSpeed;
   enabled?: boolean;
   endFrame?: number;
   fps?: number;

@@ -52,7 +52,7 @@ import { useNovelStore } from "@/store/novelStore";
 import { characterFrameRegistry } from "@/lib/runtime/characterFrameRegistry";
 import { getCharacterBundleTotalFrames } from "@/types/characterBundle";
 import type { LoadedCharacterBundle } from "@/types/characterBundle";
-import type { CharacterInstance, CutSceneNarration, CutSceneSelection } from "@/types/novel";
+import type { CharacterInstance, CutSceneNarration, CutSceneSelection, CutSceneSpeed } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
 import nropLogo from "@/assets/logo-nrop.png";
 import nvmLogo from "@/assets/nvm-logo-white.png";
@@ -754,6 +754,15 @@ const DialogueUI = memo(({
   );
 });
 
+/**
+ * Normalizes a script-declared cut scene speed ("2x" or 2) into a playbackRate.
+ * Returns undefined when unset so the player keeps its default 1x.
+ */
+const resolveCutSceneSpeed = (speed?: CutSceneSpeed): number | undefined => {
+  if (speed === undefined) return undefined;
+  return typeof speed === "number" ? speed : Number(speed.replace("x", ""));
+};
+
 const CutSceneOverlay = ({
   src,
   audioSrc,
@@ -813,6 +822,7 @@ const CutSceneOverlay = ({
     { label: "1x", value: 1 },
     { label: "2x", value: 2 },
     { label: "3x", value: 3 },
+    { label: "4x", value: 4 },
   ];
 
   useEffect(() => {
@@ -1354,6 +1364,7 @@ const MultiCutSceneOverlay = ({
         loop={activeSelection.loop}
         narrate={activeSelection.narrate}
         showSpeedControl={false}
+        forcedPlaybackSpeed={resolveCutSceneSpeed(activeSelection.speed)}
         endFrame={activeSelection.endFrame}
         fps={activeSelection.fps}
         language={language}
@@ -2397,6 +2408,7 @@ const App = () => {
             loop={activeCutScene.loop}
             narrate={activeCutScene.narrate}
             showSpeedControl={activeCutScene.showSpeedControl}
+            forcedPlaybackSpeed={resolveCutSceneSpeed(activeCutScene.speed)}
             endFrame={activeCutScene.endFrame}
             fps={activeCutScene.fps}
             language={language}

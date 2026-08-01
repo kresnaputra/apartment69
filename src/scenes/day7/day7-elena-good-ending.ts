@@ -18,6 +18,7 @@ import {
 } from "@/scenes/scriptTypes";
 import elenaHallwayOpenUrl from "@/background/elena-hallway-open.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
+import bedroomNightUrl from "@/background/bedroom-night.png";
 import knockSound from "@/sfx/knock.wav";
 import elenaG1Url from "@/cut-scene/elena-g1.png";
 import elenaG2Url from "@/cut-scene/elena-g2.png";
@@ -40,6 +41,26 @@ import elenaSpecialSceneG3_3 from "@/cut-scene/elena-g3-3.webm";
 import elenaSpecialSceneG3_3Sound from "@/voice/elena/elena-g3-3.wav";
 import elenaSpecialSceneG3_4 from "@/cut-scene/elena-g4.webm";
 import elenaSpecialSceneG3_4Sound from "@/voice/elena/elena-g4.wav";
+import elenaSpecialSceneBadG1_1 from "@/cut-scene/elena-bad-g1-1.webm";
+import elenaSpecialSceneBadG1_1Sound from "@/voice/elena/elena-bad-g1-1.wav";
+import elenaSpecialSceneBadG1_2 from "@/cut-scene/elena-bad-g1-2.webm";
+import elenaSpecialSceneBadG1_2Sound from "@/voice/elena/elena-bad-g1-2.wav";
+import elenaSpecialSceneBadG1_3 from "@/cut-scene/elena-bad-g1-3.webm";
+import elenaSpecialSceneBadG1_3Sound from "@/voice/elena/elena-bad-g1-3.wav";
+import elenaSpecialSceneBadG2_1 from "@/cut-scene/elena-bad-g2-1.webm";
+import elenaSpecialSceneBadG2_1Sound from "@/voice/elena/elena-bad-g2-1.wav";
+import elenaSpecialSceneBadG2_2 from "@/cut-scene/elena-bad-g2-2.webm";
+import elenaSpecialSceneBadG2_2Sound from "@/voice/elena/elena-bad-g2-2.wav";
+import elenaSpecialSceneBadG2_3 from "@/cut-scene/elena-bad-g2-3.webm";
+import elenaSpecialSceneBadG2_3Sound from "@/voice/elena/elena-bad-g2-3.wav";
+import elenaSpecialSceneBadG2_4 from "@/cut-scene/elena-bad-g2-4.webm";
+import elenaSpecialSceneBadG2_4Sound from "@/voice/elena/elena-bad-g2-4.wav";
+import elenaSpecialSceneBadG3_1 from "@/cut-scene/elena-bad-g3-1.webm";
+import elenaSpecialSceneBadG3_1Sound from "@/voice/elena/elena-bad-g3-1.wav";
+import elenaSpecialSceneBadG3_2 from "@/cut-scene/elena-bad-g3-2.webm";
+import elenaSpecialSceneBadG3_2Sound from "@/voice/elena/elena-bad-g3-2.wav";
+import elenaSpecialSceneBadG3_3 from "@/cut-scene/elena-bad-g3-3.webm";
+import elenaSpecialSceneBadG3_3Sound from "@/voice/elena/elena-bad-g3-3.wav";
 
 export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
   hide("arka-day6-elena"),
@@ -824,4 +845,456 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
     { size: "sub" },
   ),
   setFlag("elenaGoodEndingCompleted", true),
+];
+
+export const day7ElenaBadEndingScene: VisualNovelCommand[] = [
+  hide("arka-day6-elena"),
+  hide("elena-day6-arthur"),
+  hide("arthur-day6-elena"),
+  bg(bedroomNightUrl),
+  show("arka-day7-elena-bad", "arka", "serious", {
+    position: "left",
+    enterFrom: "fade",
+  }),
+  narrate(
+    tx({
+      id: "Arka tidak bisa tidur. Rasa bersalah dan khawatir membuatnya gelisah. Ia keluar dari unitnya dan berjalan ke depan pintu Unit 303. Pintu tidak terkunci rapat.",
+      en: "Arka cannot sleep. Guilt and worry keep him restless. He leaves his unit and walks to the door of Unit 303. The door is not fully locked.",
+      ja: "アルカは眠れない。罪悪感と不安が彼を落ち着かなくさせていた。彼は自分の部屋を出て、303号室の前まで歩いていく。ドアはきちんと鍵がかかっていない。",
+      ko: "아르카는 잠들 수 없다. 죄책감과 걱정이 그를 불안하게 만든다. 그는 자신의 호실을 나와 303호 문 앞으로 걸어간다. 문은 제대로 잠겨 있지 않다.",
+    }),
+  ),
+  bg(elenaHallwayOpenUrl),
+  narrate(
+    tx({
+      id: "Aku cuma mau memastikan dia baik-baik saja…",
+      en: "I just want to make sure she is okay…",
+      ja: "ただ、彼女が無事か確かめたいだけだ…",
+      ko: "그냥 그녀가 괜찮은지 확인하고 싶을 뿐이야…",
+    }),
+    "arka",
+  ),
+  narrate(
+    tx({
+      id: "Arka mendorong pintu pelan. Dari dalam terdengar suara desahan samar dan suara tempat sofa yang berderit.",
+      en: "Arka pushes the door gently. From inside, a faint moan and the creak of a sofa can be heard.",
+      ja: "アルカがそっとドアを押す。中から微かな喘ぎ声と、きしむソファの音が聞こえる。",
+      ko: "아르카가 문을 살짝 밀었다. 안에서 희미한 신음소리와 소파가 삐걱이는 소리가 들렸다.",
+    }),
+  ),
+  hide("arka-day7-elena-bad", "fadeAway"),
+  blackScreen(),
+  narrate(
+    tx({
+      id: "Dan Arka melihatnya.",
+      en: "And Arka sees it.",
+      ja: "そしてアルカは、それを見てしまう。",
+      ko: "그리고 아르카는 그것을 보고 만다.",
+    }),
+  ),
+  clearBlackScreen(),
+  multiCutScene(
+    [
+      {
+        id: "elena-1",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: elenaSpecialSceneBadG1_1,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG1_1Sound,
+        narrate: [
+          {
+            id: "Tubuh Elena telanjang dan berkeringat. Rambutnya acak-acakan. Ia menumpukan tangan di dada Arthur sambil menggerakkan pinggulnya naik-turun",
+            en: "Elena's body is naked and sweaty. Her hair is messy. She piles her hands on Arthur's chest while moving her hips up and down.",
+            ja: "エレナの体は裸で汗ばんでいる。髪は乱れている。彼女はハーレスの胸に手を重ねながら、お尻を上下させている。",
+            ko: "엘레나의 몸은 벗겨지고 땀이 흘러내린다. 머리카락은 어지럽다. 그녀는 하레스의 가슴에 손을 얹고 허리를 위아래로 움직이고 있다.",
+          },
+          {
+            id: "Elena: “Ahh… pelan dulu… nnghh…”",
+            en: "Elena: “Ahh… slow down… nnghh…”",
+            ja: "エレナ：「ああ…ちょっとだけ…ううん…」",
+            ko: "엘레나: “아아… 천천히… 으음…”",
+          },
+          {
+            id: "Arthur: “Kamu yang bilang mau cepat tadi. Sekarang minta pelan?”",
+            en: "Arthur: “You were the one who said you wanted it fast earlier. Now you want me to slow down?”",
+            ja: "ハーレス：「さっきは早くって言ったのはあなたじゃなかったっけ？今度はゆっくりって言うの？」",
+            ko: "아서: “아까는 빨리 라고 말한 건 너였지. 지금은 천천히 라고 말하는 거야?”",
+          },
+        ],
+      },
+      {
+        id: "elena-2",
+        label: tx({
+          id: "Gaya 2",
+          en: "Style 2",
+          ja: "スタイル2",
+          ko: "스타일2",
+        }),
+        src: elenaSpecialSceneBadG1_2,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG1_2Sound,
+        narrate: [
+          {
+            id: "Elena mempercepat gerakannya. Dada montoknya bergoyang mengikuti setiap naik turun.",
+            en: "Elena speeds up her movements. Her plump tits bounce with every rise and fall.",
+            ja: "エレナは腰の動きを速める。むっちりしたおっぱいが、上下するたびに激しく揺れる。",
+            ko: "엘레나는 움직임을 빠르게 한다. 풍만한 가슴이 오르내릴 때마다 출렁거린다.",
+          },
+          {
+            id: "Elena: “Ahh! Ahh! Kau bilang bakal lindungi aku… ahh!”",
+            en: "Elena: “Ahh! Ahh! You said you’d protect me… ahh!”",
+            ja: "エレナ：「あっ！あっ！守ってくれるって言ったのに…あっ！」",
+            ko: "엘레나: “아앗! 아앗! 지켜준다고 했잖아… 아앗!”",
+          },
+          {
+            id: "Arthur: “Iya. Asal kamu nurut kayak gini setiap aku mau.”",
+            en: "Arthur: “Yeah. As long as you stay obedient like this whenever I want.”",
+            ja: "ハーレス：「ああ。その代わり、俺が欲しいときはいつでもこうして従うんだぞ。」",
+            ko: "아서: “그래. 대신 내가 원할 때마다 이렇게 순종하면 돼.”",
+          },
+          {
+            id: "Arthur menampar pantat Elena keras sekali. Elena menggigit bibirnya tapi tidak berhenti bergerak.",
+            en: "Arthur slaps Elena’s ass hard. She bites her lip but doesn’t stop riding him.",
+            ja: "ハーレスがエレナの尻を強く叩く。エレナは唇を噛むが、腰の動きは止めない。",
+            ko: "아서가 엘레나의 엉덩이를 세게 때린다. 엘레나는 입술을 깨물지만 허리를 멈추지 않는다.",
+          },
+        ],
+      },
+      {
+        id: "elena-3",
+        label: tx({
+          id: "Gaya 3",
+          en: "Style 3",
+          ja: "スタイル3",
+          ko: "스타일3",
+        }),
+        src: elenaSpecialSceneBadG1_3,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG1_3Sound,
+        narrate: [
+          {
+            id: "Elena: “Lebih dalam… aku mau cepat selesai… nnghh!!”",
+            en: "Elena: “Deeper… I want to cum fast… nnghh!!”",
+            ja: "エレナ：「もっと深く…早くイキたい…んぐっ!!」",
+            ko: "엘레나: “더 깊게… 빨리 가고 싶어… 으응!!”",
+          },
+          {
+            id: "Arthur: “Kamu basah banget. Ternyata suka yang kasar ya?”",
+            en: "Arthur: “You’re so fucking wet. So you like it rough, huh?”",
+            ja: "ハーレス：「びしょびしょじゃん。荒々しいのが好きだったのか？」",
+            ko: "아서: “완전 젖었네. 거칠게 하는 거 좋아하나 봐?”",
+          },
+          {
+            id: "Arthur mendorong pinggul Elena dari bawah dengan kuat.",
+            en: "Arthur thrusts up hard into Elena’s hips from below.",
+            ja: "ハーレスが下からエレナの腰を強く突き上げる。",
+            ko: "아서가 아래에서 엘레나의 허리를 세게 밀어 올린다.",
+          },
+          {
+            id: "Elena: “AAHH!! Terlalu dalam…!”",
+            en: "Elena: “AAHH!! Too deep…!”",
+            ja: "エレナ：「あぁっ!! 深すぎ…！」",
+            ko: "엘레나: “아아앗!! 너무 깊어…!”",
+          },
+        ],
+      },
+    ],
+    "elena-1",
+  ),
+  multiCutScene(
+    [
+      {
+        id: "elena-4",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: elenaSpecialSceneBadG2_1,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG2_1Sound,
+        narrate: [
+          {
+            id: "Arthur membalikkan posisi Elena. Ia menindih tubuhnya dan memasukkan dirinya lagi dengan gerakan yang sangat pelan.",
+            en: "Arthur flips Elena over. He pins her body down and slides back inside her, painfully slow.",
+            ja: "ハーレスがエレナの体勢をひっくり返す。彼女の体を押し潰すように覆い、ごくゆっくりとまた中に入れる。",
+            ko: "아서가 엘레나의 자세를 뒤집는다. 몸을 짓누르고 아주 천천히 다시 안으로 넣는다.",
+          },
+          {
+            id: "Elena: “Ahh… pelan sedikit… nnghh!”",
+            en: "Elena: “Ahh… a little slower… nnghh!”",
+            ja: "エレナ：「あっ…ちょっとゆっくり…んぐっ！」",
+            ko: "엘레나: “아아… 조금만 천천히… 으응!”",
+          },
+          {
+            id: "Arthur: “Jangan banyak protes.”",
+            en: "Arthur: “Don’t complain so much.”",
+            ja: "ハーレス：「文句が多いな。」",
+            ko: "아서: “투정 그만 부려.”",
+          },
+          {
+            id: "Elena: “Aku cuma… ahh…”",
+            en: "Elena: “I was just… ahh…”",
+            ja: "エレナ：「ただ…あっ…」",
+            ko: "엘레나: “그냥… 아앗…”",
+          },
+          {
+            id: "Arthur bergerak naik turun dengan tempo yang lambat, menikmati setiap detiknya. Elena menggigit bibirnya, kedua tangannya masih mencoba menahan bahu Arthur.",
+            en: "Arthur fucks her slow, savoring every second. Elena bites her lip, her hands still trying to hold back his shoulders.",
+            ja: "ハーレスはゆっくりとしたテンポで腰を上下させ、一瞬一瞬を味わう。エレナは唇を噛み、両手でまだハーレスの肩を押し支えようとしている。",
+            ko: "아서는 느린 템포로 위아래로 움직이며 매 순간을 즐긴다. 엘레나는 입술을 깨물고, 양손으로 여전히 아서의 어깨를 막으려 한다.",
+          },
+        ],
+      },
+      {
+        id: "elena-5",
+        label: tx({
+          id: "Gaya 2",
+          en: "Style 2",
+          ja: "スタイル2",
+          ko: "스타일2",
+        }),
+        src: elenaSpecialSceneBadG2_2,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG2_2Sound,
+        narrate: [
+          {
+            id: "Arthur mulai mempercepat sedikit gerakannya. Suara basah dari pertemuan tubuh mereka terdengar jelas.",
+            en: "Arthur starts fucking her a little faster. The wet sounds of their bodies meeting ring out clearly.",
+            ja: "ハーレスは少し腰の動きを速める。互いの体がぶつかるたびに、濡れそぼった音がはっきり聞こえる。",
+            ko: "아서가 조금씩 더 빠르게 움직이기 시작한다. 서로의 몸이 부딪힐 때마다 축축한 소리가 또렷이 들린다.",
+          },
+          {
+            id: "Elena: “Nnghh… lebih dalam… tapi jangan terlalu cepat…”",
+            en: "Elena: “Nnghh… deeper… but not too fast…”",
+            ja: "エレナ：「んぐっ…もっと深く…でも速くしすぎないで…」",
+            ko: "엘레나: “으응… 더 깊게… 근데 너무 빠르진 마…”",
+          },
+          {
+            id: "Arthur: “Kamu bilang begitu, tapi tubuhmu sudah mengapitku erat.”",
+            en: "Arthur: “You say that, but your pussy is already squeezing me so tight.”",
+            ja: "ハーレス：「そう言いながら、体はもうぎゅっと俺を締めつけてるぞ。」",
+            ko: "아서: “그렇게 말하면서, 네 몸은 이미 날 꽉 조이고 있잖아.”",
+          },
+          {
+            id: "Elena: “Aku… ahh… aku tidak bisa menahan…!”",
+            en: "Elena: “I… ahh… I can’t hold it…!”",
+            ja: "エレナ：「私…あっ…もう我慢できない…！」",
+            ko: "엘레나: “나… 아앗… 참을 수가 없어…!”",
+          },
+          {
+            id: "Elena mencengkeram punggung Arthur. Kuku-kukunya sedikit menancap di kulitnya.",
+            en: "Elena clutches Arthur’s back. Her nails dig slightly into his skin.",
+            ja: "エレナがハーレスの背中を掴む。爪がわずかに肌に食い込む。",
+            ko: "엘레나가 아서의 등을 움켜쥔다. 손톱이 피부에 살짝 파고든다.",
+          },
+        ],
+        speed: "3x"
+      },
+      {
+        id: "elena-6",
+        label: tx({
+          id: "Gaya 3",
+          en: "Style 3",
+          ja: "スタイル3",
+          ko: "스타일3",
+        }),
+        src: elenaSpecialSceneBadG2_3,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG2_3Sound,
+        narrate: [
+          {
+            id: "Arthur tidak lagi menahan diri. Ia menghentak lebih cepat dan lebih dalam. Elena mulai kesulitan berbicara.",
+            en: "Arthur stops holding back. He pounds into her faster and deeper. Elena can barely form words.",
+            ja: "ハーレスはもう我慢しない。より速く、より深く突き上げる。エレナはうまく声にならない。",
+            ko: "아서는 더 이상 참지 않는다. 더 빠르고 더 깊게 찔러 넣는다. 엘레나는 말을 제대로 잇지 못한다.",
+          },
+          {
+            id: "Elena: “Ahh! Ahh! Pelan… nngghh!!”",
+            en: "Elena: “Ahh! Ahh! Slow… nngghh!!”",
+            ja: "エレナ：「あっ！あっ！ゆっくり…んぐっ!!」",
+            ko: "엘레나: “아앗! 아앗! 천천히… 으으응!!”",
+          },
+          {
+            id: "Arthur: “Kamu tidak boleh melawan.”",
+            en: "Arthur: “You’re not allowed to fight back.”",
+            ja: "ハーレス：「抵抗しちゃダメだ。」",
+            ko: "아서: “반항하면 안 돼.”",
+          },
+          {
+            id: "Elena: “Aku mau keluar… cepat… ahhh!!”",
+            en: "Elena: “I’m gonna cum… soon… ahhh!!”",
+            ja: "エレナ：「イキそう…もう…あっあっ!!」",
+            ko: "엘레나: “갈 것 같아… 빨리… 아아앗!!”",
+          },
+          {
+            id: "Arthur: “Tahan sedikit lagi.”",
+            en: "Arthur: “Hold it a little longer.”",
+            ja: "ハーレス：「もうちょっと我慢しろ。」",
+            ko: "아서: “조금만 더 참아.”",
+          },
+          {
+            id: "Arthur: “Tahan sedikit lagi.”",
+            en: "Arthur: “Hold it a little longer.”",
+            ja: "ハーレス：「もうちょっと我慢しろ。」",
+            ko: "아서: “조금만 더 참아.”",
+          },
+        ],
+      },
+      {
+        id: "elena-7",
+        label: tx({
+          id: "Gaya 4",
+          en: "Style 4",
+          ja: "スタイル4",
+          ko: "스타일4",
+        }),
+        src: elenaSpecialSceneBadG2_4,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG2_4Sound,
+        narrate: [
+          {
+            id: "Elena: “ ahhh!! AAHHH…!!”",
+            en: "“ ahhh!! AAHHH…!!”",
+            ja: "「あっあっ!! アアアッハッハ…!!」",
+            ko: "“아아아!! 아아아아…!!”",
+          },
+        ],
+      },
+    ],
+    "elena-2",
+  ),
+  multiCutScene(
+    [
+      {
+        id: "elena-8",
+        label: tx({
+          id: "Gaya 1",
+          en: "Style 1",
+          ja: "スタイル1",
+          ko: "스타일1",
+        }),
+        src: elenaSpecialSceneBadG3_1,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG3_1Sound,
+        narrate: [
+          {
+            id: "Arthur menarik Elena bangun dan membalikkan tubuhnya. Ia menyodorkan pinggul Elena ke belakang di pinggir tempat tidur.",
+            en: "Arthur pulls Elena up and flips her around. He bends her hips back over the edge of the bed.",
+            ja: "ハーレスがエレナを引き起こし、体をひっくり返す。ベッドの端で彼女の腰を後ろに突き出す。",
+            ko: "아서가 엘레나를 일으켜 몸을 뒤집는다. 침대 가장자리에서 엘레나의 허리를 뒤로 밀어 낸다.",
+          },
+          {
+            id: "Elena: “Dari belakang lagi…?”",
+            en: "Elena: “From behind again…?”",
+            ja: "エレナ：「また後ろから…？」",
+            ko: "엘레나: “또 뒤에서…?”",
+          },
+          {
+            id: "Arthur: “Belum puas. Sekali lagi.”",
+            en: "Arthur: “Not done yet. One more time.”",
+            ja: "ハーレス：「まだ足りない。もう一回だ。」",
+            ko: "아서: “아직 모자라. 한 번 더.”",
+          },
+          {
+            id: "Elena: “Ahh! Dalam sekali… nnghh!”",
+            en: "Elena: “Ahh! So deep… nnghh!”",
+            ja: "エレナ：「あっ！深い…んぐっ！」",
+            ko: "엘레나: “아앗! 너무 깊어… 으응!”",
+          },
+          {
+            id: "Arthur: “Gerakkan pinggulmu sendiri.”",
+            en: "Arthur: “Move your hips yourself.”",
+            ja: "ハーレス：「自分で腰を動かせ。」",
+            ko: "아서: “네가 직접 허리를 움직여.”",
+          },
+        ],
+      },
+      {
+        id: "elena-9",
+        label: tx({
+          id: "Gaya 2",
+          en: "Style 2",
+          ja: "スタイル2",
+          ko: "스타일2",
+        }),
+        src: elenaSpecialSceneBadG3_2,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG3_2Sound,
+        narrate: [
+          {
+            id: "Elena mulai menggerakkan pinggulnya sambil Arthur mendorong dari belakang.",
+            en: "Elena starts rocking her hips while Arthur thrusts into her from behind.",
+            ja: "エレナが腰を動かし始め、ハーレスが後ろから突き入れる。",
+            ko: "엘레나가 허리를 움직이기 시작하고, 아서가 뒤에서 밀어 넣는다.",
+          },
+          {
+            id: "Elena: “Ahh… ahh… lebih cepat…”",
+            en: "Elena: “Ahh… ahh… faster…”",
+            ja: "エレナ：「あっ…あっ…もっと速く…」",
+            ko: "엘레나: “아앗… 아앗… 더 빠르게…”",
+          },
+          {
+            id: "Gerakan semakin cepat dan kuat.",
+            en: "Their movements grow faster and harder.",
+            ja: "動きはますます速く、激しくなっていく。",
+            ko: "움직임이 점점 더 빠르고 세게 변한다.",
+          },
+          {
+            id: "Elena: “Aku… aku keluar lagi… AAHH!!”",
+            en: "Elena: “I… I’m cumming again… AAHH!!”",
+            ja: "エレナ：「私…またイく…あぁっ!!」",
+            ko: "엘레나: “나… 또 가… 아아앗!!”",
+          },
+          {
+            id: "Arthur: “Aku juga…!”",
+            en: "Arthur: “Me too…!”",
+            ja: "ハーレス：「俺も…！」",
+            ko: "아서: “나도…!”",
+          },
+        ],
+      },
+      {
+        id: "elena-10",
+        label: tx({
+          id: "Gaya 3",
+          en: "Style 3",
+          ja: "スタイル3",
+          ko: "스타일3",
+        }),
+        src: elenaSpecialSceneBadG3_3,
+        loop: true,
+        audioSrc: elenaSpecialSceneBadG3_3Sound,
+        narrate: [
+          {
+            id: "Arthur: “Bagus. Besok aku urus surat pemberhentianmu. Kamu selamat… asal kamu ingat kesepakatan kita.”",
+            en: "Arthur: “It’s over. Tomorrow I’ll handle your termination letter. You’re safe… as long as you remember our deal.”",
+            ja: "ハーレス：「終わりだ。明日、お前の解雇通知は俺が何とかする。お前は助かる…俺たちとの約束を忘れなければな。」",
+            ko: "아서: “끝났다. 내일 네 해고 통지서는 내가 처리한다. 넌 살았어… 우리 약속을 기억하는 한.”",
+          },
+          {
+            id: "Elena: “Iya… aku ingat.”",
+            en: "Elena: “Yes… I remember.”",
+            ja: "エレナ：「はい…覚えてます。」",
+            ko: "엘레나: “네… 기억해요.”",
+          },
+          {
+            id: "Elena ambruk ke kasur, napasnya tersengal. Air mata pelan mengalir di pipinya. Ia menutup matanya erat.",
+            en: "Elena collapses onto the mattress, gasping for air. Tears slowly slide down her cheeks. She squeezes her eyes shut.",
+            ja: "エレナはマットレスに崩れ落ち、息を切らせる。涙がゆっくりと頰を伝う。彼女は固く目を閉じる。",
+            ko: "엘레나는 매트리스에 쓰러져 숨을 헐떡인다. 눈물이 천천히 볼을 타고 흐른다. 그녀는 눈을 꼭 감는다.",
+          },
+        ],
+      },
+    ],
+    "elena-3",
+  ),
+
+  setFlag("elenaBadEndingCompleted", true),
 ];

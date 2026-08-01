@@ -62,6 +62,9 @@ export const day7IntroScene: VisualNovelCommand[] = [
   jumpIf("elenaRelationshipStrengthened", "day7-elena-good-ending", {
     value: true,
   }),
+  jumpIf("elenaRelationshipDamaged", "day7-elena-bad-ending", {
+    value: true,
+  }),
   bg(
     bedroomNightUrl,
     tx({
