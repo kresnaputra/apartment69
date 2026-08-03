@@ -1,4 +1,4 @@
-import { type CSSProperties, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
+import { type CSSProperties, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorButtonMinigameMobile";
@@ -763,6 +763,131 @@ const resolveCutSceneSpeed = (speed?: CutSceneSpeed): number | undefined => {
   return typeof speed === "number" ? speed : Number(speed.replace("x", ""));
 };
 
+type CutSceneAudioHandle = {
+  start: () => void;
+  stop: () => void;
+  isPlaying: () => boolean;
+};
+
+/**
+ * One context for every cut scene there will ever be. Browsers cap how many can be
+ * open at once and each one runs its own realtime audio thread, so minting a fresh
+ * one per overlay — and a multiCutScene remounts the overlay on every selection —
+ * piles up threads faster than close() retires them.
+ */
+let sharedCutSceneAudioContext: AudioContext | null = null;
+
+const getCutSceneAudioContext = () => {
+  if (!sharedCutSceneAudioContext) {
+    sharedCutSceneAudioContext = new AudioContext();
+  }
+  // A context built before the page saw any gesture comes back suspended.
+  if (sharedCutSceneAudioContext.state === "suspended") {
+    void sharedCutSceneAudioContext.resume().catch(() => {});
+  }
+  return sharedCutSceneAudioContext;
+};
+
+/**
+ * Starts the decoded clip, replacing whatever was already sounding. Kept outside
+ * the hook so the decode callback can reach it without a ref dance.
+ */
+const spawnCutSceneAudioSource = (
+  context: AudioContext,
+  buffer: AudioBuffer,
+  sourceRef: { current: AudioBufferSourceNode | null },
+) => {
+  const previous = sourceRef.current;
+  if (previous) {
+    previous.onended = null;
+    previous.stop();
+  }
+
+  const source = context.createBufferSource();
+  source.buffer = buffer;
+  source.connect(context.destination);
+  source.onended = () => {
+    if (sourceRef.current === source) sourceRef.current = null;
+  };
+  source.start();
+  sourceRef.current = source;
+};
+
+/**
+ * Cut scene audio runs through Web Audio rather than an <audio> element. Repeating
+ * an element means seeking currentTime back to 0 on every video wrap, and that
+ * synchronous seek both swallows the first few milliseconds of sound and stalls
+ * the frame the video is trying to present — the dropout and the held first frame
+ * are the same bug. Spawning a buffer source is free by comparison and begins on
+ * an exact sample, so the two stay in step across every loop.
+ */
+const useCutSceneAudio = (audioSrc?: string): CutSceneAudioHandle => {
+  const bufferRef = useRef<AudioBuffer | null>(null);
+  const sourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const pendingStartRef = useRef(false);
+
+  useEffect(() => {
+    pendingStartRef.current = false;
+    bufferRef.current = null;
+    if (!audioSrc) return;
+
+    const context = getCutSceneAudioContext();
+    let cancelled = false;
+
+    void fetch(audioSrc)
+      .then((response) => response.arrayBuffer())
+      .then((encoded) => context.decodeAudioData(encoded))
+      .then((buffer) => {
+        if (cancelled) return;
+        bufferRef.current = buffer;
+        // The video can hit its first frame before the decode lands; honour the
+        // start that was asked for while we were still waiting.
+        if (pendingStartRef.current) {
+          pendingStartRef.current = false;
+          spawnCutSceneAudioSource(context, buffer, sourceRef);
+        }
+      })
+      .catch(() => {});
+
+    // The context outlives the overlay on purpose; only this clip's node is torn down.
+    return () => {
+      cancelled = true;
+      bufferRef.current = null;
+      const source = sourceRef.current;
+      sourceRef.current = null;
+      if (source) {
+        source.onended = null;
+        source.stop();
+      }
+    };
+  }, [audioSrc]);
+
+  const stop = useCallback(() => {
+    pendingStartRef.current = false;
+    const source = sourceRef.current;
+    if (!source) return;
+    sourceRef.current = null;
+    source.onended = null;
+    source.stop();
+  }, []);
+
+  const start = useCallback(() => {
+    const buffer = bufferRef.current;
+    if (!buffer) {
+      pendingStartRef.current = true;
+      return;
+    }
+    spawnCutSceneAudioSource(getCutSceneAudioContext(), buffer, sourceRef);
+  }, []);
+
+  const isPlaying = useCallback(
+    () => sourceRef.current !== null || pendingStartRef.current,
+    [],
+  );
+
+  return useMemo(() => ({ start, stop, isPlaying }), [isPlaying, start, stop]);
+};
+
 const CutSceneOverlay = ({
   src,
   audioSrc,
@@ -810,7 +935,7 @@ const CutSceneOverlay = ({
   const [currentSpeed, setCurrentSpeed] = useState(1);
   const completedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audio = useCutSceneAudio(audioSrc);
   const narrationRef = useRef<CutSceneNarrationHandle | null>(null);
   const previousVideoTimeRef = useRef(0);
   const lastAudioRestartRef = useRef(0);
@@ -847,9 +972,6 @@ const CutSceneOverlay = ({
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = forcedPlaybackSpeed ?? currentSpeed;
-    }
-    if (audioRef.current) {
-      audioRef.current.playbackRate = 1;
     }
   }, [currentSpeed, forcedPlaybackSpeed]);
 
@@ -889,46 +1011,27 @@ const CutSceneOverlay = ({
     };
   }, [endTime, src]);
 
+  // Held back until the video reports its first presented frame. Kicking the audio
+  // off on mount lets it win the race — a short WAV decodes long before 1080p VP8
+  // does — and the voice would open over a still-black screen.
   useEffect(() => {
-    const audioNode = audioRef.current;
-    if (!audioNode || !audioSrc) return;
+    if (!audioSrc || !videoStarted) return;
+    audio.start();
+  }, [audio, audioSrc, src, videoStarted]);
 
-    audioNode.currentTime = 0;
-
-    const retry = () => {
-      void audioNode.play().catch(() => {});
-      document.removeEventListener("touchstart", retry, true);
-      document.removeEventListener("click", retry, true);
-      document.removeEventListener("keydown", retry, true);
-    };
-
-    void audioNode.play().catch(() => {
-      // Android WebView blocks autoplay outside a user-gesture call stack.
-      // Retry on the very next interaction (tap / click / key).
-      document.addEventListener("touchstart", retry, true);
-      document.addEventListener("click", retry, true);
-      document.addEventListener("keydown", retry, true);
-    });
-
-    return () => {
-      document.removeEventListener("touchstart", retry, true);
-      document.removeEventListener("click", retry, true);
-      document.removeEventListener("keydown", retry, true);
-    };
-  }, [audioSrc, endTime, src]);
-
-  // React only detaches the media nodes on unmount; it never pauses them, and a
-  // detached element still held by a ref keeps playing. Without this the cutscene
-  // audio bleeds into whatever scene comes next.
+  // Pausing is not releasing. A detached <video> that still has a src keeps its
+  // decoder and its 1080p frame buffers until the GC happens to collect it, and a
+  // multiCutScene mounts a fresh one for every selection the player flips through —
+  // so a scene like day 7 can leave a dozen of them resident, which is what makes
+  // the main menu crawl afterwards. This is the same release the voice and sfx
+  // paths already use.
   useEffect(() => {
     const videoNode = videoRef.current;
-    const audioNode = audioRef.current;
     return () => {
-      videoNode?.pause();
-      if (audioNode) {
-        audioNode.pause();
-        audioNode.currentTime = 0;
-      }
+      if (!videoNode) return;
+      videoNode.pause();
+      videoNode.removeAttribute("src");
+      videoNode.load();
     };
   }, []);
 
@@ -949,22 +1052,20 @@ const CutSceneOverlay = ({
 
   const shouldHandleOverlayClick = allowDirectExit || hasNarration;
 
-  // The video is the clock: every time it wraps the audio jumps back to 0, even
-  // if it was still mid-playback. Both the frame callback and timeupdate can spot
-  // the same wrap, so restarts are debounced to keep it to one seek.
+  // A wrap only rearms the audio once it has actually finished — a line that is
+  // still playing is never cut off, the video just loops underneath it. Both the
+  // frame callback and timeupdate can spot the same wrap, so restarts are
+  // debounced to keep it to one seek.
   const restartAudio = useCallback(() => {
-    const audioNode = audioRef.current;
-    if (!audioNode) return;
+    if (audio.isPlaying()) return;
     const now = performance.now();
     if (now - lastAudioRestartRef.current < 120) return;
     lastAudioRestartRef.current = now;
-    audioNode.currentTime = 0;
-    void audioNode.play().catch(() => {});
-  }, []);
+    audio.start();
+  }, [audio]);
 
   const handleVideoTimeUpdate = useCallback(() => {
     const videoNode = videoRef.current;
-    const audioNode = audioRef.current;
     if (!videoNode) return;
 
     const currentTime = videoNode.currentTime;
@@ -974,9 +1075,7 @@ const CutSceneOverlay = ({
     if (playbackEndTime !== null && currentTime >= Math.max(0, playbackEndTime - 0.01)) {
       if (loop) {
         videoNode.currentTime = 0;
-        if (audioNode) {
-          restartAudio();
-        }
+        restartAudio();
         previousVideoTimeRef.current = 0;
         return;
       }
@@ -984,22 +1083,19 @@ const CutSceneOverlay = ({
       if (!videoEnded) {
         videoNode.pause();
         videoNode.currentTime = playbackEndTime;
-        if (audioNode) {
-          audioNode.pause();
-          audioNode.currentTime = Math.max(0, playbackEndTime);
-        }
+        audio.stop();
         setVideoEnded(true);
       }
       previousVideoTimeRef.current = playbackEndTime;
       return;
     }
 
-    if (loop && audioSrc && audioNode && currentTime + 0.2 < previousTime) {
+    if (loop && audioSrc && currentTime + 0.2 < previousTime) {
       restartAudio();
     }
 
     previousVideoTimeRef.current = currentTime;
-  }, [audioSrc, endTime, loop, restartAudio, videoEnded]);
+  }, [audio, audioSrc, endTime, loop, restartAudio, videoEnded]);
 
   // timeupdate only fires ~4x/sec, so on its own it can notice a wrap up to 250ms
   // late — a quarter of the whole cycle once the video is sped up. The frame
@@ -1055,7 +1151,6 @@ const CutSceneOverlay = ({
     >
       <CutSceneMediaLayer
         src={src}
-        audioSrc={audioSrc}
         loop={loop}
         endFrame={endFrame}
         fps={fps}
@@ -1063,7 +1158,6 @@ const CutSceneOverlay = ({
         visible={visible}
         videoStarted={videoStarted}
         videoRef={videoRef}
-        audioRef={audioRef}
         handleVideoTimeUpdate={handleVideoTimeUpdate}
         onVideoEnded={() => setVideoEnded(true)}
         onVideoPlaying={() => setVideoStarted(true)}
@@ -1158,7 +1252,6 @@ const CutSceneOverlay = ({
 
 const CutSceneMediaLayer = memo(({
   src,
-  audioSrc,
   loop,
   endFrame,
   fps,
@@ -1166,13 +1259,11 @@ const CutSceneMediaLayer = memo(({
   visible,
   videoStarted,
   videoRef,
-  audioRef,
   handleVideoTimeUpdate,
   onVideoEnded,
   onVideoPlaying,
 }: {
   src: string;
-  audioSrc?: string;
   loop?: boolean;
   endFrame?: number;
   fps?: number;
@@ -1180,7 +1271,6 @@ const CutSceneMediaLayer = memo(({
   visible: boolean;
   videoStarted: boolean;
   videoRef: { current: HTMLVideoElement | null };
-  audioRef: { current: HTMLAudioElement | null };
   handleVideoTimeUpdate: () => void;
   onVideoEnded: () => void;
   onVideoPlaying: () => void;
@@ -1208,16 +1298,6 @@ const CutSceneMediaLayer = memo(({
         transition: `opacity ${CUTSCENE_FADE_MS}ms ease`,
       }}
     />
-    {audioSrc ? (
-      <audio
-        ref={audioRef}
-        key={`${src}:${audioSrc}:${endFrame ?? "full"}:${fps ?? "auto"}`}
-        src={audioSrc}
-        autoPlay
-        playsInline
-        loop={loop}
-      />
-    ) : null}
   </>
 ));
 

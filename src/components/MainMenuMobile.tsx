@@ -252,6 +252,16 @@ export const MainMenuMobile = ({
           >
             {labels.subtitle}
           </p>
+          <span
+            className="mt-1 inline-block text-[#ffd6a0] uppercase rounded-full border border-[rgba(255,214,173,0.45)] px-2.5 py-0.5"
+            style={{
+              fontFamily: '"Crimson Text", Georgia, serif',
+              fontSize: "0.6rem",
+              letterSpacing: "0.14em",
+            }}
+          >
+            Early Access
+          </span>
         </div>
 
         {/* Right: buttons */}
@@ -324,7 +334,7 @@ export const MainMenuMobile = ({
         className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/36 tracking-[0.1em] whitespace-nowrap"
         style={{ fontFamily: '"Crimson Text", Georgia, serif', fontSize: "0.65rem" }}
       >
-        © 2026 &nbsp;·&nbsp; Nrop Guy
+        © 2026 &nbsp;·&nbsp; Nrop Guy &nbsp;·&nbsp; Please Do Not Redistribute
       </span>
 
       {/* Load slot picker */}

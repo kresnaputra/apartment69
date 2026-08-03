@@ -863,6 +863,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
     }),
     { size: "sub" },
   ),
+  setFlag("gallerySceneElena2Unlocked", true),
   setFlag("elenaGoodEndingCompleted", true),
 ];
 
@@ -1165,7 +1166,6 @@ export const day7ElenaBadEndingScene: VisualNovelCommand[] = [
             ko: "아서: “조금만 더 참아.”",
           },
         ],
-        speed: "3x"
       },
       {
         id: "elena-7",
@@ -1371,6 +1371,6 @@ export const day7ElenaBadEndingScene: VisualNovelCommand[] = [
     }),
     { size: "sub" },
   ),
-
+  setFlag("gallerySceneElena3Unlocked", true),
   setFlag("elenaBadEndingCompleted", true),
 ];

@@ -1066,6 +1066,21 @@ textarea {
   text-transform: uppercase;
 }
 
+.vn-menu-badge {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  font-family: "Crimson Text", Georgia, serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffd6ad;
+  border: 1px solid rgba(255, 214, 173, 0.45);
+  border-radius: 999px;
+}
+
 /* Thin accent rule between header and nav */
 .vn-menu-rule {
   width: 2.5rem;

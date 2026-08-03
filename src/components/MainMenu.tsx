@@ -387,6 +387,7 @@ export const MainMenu = ({
             <span className="vn-menu-title-num">69</span>
           </h1>
           <p className="vn-menu-subtitle">{labels.subtitle}</p>
+          <span className="vn-menu-badge">Early Access</span>
         </header>
 
         <hr className="vn-menu-rule" />
@@ -442,7 +443,9 @@ export const MainMenu = ({
         </nav>
       </div>
 
-      <footer className="vn-menu-footer">© 2026 &nbsp;·&nbsp; NVN Tools</footer>
+      <footer className="vn-menu-footer">
+        © 2026 &nbsp;·&nbsp; NVN Tools &nbsp;·&nbsp; Please Do Not Redistribute
+      </footer>
       <span
         style={{
           position: "absolute",
