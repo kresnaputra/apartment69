@@ -1,6 +1,6 @@
 import { languageOptions, uiText, type LanguageCode } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { exitApp } from "@/lib/runtime/appExit";
 import mainMenuBg from "@/background/main-menu.png";
 import mainMenuSbnUrl from "@/assets/main-menu.sbn?url";
 import rainCityMusic from "@/music/rain-city.mp3";
@@ -353,7 +353,7 @@ export const MainMenu = ({
   };
 
   const handleExit = () => {
-    void getCurrentWindow().close();
+    void exitApp();
   };
 
   return (

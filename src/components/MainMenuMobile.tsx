@@ -1,6 +1,6 @@
 import { languageOptions, uiText, type LanguageCode } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { exitApp } from "@/lib/runtime/appExit";
 import mainMenuBg from "@/background/main-menu.png";
 import rainCityMusic from "@/music/rain-city.mp3";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
@@ -194,7 +194,7 @@ export const MainMenuMobile = ({
 
 
   const handleExit = () => {
-    void getCurrentWindow().close();
+    void exitApp();
   };
 
   const btnBase = "w-full rounded-full backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 transition-all duration-200 border";
