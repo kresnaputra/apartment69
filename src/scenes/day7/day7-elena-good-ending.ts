@@ -478,14 +478,6 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
       ko: "아르카는 미소 짓고, 그녀의 손을 잡는다.",
     }),
   ),
-  moveTo("arka-day7-elena-good", "center", -0.18, {
-    duration: 700,
-    easing: "ease-in-out",
-  }),
-  moveTo("elena-day7-elena-good", "center", 0.18, {
-    duration: 700,
-    easing: "ease-in-out",
-  }),
   narrate(
     tx({
       id: "Di luar, hujan mulai turun.",
