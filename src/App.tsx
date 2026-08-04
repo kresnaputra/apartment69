@@ -979,6 +979,12 @@ const CutSceneOverlay = ({
     const videoNode = videoRef.current;
     if (!videoNode) return;
 
+    // StrictMode double-invokes effects on mount without tearing down the DOM
+    // node, so the release-on-unmount effect below can strip this same node's
+    // src between the two passes. Re-assert it here so playback survives that.
+    if (videoNode.getAttribute("src") !== src) {
+      videoNode.src = src;
+    }
     videoNode.currentTime = 0;
 
     const retry = () => {

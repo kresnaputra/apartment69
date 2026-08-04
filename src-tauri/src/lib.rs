@@ -9,6 +9,7 @@ pub fn run() {
   context.set_default_window_icon(Some(app_icon.clone()));
 
   tauri::Builder::default()
+    .plugin(tauri_plugin_process::init())
     .setup(move |app| {
       if let Some(window) = app.get_webview_window("main") {
         window.set_icon(app_icon.clone())?;

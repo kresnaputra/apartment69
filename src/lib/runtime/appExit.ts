@@ -10,6 +10,9 @@ export const exitApp = async () => {
     return;
   }
 
-  const { getCurrentWindow } = await import("@tauri-apps/api/window");
-  await getCurrentWindow().close();
+  // getCurrentWindow().close() only closes the window — on macOS the process
+  // stays resident in the Dock afterward, same as any native app with no open
+  // windows. The process plugin's exit() actually terminates the app.
+  const { exit } = await import("@tauri-apps/plugin-process");
+  await exit(0);
 };

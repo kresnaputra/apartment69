@@ -6,6 +6,7 @@ import {
   centeredText,
   clearBlackScreen,
   cutScene,
+  jump,
   jumpIf,
   multiCutScene,
   narrate,
@@ -1521,4 +1522,5 @@ export const day5ElenaHallwayScene: VisualNovelCommand[] = [
   jumpIf("galleryMode", "gallery-return", {
     value: true,
   }),
+  jump("day5-elena-complate"),
 ];
