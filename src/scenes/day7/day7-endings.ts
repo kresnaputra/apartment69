@@ -369,7 +369,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene2,
         audioSrc: mayaBadEndingSound2,
         loop: true,
-        endFrame: 120,
+        endFrame: 90,
         fps: 120,
         narrate: tx({
           id: "Arka: Nggak ada lagi sisa-sisa harga diri. Kaca di depannya sampai berembun karena napasnya yang putus-putus. Dia menerima kehancuran ini dengan sangat sukarela. Ngelihat tubuhnya se-binal ini pasrah di depanku... egoku rasanya bener-bener dipuasin sampai ke akar",
@@ -446,7 +446,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         }),
         src: mayaSpecial2Scene5,
         audioSrc: mayaBadEndingSound5,
-        endFrame: 120,
+        endFrame: 90,
         fps: 120,
         loop: true,
         narrate: [

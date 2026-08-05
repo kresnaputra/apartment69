@@ -1081,7 +1081,11 @@ const CutSceneOverlay = ({
     if (playbackEndTime !== null && currentTime >= Math.max(0, playbackEndTime - 0.01)) {
       if (loop) {
         videoNode.currentTime = 0;
-        restartAudio();
+        // endFrame defines the whole loop segment, so the audio has to repeat
+        // with it — letting the line run past the frame the video already
+        // cut back from would drift the two out of sync on every cycle.
+        audio.stop();
+        audio.start();
         previousVideoTimeRef.current = 0;
         return;
       }
