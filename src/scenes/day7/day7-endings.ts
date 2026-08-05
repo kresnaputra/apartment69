@@ -337,6 +337,8 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene1,
         audioSrc: mayaBadEndingSound,
         loop: true,
+        fps: 120,
+        endFrame: 240,
         narrate: [
           tx({
             id: 'Maya: "AAHH!! Iya!! Kayak gitu, Arka!! Haaah... lebih keras lagi!! Jangan kasih ampun!"',
