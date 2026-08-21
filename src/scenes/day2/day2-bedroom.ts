@@ -3,6 +3,7 @@ import { tx } from "@/lib/i18n";
 import { bg, jump, minigame, narrate, playBgm, say } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
 import bgm from "@/music/day2.mp3";
+import { day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
 
 export const day2BedroomScene: VisualNovelCommand[] = [
   playBgm(bgm),
@@ -43,7 +44,7 @@ export const day2BedroomScene: VisualNovelCommand[] = [
       ja: "全員を一度に相手するのは無理だ。まずは一人に絞ろう。",
       ko: "모두를 한 번에 챙길 수는 없다. 우선 한 사람에게 집중하자.",
     }),
-    disabledContacts: ["nadia", "sara", "sleep"],
+    disabledContacts: ["sara", "sleep"],
     contactOverrides: {
       maya: {
         next: "day2-route-maya",
@@ -52,11 +53,12 @@ export const day2BedroomScene: VisualNovelCommand[] = [
         next: "day2-route-elena",
       },
       nadia: {
+        next: "day2-route-nadia",
         blurb: tx({
-          id: "Belum ada alur Hari 2 untuk Nadia.",
-          en: "No Day 2 route for Nadia yet.",
-          ja: "ナディアの2日目ルートはまだない。",
-          ko: "나디아의 2일차 루트는 아직 없다.",
+          id: "Nadia butuh bantuan setup streamingnya lagi.",
+          en: "Nadia needs help with her streaming setup again.",
+          ja: "ナディアはまた配信セットアップの助けが必要だ。",
+          ko: "나디아는 다시 방송 세팅 도움이 필요해.",
         }),
       },
       sara: {
@@ -112,3 +114,5 @@ export const day2RouteElenaScene: VisualNovelCommand[] = [
   ),
   jump("day2-elena-hallway"),
 ];
+
+export { day2RouteNadiaScene };
