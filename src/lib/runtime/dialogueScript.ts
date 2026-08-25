@@ -45,6 +45,7 @@ import { day2ComplateScene } from "@/scenes/day2/day2-complate";
 import { day2ElenaHallwayScene } from "@/scenes/day2/elena/day2-elena-hallway";
 import { day2NadiaRoomScene, day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
 import { day3ElenaMorningScene } from "@/scenes/day3/elena/day3-elena-morning";
+import { day3NadiaNightScene } from "@/scenes/day3/nadia/day3-nadia-night";
 import {
   mayaPhoneCallScene,
   mayaPhoneCallLogicalScene,
@@ -193,7 +194,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "day2-route-nadia",
+  startLabel: "day3-nadia-night",
   labels: {
     "gallery-return": [],
     "sbn-maya-test": sbnTestScene,
@@ -241,6 +242,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day3-slot2-complete": day3Slot2CompleteScene,
     "day3-slot2-elena": day3Slot2ElenaScene,
     "day3-slot2-nadia": day3Slot2NadiaScene,
+    "day3-nadia-night": day3NadiaNightScene,
     "day3-slot2-sarah": day3Slot2SarahScene,
     "day3-complete": day3ComplateScene,
     // Day 4

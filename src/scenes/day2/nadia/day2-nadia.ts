@@ -85,10 +85,10 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = [
     "nadia",
     "neutral",
     tx({
-      id: "Setup-ku lagi error. Kali ini bukan listrik. Laptop aku lag parah pas lagi live. Aku butuh bantuan cepat. Bisa turun sebentar?",
-      en: "My setup's acting up. Not the electricity this time. My laptop is lagging badly while I'm live. I need quick help. Can you come down for a bit?",
-      ja: "セットアップが調子悪いの。今回は電気じゃなくて、ライブ中にノートパソコンが重くなってる。急いで助けが必要。ちょっと降りてこれる？",
-      ko: "내 세팅에 문제 생겼어. 이번엔 전기 문제 아냐. 라이브 중인데 노트북이 심하게 렉 걸려. 빨리 도움이 필요해. 잠깐 내려올 수 있어?",
+      id: "Setup-ku lagi error. Kali ini bukan listrik. Laptop aku lag parah pas lagi live. Aku butuh bantuan cepat. Bisa naik sebentar?",
+      en: "My setup's acting up. Not the electricity this time. My laptop is lagging badly while I'm live. I need quick help. Can you come up for a bit?",
+      ja: "セットアップが調子悪いの。今回は電気じゃなくて、ライブ中にノートパソコンが重くなってる。急いで助けが必要。ちょっと上がってこれる？",
+      ko: "내 세팅에 문제 생겼어. 이번엔 전기 문제 아냐. 라이브 중인데 노트북이 심하게 렉 걸려. 빨리 도움이 필요해. 잠깐 올라올 수 있어?",
     }),
   ),
   say(
@@ -571,4 +571,5 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = [
   ),
   setFlag("day2NadiaCompleted", true),
   setFlag("nadiaAffection", 1),
+  jump("day2-complate"),
 ];

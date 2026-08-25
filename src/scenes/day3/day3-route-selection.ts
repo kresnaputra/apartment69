@@ -60,6 +60,7 @@ export const day3BedroomScene: VisualNovelCommand[] = [
     disabledContacts: ["elena", "nadia", "sara", "sleep"],
     conditionalEnabledContacts: {
       elena: "day2ElenaCompleted",
+      nadia: "day2NadiaCompleted",
     },
     contactOverrides: {
       maya: {
@@ -81,11 +82,12 @@ export const day3BedroomScene: VisualNovelCommand[] = [
         }),
       },
       nadia: {
+        next: "day3-nadia-night",
         blurb: tx({
-          id: "Nadia belum muncul pagi-pagi begini.",
-          en: "Nadia hasn't surfaced this early in the morning.",
-          ja: "こんな朝早くからナディアが動いている気はしない。",
-          ko: "이렇게 이른 아침부터 나디아가 움직이고 있을 것 같진 않다.",
+          id: "Nadia bilang dia mungkin membutuhkan bantuan lagi hari ini.",
+          en: "Nadia said she might need help again today.",
+          ja: "ナディアは今日また助けが必要かもしれないと言っていた。",
+          ko: "나디아는 오늘 다시 도움이 필요할 수도 있다고 말했다.",
         }),
       },
       sara: {
@@ -214,7 +216,7 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
   hide("arka-campus"),
   minigame("smartphone-contacts", {
     showSleepOption: true,
-    disabledContacts: ["maya", "elena", "nadia", "sara"],
+    disabledContacts: ["maya", "elena", "sara"],
     title: tx({
       id: "Pilih rute berikutnya",
       en: "Pick the next route",
@@ -245,11 +247,12 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
         }),
       },
       nadia: {
+        next: "day3-slot2-nadia",
         blurb: tx({
-          id: "Nadia tidak jadi route aktif di fase kampus hari ini.",
-          en: "Nadia isn't an active route in the campus phase today.",
-          ja: "今日のキャンパスパートでナディアのルートは進まない。",
-          ko: "오늘 캠퍼스 파트에서는 나디아 루트가 진행되지 않는다.",
+          id: "Nadia chat tadi siang. Katanya ada urusan malam ini di unitnya.",
+          en: "Nadia texted earlier. She said she has something tonight at her unit.",
+          ja: "ナディアから昼に連絡が来た。今夜、彼女の部屋で何かあるらしい。",
+          ko: "나디아가 오늘 오전에 연락 왔어. 오늘 밤 그녀 유닛에서 할 일이 있다고 했어.",
         }),
       },
       sara: {
@@ -309,13 +312,13 @@ export const day3Slot2NadiaScene: VisualNovelCommand[] = [
     "arka",
     "surprised",
     tx({
-      id: "Nadia aja deh. Gratis kopi, dan jelas suasananya nggak bakal biasa-biasa aja. Jujur, itu jauh lebih menarik daripada langsung pulang.",
-      en: "Nadia wins. Free coffee, zero chance of things staying normal, and honestly? That sounds way better than heading straight home.",
-      ja: "ナディアにするか。無料のコーヒーに、普通じゃ終わらなそうな予感。正直、まっすぐ帰るよりずっと面白そうだ。",
-      ko: "나디아로 가자. 무료 커피에, 평범하게 끝날 가능성은 제로다. 솔직히 바로 집에 가는 것보다 훨씬 낫다.",
+      id: "Nadia aja deh. Chat-nya tadi siang terasa ada urusan. Jujur, itu jauh lebih menarik daripada langsung pulang.",
+      en: "Nadia it is. Her text earlier felt like there's something going on. Honestly, that sounds way better than heading straight home.",
+      ja: "ナディアにするか。昼のメッセージは何かありそうな感じがした。正直、まっすぐ帰るよりずっと面白そうだ。",
+      ko: "나디아로 가자. 오늘 오전에 온 메시지가 뭔가 있는 것 같았어. 솔직히 바로 집에 가는 것보다 훨씬 낫다.",
     }),
   ),
-  jump("day3-slot2-complete"),
+  jump("day3-nadia-night"),
 ];
 
 export const day3Slot2SarahScene: VisualNovelCommand[] = [
