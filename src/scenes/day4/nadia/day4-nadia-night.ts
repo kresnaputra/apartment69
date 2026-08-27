@@ -7,6 +7,7 @@ import {
   clearBlackScreen,
   hide,
   jump,
+  jumpIf,
   narrate,
   say,
   setFlag,
@@ -17,6 +18,13 @@ import nadiaHallwayUrl from "@/background/nadia-hallway.png";
 import nadiaRoomUrl from "@/background/nadia-room.png";
 
 export const day4NadiaNightScene: VisualNovelCommand[] = [
+  jumpIf("nadia_help_day4", "day4-nadia-night-help", {
+    value: true,
+    elseTarget: "day4-nadia-night-skip",
+  }),
+];
+
+export const day4NadiaNightHelpScene: VisualNovelCommand[] = [
   bg(
     bedroomNightUrl,
     tx({
@@ -52,30 +60,30 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
     "arka",
     "neutral",
     tx({
-      id: "Nggak terlalu. Kenapa?",
-      en: "Not really. Why?",
-      ja: "そんなに。どうした？",
-      ko: "딱히. 왜?",
+      id: "Nggak juga. Ada apa?",
+      en: "Not really. What's up?",
+      ja: "そんなことない。どうした？",
+      ko: "아니. 무슨 일?",
     }),
   ),
   say(
     "nadia",
     "smile",
     tx({
-      id: "Aku butuh bantuan kamera lagi. Tapi kali ini kontennya lebih… panas. Kamu masih mau dengar?",
-      en: "I need camera help again. But this time the content is hotter. Still willing to hear me out?",
-      ja: "またカメラの手伝いが必要。でも今回のコンテンツはもっと…熱いの。まだ聞いてくれる？",
-      ko: "또 카메라 도움이 필요해. 근데 이번 콘텐츠는 더… 뜨거워. 아직도 들어줄 거야?",
+      id: "Ingat janji kemarin? Aku butuh bantuan kamera lagi. Tapi kali ini kontennya lebih… panas. Kamu masih oke?",
+      en: "Remember your promise yesterday? I need camera help again. But this time the content is hotter. You still okay with that?",
+      ja: "昨日の約束覚えてる？ またカメラの手伝いが必要。でも今回のコンテンツはもっと…熱いの。まだ大丈夫？",
+      ko: "어제 약속 기억해? 또 카메라 도움이 필요해. 근데 이번 콘텐츠는 더… 뜨거워. 아직 괜찮아?",
     }),
   ),
   say(
     "arka",
     "serious",
     tx({
-      id: "Bilang dulu.",
-      en: "Tell me first.",
-      ja: "まず話せ。",
-      ko: "일단 말해.",
+      id: "Panas gimana?",
+      en: "How hot?",
+      ja: "どのくらい熱いの？",
+      ko: "얼마나 뜨거운데?",
     }),
   ),
   say(
@@ -88,22 +96,14 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
       ko: "유료 라이브 스트림을 할 거야. 솔로. 좋은 각도에서 카메라를 들어줄 사람이 필요해. 너는 카메라 뒤에만 있고, 안 나와. 보수는 어제보다 높아.",
     }),
   ),
-  narrate(
-    tx({
-      id: "Arka diam sebentar.",
-      en: "Arka is silent for a moment.",
-      ja: "アルカはしばらく黙る。",
-      ko: "아르카가 잠시 침묵한다.",
-    }),
-  ),
   say(
     "arka",
     "neutral",
     tx({
-      id: "Oke. Aku naik.",
-      en: "Okay. I'm coming up.",
-      ja: "わかった。上がる。",
-      ko: "알았어. 올라갈게.",
+      id: "…Oke. Aku turun sekarang.",
+      en: "...Okay. I'm coming down now.",
+      ja: "…わかった。今すぐ下りる。",
+      ko: "…알았어. 지금 내려갈게.",
     }),
   ),
   bg(
@@ -117,10 +117,10 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
   ),
   narrate(
     tx({
-      id: "Beberapa menit kemudian Arka berdiri di depan unit 102. Pintu langsung dibuka. Nadia sudah memakai tank top longgar dan short pendek. Rambutnya diikat tinggi, ring light sudah menyala.",
-      en: "A few minutes later, Arka stands in front of Unit 102. The door opens right away. Nadia is already wearing a loose tank top and short shorts. Her hair is tied up high, and the ring light is already on.",
-      ja: "数分後、アルカは102号室の前に立つ。ドアはすぐに開いた。ナディアはすでにゆるいタンクトップと短いショートパンツ姿。髪は高く結ばれ、リングライトはもう点いている。",
-      ko: "몇 분 후, 아르카는 102호 앞에 선다. 문이 바로 열린다. 나디아는 이미 루즈한 민소매와 짧은 반바지 차림이다. 머리는 높이 묶여 있고, 링 라이트는 이미 켜져 있다.",
+      id: "Beberapa menit kemudian Arka berdiri di depan unit 102. Pintu langsung dibuka. Nadia sudah memakai tank top longgar dan short pendek. Ring light sudah menyala.",
+      en: "A few minutes later, Arka stands in front of Unit 102. The door opens right away. Nadia is already wearing a loose tank top and short shorts. The ring light is already on.",
+      ja: "数分後、アルカは102号室の前に立つ。ドアはすぐに開いた。ナディアはすでにゆるいタンクトップと短いショートパンツ姿。リングライトはもう点いている。",
+      ko: "몇 분 후, 아르카는 102호 앞에 선다. 문이 바로 열린다. 나디아는 이미 루즈한 민소매와 짧은 반바지 차림이다. 링 라이트는 이미 켜져 있다.",
     }),
   ),
   show("nadia-day4-night", "nadia", "smile", {
@@ -168,10 +168,10 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
     "arka",
     "serious",
     tx({
-      id: "Mengerti.",
-      en: "Got it.",
-      ja: "わかった。",
-      ko: "알겠어.",
+      id: "Siap.",
+      en: "Ready.",
+      ja: "了解。",
+      ko: "준비 됐어.",
     }),
   ),
   narrate(
@@ -196,10 +196,10 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
     "arka",
     "neutral",
     tx({
-      id: "Lanjut aja.",
-      en: "Just keep going.",
-      ja: "そのままでいい。",
-      ko: "그냥 계속해.",
+      id: "Santai. Lanjut aja.",
+      en: "Relax. Just keep going.",
+      ja: "安心して。そのままでいい。",
+      ko: "편하게 해. 그냥 계속해.",
     }),
   ),
   narrate(
@@ -510,10 +510,10 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
     "arka",
     "serious",
     tx({
-      id: "Aku cuma pegang kamera.",
-      en: "I was just holding the camera.",
-      ja: "カメラを持ってただけだ。",
-      ko: "카메라만 들고 있었어.",
+      id: "Kerjaanku cuma pegang kamera. Nggak lebih.",
+      en: "My job was just holding the camera. Nothing more.",
+      ja: "俺の仕事はカメラを持つことだけだ。それ以上は何も。",
+      ko: "내 일은 카메라만 드는 거야. 그 이상은 아니야.",
     }),
   ),
   narrate(
@@ -584,10 +584,10 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
     "arka",
     "neutral",
     tx({
-      id: "Tergantung.",
-      en: "Depends.",
-      ja: "内容による。",
-      ko: "상황에 따라 달라.",
+      id: "Tergantung isinya.",
+      en: "Depends on what it is.",
+      ja: "内容によるね。",
+      ko: "내용에 따라 달라.",
     }),
   ),
   say(
@@ -667,5 +667,103 @@ export const day4NadiaNightScene: VisualNovelCommand[] = [
   ),
   setFlag("day4NadiaCompleted", true),
   setFlag("nadiaAffection", 3),
+  jump("day4-after-route-phone"),
+];
+
+export const day4NadiaNightSkipScene: VisualNovelCommand[] = [
+  bg(
+    bedroomNightUrl,
+    tx({
+      id: "Apartment 69 - Unit 302, Malam",
+      en: "Apartment 69 - Unit 302, Night",
+      ja: "Apartment 69 - 302号室、夜",
+      ko: "Apartment 69 - 302호, 밤",
+    }),
+  ),
+  show("arka-day4-nadia-skip", "arka", "neutral", {
+    position: "left",
+    enterFrom: "left",
+  }),
+  narrate(
+    tx({
+      id: "Malam hari. Arka sedang duduk di unit 302 ketika ponselnya bergetar. Nama Nadia muncul di layar.",
+      en: "Night. Arka is sitting in Unit 302 when his phone vibrates. Nadia's name appears on the screen.",
+      ja: "夜。アルカが302号室に座っているとスマホが震える。画面にナディアの名前が表示される。",
+      ko: "밤. 아르카가 302호에 앉아 있을 때 휴대폰이 진동한다. 화면에 나디아의 이름이 뜬다.",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Arka melihat notifikasi itu beberapa detik, lalu mengunci ponselnya tanpa membalas.",
+      en: "Arka looks at the notification for a few seconds, then locks his phone without replying.",
+      ja: "アルカは通知を数秒見つめ、返信せずにスマホをロックする。",
+      ko: "아르카가 알림을 몇 초 동안 바라보다가, 답장하지 않은 채 휴대폰을 잠근다.",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Beberapa jam kemudian, pesan masuk lagi.",
+      en: "A few hours later, another message comes in.",
+      ja: "数時間後、またメッセージが届く。",
+      ko: "몇 시간 후, 다시 메시지가 온다.",
+    }),
+  ),
+  say(
+    "nadia",
+    "neutral",
+    tx({
+      id: "Oke. Aku ngerti. Nggak usah balas kalau lagi sibuk.",
+      en: "Okay. I understand. No need to reply if you're busy.",
+      ja: "わかった。無理しないで。忙しいなら返信しなくていいよ。",
+      ko: "알았어. 이해해. 바쁘면 답장 안 해도 돼.",
+    }),
+  ),
+  say(
+    "nadia",
+    "neutral",
+    tx({
+      id: "Tapi kalau suatu saat kamu berubah pikiran… aku masih butuh bantuan kamera.",
+      en: "But if you ever change your mind... I still need camera help.",
+      ja: "でも、もし気が変わったら…カメラの手伝いはまだ必要だから。",
+      ko: "근데 언젠가 마음이 바뀌면… 나는 아직 카메라 도움이 필요해.",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Arka membaca pesan itu, lalu meletakkan ponsel di samping kasur.",
+      en: "Arka reads the message, then sets his phone down beside the bed.",
+      ja: "アルカはメッセージを読み、スマホをベッドの横に置く。",
+      ko: "아르카가 메시지를 읽고, 휴대폰을 침대 옆에 내려놓는다.",
+    }),
+  ),
+  say(
+    "arka",
+    "gentle",
+    tx({
+      id: "Dia nggak memaksa. Tapi aku tahu dia kecewa.",
+      en: "She didn't push. But I know she's disappointed.",
+      ja: "彼女は強要しなかった。でも失望してるのはわかる。",
+      ko: "그녀는 강요하지 않았다. 하지만 실망했다는 걸 안다.",
+    }),
+  ),
+  centeredText(
+    tx({
+      id: "SYSTEM: NADIA AFFECTION +0",
+      en: "SYSTEM: NADIA AFFECTION +0",
+      ja: "SYSTEM: ナディアの好感度 +0",
+      ko: "SYSTEM: 나디아 호감도 +0",
+    }),
+    { size: "sub" },
+  ),
+  centeredText(
+    tx({
+      id: "DAY 4 - NADIA ROUTE SKIPPED",
+      en: "DAY 4 - NADIA ROUTE SKIPPED",
+      ja: "DAY 4 - ナディアルート skipped",
+      ko: "DAY 4 - 나디아 루트 생략",
+    }),
+    { size: "hero" },
+  ),
+  setFlag("day4NadiaCompleted", true),
   jump("day4-after-route-phone"),
 ];
