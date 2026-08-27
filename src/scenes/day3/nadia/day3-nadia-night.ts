@@ -1,9 +1,23 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, centeredText, hide, jump, menu, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import {
+  bg,
+  centeredText,
+  cutScene,
+  hide,
+  jump,
+  menu,
+  narrate,
+  say,
+  setFlag,
+  show,
+} from "@/scenes/scriptTypes";
 import bedroomNightUrl from "@/background/bedroom-night.png";
 import nadiaHallwayUrl from "@/background/nadia-hallway.png";
 import nadiaRoomUrl from "@/background/nadia-room.png";
+import cutSceneNadia1 from "@/cut-scene/nadia-day-3-1.webm";
+import cutSceneNadia2 from "@/cut-scene/nadia-day-3-2.webm";
+import cutSceneNadia3 from "@/cut-scene/nadia-day-3-3.webm";
 
 export const day3NadiaNightScene: VisualNovelCommand[] = [
   bg(
@@ -227,78 +241,60 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
       ko: "알았어. 위치만 알려줘.",
     }),
   ),
-  narrate(
-    tx({
+  cutScene(cutSceneNadia1, true, [
+    {
       id: "Nadia langsung bergerak. Ia mengambil remote kamera dan menyerahkannya ke Arka.",
       en: "Nadia moves right away. She grabs the camera remote and hands it to Arka.",
       ja: "ナディアはすぐに動き出す。カメラのリモコンを取り、アルカに渡した。",
       ko: "나디아가 바로 움직인다. 카메라 리모컨을 집어 아르카에게 건넨다.",
-    }),
-  ),
-  say(
-    "nadia",
-    "neutral",
-    tx({
-      id: "Kamu berdiri di situ. Fokus ke wajah dan bahu aku aja. Jangan terlalu zoom ke bawah.",
-      en: "Stand right there. Just focus on my face and shoulders. Don't zoom too low.",
-      ja: "そこに立って。顔と肩だけにフォーカスして。下にズームしすぎないで。",
-      ko: "거기 서 있어. 내 얼굴과 어깨만 초점 맞춰. 너무 아래로 확대하지 마.",
-    }),
-  ),
-  narrate(
-    tx({
+    },
+    {
+      id: "Nadia: Kamu berdiri di situ. Fokus ke wajah dan bahu aku aja. Jangan terlalu zoom ke bawah.",
+      en: "Nadia: Stand right there. Just focus on my face and shoulders. Don't zoom too low.",
+      ja: "ナディア: そこに立って。顔と肩だけにフォーカスして。下にズームしすぎないで。",
+      ko: "나디아: 거기 서 있어. 내 얼굴과 어깨만 초점 맞춰. 너무 아래로 확대하지 마.",
+    },
+    {
       id: "Arka berdiri di posisi yang ditunjuk. Nadia duduk di sofa, mengatur pose, lalu mulai berpose dengan ekspresi yang jauh lebih berani dibanding saat mereka biasa bicara.",
       en: "Arka stands in the spot she pointed to. Nadia sits on the sofa, adjusts her pose, then starts posing with an expression far bolder than when they usually talk.",
       ja: "アルカは指定された位置に立つ。ナディアはソファに座り、ポーズを整え、いつもの会話時よりずっと大胆な表情でポーズを取り始める。",
       ko: "아르카는 나디아가 가리킨 위치에 선다. 나디아는 소파에 앉아 포즈를 잡고, 평소 대화할 때보다 훨씬 대담한 표정으로 포즈를 시작한다.",
-    }),
-  ),
-  narrate(
-    tx({
+    },
+  ]),
+  cutScene(cutSceneNadia2, true, [
+    {
       id: "Beberapa menit berlalu. Nadia sesekali memberi instruksi singkat.",
       en: "A few minutes pass. Nadia occasionally gives short instructions.",
       ja: "数分が経過する。ナディアは時折短い指示を出す。",
       ko: "몇 분이 지난다. 나디아가 가끔 짧은 지시를 내린다.",
-    }),
-  ),
-  say(
-    "nadia",
-    "neutral",
-    tx({
-      id: "Sedikit ke kiri… oke. Tahan.",
-      en: "A little to the left... okay. Hold it.",
-      ja: "少し左へ… うん、そのまま。",
-      ko: "조금 왼쪽… 그래. 멈춰.",
-    }),
-  ),
-  say(
-    "nadia",
-    "smile",
-    tx({
-      id: "Sekarang dari atas sedikit… bagus.",
-      en: "Now a bit from above... nice.",
-      ja: "今度は上から少し… いい感じ。",
-      ko: "이번엔 위에서 조금… 좋아.",
-    }),
-  ),
-  narrate(
-    tx({
+    },
+    {
+      id: "Nadia: Sedikit ke kiri… oke. Tahan.",
+      en: "Nadia: A little to the left... okay. Hold it.",
+      ja: "ナディア: 少し左へ… うん、そのまま。",
+      ko: "나디아: 조금 왼쪽… 그래. 멈춰.",
+    },
+    {
+      id: "Nadia: Sekarang dari atas sedikit… bagus.",
+      en: "Nadia: Now a bit from above... nice.",
+      ja: "ナディア: 今度は上から少し… いい感じ。",
+      ko: "나디아: 이번엔 위에서 조금… 좋아.",
+    },
+    {
       id: "Setelah sekitar sepuluh menit, Nadia berdiri dan meregangkan tubuh.",
       en: "After about ten minutes, Nadia stands up and stretches.",
       ja: "約10分後、ナディアは立ち上がって体を伸ばす。",
       ko: "약 10분 후, 나디아가 일어나 몸을 쭉 핀다.",
-    }),
-  ),
-  say(
-    "nadia",
-    "neutral",
-    tx({
-      id: "Udah. Cukup.",
-      en: "That's it. Enough.",
-      ja: "もういい。十分。",
-      ko: "됐어. 충분해.",
-    }),
-  ),
+    },
+  ]),
+  cutScene(cutSceneNadia3, true, {
+    id: "Nadia: Udah. Cukup.",
+    en: "Nadia: That's it. Enough.",
+    ja: "ナディア: いいよ。十分。",
+    ko: "나디아: 됐어. 충분해.",
+  }),
+  hide("arka-day3-nadia"),
+  hide("nadia-day3-night"),
   narrate(
     tx({
       id: "Ia berjalan mendekati Arka dan melihat hasil foto di kamera.",
@@ -307,6 +303,14 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
       ko: "그녀가 아르카에게 다가가 카메라의 사진을 본다.",
     }),
   ),
+  show("arka-day3-nadia", "arka", "neutral", {
+    position: "left",
+    enterFrom: "left",
+  }),
+  show("nadia-day3-night", "nadia", "neutral", {
+    position: "center",
+    enterFrom: "right",
+  }),
   say(
     "nadia",
     "smile",
@@ -457,33 +461,36 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
       ko: "내일도 도움이 필요해. 또 올 수 있어?",
     }),
   ),
-  menu(tx({
-    id: "Pilihanmu?",
-    en: "Your choice?",
-    ja: "どうする？",
-    ko: "어떻게 할까?",
-  }), [
-    {
-      id: "help-tomorrow",
-      label: tx({
-        id: "Bantu dia lagi besok",
-        en: "Help her again tomorrow",
-        ja: "明日また手伝う",
-        ko: "내일 또 도와준다",
-      }),
-      next: "day3-nadia-night-help",
-    },
-    {
-      id: "refuse-busy",
-      label: tx({
-        id: "Tolak / bilang sibuk",
-        en: "Refuse / say you're busy",
-        ja: "断る / 忙しいと言う",
-        ko: "거절 / 바쁘다고 한다",
-      }),
-      next: "day3-nadia-night-refuse",
-    },
-  ]),
+  menu(
+    tx({
+      id: "Pilihanmu?",
+      en: "Your choice?",
+      ja: "どうする？",
+      ko: "어떻게 할까?",
+    }),
+    [
+      {
+        id: "help-tomorrow",
+        label: tx({
+          id: "Bantu dia lagi besok",
+          en: "Help her again tomorrow",
+          ja: "明日また手伝う",
+          ko: "내일 또 도와준다",
+        }),
+        next: "day3-nadia-night-help",
+      },
+      {
+        id: "refuse-busy",
+        label: tx({
+          id: "Tolak / bilang sibuk",
+          en: "Refuse / say you're busy",
+          ja: "断る / 忙しいと言う",
+          ko: "거절 / 바쁘다고 한다",
+        }),
+        next: "day3-nadia-night-refuse",
+      },
+    ],
+  ),
 ];
 
 export const day3NadiaNightHelpScene: VisualNovelCommand[] = [

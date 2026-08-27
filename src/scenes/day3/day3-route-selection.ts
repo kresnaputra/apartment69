@@ -13,6 +13,7 @@ import {
 } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
 import universityUrl from "@/background/university.png";
+ 
 
 export const day3BedroomScene: VisualNovelCommand[] = [
   bg(

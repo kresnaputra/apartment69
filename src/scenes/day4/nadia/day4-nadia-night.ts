@@ -100,10 +100,10 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = [
     "arka",
     "neutral",
     tx({
-      id: "…Oke. Aku turun sekarang.",
-      en: "...Okay. I'm coming down now.",
-      ja: "…わかった。今すぐ下りる。",
-      ko: "…알았어. 지금 내려갈게.",
+      id: "…Oke. Aku naik sekarang.",
+      en: "...Okay. I'm coming up now.",
+      ja: "…わかった。今すぐ上がる。",
+      ko: "…알았어. 지금 올라갈게.",
     }),
   ),
   bg(
