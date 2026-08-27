@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import type { LoadedSbnBundle, SbnManifest, SbnProject } from "@/types/sbn";
+import type { LoadedSbnBundle, SbnAttachment, SbnManifest, SbnProject } from "@/types/sbn";
 
 const DEFAULT_PROJECT_FILE = "project.json";
 const DEFAULT_MANIFEST_FILE = "manifest.json";
@@ -27,9 +27,26 @@ const loadOptionalDataUrl = async (zip: JSZip, path?: string | null) => {
   return await blobToDataUrl(blob);
 };
 
+// Ekspor .sbn versi baru menyimpan mesh sebagai { mesh: { vertices, triangles, grid } },
+// sedangkan renderer membaca meshVertices/meshTriangles. Ratakan supaya kedua format jalan.
+const normalizeAttachmentMesh = (attachment: SbnAttachment): SbnAttachment => {
+  if (attachment.meshVertices && attachment.meshTriangles) return attachment;
+
+  const mesh = attachment.mesh;
+  if (!mesh?.vertices || !mesh.triangles) return attachment;
+
+  return {
+    ...attachment,
+    meshVertices: mesh.vertices,
+    meshTriangles: mesh.triangles,
+    meshGrid: attachment.meshGrid ?? mesh.grid,
+  };
+};
+
 const hydrateProjectAssets = async (zip: JSZip, project: SbnProject) => {
   const attachments = await Promise.all(
-    (project.attachments ?? []).map(async (attachment) => {
+    (project.attachments ?? []).map(async (rawAttachment) => {
+      const attachment = normalizeAttachmentMesh(rawAttachment);
       if (!attachment.assetPath) return attachment;
       const imageData = await loadOptionalDataUrl(zip, attachment.assetPath);
       return imageData ? { ...attachment, imageData } : attachment;

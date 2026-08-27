@@ -76,6 +76,11 @@ export type SbnAttachment = {
   meshVertices?: SbnMeshVertex[];
   meshTriangles?: number[][];
   meshGrid?: { columns: number; rows: number };
+  mesh?: {
+    vertices?: SbnMeshVertex[];
+    triangles?: number[][];
+    grid?: { columns: number; rows: number };
+  };
 };
 
 export type SbnSkin = {

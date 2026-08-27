@@ -123,13 +123,10 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = [
       ko: "몇 분 후, 아르카는 102호 앞에 선다. 문이 바로 열린다. 나디아는 이미 루즈한 민소매와 짧은 반바지 차림이다. 링 라이트는 이미 켜져 있다.",
     }),
   ),
-  show("nadia-day4-night", "nadia", "smile", {
-    position: "center",
-    enterFrom: "right",
-  }),
+
   say(
     "nadia",
-    "smile",
+    "tanktopSmile",
     tx({
       id: "Masuk. Kita langsung mulai aja biar nggak molor.",
       en: "Come in. Let's start right away so we don't run late.",
@@ -154,9 +151,13 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = [
       ko: "아르카가 들어간다. 소파는 이미 카메라를 향해 배치되어 있다. 바닥에는 쿠션이 몇 개 있다.",
     }),
   ),
+  show("nadia-day4-night", "nadia", "tanktopSmile", {
+    position: "center",
+    enterFrom: "right",
+  }),
   say(
     "nadia",
-    "neutral",
+    "tanktopNeutral",
     tx({
       id: "Kamu berdiri di situ. Jangan terlalu deket, tapi jangan terlalu jauh juga. Fokus ke tubuh aku dari pinggang ke atas dulu, nanti aku kasih tahu kalau mau diganti sudut.",
       en: "Stand right there. Not too close, but not too far either. Focus on my body from the waist up first. I'll tell you if I want the angle changed.",
@@ -184,7 +185,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = [
   ),
   say(
     "nadia",
-    "neutral",
+    "tanktopNeutral",
     tx({
       id: "Kalau kamu nggak nyaman di tengah jalan, bilang. Aku bisa stop.",
       en: "If you get uncomfortable halfway through, say so. I can stop.",

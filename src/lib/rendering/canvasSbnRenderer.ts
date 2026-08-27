@@ -274,7 +274,9 @@ export class CanvasSbnRenderer {
     const sinR = Math.sin(totalRotRad);
 
     const deformKey = `${attachment.slotId}:${attachment.name}`;
-    const deformedPositions = meshDeforms[deformKey];
+    const deformCandidate = meshDeforms[deformKey];
+    const deformedPositions =
+      deformCandidate?.length === attachment.meshVertices.length ? deformCandidate : undefined;
 
     // Compute screen position for every mesh vertex
     const screenVerts = attachment.meshVertices.map((v, i) => {
