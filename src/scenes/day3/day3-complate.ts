@@ -5,6 +5,8 @@ import { dayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
 
 export const day3ComplateScene: VisualNovelCommand[] = [
   hide("arka-bedroom"),
+  hide("arka-day3-nadia"),
+  hide("nadia-day3-night"),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", {
     transitionDuration: 1000,
     backgroundVideo: dayChangeClassic,

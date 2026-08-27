@@ -46,9 +46,13 @@ export const day4BedroomScene: VisualNovelCommand[] = [
       ja: "まだ日は長い。まず誰のところへ向かうべきか、アルカが決める番だ。",
       ko: "하루는 아직 길다. 아르카는 먼저 누구를 찾아가야 할지 정해야 한다.",
     }),
-    disabledContacts: ["nadia", "sara", "sleep"],
+    disabledContacts: ["sara", "sleep"],
     conditionalDisabledContacts: {
       elena: "day4ElenaCompleted",
+      nadia: "day4NadiaCompleted",
+    },
+    conditionalEnabledContacts: {
+      nadia: "day3NadiaCompleted",
     },
     contactOverrides: {
       maya: {
@@ -67,6 +71,15 @@ export const day4BedroomScene: VisualNovelCommand[] = [
           en: "After everything that's happened lately, it feels like I should check on Elena one more time.",
           ja: "ここ数日のことを考えると、エレナの様子ももう一度見ておいたほうがいい気がする。",
           ko: "최근 있었던 일들을 생각하면, 엘레나 상태도 한 번 더 확인해두는 게 맞는 것 같다.",
+        }),
+      },
+      nadia: {
+        next: "day4-nadia-night",
+        blurb: tx({
+          id: "Nadia bilang konten malam ini lebih panas. Kalau aku setuju, aku hanya di belakang kamera.",
+          en: "Nadia said tonight's content is hotter. If I agree, I stay behind the camera.",
+          ja: "ナディアは今夜のコンテンツがもっと熱いと言っていた。引き受けるなら、カメラの後ろだけだ。",
+          ko: "나디아가 오늘 밤 콘텐츠가 더 뜨겁다고 했다. 승낙하면 나는 카메라 뒤에만 있으면 된다.",
         }),
       },
     },

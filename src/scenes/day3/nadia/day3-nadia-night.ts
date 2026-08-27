@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, centeredText, hide, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import { bg, centeredText, hide, jump, menu, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
 import bedroomNightUrl from "@/background/bedroom-night.png";
 import nadiaHallwayUrl from "@/background/nadia-hallway.png";
 import nadiaRoomUrl from "@/background/nadia-room.png";
@@ -51,10 +51,10 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
     "nadia",
     "neutral",
     tx({
-      id: "Aku butuh bantuan. Bukan laptop kali ini. Bisa naik sebentar? Cuma 10 menit.",
-      en: "I need help. Not the laptop this time. Can you come up for a bit? Just 10 minutes.",
-      ja: "助けが必要。今回はノートパソコンじゃない。ちょっと上がってこれる？ 10分だけ。",
-      ko: "도움이 필요해. 이번엔 노트북 아냐. 잠깐 올라올 수 있어? 10분만.",
+      id: "Aku butuh bantuan. Bukan laptop kali ini. Bisa turun sebentar? Cuma 10 menit.",
+      en: "I need help. Not the laptop this time. Can you come down for a bit? Just 10 minutes.",
+      ja: "助けが必要。今回はノートパソコンじゃない。ちょっと下りてこれる？ 10分だけ。",
+      ko: "도움이 필요해. 이번엔 노트북 아냐. 잠깐 내려올 수 있어? 10분만.",
     }),
   ),
   say(
@@ -127,10 +127,10 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
   ),
   narrate(
     tx({
-      id: "Arka masuk. Ada satu ring light yang masih menyala di sudut. Kamera sudah terpasang menghadap sofa.",
-      en: "Arka steps inside. There's one ring light still on in the corner. A camera is already set up facing the sofa.",
-      ja: "アルカは中に入る。隅ではリングライトが一つだけまだ点いている。カメラはすでにソファに向けて設置されている。",
-      ko: "아르카가 안으로 들어간다. 구석에는 링 라이트 하나만 아직 켜져 있다. 카메라는 이미 소파를 향해 설치되어 있다.",
+      id: "Arka masuk. Ruangan agak gelap, hanya ada satu ring light yang masih menyala di sudut. Kamera sudah terpasang menghadap sofa.",
+      en: "Arka steps inside. The room is rather dark, with only one ring light still on in the corner. A camera is already set up facing the sofa.",
+      ja: "アルカは中に入る。部屋はかなり暗く、隅にはリングライトが一つだけまだ点いている。カメラはすでにソファに向けて設置されている。",
+      ko: "아르카가 안으로 들어간다. 방은 꽤 어두운 편이고, 구석에는 링 라이트 하나만 아직 켜져 있다. 카메라는 이미 소파를 향해 설치되어 있다.",
     }),
   ),
   say(
@@ -451,38 +451,68 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
     "nadia",
     "smile",
     tx({
-      id: "Kalau suatu hari aku minta bantuan yang lebih… langsung. Kamu masih mau dengar dulu?",
-      en: "If one day I ask for help that's more... direct. Will you still hear me out first?",
-      ja: "いつか私が、もっと… 直接的な助けを求めたら、まず聞いてくれる？",
-      ko: "혹시 언젠가 내가 더… 직접적인 도움을 요청하면, 먼저 들어줄 거야?",
+      id: "Besok aku masih butuh bantuan. Kamu bisa datang lagi?",
+      en: "I still need help tomorrow. Can you come again?",
+      ja: "明日も手伝ってほしいの。また来れる？",
+      ko: "내일도 도움이 필요해. 또 올 수 있어?",
     }),
   ),
+  menu(tx({
+    id: "Pilihanmu?",
+    en: "Your choice?",
+    ja: "どうする？",
+    ko: "어떻게 할까?",
+  }), [
+    {
+      id: "help-tomorrow",
+      label: tx({
+        id: "Bantu dia lagi besok",
+        en: "Help her again tomorrow",
+        ja: "明日また手伝う",
+        ko: "내일 또 도와준다",
+      }),
+      next: "day3-nadia-night-help",
+    },
+    {
+      id: "refuse-busy",
+      label: tx({
+        id: "Tolak / bilang sibuk",
+        en: "Refuse / say you're busy",
+        ja: "断る / 忙しいと言う",
+        ko: "거절 / 바쁘다고 한다",
+      }),
+      next: "day3-nadia-night-refuse",
+    },
+  ]),
+];
+
+export const day3NadiaNightHelpScene: VisualNovelCommand[] = [
   say(
     "arka",
     "neutral",
     tx({
-      id: "Tergantung isinya.",
-      en: "Depends on what it is.",
-      ja: "内容によるね。",
-      ko: "내용에 따라 달라.",
+      id: "Bisa. Jam berapa?",
+      en: "Sure. What time?",
+      ja: "いいよ。何時？",
+      ko: "좋아. 몇 시?",
     }),
   ),
   narrate(
     tx({
-      id: "Nadia tersenyum lebar, matanya berbinar nakal.",
-      en: "Nadia smiles widely, her eyes gleaming mischievously.",
-      ja: "ナディアは大きく微笑み、目がいたずらっぽく輝く。",
-      ko: "나디아가 환하게 웃으며 눈이 장난기 가득 빛난다.",
+      id: "Nadia tersenyum lebar, matanya berbinar.",
+      en: "Nadia smiles widely, her eyes gleaming.",
+      ja: "ナディアは大きく微笑み、目が輝く。",
+      ko: "나디아가 환하게 웃으며 눈이 빛난다.",
     }),
   ),
   say(
     "nadia",
     "smile",
     tx({
-      id: "Bagus. Aku suka orang yang nggak langsung bilang iya atau nggak. Nanti aku kabari lagi.",
-      en: "Good. I like people who don't just say yes or no right away. I'll text you later.",
-      ja: "いいね。すぐにイエスかノーか言わない人、好き。後でまた連絡する。",
-      ko: "좋아. 바로 예스나 노우 말하지 않는 사람 마음에 들어. 나중에 다시 연락할게.",
+      id: "Bagus. Nanti aku kabari lagi. Jangan berubah pikiran ya.",
+      en: "Great. I'll let you know later. Don't change your mind, okay?",
+      ja: "いいね。後でまた連絡する。気が変わらないでね。",
+      ko: "좋아. 나중에 다시 연락할게. 마음 바꾸지 마.",
     }),
   ),
   narrate(
@@ -493,6 +523,52 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
       ko: "아르카가 나간 후 그녀가 문을 살짝 닫는다.",
     }),
   ),
+  setFlag("nadia_help_day4", true),
+  jump("day3-nadia-night-ending"),
+];
+
+export const day3NadiaNightRefuseScene: VisualNovelCommand[] = [
+  say(
+    "arka",
+    "neutral",
+    tx({
+      id: "Besok agak susah. Ada urusan lain.",
+      en: "Tomorrow's a bit difficult. I have other things to do.",
+      ja: "明日はちょっと厳しい。用事があるんだ。",
+      ko: "내일은 좀 힘들어. 다른 일이 있어.",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Nadia diam sebentar, lalu mengangguk pelan.",
+      en: "Nadia is quiet for a moment, then nods slowly.",
+      ja: "ナディアは少し黙り、それからゆっくり頷く。",
+      ko: "나디아가 잠시 침묵한 뒤 천천히 고개를 끄덕인다.",
+    }),
+  ),
+  say(
+    "nadia",
+    "neutral",
+    tx({
+      id: "Oke. Nggak apa-apa. Kalau berubah pikiran, bilang aja.",
+      en: "Okay. No problem. If you change your mind, just tell me.",
+      ja: "わかった。大丈夫。気が変わったら、言ってね。",
+      ko: "알았어. 괜찮아. 마음 바뀌면 말해.",
+    }),
+  ),
+  narrate(
+    tx({
+      id: "Ia menutup pintu setelah Arka keluar.",
+      en: "She closes the door after Arka leaves.",
+      ja: "アルカが出た後、彼女はドアを閉める。",
+      ko: "아르카가 나간 후 그녀가 문을 닫는다.",
+    }),
+  ),
+  setFlag("nadia_help_day4", false),
+  jump("day3-nadia-night-ending"),
+];
+
+export const day3NadiaNightEndingScene: VisualNovelCommand[] = [
   hide("nadia-day3-night", "fadeAway"),
   bg(
     nadiaHallwayUrl,
@@ -540,4 +616,5 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
     { size: "hero" },
   ),
   setFlag("day3NadiaCompleted", true),
+  jump("day3-complete"),
 ];

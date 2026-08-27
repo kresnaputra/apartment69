@@ -45,7 +45,13 @@ import { day2ComplateScene } from "@/scenes/day2/day2-complate";
 import { day2ElenaHallwayScene } from "@/scenes/day2/elena/day2-elena-hallway";
 import { day2NadiaRoomScene, day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
 import { day3ElenaMorningScene } from "@/scenes/day3/elena/day3-elena-morning";
-import { day3NadiaNightScene } from "@/scenes/day3/nadia/day3-nadia-night";
+import {
+  day3NadiaNightScene,
+  day3NadiaNightHelpScene,
+  day3NadiaNightRefuseScene,
+  day3NadiaNightEndingScene,
+} from "@/scenes/day3/nadia/day3-nadia-night";
+import { day4NadiaNightScene } from "@/scenes/day4/nadia/day4-nadia-night";
 import {
   mayaPhoneCallScene,
   mayaPhoneCallLogicalScene,
@@ -243,11 +249,15 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day3-slot2-elena": day3Slot2ElenaScene,
     "day3-slot2-nadia": day3Slot2NadiaScene,
     "day3-nadia-night": day3NadiaNightScene,
+    "day3-nadia-night-help": day3NadiaNightHelpScene,
+    "day3-nadia-night-refuse": day3NadiaNightRefuseScene,
+    "day3-nadia-night-ending": day3NadiaNightEndingScene,
     "day3-slot2-sarah": day3Slot2SarahScene,
     "day3-complete": day3ComplateScene,
     // Day 4
     "day4-bedroom": day4BedroomScene,
     "day4-after-route-phone": day4AfterRoutePhoneScene,
+    "day4-nadia-night": day4NadiaNightScene,
     "day4-elena-door": day4ElenaDoorScene,
     "day4-maya-collapse": day4MayaCollapseScene,
     "day4-maya-bad-ending": day4MayaBadEndingScene,
