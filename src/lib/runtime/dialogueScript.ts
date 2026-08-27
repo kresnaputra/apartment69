@@ -204,7 +204,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "opening",
+  startLabel: "day2-nadia-room",
   labels: {
     "gallery-return": [],
     "sbn-maya-test": sbnTestScene,

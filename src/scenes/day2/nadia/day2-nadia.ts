@@ -3,6 +3,7 @@ import { tx } from "@/lib/i18n";
 import {
   bg,
   centeredText,
+  cutScene,
   hide,
   jump,
   narrate,
@@ -14,6 +15,9 @@ import {
 import bedroomAfternoonUrl from "@/background/bedroom-afteroon.png";
 import nadiaRoomUrl from "@/background/nadia-room.png";
 import nadiaHallwayUrl from "@/background/nadia-hallway.png";
+import cutSceneNadia1 from "@/cut-scene/nadia-day-2-1.webm";
+import cutSceneNadia2 from "@/cut-scene/nadia-day-2-2.webm";
+import cutSceneNadia3 from "@/cut-scene/nadia-day-2-3.webm";
 import { officeDayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
 
 export const day2RouteNadiaScene: VisualNovelCommand[] = [
@@ -65,10 +69,10 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = [
     "nadia",
     "neutral",
     tx({
-      id: "Hei tetangga atas! Ini Nadia. Kamu sibuk?",
-      en: "Hey upstairs neighbor! It's Nadia. You busy?",
-      ja: "ねえ、上の隣人！ ナディアだけど。忙しい？",
-      ko: "이웃 오빠! 나디아인데. 지금 바빠?",
+      id: "Hei tetangga bawah! Ini Nadia. Kamu sibuk?",
+      en: "Hey downstairs neighbor! It's Nadia. You busy?",
+      ja: "ねえ、下の隣人！ ナディアだけど。忙しい？",
+      ko: "이웃 아빠! 나디아인데. 지금 바빠?",
     }),
   ),
   say(
@@ -233,62 +237,46 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = [
       ko: "아르카는 재빨리 작업한다. 몇 분 후 화면이 다시 부드러워진다.",
     }),
   ),
-  say(
-    "nadia",
-    "smile",
-    tx({
-      id: "Oke guys, tech support darurat sudah datang! Semua beres berkat tetangga gantengku!",
-      en: "Okay guys, emergency tech support has arrived! Everything's fixed thanks to my handsome neighbor!",
-      ja: "ねえみんな、緊急テックサポートが来てくれた！ イケメン隣人のおかげで全部直った！",
-      ko: "여러분, 긴급 기술 지원이 도착했어! 잘생긴 이웃 오빠 덕에 모두 해결됐어!",
-    }),
-  ),
-  narrate(
-    tx({
+  cutScene(cutSceneNadia1, true, {
+    id: "Oke guys, tech support darurat sudah datang! Semua beres berkat tetangga gantengku!",
+    en: "Okay guys, emergency tech support has arrived! Everything's fixed thanks to my handsome neighbor!",
+    ja: "ねえみんな、緊急テックサポートが来てくれた！ イケメン隣人のおかげで全部直った！",
+    ko: "여러분, 긴급 기술 지원이 도착했어! 잘생긴 이웃 오빠 덕에 모두 해결됐어!",
+  }),
+  cutScene(cutSceneNadia2, true, [
+    {
       id: "Chat penonton langsung ramai.",
       en: "The viewer chat erupts.",
       ja: "視聴者のチャットが一気に盛り上がる。",
       ko: "시청자 채팅이 순식간에 들끓는다.",
-    }),
-  ),
-  narrate(
-    tx({
+    },
+    {
       id: "Nadia menoleh ke Arka sambil tertawa.",
       en: "Nadia turns to Arka, laughing.",
       ja: "ナディアは笑いながらアルカに振り返る。",
       ko: "나디아가 웃으며 아르카를 바라본다.",
-    }),
-  ),
-  say(
-    "nadia",
-    "smile",
-    tx({
-      id: "Mereka lagi nanya nama kamu. Mau aku kasih tahu?",
-      en: "They're asking for your name. Should I tell them?",
-      ja: "みんな、あなたの名前聞いてる。教えちゃおうか？",
-      ko: "얘들이 네 이름 물어봐. 내가 알려줄까?",
-    }),
-  ),
-  say(
-    "arka",
-    "serious",
-    tx({
-      id: "Jangan.",
-      en: "Don't.",
-      ja: "やめとけ。",
-      ko: "하지 마.",
-    }),
-  ),
-  say(
-    "nadia",
-    "smile",
-    tx({
-      id: "Pelit. Tapi oke.",
-      en: "Stingy. But okay.",
-      ja: "ケチ。でもわかった。",
-      ko: "인색하네. 그래도 알겠어.",
-    }),
-  ),
+    },
+    {
+      id: "Nadia: Mereka lagi nanya nama kamu. Mau aku kasih tahu?",
+      en: "Nadia: They're asking for your name. Should I tell them?",
+      ja: "ナディア：みんな、あなたの名前聞いてる。教えちゃおうか？",
+      ko: "나디아: 얘들이 네 이름 물어봐. 내가 알려줄까?",
+    },
+    {
+      id: "Arka: Jangan.",
+      en: "Arka: Don't.",
+      ja: "アルカ：やめとけ。",
+      ko: "아르카: 하지 마.",
+    },
+  ]),
+  cutScene(cutSceneNadia3, true, {
+    id: "Nadia: Pelit. Tapi oke.",
+    en: "Nadia: Stingy. But okay.",
+    ja: "ナディア：ケチ。でもわかった。",
+    ko: "나디아: 인색하네. 그래도 알겠어.",
+  }),
+  hide("arka-day2-nadia"),
+  hide("nadia-day2-room"),
   narrate(
     tx({
       id: "Setelah stream selesai, Nadia melepas headset dan duduk di lantai sambil menghela napas lega.",
@@ -297,6 +285,14 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = [
       ko: "방송이 끝나고 나디아는 헤드셋을 벗고 안도의 한숨을 내쉬며 바닥에 앉는다.",
     }),
   ),
+  show("arka-day2-nadia", "arka", "neutral", {
+    position: "left",
+    enterFrom: "left",
+  }),
+  show("nadia-day2-room", "nadia", "neutral", {
+    position: "center",
+    enterFrom: "right",
+  }),
   say(
     "nadia",
     "neutral",

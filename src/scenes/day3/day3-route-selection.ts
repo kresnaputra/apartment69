@@ -15,16 +15,15 @@ import apartmentUrl from "@/background/apartment.png";
 import universityUrl from "@/background/university.png";
 
 export const day3BedroomScene: VisualNovelCommand[] = [
-  bg(apartmentUrl, tx({
-    id: "Apartment 69 Hari 3",
-    en: "Apartment 69 Day 3",
-    ja: "Apartment 69 - 3日目",
-    ko: "Apartment 69 - 3일차",
-  })),
-  show("arka-day3-bedroom", "arka", "neutral", {
-    position: "left",
-    enterFrom: "fade",
-  }),
+  bg(
+    apartmentUrl,
+    tx({
+      id: "Apartment 69 Hari 3",
+      en: "Apartment 69 Day 3",
+      ja: "Apartment 69 - 3日目",
+      ko: "Apartment 69 - 3일차",
+    }),
+  ),
   narrate(
     tx({
       id: "Pagi Hari 3 dimulai pelan. Arka meraih ponselnya sambil menata kepala yang masih berat, lalu membuka daftar kontak seperti kemarin.",
@@ -33,6 +32,10 @@ export const day3BedroomScene: VisualNovelCommand[] = [
       ko: "3일차 아침은 조용히 시작된다. 아르카는 아직 무거운 머리를 추스르며 휴대폰을 집어 들고, 어제처럼 연락처 목록을 연다.",
     }),
   ),
+  show("arka-day3-bedroom", "arka", "neutral", {
+    position: "left",
+    enterFrom: "fade",
+  }),
   say(
     "arka",
     "serious",
@@ -110,12 +113,15 @@ export const day3BedroomScene: VisualNovelCommand[] = [
 
 export const day3AfterMayaPhoneScene: VisualNovelCommand[] = [
   jumpIf("day3Slot2ElenaCompleted", "day3-route-selection"),
-  bg(apartmentUrl, tx({
-    id: "Apartment 69 Hari 3",
-    en: "Apartment 69 Day 3",
-    ja: "Apartment 69 - 3日目",
-    ko: "Apartment 69 - 3일차",
-  })),
+  bg(
+    apartmentUrl,
+    tx({
+      id: "Apartment 69 Hari 3",
+      en: "Apartment 69 Day 3",
+      ja: "Apartment 69 - 3日目",
+      ko: "Apartment 69 - 3일차",
+    }),
+  ),
   show("arka-day3-after-maya", "arka", "neutral", {
     position: "left",
     enterFrom: "fade",
@@ -174,12 +180,15 @@ export const day3AfterMayaPhoneScene: VisualNovelCommand[] = [
 ];
 
 export const day3RouteSelectionScene: VisualNovelCommand[] = [
-  bg(universityUrl, tx({
-    id: "Area Parkir Kampus - 16:00",
-    en: "Campus Parking Area - 16:00",
-    ja: "大学の駐車エリア - 16:00",
-    ko: "캠퍼스 주차 구역 - 16:00",
-  })),
+  bg(
+    universityUrl,
+    tx({
+      id: "Area Parkir Kampus - 16:00",
+      en: "Campus Parking Area - 16:00",
+      ja: "大学の駐車エリア - 16:00",
+      ko: "캠퍼스 주차 구역 - 16:00",
+    }),
+  ),
   show("arka-campus", "arka", "neutral", {
     position: "left",
     enterFrom: "fade",
