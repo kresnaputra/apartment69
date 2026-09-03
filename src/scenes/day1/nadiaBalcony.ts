@@ -15,8 +15,9 @@ import {
 import bedroom from "@/background/bedroom-afteroon.png";
 import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url";
 import breakSound from "@/sfx/break.wav";
+import { addNadiaVoices } from "@/voice/nadia/day1to4";
 
-export const nadiaBalconyScene: VisualNovelCommand[] = [
+export const nadiaBalconyScene: VisualNovelCommand[] = addNadiaVoices([
   bg(bedroom, tx({
     id: "Lentera Apartments - Kamar",
     en: "Lentera Apartments - Bedroom",
@@ -100,9 +101,9 @@ export const nadiaBalconyScene: VisualNovelCommand[] = [
       next: "nadia-advice-refuse",
     },
   ]),
-];
+], 0);
 
-export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
+export const nadiaAdviceHelpScene: VisualNovelCommand[] = addNadiaVoices([
   say(
     "arka",
     "neutral",
@@ -208,9 +209,9 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = [
   ),
   jump("sara-hallway"),
   hide("nadia-balcony"),
-];
+], 2);
 
-export const nadiaAdviceRefuseScene: VisualNovelCommand[] = [
+export const nadiaAdviceRefuseScene: VisualNovelCommand[] = addNadiaVoices([
   setFlag("nadiaAcceptedNumber", false),
   say(
     "arka",
@@ -229,4 +230,4 @@ export const nadiaAdviceRefuseScene: VisualNovelCommand[] = [
     ko: "알겠어, 한번 해볼게.",
   }), { hideName: true }),
   jump("sara-hallway"),
-];
+], 6);

@@ -19,6 +19,7 @@ import cutSceneNadia1 from "@/cut-scene/nadia-day-2-1.webm";
 import cutSceneNadia2 from "@/cut-scene/nadia-day-2-2.webm";
 import cutSceneNadia3 from "@/cut-scene/nadia-day-2-3.webm";
 import { officeDayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
+import { addNadiaVoices } from "@/voice/nadia/day1to4";
 
 export const day2RouteNadiaScene: VisualNovelCommand[] = [
   narrate(
@@ -43,7 +44,7 @@ export const day2RouteNadiaScene: VisualNovelCommand[] = [
   jump("day2-nadia-room"),
 ];
 
-export const day2NadiaRoomScene: VisualNovelCommand[] = [
+export const day2NadiaRoomScene: VisualNovelCommand[] = addNadiaVoices([
   bg(
     bedroomAfternoonUrl,
     tx({
@@ -568,4 +569,4 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = [
   setFlag("day2NadiaCompleted", true),
   setFlag("nadiaAffection", 1),
   jump("day2-complate"),
-];
+], 7);

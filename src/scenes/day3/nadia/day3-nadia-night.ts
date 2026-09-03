@@ -18,8 +18,9 @@ import nadiaRoomUrl from "@/background/nadia-room.png";
 import cutSceneNadia1 from "@/cut-scene/nadia-day-3-1.webm";
 import cutSceneNadia2 from "@/cut-scene/nadia-day-3-2.webm";
 import cutSceneNadia3 from "@/cut-scene/nadia-day-3-3.webm";
+import { addNadiaVoices } from "@/voice/nadia/day1to4";
 
-export const day3NadiaNightScene: VisualNovelCommand[] = [
+export const day3NadiaNightScene: VisualNovelCommand[] = addNadiaVoices([
   bg(
     bedroomNightUrl,
     tx({
@@ -491,9 +492,9 @@ export const day3NadiaNightScene: VisualNovelCommand[] = [
       },
     ],
   ),
-];
+], 23);
 
-export const day3NadiaNightHelpScene: VisualNovelCommand[] = [
+export const day3NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices([
   say(
     "arka",
     "neutral",
@@ -532,9 +533,9 @@ export const day3NadiaNightHelpScene: VisualNovelCommand[] = [
   ),
   setFlag("nadia_help_day4", true),
   jump("day3-nadia-night-ending"),
-];
+], 37);
 
-export const day3NadiaNightRefuseScene: VisualNovelCommand[] = [
+export const day3NadiaNightRefuseScene: VisualNovelCommand[] = addNadiaVoices([
   say(
     "arka",
     "neutral",
@@ -573,7 +574,7 @@ export const day3NadiaNightRefuseScene: VisualNovelCommand[] = [
   ),
   setFlag("nadia_help_day4", false),
   jump("day3-nadia-night-ending"),
-];
+], 38);
 
 export const day3NadiaNightEndingScene: VisualNovelCommand[] = [
   hide("nadia-day3-night", "fadeAway"),
