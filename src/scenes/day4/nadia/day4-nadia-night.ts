@@ -635,7 +635,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
   39,
 );
 
-export const day4NadiaNightSkipScene: VisualNovelCommand[] = [
+export const day4NadiaNightSkipScene: VisualNovelCommand[] = addNadiaVoices([
   bg(
     bedroomNightUrl,
     tx({
@@ -731,4 +731,4 @@ export const day4NadiaNightSkipScene: VisualNovelCommand[] = [
   ),
   setFlag("day4NadiaCompleted", true),
   jump("day4-after-route-phone"),
-];
+], 52);

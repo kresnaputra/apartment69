@@ -44,6 +44,15 @@ import nadia42 from "@/voice/nadia/nadia_00042.mp3";
 import nadia43 from "@/voice/nadia/nadia_00043.mp3";
 import nadia44 from "@/voice/nadia/nadia_00044.mp3";
 import nadia45 from "@/voice/nadia/nadia_00045.mp3";
+import nadia46 from "@/voice/nadia/nadia_00046.mp3";
+import nadia47 from "@/voice/nadia/nadia_00047.mp3";
+import nadia48 from "@/voice/nadia/nadia_00048.mp3";
+import nadia49 from "@/voice/nadia/nadia_00049.mp3";
+import nadia50 from "@/voice/nadia/nadia_00050.mp3";
+import nadia51 from "@/voice/nadia/nadia_00051.mp3";
+import nadia52 from "@/voice/nadia/nadia_00052.mp3";
+import nadia53 from "@/voice/nadia/nadia_00053.mp3";
+import nadia54 from "@/voice/nadia/nadia_00054.mp3";
 
 export const nadiaDay1To4Voices = [
   nadia1,
@@ -91,6 +100,15 @@ export const nadiaDay1To4Voices = [
   nadia43,
   nadia44,
   nadia45,
+  nadia46,
+  nadia47,
+  nadia48,
+  nadia49,
+  nadia50,
+  nadia51,
+  nadia52,
+  nadia53,
+  nadia54,
 ] as const;
 
 export const addNadiaVoices = (
