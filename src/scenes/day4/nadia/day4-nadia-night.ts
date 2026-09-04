@@ -7,7 +7,6 @@ import {
   clearBlackScreen,
   cutScene,
   hide,
-  jump,
   jumpIf,
   narrate,
   say,
@@ -443,7 +442,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     }),
     say(
       "nadia",
-      "neutral",
+      "towelNeutral",
       tx({
         id: "Selesai.",
         en: "Done.",
@@ -461,7 +460,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     ),
     say(
       "nadia",
-      "smile",
+      "towelSmile",
       tx({
         id: "Kamu tahan banget. Kebanyakan orang udah goyah di tengah.",
         en: "You held out really well. Most people would have cracked halfway through.",
@@ -489,11 +488,11 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     ),
     say(
       "nadia",
-      "smile",
+      "towelSmile",
       tx({
         id: "Iya, iya. Tapi matanya nggak bisa bohong.",
         en: "Yeah, yeah. But the eyes can't lie.",
-        ja: "はいはい。でも目は嘘をつけないよ。",
+        ja: "はいはい。でも目は嘘つけないよ。",
         ko: "그래, 그래. 근데 눈은 거짓말을 못 해.",
       }),
     ),
@@ -507,7 +506,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     ),
     say(
       "nadia",
-      "neutral",
+      "towelNeutral",
       tx({
         id: "Bayaran. Lebih dari kemarin. Jangan ditolak.",
         en: "Payment. More than yesterday. Don't refuse.",
@@ -535,7 +534,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     ),
     say(
       "nadia",
-      "blush",
+      "towelBlush",
       tx({
         id: "Arka… lain kali aku mungkin minta bantuan yang lebih dari sekadar pegang kamera. Kamu masih mau dengar dulu?",
         en: "Arka... next time I might ask for help with more than just holding a camera. Will you still hear me out first?",
@@ -555,7 +554,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     ),
     say(
       "nadia",
-      "smile",
+      "towelSmile",
       tx({
         id: "Bagus. Aku suka jawaban itu.",
         en: "Good. I like that answer.",
@@ -573,7 +572,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     ),
     say(
       "nadia",
-      "smile",
+      "towelSmile",
       tx({
         id: "Hati-hati di jalan. Jangan kepikiran terus ya.",
         en: "Be careful on the way. Don't keep thinking about it, okay?",
@@ -631,7 +630,6 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     setFlag("day4NadiaCompleted", true),
     setFlag("gallerySceneNadia1Unlocked", true),
     setFlag("nadiaAffection", 3),
-    jump("day4-after-route-phone"),
   ],
   39,
 );
@@ -731,5 +729,4 @@ export const day4NadiaNightSkipScene: VisualNovelCommand[] = addNadiaVoices([
     { size: "hero" },
   ),
   setFlag("day4NadiaCompleted", true),
-  jump("day4-after-route-phone"),
 ], 52);
