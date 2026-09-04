@@ -8,6 +8,7 @@ import { sharedSoundEffects } from "@/lib/runtime/soundEffects";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
+import { ExitConfirmationOverlay } from "@/components/ExitConfirmationOverlay";
 import type { AnimationFrameRate, GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import type { FlagMap } from "@/types/novel";
@@ -15,9 +16,12 @@ import type { FlagMap } from "@/types/novel";
 type MainMenuMobileProps = {
   bgVolume: number;
   labels: {
+    cancel: string;
     close: string;
     continueStory: string;
     exit: string;
+    exitAppConfirmation: string;
+    exitWarning: string;
     frameRate: string;
     gallery: string;
     galleryEmpty: string;
@@ -88,6 +92,7 @@ export const MainMenuMobile = ({
   const [showLoadSlots, setShowLoadSlots] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [focusedMenuIndex, setFocusedMenuIndex] = useState(0);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
   const showLoadSlotsRef = useRef(showLoadSlots);
@@ -194,7 +199,7 @@ export const MainMenuMobile = ({
 
 
   const handleExit = () => {
-    void exitApp();
+    setShowExitConfirmation(true);
   };
 
   const btnBase = "w-full rounded-full backdrop-blur-sm tracking-[0.03em] py-2.5 px-6 transition-all duration-200 border";
@@ -387,6 +392,17 @@ export const MainMenuMobile = ({
           onTextSpeedChange={onTextSpeedChange}
           onClose={() => setShowSettings(false)}
           title={labels.mainMenuSettings}
+        />
+      )}
+
+      {showExitConfirmation && (
+        <ExitConfirmationOverlay
+          cancelLabel={labels.cancel}
+          confirmLabel={labels.exit}
+          message={labels.exitAppConfirmation}
+          title={labels.exitWarning}
+          onCancel={() => setShowExitConfirmation(false)}
+          onConfirm={() => void exitApp()}
         />
       )}
     </div>

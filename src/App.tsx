@@ -17,6 +17,7 @@ import { NarratorMobile } from "@/components/NarratorMobile";
 import { DialogueMobile } from "@/components/DialogueMobile";
 import { LogOverlay } from "@/components/LogOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
+import { ExitConfirmationOverlay } from "@/components/ExitConfirmationOverlay";
 import { DEFAULT_LANGUAGE, LANGUAGE_STORAGE_KEY, languageOptions, resolveText, uiText, type LanguageCode, type LocalizedText } from "@/lib/i18n";
 import { readAllSlots, readAutoSave, writeAutoSave, writeSlot } from "@/lib/runtime/saveSlots";
 import { readGalleryUnlockFlags } from "@/lib/runtime/galleryUnlocks";
@@ -1681,6 +1682,7 @@ const App = () => {
   const [showLog, setShowLog] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [showSaveSlots, setShowSaveSlots] = useState(false);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [focusedChoiceIndex, setFocusedChoiceIndex] = useState(0);
   const [focusedControlIndex, setFocusedControlIndex] = useState(-1);
   const CONTROL_COUNT = 6; // Auto, Skip, Log, Save, Config, Exit
@@ -1752,6 +1754,7 @@ const App = () => {
   const bundleList = Object.values(bundles);
   const labels = {
     auto: resolveText(uiText.auto, language),
+    cancel: resolveText(uiText.cancel, language),
     clickToContinue: resolveText(uiText.clickToContinue, language),
     clickToFinish: resolveText(uiText.clickToFinish, language),
     close: resolveText(uiText.close, language),
@@ -1759,6 +1762,9 @@ const App = () => {
     continueStory: resolveText(uiText.continueStory, language),
     emptySlot: resolveText(uiText.emptySlot, language),
     exit: resolveText(uiText.exit, language),
+    exitAppConfirmation: resolveText(uiText.exitAppConfirmation, language),
+    exitToMenuConfirmation: resolveText(uiText.exitToMenuConfirmation, language),
+    exitWarning: resolveText(uiText.exitWarning, language),
     frameRate: resolveText(uiText.animationFps, language),
     fastPlayback: resolveText(uiText.playbackFast, language),
     fasterPlayback: resolveText(uiText.playbackFaster, language),
@@ -2198,6 +2204,11 @@ const App = () => {
   };
 
   const handleExitToMenu = useCallback(() => {
+    setShowExitConfirmation(true);
+  }, []);
+
+  const confirmExitToMenu = useCallback(() => {
+    setShowExitConfirmation(false);
     setIsAuto(false);
     setShowLog(false);
     setShowConfig(false);
@@ -2655,6 +2666,17 @@ const App = () => {
           unknownSceneLabel={uiText.unknownScene}
           onSelect={handleSaveToSlot}
           onClose={() => setShowSaveSlots(false)}
+        />
+      )}
+
+      {showExitConfirmation && (
+        <ExitConfirmationOverlay
+          cancelLabel={labels.cancel}
+          confirmLabel={labels.exit}
+          message={labels.exitToMenuConfirmation}
+          title={labels.exitWarning}
+          onCancel={() => setShowExitConfirmation(false)}
+          onConfirm={confirmExitToMenu}
         />
       )}
 

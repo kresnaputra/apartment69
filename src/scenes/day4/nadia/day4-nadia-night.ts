@@ -629,6 +629,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
       { size: "hero" },
     ),
     setFlag("day4NadiaCompleted", true),
+    setFlag("gallerySceneNadia1Unlocked", true),
     setFlag("nadiaAffection", 3),
     jump("day4-after-route-phone"),
   ],

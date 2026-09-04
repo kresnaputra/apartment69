@@ -51,8 +51,27 @@ export const uiText = {
     ko: "아직 잠김",
   }),
   settings: tx({ id: "Pengaturan", en: "Settings", ja: "設定", ko: "설정" }),
+  cancel: tx({ id: "Batal", en: "Cancel", ja: "キャンセル", ko: "취소" }),
   slot: tx({ id: "Slot", en: "Slot", ja: "スロット", ko: "슬롯" }),
   exit: tx({ id: "Keluar", en: "Exit", ja: "終了", ko: "종료" }),
+  exitAppConfirmation: tx({
+    id: "Yakin ingin keluar dari game?",
+    en: "Are you sure you want to exit the game?",
+    ja: "ゲームを終了しますか？",
+    ko: "게임을 종료하시겠습니까?",
+  }),
+  exitToMenuConfirmation: tx({
+    id: "Kembali ke menu utama? Progres yang belum disimpan akan hilang.",
+    en: "Return to the main menu? Any unsaved progress will be lost.",
+    ja: "メインメニューに戻りますか？ 未保存の進行状況は失われます。",
+    ko: "메인 메뉴로 돌아가시겠습니까? 저장하지 않은 진행 상황은 사라집니다.",
+  }),
+  exitWarning: tx({
+    id: "Peringatan Keluar",
+    en: "Exit Warning",
+    ja: "終了の確認",
+    ko: "종료 확인",
+  }),
   loading: tx({
     id: "Memuat",
     en: "Loading",
