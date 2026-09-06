@@ -18,7 +18,9 @@ import nadiaHallwayUrl from "@/background/nadia-hallway.png";
 import cutSceneNadia1 from "@/cut-scene/nadia-day-2-1.webm";
 import cutSceneNadia2 from "@/cut-scene/nadia-day-2-2.webm";
 import cutSceneNadia3 from "@/cut-scene/nadia-day-2-3.webm";
-import { officeDayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
+import nadiaCutSceneVoiceDay2_1 from "@/voice/nadia/nadia-cut-scene-voice-day-2-1.mp3";
+import nadiaCutSceneVoiceDay2_2 from "@/voice/nadia/nadia-cut-scene-voice-day-2-2.mp3";
+import nadiaCutSceneVoiceDay2_3 from "@/voice/nadia/nadia-cut-scene-voice-day-2-3.mp3";
 import { addNadiaVoices } from "@/voice/nadia/day1to4";
 
 export const day2RouteNadiaScene: VisualNovelCommand[] = [
@@ -239,10 +241,13 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = addNadiaVoices([
     }),
   ),
   cutScene(cutSceneNadia1, true, {
-    id: "Oke guys, tech support darurat sudah datang! Semua beres berkat tetangga gantengku!",
-    en: "Okay guys, emergency tech support has arrived! Everything's fixed thanks to my handsome neighbor!",
-    ja: "ねえみんな、緊急テックサポートが来てくれた！ イケメン隣人のおかげで全部直った！",
-    ko: "여러분, 긴급 기술 지원이 도착했어! 잘생긴 이웃 오빠 덕에 모두 해결됐어!",
+    text: {
+      id: "Oke guys, tech support darurat sudah datang! Semua beres berkat tetangga gantengku!",
+      en: "Okay guys, emergency tech support has arrived! Everything's fixed thanks to my handsome neighbor!",
+      ja: "ねえみんな、緊急テックサポートが来てくれた！ イケメン隣人のおかげで全部直った！",
+      ko: "여러분, 긴급 기술 지원이 도착했어! 잘생긴 이웃 오빠 덕에 모두 해결됐어!",
+    },
+    voice: nadiaCutSceneVoiceDay2_1,
   }),
   cutScene(cutSceneNadia2, true, [
     {
@@ -258,10 +263,13 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = addNadiaVoices([
       ko: "나디아가 웃으며 아르카를 바라본다.",
     },
     {
-      id: "Nadia: Mereka lagi nanya nama kamu. Mau aku kasih tahu?",
-      en: "Nadia: They're asking for your name. Should I tell them?",
-      ja: "ナディア：みんな、あなたの名前聞いてる。教えちゃおうか？",
-      ko: "나디아: 얘들이 네 이름 물어봐. 내가 알려줄까?",
+      text: {
+        id: "Nadia: Mereka lagi nanya nama kamu. Mau aku kasih tahu?",
+        en: "Nadia: They're asking for your name. Should I tell them?",
+        ja: "ナディア：みんな、あなたの名前聞いてる。教えちゃおうか？",
+        ko: "나디아: 얘들이 네 이름 물어봐. 내가 알려줄까?",
+      },
+      voice: nadiaCutSceneVoiceDay2_2,
     },
     {
       id: "Arka: Jangan.",
@@ -271,10 +279,13 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = addNadiaVoices([
     },
   ]),
   cutScene(cutSceneNadia3, true, {
-    id: "Nadia: Pelit. Tapi oke.",
-    en: "Nadia: Stingy. But okay.",
-    ja: "ナディア：ケチ。でもわかった。",
-    ko: "나디아: 인색하네. 그래도 알겠어.",
+    text: {
+      id: "Nadia: Pelit. Tapi oke.",
+      en: "Nadia: Stingy. But okay.",
+      ja: "ナディア：ケチ。でもわかった。",
+      ko: "나디아: 인색하네. 그래도 알겠어.",
+    },
+    voice: nadiaCutSceneVoiceDay2_3,
   }),
   hide("arka-day2-nadia"),
   hide("nadia-day2-room"),
@@ -546,7 +557,7 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = addNadiaVoices([
       ko: "그는 살짝 고개를 저으며 자기 유닛으로 돌아간다.",
     }),
   ),
-  hide("arka", "fadeAway"),
+  hide("arka-day2-nadia", "fadeAway"),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
   centeredText(
     tx({
@@ -557,16 +568,7 @@ export const day2NadiaRoomScene: VisualNovelCommand[] = addNadiaVoices([
     }),
     { size: "sub" },
   ),
-  centeredText(
-    tx({
-      id: "DAY 2 - NADIA ROUTE COMPLETE",
-      en: "DAY 2 - NADIA ROUTE COMPLETE",
-      ja: "DAY 2 - ナディアルート完了",
-      ko: "DAY 2 - 나디아 루트 완료",
-    }),
-    { size: "hero" },
-  ),
   setFlag("day2NadiaCompleted", true),
   setFlag("nadiaAffection", 1),
-  jump("day2-complate"),
+  jump("day2-nadia-free-time"),
 ], 7);

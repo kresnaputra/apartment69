@@ -18,6 +18,10 @@ import nadiaRoomUrl from "@/background/nadia-room.png";
 import cutSceneNadia1 from "@/cut-scene/nadia-day-3-1.webm";
 import cutSceneNadia2 from "@/cut-scene/nadia-day-3-2.webm";
 import cutSceneNadia3 from "@/cut-scene/nadia-day-3-3.webm";
+import nadiaCutSceneVoiceDay3_1 from "@/voice/nadia/nadia-cut-scene-voice-day-3-1.mp3";
+import nadiaCutSceneVoiceDay3_2 from "@/voice/nadia/nadia-cut-scene-voice-day-3-2.mp3";
+import nadiaCutSceneVoiceDay3_3 from "@/voice/nadia/nadia-cut-scene-voice-day-3-3.mp3";
+import nadiaCutSceneVoiceDay3_4 from "@/voice/nadia/nadia-cut-scene-voice-day-3-4.mp3";
 import { addNadiaVoices } from "@/voice/nadia/day1to4";
 
 export const day3NadiaNightScene: VisualNovelCommand[] = addNadiaVoices([
@@ -250,10 +254,13 @@ export const day3NadiaNightScene: VisualNovelCommand[] = addNadiaVoices([
       ko: "나디아가 바로 움직인다. 카메라 리모컨을 집어 아르카에게 건넨다.",
     },
     {
-      id: "Nadia: Kamu berdiri di situ. Fokus ke wajah dan bahu aku aja. Jangan terlalu zoom ke bawah.",
-      en: "Nadia: Stand right there. Just focus on my face and shoulders. Don't zoom too low.",
-      ja: "ナディア: そこに立って。顔と肩だけにフォーカスして。下にズームしすぎないで。",
-      ko: "나디아: 거기 서 있어. 내 얼굴과 어깨만 초점 맞춰. 너무 아래로 확대하지 마.",
+      text: {
+        id: "Nadia: Kamu berdiri di situ. Fokus ke wajah dan bahu aku aja. Jangan terlalu zoom ke bawah.",
+        en: "Nadia: Stand right there. Just focus on my face and shoulders. Don't zoom too low.",
+        ja: "ナディア: そこに立って。顔と肩だけにフォーカスして。下にズームしすぎないで。",
+        ko: "나디아: 거기 서 있어. 내 얼굴과 어깨만 초점 맞춰. 너무 아래로 확대하지 마.",
+      },
+      voice: nadiaCutSceneVoiceDay3_1,
     },
     {
       id: "Arka berdiri di posisi yang ditunjuk. Nadia duduk di sofa, mengatur pose, lalu mulai berpose dengan ekspresi yang jauh lebih berani dibanding saat mereka biasa bicara.",
@@ -270,16 +277,22 @@ export const day3NadiaNightScene: VisualNovelCommand[] = addNadiaVoices([
       ko: "몇 분이 지난다. 나디아가 가끔 짧은 지시를 내린다.",
     },
     {
-      id: "Nadia: Sedikit ke kiri… oke. Tahan.",
-      en: "Nadia: A little to the left... okay. Hold it.",
-      ja: "ナディア: 少し左へ… うん、そのまま。",
-      ko: "나디아: 조금 왼쪽… 그래. 멈춰.",
+      text: {
+        id: "Nadia: Sedikit ke kiri… oke. Tahan.",
+        en: "Nadia: A little to the left... okay. Hold it.",
+        ja: "ナディア: 少し左へ… うん、そのまま。",
+        ko: "나디아: 조금 왼쪽… 그래. 멈춰.",
+      },
+      voice: nadiaCutSceneVoiceDay3_2,
     },
     {
-      id: "Nadia: Sekarang dari atas sedikit… bagus.",
-      en: "Nadia: Now a bit from above... nice.",
-      ja: "ナディア: 今度は上から少し… いい感じ。",
-      ko: "나디아: 이번엔 위에서 조금… 좋아.",
+      text: {
+        id: "Nadia: Sekarang dari atas sedikit… bagus.",
+        en: "Nadia: Now a bit from above... nice.",
+        ja: "ナディア: 今度は上から少し… いい感じ。",
+        ko: "나디아: 이번엔 위에서 조금… 좋아.",
+      },
+      voice: nadiaCutSceneVoiceDay3_3,
     },
     {
       id: "Setelah sekitar sepuluh menit, Nadia berdiri dan meregangkan tubuh.",
@@ -289,10 +302,13 @@ export const day3NadiaNightScene: VisualNovelCommand[] = addNadiaVoices([
     },
   ]),
   cutScene(cutSceneNadia3, true, {
-    id: "Nadia: Udah. Cukup.",
-    en: "Nadia: That's it. Enough.",
-    ja: "ナディア: いいよ。十分。",
-    ko: "나디아: 됐어. 충분해.",
+    text: {
+      id: "Nadia: Udah. Cukup.",
+      en: "Nadia: That's it. Done.",
+      ja: "ナディア: いいよ。十分。",
+      ko: "나디아: 됐어. 충분해.",
+    },
+    voice: nadiaCutSceneVoiceDay3_4,
   }),
   hide("arka-day3-nadia"),
   hide("nadia-day3-night"),

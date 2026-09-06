@@ -24,7 +24,11 @@ export type FlagValue = boolean | number | string | null;
 export type FlagMap = Record<string, FlagValue>;
 
 export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts" | "laptop-cleanup" | "email-compose";
-export type CutSceneNarration = LocalizedText | LocalizedText[];
+export type CutSceneNarrationEntry = LocalizedText | {
+  text: LocalizedText;
+  voice?: string;
+};
+export type CutSceneNarration = CutSceneNarrationEntry | CutSceneNarrationEntry[];
 
 /**
  * Fixed playback speed for a cut scene, set in the script rather than by the

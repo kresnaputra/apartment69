@@ -6,6 +6,7 @@ import {
   interstitial,
   jump,
   scene,
+  setFlag,
 } from "@/scenes/scriptTypes";
 import { officeDayChangeClassic } from "@/cut-scene/dayChangeBackgrounds";
 
@@ -33,6 +34,7 @@ export const day2ComplateScene: VisualNovelCommand[] = [
     }),
     { size: "hero", typingSpeed: 0.3 },
   ),
+  setFlag("day2Completed", true),
   interstitial(),
   jump("day3-bedroom"),
 ];

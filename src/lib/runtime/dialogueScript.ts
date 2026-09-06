@@ -43,6 +43,7 @@ import { day2HallwayScene } from "@/scenes/day2/day2-hallway";
 import { day2MayaBedroomScene } from "@/scenes/day2/day2-maya-bedroom";
 import { day2ComplateScene } from "@/scenes/day2/day2-complate";
 import { day2ElenaHallwayScene } from "@/scenes/day2/elena/day2-elena-hallway";
+import { day2NadiaFreeTimeScene } from "@/scenes/day2/nadia/day2-nadia-free-time";
 import { day2NadiaRoomScene, day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
 import { day3ElenaMorningScene } from "@/scenes/day3/elena/day3-elena-morning";
 import {
@@ -239,6 +240,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day2-elena-hallway": day2ElenaHallwayScene,
     "day2-route-nadia": day2RouteNadiaScene,
     "day2-nadia-room": day2NadiaRoomScene,
+    "day2-nadia-free-time": day2NadiaFreeTimeScene,
     "day3-elena-morning": day3ElenaMorningScene,
     "day2-free-time": day2FreeTimeScene,
     "day2-complate": day2ComplateScene,

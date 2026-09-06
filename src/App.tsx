@@ -1338,9 +1338,16 @@ const CutSceneNarrationLayer = memo(forwardRef<CutSceneNarrationHandle, CutScene
   const [currentNarrateIndex, setCurrentNarrateIndex] = useState(0);
   const [revealedCount, setRevealedCount] = useState(0);
 
-  const resolvedNarrateBlocks = narrate
-    ? (Array.isArray(narrate) ? narrate : [narrate]).map((entry) => resolveText(entry, language))
-    : [];
+  const narrateEntries = narrate ? (Array.isArray(narrate) ? narrate : [narrate]) : [];
+  const resolvedNarrateBlocks = narrateEntries.map((entry) => resolveText(
+    typeof entry === "object" && entry !== null && "text" in entry ? entry.text : entry,
+    language,
+  ));
+  const currentNarrateEntry = narrateEntries[currentNarrateIndex];
+  const currentNarrateVoice = typeof currentNarrateEntry === "object" && currentNarrateEntry !== null && "text" in currentNarrateEntry
+    ? currentNarrateEntry.voice
+    : undefined;
+  const narrationAudio = useCutSceneAudio(VOICE_ACTING_ENABLED ? currentNarrateVoice : undefined);
   const currentNarrateBlock = resolvedNarrateBlocks[currentNarrateIndex] ?? "";
   const hasNarration = resolvedNarrateBlocks.length > 0;
   const visibleNarrateBlocks = currentNarrateBlock
@@ -1353,6 +1360,12 @@ const CutSceneNarrationLayer = memo(forwardRef<CutSceneNarrationHandle, CutScene
     setCurrentNarrateIndex(0);
     setRevealedCount(0);
   }, [language, narrate]);
+
+  useEffect(() => {
+    if (!currentNarrateVoice) return;
+    narrationAudio.start();
+    return narrationAudio.stop;
+  }, [currentNarrateIndex, currentNarrateVoice, narrationAudio]);
 
   useEffect(() => {
     if (!currentNarrateBlock) return;
@@ -1640,7 +1653,7 @@ const App = () => {
           activeMinigame.options?.disabledContacts as string[] | undefined,
         );
         const conditionalDisabledContacts = activeMinigame.options?.conditionalDisabledContacts as
-          | Partial<Record<SmartphoneContactId, string>>
+          | Partial<Record<SmartphoneContactId, string | string[]>>
           | undefined;
         const conditionalEnabledContacts = activeMinigame.options?.conditionalEnabledContacts as
           | Partial<Record<SmartphoneContactId, string>>
@@ -1652,8 +1665,9 @@ const App = () => {
         const resolvedDisabledContacts = new Set(baseDisabledContacts);
 
         if (conditionalDisabledContacts) {
-          (Object.entries(conditionalDisabledContacts) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
-            if (flags[flagName]) {
+          (Object.entries(conditionalDisabledContacts) as Array<[SmartphoneContactId, string | string[]]>).forEach(([contactId, requiredFlags]) => {
+            const flagNames = Array.isArray(requiredFlags) ? requiredFlags : [requiredFlags];
+            if (flagNames.some((flagName) => flags[flagName])) {
               resolvedDisabledContacts.add(contactId);
             }
           });
@@ -2368,7 +2382,8 @@ const App = () => {
             if (activeMinigame) return;
             if (choices.length > 0) return;
             if (isEnded) {
-              handleExitToMenu();
+              clearScene();
+              setPhase("menu");
               return;
             }
             if (isTyping) {

@@ -35,6 +35,12 @@ export const smartphoneContactFlagMap: Partial<Record<SmartphoneContactId, strin
   sara: "saraAcceptedNumber",
 };
 
+const day2RouteCompletionFlagMap: Partial<Record<SmartphoneContactId, string>> = {
+  maya: "day2MayaCompleted",
+  elena: "day2ElenaCompleted",
+  nadia: "day2NadiaCompleted",
+};
+
 export const resolveLockedSmartphoneContacts = (
   flags: FlagMap,
   disabledContacts: string[] = [],
@@ -50,6 +56,14 @@ export const resolveLockedSmartphoneContacts = (
       resolvedDisabledContacts.add(contactId);
     }
   });
+
+  if (flags.day2Completed) {
+    (Object.entries(day2RouteCompletionFlagMap) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
+      if (!flags[flagName]) {
+        resolvedDisabledContacts.add(contactId);
+      }
+    });
+  }
 
   return [...resolvedDisabledContacts];
 };
