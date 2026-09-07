@@ -16,6 +16,7 @@ import elenaArkaWork from "@/background/elena-arka-work.png";
 import { elenaDay4Voices } from "@/voice/elena/day4";
 
 export const day4ElenaDoorScene: VisualNovelCommand[] = [
+  setFlag("day4SelectedCharacter", "elena"),
   bg(
     elenaHallwayOpenUrl,
     tx({

@@ -41,6 +41,8 @@ const day2RouteCompletionFlagMap: Partial<Record<SmartphoneContactId, string>> =
   nadia: "day2NadiaCompleted",
 };
 
+const day4RouteCharacterIds = ["maya", "elena", "nadia"] as const;
+
 export const resolveLockedSmartphoneContacts = (
   flags: FlagMap,
   disabledContacts: string[] = [],
@@ -60,6 +62,15 @@ export const resolveLockedSmartphoneContacts = (
   if (flags.day2Completed) {
     (Object.entries(day2RouteCompletionFlagMap) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
       if (!flags[flagName]) {
+        resolvedDisabledContacts.add(contactId);
+      }
+    });
+  }
+
+  const day4SelectedCharacter = flags.day4SelectedCharacter;
+  if (day4RouteCharacterIds.some((contactId) => contactId === day4SelectedCharacter)) {
+    day4RouteCharacterIds.forEach((contactId) => {
+      if (contactId !== day4SelectedCharacter) {
         resolvedDisabledContacts.add(contactId);
       }
     });

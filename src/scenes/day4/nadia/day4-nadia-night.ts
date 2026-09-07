@@ -31,6 +31,7 @@ import nadiaDay4_6Sound from "@/voice/nadia/nadia-day-4-6.wav";
 import nadiaDay4_7Sound from "@/voice/nadia/nadia-day-4-7.wav";
 
 export const day4NadiaNightScene: VisualNovelCommand[] = [
+  setFlag("day4SelectedCharacter", "nadia"),
   jumpIf("nadia_help_day4", "day4-nadia-night-help", {
     value: true,
     elseTarget: "day4-nadia-night-skip",

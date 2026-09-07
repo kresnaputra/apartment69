@@ -44,6 +44,7 @@ import day4Bgm from "@/music/day4.mp3";
 import breakSound from "@/sfx/break.wav";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
+  setFlag("day4SelectedCharacter", "maya"),
   playBgm(day4Bgm),
   bg(
     hallwayUrl,
