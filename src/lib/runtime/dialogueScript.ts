@@ -84,6 +84,7 @@ import {
   day5LobbyFarewellScene,
 } from "@/scenes/day5/day5-maya-morning";
 import { day5ComplateScene } from "@/scenes/day5/day5-complate";
+import { day5NadiaScene } from "@/scenes/day5/day5-nadia";
 import { day5ElenaHallwayScene } from "@/scenes/day5/elena/day5-elena-hallway";
 import {
   day6PapaConfrontationScene,
@@ -97,6 +98,12 @@ import {
   day6ElenaStandScene,
 } from "@/scenes/day6/elena/day6-elena-arthur";
 import { day6ComplateScene } from "@/scenes/day6/day6-complate";
+import {
+  day6NadiaScene,
+  day6NadiaGoodPathScene,
+  day6NadiaBadPathScene,
+  day6NadiaEndingScene,
+} from "@/scenes/day6/day6-nadia";
 import {
   day7IntroScene,
   day7DevotedSubmissionScene,
@@ -275,6 +282,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     // Day 5
     "day5-maya-morning": day5MayaMorningScene,
     "day5-elena-hallway": day5ElenaHallwayScene,
+    "day5-nadia": day5NadiaScene,
     "day5-lobby-farewell": day5LobbyFarewellScene,
     "day5-complate": day5ComplateScene,
     "day5-elena-complate": day5ElenaComplateScene,
@@ -287,6 +295,10 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day6-supportive": day6SupportiveScene,
     "day6-aftermath": day6AftermathScene,
     "day6-complate": day6ComplateScene,
+    "day6-nadia": day6NadiaScene,
+    "day6-nadia-good-path": day6NadiaGoodPathScene,
+    "day6-nadia-bad-path": day6NadiaBadPathScene,
+    "day6-nadia-ending": day6NadiaEndingScene,
     // Day 7
     "day7-intro": day7IntroScene,
     "day7-elena-good-ending": day7ElenaGoodEndingScene,

@@ -7,6 +7,7 @@ import {
   clearBlackScreen,
   cutScene,
   hide,
+  jump,
   jumpIf,
   narrate,
   say,
@@ -631,6 +632,7 @@ export const day4NadiaNightHelpScene: VisualNovelCommand[] = addNadiaVoices(
     setFlag("day4NadiaCompleted", true),
     setFlag("gallerySceneNadia1Unlocked", true),
     setFlag("nadiaAffection", 3),
+    jump("day5-nadia"),
   ],
   39,
 );
