@@ -4,8 +4,9 @@ import { bg, centeredText, hide, jump, menu, narrate, say, setFlag, show } from 
 import bedroomAfternoonUrl from "@/background/bedroom-afteroon.png";
 import nadiaHallwayUrl from "@/background/nadia-hallway.png";
 import nadiaRoomUrl from "@/background/nadia-room.png";
+import { addNadiaDay5To6Voices } from "@/voice/nadia/day5to6";
 
-export const day6NadiaScene: VisualNovelCommand[] = [
+export const day6NadiaScene: VisualNovelCommand[] = addNadiaDay5To6Voices([
   bg(
     bedroomAfternoonUrl,
     tx({
@@ -191,9 +192,9 @@ export const day6NadiaScene: VisualNovelCommand[] = [
       },
     ],
   ),
-];
+], 0);
 
-export const day6NadiaGoodPathScene: VisualNovelCommand[] = [
+export const day6NadiaGoodPathScene: VisualNovelCommand[] = addNadiaDay5To6Voices([
   say("arka", "serious", tx({
     id: "Kamu lebih cocok streaming biasa.",
     en: "You're better suited to regular streaming.",
@@ -282,9 +283,9 @@ export const day6NadiaGoodPathScene: VisualNovelCommand[] = [
     ko: "나디아 호감도 +2",
   }), { size: "sub" }),
   jump("day6-nadia-ending"),
-];
+], 9);
 
-export const day6NadiaBadPathScene: VisualNovelCommand[] = [
+export const day6NadiaBadPathScene: VisualNovelCommand[] = addNadiaDay5To6Voices([
   say("arka", "serious", tx({
     id: "Mungkin kamu memang lebih cocok coba konten dewasa.",
     en: "Maybe you really are better suited to trying adult content.",
@@ -380,9 +381,9 @@ export const day6NadiaBadPathScene: VisualNovelCommand[] = [
     ko: "나디아 호감도 +1",
   }), { size: "sub" }),
   jump("day6-nadia-ending"),
-];
+], 14);
 
-export const day6NadiaEndingScene: VisualNovelCommand[] = [
+export const day6NadiaEndingScene: VisualNovelCommand[] = addNadiaDay5To6Voices([
   narrate(tx({
     id: "Nadia menghabiskan kopinya, lalu berdiri.",
     en: "Nadia finishes her coffee, then stands.",
@@ -437,4 +438,4 @@ export const day6NadiaEndingScene: VisualNovelCommand[] = [
   }), "arka"),
   hide("arka-day6-nadia", "fadeAway"),
   setFlag("day6NadiaCompleted", true),
-];
+], 19);
