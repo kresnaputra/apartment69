@@ -113,6 +113,7 @@ import {
   day7ElenaBadEndingScene,
   day7ElenaGoodEndingScene,
 } from "@/scenes/day7/day7-elena-good-ending";
+import { day7NadiaBadEndingScene } from "@/scenes/day7/day7-nadia-bad-ending";
 import { day4ComplateScene } from "@/scenes/day4/day4-complate";
 import { sbnTestScene } from "@/scenes/sbnTestScene";
 import { day4ElenaComplateScene } from "@/scenes/day4/elena/day4-elena-complate";
@@ -212,7 +213,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "day5-nadia",
+  startLabel: "day7-nadia-bad-ending",
   labels: {
     "gallery-return": [],
     "sbn-maya-test": sbnTestScene,
@@ -303,6 +304,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day7-intro": day7IntroScene,
     "day7-elena-good-ending": day7ElenaGoodEndingScene,
     "day7-elena-bad-ending": day7ElenaBadEndingScene,
+    "day7-nadia-bad-ending": day7NadiaBadEndingScene,
     "day7-devoted-submission": day7DevotedSubmissionScene,
     "day7-eternal-promise": day7EternalPromiseScene,
     epilogue: epilogueScene,

@@ -65,6 +65,9 @@ export const day7IntroScene: VisualNovelCommand[] = [
   jumpIf("elenaRelationshipDamaged", "day7-elena-bad-ending", {
     value: true,
   }),
+  jumpIf("nadiaBadPathLocked", "day7-nadia-bad-ending", {
+    value: true,
+  }),
   bg(
     bedroomNightUrl,
     tx({

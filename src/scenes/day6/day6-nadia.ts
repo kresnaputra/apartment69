@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, centeredText, hide, jump, menu, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import { bg, centeredText, hide, jump, jumpIf, menu, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
 import bedroomAfternoonUrl from "@/background/bedroom-afteroon.png";
 import nadiaHallwayUrl from "@/background/nadia-hallway.png";
 import nadiaRoomUrl from "@/background/nadia-room.png";
@@ -438,4 +438,8 @@ export const day6NadiaEndingScene: VisualNovelCommand[] = addNadiaDay5To6Voices(
   }), "arka"),
   hide("arka-day6-nadia", "fadeAway"),
   setFlag("day6NadiaCompleted", true),
+  jumpIf("nadiaBadPathLocked", "day7-nadia-bad-ending", {
+    value: true,
+    elseTarget: "day7-intro",
+  }),
 ], 19);
