@@ -1,7 +1,8 @@
+import type {} from "bun";
 import { describe, expect, test, spyOn } from "bun:test";
 import { readFile } from "node:fs/promises";
 import JSZip from "jszip";
-import { computeAllWorldTransforms, sampleBonesAtFrame } from "./src/lib/sbn/sampling";
+import { computeAllWorldTransforms, sampleAttachmentOpacityAtFrame, sampleBonesAtFrame } from "./src/lib/sbn/sampling";
 import { createAnimationFrameGate } from "./src/lib/runtime/graphicsSettings";
 import { CanvasSbnRenderer } from "./src/lib/rendering/canvasSbnRenderer";
 import type { SbnProject, WorldBone } from "./src/types/sbn";
@@ -81,6 +82,90 @@ describe("SBN transforms", () => {
       console.info(`${asset}: ${project.bones.length} bones, ${project.attachments.length} attachments, ${project.attachments.reduce((count, attachment) => count + (attachment.meshTriangles ?? attachment.mesh?.triangles ?? []).length, 0)} mesh triangles`);
     });
   }
+});
+
+const renderAttachmentAlphas = (project: SbnProject, frame: number) => {
+  const alphas: number[] = [];
+  const stack: number[] = [];
+  const ctx = {
+    globalAlpha: 1,
+    save() { stack.push(this.globalAlpha); },
+    restore() { this.globalAlpha = stack.pop() ?? 1; },
+    drawImage() { alphas.push(this.globalAlpha); },
+    clearRect() {}, translate() {}, rotate() {}, scale() {},
+    beginPath() {}, moveTo() {}, lineTo() {}, closePath() {}, clip() {}, transform() {},
+  };
+  const renderer = new CanvasSbnRenderer();
+  renderer.attach({ getContext: () => ctx } as unknown as HTMLCanvasElement);
+  const image = { naturalWidth: 1159, naturalHeight: 589 } as HTMLImageElement;
+  const getImage = spyOn(renderer as unknown as { getImage: (src: string) => HTMLImageElement }, "getImage")
+    .mockReturnValue(image);
+  try {
+    renderer.render({
+      project, frame, scale: 1,
+      camera: { minX: -1000, minY: -500, maxX: 1000, maxY: 500, centerX: 0, centerY: 0, zoom: 1 },
+      viewportWidth: 2000, viewportHeight: 1000,
+    });
+  } finally {
+    getImage.mockRestore();
+  }
+  expect(ctx.globalAlpha).toBe(1);
+  return alphas;
+};
+
+for (const type of ["mesh", "image"]) {
+  test(`leaf ${type} fades out before its position resets at the loop boundary`, async () => {
+    const zip = await JSZip.loadAsync(await readFile(new URL("./src/assets/leaf.sbn", import.meta.url)));
+    const project = JSON.parse(await zip.file("project.json")!.async("string")) as SbnProject;
+    project.backgroundImage = null;
+    project.attachments = project.attachments.filter((attachment) => attachment.name === "BG3").map((attachment) => ({
+      ...attachment, type, imageData: "leaf-test-image",
+      meshVertices: attachment.meshVertices ?? attachment.mesh?.vertices,
+      meshTriangles: attachment.meshTriangles ?? attachment.mesh?.triangles,
+    }));
+    for (const [frame, opacity] of [[0, 0], [25, 0.5], [50, 1], [75, 0.5], [99, 0.02], [100, 0], [0, 0]]) {
+      const alphas = renderAttachmentAlphas(project, frame);
+      if (opacity === 0) {
+        expect(alphas).toHaveLength(0);
+      } else {
+        expect(alphas.length).toBeGreaterThan(0);
+        for (const alpha of alphas) expect(alpha).toBeCloseTo(opacity, 6);
+      }
+    }
+  });
+}
+
+test("attachment opacity respects easing, endpoints, static values and empty tracks", () => {
+  const project: SbnProject = {
+    bones: [makeBone(1, null)], skins: [], duration: 40,
+    slots: [{ id: 1, name: "leaf", boneId: 1, attachmentName: "leaf", drawOrder: 0 }],
+    attachments: [{ name: "leaf", type: "image", slotId: 1, width: 10, height: 10,
+      x: 0, y: 0, rotation: 0, scaleX: 1, scaleY: 1, opacity: 0.3, imageData: "leaf-test-image" }],
+  };
+  const attachment = project.attachments[0];
+  expect(sampleAttachmentOpacityAtFrame(project, attachment, 0)).toBe(0.3);
+  expect(renderAttachmentAlphas(project, 0)).toEqual([0.3]);
+  project.attachmentOpacityKeyframes = { "1:leaf": {} };
+  expect(sampleAttachmentOpacityAtFrame(project, attachment, 5)).toBe(0.3);
+  project.attachmentOpacityKeyframes["1:leaf"] = {
+    "10": { opacity: 0, easing: "easeIn" },
+    "20": { opacity: 1, easing: "easeOut" },
+    "30": { opacity: 0 },
+  };
+  for (const [frame, opacity] of [[0, 0], [10, 0], [15, 0.25], [20, 1], [25, 0.25], [30, 0], [40, 0]]) {
+    expect(sampleAttachmentOpacityAtFrame(project, attachment, frame)).toBeCloseTo(opacity, 6);
+  }
+  expect(attachment.opacity).toBe(0.3);
+  project.attachmentOpacityKeyframes["1:leaf"] = { "10": { opacity: 0.7 } };
+  expect(sampleAttachmentOpacityAtFrame(project, attachment, 0)).toBe(0.7);
+  expect(sampleAttachmentOpacityAtFrame(project, attachment, 40)).toBe(0.7);
+  delete project.attachmentOpacityKeyframes;
+  attachment.opacity = 2;
+  expect(sampleAttachmentOpacityAtFrame(project, attachment, 0)).toBe(1);
+  attachment.opacity = -1;
+  expect(sampleAttachmentOpacityAtFrame(project, attachment, 0)).toBe(0);
+  delete attachment.opacity;
+  expect(sampleAttachmentOpacityAtFrame(project, attachment, 0)).toBe(1);
 });
 
 describe("animation render cadence", () => {

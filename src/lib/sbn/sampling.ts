@@ -163,6 +163,28 @@ export const sampleBonesAtFrame = (project: SbnProject, frame: number) => {
   return bones;
 };
 
+export const sampleAttachmentOpacityAtFrame = (
+  project: SbnProject,
+  attachment: SbnAttachment,
+  frame: number,
+) => {
+  const track = project.attachmentOpacityKeyframes?.[`${attachment.slotId}:${attachment.name}`];
+  const frames = track ? Object.keys(track).map(Number).sort((a, b) => a - b) : [];
+  let opacity = attachment.opacity ?? 1;
+
+  if (track && frames.length > 0) {
+    const nextIndex = frames.findIndex((keyframe) => keyframe >= frame);
+    const nextFrame = frames[nextIndex < 0 ? frames.length - 1 : nextIndex];
+    const previousFrame = frames[nextIndex < 0 ? frames.length - 1 : Math.max(0, nextIndex - 1)];
+    const from = track[String(previousFrame)];
+    const to = track[String(nextFrame)];
+    const t = previousFrame === nextFrame ? 0 : (frame - previousFrame) / (nextFrame - previousFrame);
+    opacity = from.opacity + (to.opacity - from.opacity) * applyEasing(from.easing ?? "linear", t);
+  }
+
+  return Math.max(0, Math.min(1, opacity));
+};
+
 export const sampleMeshDeformAtFrame = (
   project: SbnProject,
   frame: number,

@@ -991,10 +991,23 @@ textarea {
 }
 
 .vn-menu-bg {
+  --vn-menu-bg-drift-distance: clamp(16px, 2vw, 32px);
   position: absolute;
-  inset: 0;
+  inset: 0 -34px;
   background-size: cover;
   background-position: center right;
+  animation: vn-menu-bg-drift 8s ease-in-out -4s infinite alternate;
+}
+
+@keyframes vn-menu-bg-drift {
+  from { transform: translate3d(calc(-1 * var(--vn-menu-bg-drift-distance)), 0, 0); }
+  to { transform: translate3d(var(--vn-menu-bg-drift-distance), 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vn-menu-bg {
+    animation: none;
+  }
 }
 
 /* Left-to-transparent gradient panel */

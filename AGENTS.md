@@ -64,4 +64,8 @@ Characters are dimmed when another character is actively speaking (`activeCharac
 
 Run `bun test rendering-performance.test.ts` for transform complexity, real Maya/father SBN transform compatibility, render cadence, animation speed, and padded-image cache regression checks. These use Bun's built-in runner without additional dependencies.
 
+Bun test files explicitly load ambient test declarations with `import type {} from "bun";` because the application tsconfig restricts automatic types to `vite/client`. Installing `@types/bun` alone does not resolve `bun:test` under those compiler options.
+
 Character sprites now advance in their own `requestAnimationFrame` loops, not a store-level `tickCharacters` loop. `createAnimationFrameGate` applies the selected 24/40/60 FPS render limit independently of each character's animation playback FPS.
+
+SBN `attachmentOpacityKeyframes` tracks use `slotId:attachmentName` keys. The Canvas renderer samples these with easing for both mesh and image attachments. The leaf animation relies on this fade-out to hide the position reset at its loop boundary; regression tests cover the actual `src/assets/leaf.sbn` asset.

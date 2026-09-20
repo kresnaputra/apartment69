@@ -1,4 +1,4 @@
-import { resolveSceneDrawables, sampleBonesAtFrame, sampleMeshDeformAtFrame } from "@/lib/sbn/sampling";
+import { resolveSceneDrawables, sampleAttachmentOpacityAtFrame, sampleBonesAtFrame, sampleMeshDeformAtFrame } from "@/lib/sbn/sampling";
 import type { GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import type { SceneBounds, SbnAttachment, SbnProject, WorldBone } from "@/types/sbn";
 
@@ -267,6 +267,7 @@ export class CanvasSbnRenderer {
     image: HTMLImageElement,
     input: RenderInput,
     meshDeforms: Record<string, Array<{ x: number; y: number }>>,
+    opacity: number,
   ) {
     if (!this.ctx || !attachment.meshVertices || !attachment.meshTriangles) return;
 
@@ -294,7 +295,6 @@ export class CanvasSbnRenderer {
       return this.worldToScreen(worldX, worldY, viewportWidth, viewportHeight, camera, scale);
     });
 
-    const opacity = attachment.opacity ?? 1;
     this.ctx.save();
     if (opacity < 1) this.ctx.globalAlpha = opacity;
 
@@ -329,11 +329,14 @@ export class CanvasSbnRenderer {
   ) {
     if (!attachment.imageData || !this.ctx) return;
 
+    const opacity = sampleAttachmentOpacityAtFrame(input.project, attachment, input.frame);
+    if (opacity === 0) return;
+
     const image = this.getImage(attachment.imageData);
     if (!image) return;
 
     if (attachment.type === "mesh" && attachment.meshVertices && attachment.meshTriangles) {
-      this.drawMeshAttachment(attachment, bone, image, input, meshDeforms);
+      this.drawMeshAttachment(attachment, bone, image, input, meshDeforms, opacity);
       return;
     }
 
@@ -364,6 +367,7 @@ export class CanvasSbnRenderer {
     const cropOffsetY = ((cropBounds?.y ?? 0) - cropGutter) * pixelScaleY;
 
     this.ctx.save();
+    if (opacity < 1) this.ctx.globalAlpha = opacity;
     this.ctx.translate(screenPos.x, screenPos.y);
     this.ctx.rotate((bone._wrot * Math.PI) / 180);
     this.ctx.rotate((attachment.rotation * Math.PI) / 180);

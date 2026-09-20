@@ -2,7 +2,7 @@ import { languageOptions, uiText, type LanguageCode } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { exitApp } from "@/lib/runtime/appExit";
 import mainMenuBg from "@/background/main-menu.png";
-import mainMenuSbnUrl from "@/assets/main-menu.sbn?url";
+import mainMenuSbnUrl from "@/assets/leaf.sbn?url";
 import rainCityMusic from "@/music/rain-city.mp3";
 import nropLogo from "@/assets/logo-nrop.png";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
@@ -11,7 +11,7 @@ import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
 import { ExitConfirmationOverlay } from "@/components/ExitConfirmationOverlay";
-import type { AnimationFrameRate, GraphicsQuality } from "@/lib/runtime/graphicsSettings";
+import { createAnimationFrameGate, type AnimationFrameRate, type GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
 import { loadSbnBundle } from "@/lib/sbn/loadSbnBundle";
@@ -19,7 +19,6 @@ import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import type { FlagMap } from "@/types/novel";
 import type { LoadedSbnBundle, SceneBounds } from "@/types/sbn";
 
-const MENU_SBN_VIEWPORT = { width: 720, height: 980 };
 let mainMenuBundlePromise: Promise<LoadedSbnBundle> | null = null;
 
 const getMainMenuBundle = async () => {
@@ -31,7 +30,7 @@ const getMainMenuBundle = async () => {
       }
 
       const source = await response.blob();
-      return loadSbnBundle(source, "main-menu.sbn");
+      return loadSbnBundle(source, "leaf.sbn");
     })().catch((error) => {
       mainMenuBundlePromise = null;
       throw error;
@@ -41,178 +40,116 @@ const getMainMenuBundle = async () => {
   return mainMenuBundlePromise;
 };
 
-const MainMenuFigure = ({ graphicsQuality }: { graphicsQuality: GraphicsQuality }) => {
+const MainMenuLeaf = ({ graphicsQuality, frameRate }: {
+  graphicsQuality: GraphicsQuality;
+  frameRate: AnimationFrameRate;
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const rendererRef = useRef<CanvasSbnRenderer | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const bundleRef = useRef<LoadedSbnBundle | null>(null);
-  const cameraRef = useRef<SceneBounds | null>(null);
   const frameRef = useRef(0);
-  const rafRef = useRef(0);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    rendererRef.current = new CanvasSbnRenderer();
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-      rendererRef.current?.dispose();
-      rendererRef.current = null;
-    };
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const renderer = rendererRef.current;
-    if (!canvas || !renderer) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    const renderer = new CanvasSbnRenderer();
     renderer.attach(canvas);
-  }, []);
-
-  useEffect(() => {
     let cancelled = false;
+    let animationFrame = 0;
+    let bundle: LoadedSbnBundle | null = null;
+    let camera: SceneBounds | null = null;
+    let width = 0;
+    let height = 0;
+    let lastTime = performance.now();
+    const shouldRender = createAnimationFrameGate();
 
-    const load = async () => {
-      const bundle = await getMainMenuBundle();
-      if (cancelled) return;
-
-      const renderer = rendererRef.current;
-      const container = containerRef.current;
-      if (renderer) {
-        await renderer.preloadProject(bundle.project);
-      }
-
-      if (cancelled) return;
-
-      const rect = container?.getBoundingClientRect();
-      const viewportWidth = rect && rect.width > 0 ? rect.width : MENU_SBN_VIEWPORT.width;
-      const viewportHeight = rect && rect.height > 0 ? rect.height : MENU_SBN_VIEWPORT.height;
-
-      if (renderer && rect && rect.width > 0 && rect.height > 0) {
-        renderer.resize(rect.width, rect.height, 1, true, graphicsQuality);
-      }
-
-      bundleRef.current = bundle;
-      cameraRef.current = fitCameraToScene(
-        bundle.project,
-        viewportWidth,
-        viewportHeight,
+    const resize = () => {
+      const rect = container.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      if (!bundle || width <= 0 || height <= 0) return;
+      const usesCroppedImages = bundle.project.attachments.some(
+        (attachment) => attachment.imageIsCropped && attachment.opaqueBounds,
       );
-      setIsReady(true);
+      renderer.resize(width, height, 1, usesCroppedImages, graphicsQuality);
+      const bounds = fitCameraToScene(bundle.project, width, height);
+      const zoom = Math.min(
+        width / (bounds.maxX - bounds.minX),
+        height / (bounds.maxY - bounds.minY),
+      );
+      const minX = bounds.maxX - width / zoom;
+      const minY = bounds.maxY - height / zoom;
+      camera = {
+        ...bounds,
+        minX,
+        minY,
+        centerX: (minX + bounds.maxX) / 2,
+        centerY: (minY + bounds.maxY) / 2,
+        zoom,
+      };
     };
 
-    void load().catch(() => {
-      if (!cancelled) {
-        setIsReady(false);
+    const loop = (time: number) => {
+      animationFrame = requestAnimationFrame(loop);
+      if (document.hidden || !bundle || !camera || width <= 0 || height <= 0) {
+        lastTime = time;
+        return;
       }
+      if (!shouldRender(time, frameRate)) return;
+      const deltaMs = Math.max(0, Math.min(time - lastTime, 100));
+      lastTime = time;
+      const fps = Math.max(1, bundle.project.fps ?? 24);
+      const duration = Math.max(1, bundle.project.duration);
+      frameRef.current = (frameRef.current + fps * deltaMs / 1000) % duration;
+      renderer.render({
+        project: bundle.project,
+        frame: frameRef.current,
+        scale: 1,
+        camera,
+        viewportWidth: width,
+        viewportHeight: height,
+      });
+    };
+
+    const observer = new ResizeObserver(resize);
+    observer.observe(container);
+    const load = async () => {
+      const loaded = await getMainMenuBundle();
+      if (cancelled) return;
+      await renderer.preloadProject(loaded.project);
+      if (cancelled) return;
+      bundle = loaded;
+      resize();
+      lastTime = performance.now();
+      animationFrame = requestAnimationFrame(loop);
+    };
+    void load().catch((error) => {
+      if (!cancelled) console.error("Gagal memuat animasi daun:", error);
     });
 
     return () => {
       cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const renderer = rendererRef.current;
-    if (!container || !renderer) return;
-
-    const resize = () => {
-      const rect = container.getBoundingClientRect();
-      if (rect.width <= 0 || rect.height <= 0) return;
-      renderer.resize(rect.width, rect.height, 1, true, graphicsQuality);
-
-      const bundle = bundleRef.current;
-      if (!bundle) return;
-      cameraRef.current = fitCameraToScene(bundle.project, rect.width, rect.height);
-    };
-
-    resize();
-    const observer = new ResizeObserver(resize);
-    observer.observe(container);
-    window.addEventListener("resize", resize);
-
-    return () => {
       observer.disconnect();
-      window.removeEventListener("resize", resize);
+      cancelAnimationFrame(animationFrame);
+      renderer.dispose();
     };
-  }, [graphicsQuality]);
-
-  useEffect(() => {
-    let lastTime = performance.now();
-
-    const loop = (time: number) => {
-      const renderer = rendererRef.current;
-      const bundle = bundleRef.current;
-      const camera = cameraRef.current;
-      const container = containerRef.current;
-
-      if (renderer && bundle && camera && container) {
-        const rect = container.getBoundingClientRect();
-        const deltaMs = Math.max(0, Math.min(time - lastTime, 100));
-        const fps = Math.max(1, bundle.project.fps ?? 24);
-        const duration = Math.max(1, bundle.project.duration);
-        frameRef.current = (frameRef.current + (fps * deltaMs) / 1000) % duration;
-
-        renderer.render({
-          project: bundle.project,
-          frame: frameRef.current,
-          scale: 1,
-          camera,
-          viewportWidth: rect.width,
-          viewportHeight: rect.height,
-        });
-      }
-
-      lastTime = time;
-      rafRef.current = requestAnimationFrame(loop);
-    };
-
-    rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, []);
+  }, [graphicsQuality, frameRate]);
 
   return (
     <div
+      ref={containerRef}
       aria-hidden="true"
       style={{
         position: "absolute",
-        left: "-30%",
-        bottom: "-13%",
-        width: "160%",
-        height: "160%",
-        zIndex: 1,
+        right: -250,
+        bottom: -60,
+        width: "100%",
+        height: "100%",
         pointerEvents: "none",
-        opacity: isReady ? 1 : 0,
-        transition: "opacity 420ms ease",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          inset: "10% 4% 4%",
-          background: "radial-gradient(circle at 50% 35%, rgba(255, 214, 173, 0.16), rgba(255, 214, 173, 0.02) 42%, rgba(0, 0, 0, 0) 72%)",
-          filter: "blur(20px)",
-          opacity: 0.9,
-        }}
-      />
-      <div
-        ref={containerRef}
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <canvas
-          ref={canvasRef}
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "block",
-          }}
-        />
-      </div>
+      <canvas ref={canvasRef} className="block h-full w-full" />
     </div>
   );
 };
@@ -370,7 +307,7 @@ export const MainMenu = ({
         style={{ backgroundImage: `url(${mainMenuBg})` }}
       />
       <div className="vn-menu-overlay" />
-      <MainMenuFigure graphicsQuality={graphicsQuality} />
+      <MainMenuLeaf graphicsQuality={graphicsQuality} frameRate={frameRate} />
       <img
         src={nropLogo}
         alt="NROP"

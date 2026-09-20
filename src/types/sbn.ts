@@ -112,6 +112,7 @@ export type SbnProject = {
   slots: SbnSlot[];
   attachments: SbnAttachment[];
   keyframes?: Record<string, Record<string, SbnKeyframe>>;
+  attachmentOpacityKeyframes?: Record<string, Record<string, { opacity: number; easing?: SbnKeyframe["easing"] }>>;
   meshDeformKeyframes?: Record<string, Record<string, { vertices: Array<{ x: number; y: number }> }>>;
   duration: number;
   fps?: number;
