@@ -45,28 +45,36 @@ export const applyEasing = (easing: string, t: number) => {
 export const computeAllWorldTransforms = (bones: WorldBone[]) => {
   const boneById = new Map(bones.map((bone) => [bone.id, bone]));
 
-  for (const bone of bones) {
-    if (bone.parentId === null) {
-      bone._wx = bone.x;
-      bone._wy = bone.y;
-      bone._wrot = bone.rotation;
-    }
-  }
+  const visited = new Set<WorldBone>();
 
-  for (let pass = 0; pass < bones.length; pass += 1) {
-    for (const bone of bones) {
-      if (bone.parentId === null) continue;
-      const parent = boneById.get(bone.parentId);
+  for (const bone of bones) {
+    const chain: WorldBone[] = [];
+    let current: WorldBone | undefined = bone;
+    while (current && !visited.has(current)) {
+      visited.add(current);
+      chain.push(current);
+      current = current.parentId === null ? undefined : boneById.get(current.parentId);
+    }
+
+    for (let index = chain.length - 1; index >= 0; index -= 1) {
+      const child = chain[index];
+      if (child.parentId === null) {
+        child._wx = child.x;
+        child._wy = child.y;
+        child._wrot = child.rotation;
+        continue;
+      }
+      const parent = boneById.get(child.parentId);
       if (!parent) continue;
 
       const cos = Math.cos((parent._wrot * Math.PI) / 180);
       const sin = Math.sin((parent._wrot * Math.PI) / 180);
-      const localX = bone.x * parent.scaleX;
-      const localY = bone.y * parent.scaleY;
+      const localX = child.x * parent.scaleX;
+      const localY = child.y * parent.scaleY;
 
-      bone._wx = parent._wx + localX * cos - localY * sin;
-      bone._wy = parent._wy + localX * sin + localY * cos;
-      bone._wrot = parent._wrot + bone.rotation;
+      child._wx = parent._wx + localX * cos - localY * sin;
+      child._wy = parent._wy + localX * sin + localY * cos;
+      child._wrot = parent._wrot + child.rotation;
     }
   }
 };

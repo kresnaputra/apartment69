@@ -38,6 +38,7 @@ import {
   DEFAULT_ANIMATION_FRAME_RATE,
   DEFAULT_GRAPHICS_QUALITY,
   GRAPHICS_QUALITY_STORAGE_KEY,
+  createAnimationFrameGate,
   frameRateOptions,
   graphicsQualityOptions,
   isAnimationFrameRate,
@@ -78,6 +79,7 @@ type CharacterSpriteProps = {
   bundle: LoadedCharacterBundle;
   character: CharacterInstance;
   graphicsQuality: GraphicsQuality;
+  frameRate: AnimationFrameRate;
   isDimmed: boolean;
 };
 
@@ -284,7 +286,7 @@ const useCharacterStageSizing = (character: CharacterInstance, aspectRatio: numb
   };
 };
 
-const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: CharacterSpriteProps & {
+const SpritesheetCharacterSprite = memo(({ bundle, character, frameRate, isDimmed }: CharacterSpriteProps & {
   bundle: Extract<LoadedCharacterBundle, { kind: "spritesheet" }>;
 }) => {
   const rendererRef = useRef<CanvasSpritesheetRenderer | null>(null);
@@ -301,8 +303,8 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
     bundle.frameSize.h > 0 ? bundle.frameSize.w / bundle.frameSize.h : 0.6,
   );
 
-  const loopRef = useRef({ bundle, character, isDimmed, viewport, stageScale, completeCharacterExit });
-  loopRef.current = { bundle, character, isDimmed, viewport, stageScale, completeCharacterExit };
+  const loopRef = useRef({ bundle, character, frameRate, isDimmed, viewport, stageScale, completeCharacterExit });
+  loopRef.current = { bundle, character, frameRate, isDimmed, viewport, stageScale, completeCharacterExit };
 
   useEffect(() => {
     rendererRef.current = new CanvasSpritesheetRenderer();
@@ -329,9 +331,10 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
     let animationFrame = 0;
     let lastTime = performance.now();
     let lastBundle = loopRef.current.bundle;
+    const shouldRender = createAnimationFrameGate();
 
     const loop = (time: number) => {
-      const { bundle: b, character: c, isDimmed: dim, viewport: vp, completeCharacterExit: complete } = loopRef.current;
+      const { bundle: b, character: c, frameRate: renderFrameRate, isDimmed: dim, viewport: vp, completeCharacterExit: complete } = loopRef.current;
       const renderer = rendererRef.current;
 
       if (b !== lastBundle) {
@@ -349,6 +352,16 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
         Date.now() - c.hideStartedAt >= CHARACTER_FADE_AWAY_DURATION_MS
       ) {
         complete(c.id);
+        animationFrame = requestAnimationFrame(loop);
+        return;
+      }
+
+      if (document.hidden) {
+        lastTime = time;
+        animationFrame = requestAnimationFrame(loop);
+        return;
+      }
+      if (!shouldRender(time, renderFrameRate)) {
         animationFrame = requestAnimationFrame(loop);
         return;
       }
@@ -399,7 +412,7 @@ const SpritesheetCharacterSprite = memo(({ bundle, character, isDimmed }: Charac
   );
 });
 
-const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed }: CharacterSpriteProps & {
+const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, frameRate, isDimmed }: CharacterSpriteProps & {
   bundle: Extract<LoadedCharacterBundle, { kind: "sbn" }>;
 }) => {
   const rendererRef = useRef<CanvasSbnRenderer | null>(null);
@@ -414,8 +427,8 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
     viewport,
   } = useCharacterStageSizing(character, bundle.preferredAspectRatio);
 
-  const loopRef = useRef({ bundle, character, graphicsQuality, isDimmed, viewport, stageScale, completeCharacterExit });
-  loopRef.current = { bundle, character, graphicsQuality, isDimmed, viewport, stageScale, completeCharacterExit };
+  const loopRef = useRef({ bundle, character, graphicsQuality, frameRate, isDimmed, viewport, stageScale, completeCharacterExit });
+  loopRef.current = { bundle, character, graphicsQuality, frameRate, isDimmed, viewport, stageScale, completeCharacterExit };
 
   useEffect(() => {
     rendererRef.current = new CanvasSbnRenderer();
@@ -446,9 +459,10 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
     let animationFrame = 0;
     let lastTime = performance.now();
     let lastBundle = loopRef.current.bundle;
+    const shouldRender = createAnimationFrameGate();
 
     const loop = (time: number) => {
-      const { bundle: b, character: c, isDimmed: dim, viewport: vp, completeCharacterExit: complete } = loopRef.current;
+      const { bundle: b, character: c, frameRate: renderFrameRate, isDimmed: dim, viewport: vp, completeCharacterExit: complete } = loopRef.current;
       const renderer = rendererRef.current;
 
       if (b !== lastBundle) {
@@ -467,6 +481,16 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
         Date.now() - c.hideStartedAt >= CHARACTER_FADE_AWAY_DURATION_MS
       ) {
         complete(c.id);
+        animationFrame = requestAnimationFrame(loop);
+        return;
+      }
+
+      if (document.hidden) {
+        lastTime = time;
+        animationFrame = requestAnimationFrame(loop);
+        return;
+      }
+      if (!shouldRender(time, renderFrameRate)) {
         animationFrame = requestAnimationFrame(loop);
         return;
       }
@@ -525,12 +549,12 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed 
   );
 });
 
-const CharacterSprite = memo(({ bundle, character, graphicsQuality, isDimmed }: CharacterSpriteProps) => {
+const CharacterSprite = memo(({ bundle, character, graphicsQuality, frameRate, isDimmed }: CharacterSpriteProps) => {
   if (bundle.kind === "sbn") {
-    return <SbnCharacterSprite bundle={bundle} character={character} graphicsQuality={graphicsQuality} isDimmed={isDimmed} />;
+    return <SbnCharacterSprite bundle={bundle} character={character} graphicsQuality={graphicsQuality} frameRate={frameRate} isDimmed={isDimmed} />;
   }
 
-  return <SpritesheetCharacterSprite bundle={bundle} character={character} graphicsQuality={graphicsQuality} isDimmed={isDimmed} />;
+  return <SpritesheetCharacterSprite bundle={bundle} character={character} graphicsQuality={graphicsQuality} frameRate={frameRate} isDimmed={isDimmed} />;
 });
 
 type CharacterStageProps = {
@@ -538,11 +562,12 @@ type CharacterStageProps = {
   bundles: Record<string, LoadedCharacterBundle>;
   activeCharacterId: string | null;
   graphicsQuality: GraphicsQuality;
+  frameRate: AnimationFrameRate;
   isNarration: boolean;
   isSceneTransitioning: boolean;
 };
 
-const CharacterStage = memo(({ characters, bundles, activeCharacterId, graphicsQuality, isNarration, isSceneTransitioning }: CharacterStageProps) => {
+const CharacterStage = memo(({ characters, bundles, activeCharacterId, graphicsQuality, frameRate, isNarration, isSceneTransitioning }: CharacterStageProps) => {
   if (isSceneTransitioning) return null;
 
   const renderCharacters = Object.values(characters).sort((a, b) => a.y - b.y);
@@ -561,6 +586,7 @@ const CharacterStage = memo(({ characters, bundles, activeCharacterId, graphicsQ
             bundle={bundle}
             character={character}
             graphicsQuality={graphicsQuality}
+            frameRate={frameRate}
             isDimmed={isDimmed}
           />
         );
@@ -2483,6 +2509,7 @@ const App = () => {
                   bundle={bundle}
                   character={character}
                   graphicsQuality={graphicsQuality}
+                  frameRate={frameRate}
                   isDimmed={isDimmed}
                 />
               );

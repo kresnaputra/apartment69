@@ -22,7 +22,7 @@ export class CanvasSbnRenderer {
   private pixelRatio = 1;
   private static imageCache = new Map<string, HTMLImageElement>();
   private static loadingCache = new Map<string, Promise<HTMLImageElement>>();
-  private static paddedImageCache = new Map<string, HTMLCanvasElement>();
+  private static paddedImageCache = new WeakMap<HTMLImageElement, Map<number, HTMLCanvasElement>>();
 
   attach(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -140,9 +140,13 @@ export class CanvasSbnRenderer {
     return CanvasSbnRenderer.imageCache.get(src) ?? null;
   }
 
-  private getPaddedImage(src: string, image: HTMLImageElement, padding: number) {
-    const cacheKey = `${src}:${padding}`;
-    const cached = CanvasSbnRenderer.paddedImageCache.get(cacheKey);
+  private getPaddedImage(image: HTMLImageElement, padding: number) {
+    let imageCache = CanvasSbnRenderer.paddedImageCache.get(image);
+    if (!imageCache) {
+      imageCache = new Map();
+      CanvasSbnRenderer.paddedImageCache.set(image, imageCache);
+    }
+    const cached = imageCache.get(padding);
     if (cached) return cached;
 
     const canvas = document.createElement("canvas");
@@ -154,7 +158,7 @@ export class CanvasSbnRenderer {
       ctx.imageSmoothingQuality = "high";
       ctx.drawImage(image, padding, padding);
     }
-    CanvasSbnRenderer.paddedImageCache.set(cacheKey, canvas);
+    imageCache.set(padding, canvas);
     return canvas;
   }
 
@@ -348,7 +352,7 @@ export class CanvasSbnRenderer {
     const cropBounds = attachment.imageIsCropped ? attachment.opaqueBounds : undefined;
     const cropGutter = cropBounds ? CROPPED_IMAGE_GUTTER_PX : 0;
     const source = cropBounds
-      ? this.getPaddedImage(attachment.imageData, image, cropGutter)
+      ? this.getPaddedImage(image, cropGutter)
       : image;
     const originalWidth = attachment.width * pixelScaleX;
     const originalHeight = attachment.height * pixelScaleY;

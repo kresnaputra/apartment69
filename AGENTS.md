@@ -59,3 +59,9 @@ The script interpreter lives entirely in `src/store/novelStore.ts` (`runScriptUn
 - Narrator mode (when `speaker === null` and `line` is non-empty) renders a separate UI from the dialogue box
 
 Characters are dimmed when another character is actively speaking (`activeCharacterId`). Characters are sorted by `y` for depth ordering.
+
+### Rendering Performance Verification
+
+Run `bun test rendering-performance.test.ts` for transform complexity, real Maya/father SBN transform compatibility, render cadence, animation speed, and padded-image cache regression checks. These use Bun's built-in runner without additional dependencies.
+
+Character sprites now advance in their own `requestAnimationFrame` loops, not a store-level `tickCharacters` loop. `createAnimationFrameGate` applies the selected 24/40/60 FPS render limit independently of each character's animation playback FPS.

@@ -34,3 +34,20 @@ export const frameRateOptions: Array<{ value: AnimationFrameRate; label: string 
 
 export const isAnimationFrameRate = (value: string | null): value is `${AnimationFrameRate}` =>
   value === "24" || value === "40" || value === "60";
+
+export const createAnimationFrameGate = () => {
+  let nextRenderTime = 0;
+  let previousFrameRate = 0;
+
+  return (time: number, frameRate: number) => {
+    const interval = 1000 / frameRate;
+    if (frameRate !== previousFrameRate) {
+      previousFrameRate = frameRate;
+      nextRenderTime = time + interval;
+      return true;
+    }
+    if (time + 0.01 < nextRenderTime) return false;
+    nextRenderTime += Math.max(1, Math.floor((time - nextRenderTime) / interval) + 1) * interval;
+    return true;
+  };
+};
