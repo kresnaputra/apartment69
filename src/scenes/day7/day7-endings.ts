@@ -374,8 +374,6 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
         src: mayaSpecial2Scene2,
         audioSrc: mayaBadEndingSound2,
         loop: true,
-        endFrame: 90,
-        fps: 120,
         narrate: tx({
           id: "Arka: Nggak ada lagi sisa-sisa harga diri. Kaca di depannya sampai berembun karena napasnya yang putus-putus. Dia menerima kehancuran ini dengan sangat sukarela. Ngelihat tubuhnya se-binal ini pasrah di depanku... egoku rasanya bener-bener dipuasin sampai ke akar",
           en: "Arka: No trace of self-respect left. The glass in front of her is fogged up from her ragged breathing. She accepts this destruction so willingly. Seeing her body this lustful and submissive before me... my ego feels truly satisfied to the core",
@@ -622,7 +620,7 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       ko: "마야가 침대 가장자리에서 일어나 아르카 쪽으로 걸어온다. 그녀는 아르카를 따뜻한 눈빛으로 바라본다.",
     }),
   ),
-  
+
   narrate(
     tx({
       id: "Maya menarik tangan Arka, mengajaknya berdiri, lalu memeluknya erat. Arka membalas pelukan itu, menyadari bahwa gadis di pelukannya kini sudah menjadi wanita yang kuat dan mandiri.",
@@ -740,8 +738,6 @@ export const day7EternalPromiseScene: VisualNovelCommand[] = [
       label: "",
       loop: true,
       audioSrc: mayaSpecialSceneNormalSound5,
-      endFrame: 120,
-      fps: 120,
       narrate: [
         {
           id: "Arka: (Mengeratkan genggaman tangannya, napasnya semakin berat) Maya... aku udah di batas... aku...",

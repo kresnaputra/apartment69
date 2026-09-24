@@ -213,7 +213,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "day6-papa-confrontation",
+  startLabel: "day7-eternal-promise",
   labels: {
     "gallery-return": [],
     "sbn-maya-test": sbnTestScene,
