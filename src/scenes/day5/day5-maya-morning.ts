@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, jump, jumpIf, minigame, narrate, playBgm, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, jump, jumpIf, narrate, playBgm, say, show } from "@/scenes/scriptTypes";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import frontOfficeUrl from "@/background/front-office.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
@@ -216,21 +216,5 @@ export const day5LobbyFarewellScene: VisualNovelCommand[] = [
     }),
     "arka",
   ),
-  minigame("smartphone-contacts", {
-    showSleepOption: true,
-    sleepOptionNext: "day5-complate",
-    disabledContacts: ["maya", "elena", "nadia", "sara"],
-    title: {
-      id: "Sisa hari ini mau ngapain?",
-      en: "What now for the rest of the day?",
-      ja: "今日の残りはどうする？",
-      ko: "오늘 남은 시간은 어떻게 할까?",
-    },
-    subtitle: {
-      id: "Kayaknya nggak ada yang perlu diurusin lagi hari ini.",
-      en: "Doesn't seem like there's anything else to deal with today.",
-      ja: "今日はもう特にやることもなさそうだ。",
-      ko: "오늘은 더 이상 처리할 일이 없는 것 같다.",
-    },
-  }),
+  jump("day5-complate"),
 ];

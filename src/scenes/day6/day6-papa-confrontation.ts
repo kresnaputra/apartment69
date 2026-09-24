@@ -5,7 +5,6 @@ import {
   hide,
   jump,
   menu,
-  minigame,
   narrate,
   playBgm,
   playSfx,
@@ -551,21 +550,5 @@ export const day6AftermathScene: VisualNovelCommand[] = [
     "arka",
   ),
   hide("arka-day6-room"),
-  minigame("smartphone-contacts", {
-    showSleepOption: true,
-    sleepOptionNext: "day6-complate",
-    disabledContacts: ["maya", "elena", "nadia", "sara"],
-    title: {
-      id: "Selanjutnya mau ngecek siapa?",
-      en: "Who do you check in with next?",
-      ja: "次は誰に声をかける？",
-      ko: "다음은 누구한테 연락할까?",
-    },
-    subtitle: {
-      id: "Maya lagi butuh istirahat. Tidak ada yang harus segera diurusin hari ini.",
-      en: "Maya needs her rest. Nothing else urgent on the board today.",
-      ja: "マヤは休息が必要だ。今日はほかに急ぎの用はない。",
-      ko: "마야는 쉬어야 한다. 오늘 달리 급한 일은 없다.",
-    },
-  }),
+  jump("day6-complate"),
 ];

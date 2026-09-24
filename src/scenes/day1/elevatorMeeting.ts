@@ -134,6 +134,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
         id: "decline-maya-number",
         label: tx({ id: "Tolak", en: "Decline", ja: "断る", ko: "거절하기" }),
         next: "decline-maya-number",
+        disabled: true,
       },
     ],
   ),

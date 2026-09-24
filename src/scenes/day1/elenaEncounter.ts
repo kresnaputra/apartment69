@@ -119,6 +119,7 @@ export const elenaEncounterScene: VisualNovelCommand[] = [
         id: "help-elena",
         label: tx({ id: "Bantu", en: "Help", ja: "手伝う", ko: "돕는다" }),
         next: "help-elena",
+        disabled: true,
       },
       {
         id: "ignore-elena",

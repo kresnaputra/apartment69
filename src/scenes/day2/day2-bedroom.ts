@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, jump, minigame, narrate, playBgm, say } from "@/scenes/scriptTypes";
+import { bg, jump, narrate, playBgm, say } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
 import bgm from "@/music/day2.mp3";
 import { day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
@@ -31,46 +31,7 @@ export const day2BedroomScene: VisualNovelCommand[] = [
       ko: "좋아... 먼저 정하자. 오늘 아침은 누구부터 갈까?",
     }),
   ),
-  minigame("smartphone-contacts", {
-    title: tx({
-      id: "Pilih Tujuan Pagi Ini",
-      en: "Choose This Morning's Stop",
-      ja: "今朝の行き先を選ぶ",
-      ko: "오늘 아침 목적지 선택",
-    }),
-    subtitle: tx({
-      id: "Nggak mungkin semuanya sekaligus. Fokus ke satu orang dulu.",
-      en: "No way to handle everyone at once. Focus on one person first.",
-      ja: "全員を一度に相手するのは無理だ。まずは一人に絞ろう。",
-      ko: "모두를 한 번에 챙길 수는 없다. 우선 한 사람에게 집중하자.",
-    }),
-    disabledContacts: ["sara", "sleep"],
-    contactOverrides: {
-      maya: {
-        next: "day2-route-maya",
-      },
-      elena: {
-        next: "day2-route-elena",
-      },
-      nadia: {
-        next: "day2-route-nadia",
-        blurb: tx({
-          id: "Nadia butuh bantuan setup streamingnya lagi.",
-          en: "Nadia needs help with her streaming setup again.",
-          ja: "ナディアはまた配信セットアップの助けが必要だ。",
-          ko: "나디아는 다시 방송 세팅 도움이 필요해.",
-        }),
-      },
-      sara: {
-        blurb: tx({
-          id: "Belum ada alur Hari 2 untuk Sarah.",
-          en: "No Day 2 route for Sarah yet.",
-          ja: "サラの2日目ルートはまだない。",
-          ko: "사라의 2일차 루트는 아직 없다.",
-        }),
-      },
-    },
-  }),
+  jump("day2-route-maya"),
 ];
 
 export const day2RouteMayaScene: VisualNovelCommand[] = [
