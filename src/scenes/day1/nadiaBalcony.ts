@@ -89,7 +89,6 @@ export const nadiaBalconyScene: VisualNovelCommand[] = addNadiaVoices([
         ko: "조언한다",
       }),
       next: "nadia-advice-help",
-      disabled: true,
     },
     {
       id: "refuse-help",
