@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { exitApp } from "@/lib/runtime/appExit";
 import mainMenuBg from "@/background/main-menu.png";
 import mainMenuSbnUrl from "@/assets/leaf.sbn?url";
-import rainCityMusic from "@/music/rain-city.mp3";
+import mainMenuMusic from "@/music/Full track.mp3";
 import nropLogo from "@/assets/logo-nrop.png";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { sharedSoundEffects } from "@/lib/runtime/soundEffects";
@@ -238,7 +238,7 @@ export const MainMenu = ({
 
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
-    bgMusicRef.current.play(rainCityMusic, bgVolume);
+    bgMusicRef.current.play(mainMenuMusic, bgVolume);
 
     let unlocked = false;
     const unlock = () => {

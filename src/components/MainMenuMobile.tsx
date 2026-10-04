@@ -2,7 +2,7 @@ import { languageOptions, uiText, type LanguageCode } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { exitApp } from "@/lib/runtime/appExit";
 import mainMenuBg from "@/background/main-menu.png";
-import rainCityMusic from "@/music/rain-city.mp3";
+import mainMenuMusic from "@/music/Full track.mp3";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { sharedSoundEffects } from "@/lib/runtime/soundEffects";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
@@ -106,7 +106,7 @@ export const MainMenuMobile = ({
 
   useEffect(() => {
     bgMusicRef.current = new BackgroundMusic();
-    bgMusicRef.current.play(rainCityMusic, bgVolume);
+    bgMusicRef.current.play(mainMenuMusic, bgVolume);
 
     // Android WebView blocks audio until a user gesture. Retry on first touch/click.
     let unlocked = false;
