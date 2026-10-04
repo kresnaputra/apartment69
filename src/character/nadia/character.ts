@@ -23,6 +23,10 @@ import nadiaTowelBlushSbnUrl from "@/character/nadia/nadia-towel-blush.sbn?url";
 import nadiaTowelBlushTalkSbnUrl from "@/character/nadia/nadia-towel-blush-talk.sbn?url";
 import nadiaTowelAngrySbnUrl from "@/character/nadia/nadia-towel-angry.sbn?url";
 import nadiaTowelAngryTalkSbnUrl from "@/character/nadia/nadia-towel-angry-talk.sbn?url";
+import nadiaNewNormalSbnUrl from "@/character/nadia/nadia-new-normal.sbn?url";
+import nadiaNewNormalTalkSbnUrl from "@/character/nadia/nadia-new-normal-talk.sbn?url";
+import nadiaNewSmileSbnUrl from "@/character/nadia/nadia-new-smile.sbn?url";
+import nadiaNewSmileTalkSbnUrl from "@/character/nadia/nadia-new-smile-talk.sbn?url";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 
 export const nadiaBundleRegistry = {
@@ -50,6 +54,10 @@ export const nadiaBundleRegistry = {
   "nadia-towel-blush-talk": nadiaTowelBlushTalkSbnUrl,
   "nadia-towel-angry": nadiaTowelAngrySbnUrl,
   "nadia-towel-angry-talk": nadiaTowelAngryTalkSbnUrl,
+  "nadia-new-normal": nadiaNewNormalSbnUrl,
+  "nadia-new-normal-talk": nadiaNewNormalTalkSbnUrl,
+  "nadia-new-smile": nadiaNewSmileSbnUrl,
+  "nadia-new-smile-talk": nadiaNewSmileTalkSbnUrl,
 } as const;
 
 export const nadiaCharacter: CharacterDefinition = {
@@ -70,6 +78,8 @@ export const nadiaCharacter: CharacterDefinition = {
     towelSmile: "nadia-towel-smile",
     towelBlush: "nadia-towel-blush",
     towelAngry: "nadia-towel-angry",
+    newNormal: "nadia-new-normal",
+    newSmile: "nadia-new-smile",
   },
   talkingBundleIdByEmotion: {
     tanktopNeutral: "nadia-tanktop-normal-talk",
@@ -80,6 +90,8 @@ export const nadiaCharacter: CharacterDefinition = {
     towelSmile: "nadia-towel-smile-talk",
     towelBlush: "nadia-towel-blush-talk",
     towelAngry: "nadia-towel-angry-talk",
+    newNormal: "nadia-new-normal-talk",
+    newSmile: "nadia-new-smile-talk",
   },
   defaultEmotion: "neutral",
   defaultPosition: "left",

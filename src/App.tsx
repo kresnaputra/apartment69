@@ -8,6 +8,7 @@ import { SmartphoneContactMinigameMobile } from "@/components/minigames/Smartpho
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
+import { freezeBackgroundCamera, getBackgroundCameraAnimation, resetBackgroundCamera } from "@/lib/rendering/backgroundAnimation";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { loadCharacterBundle } from "@/lib/rendering/loadCharacterBundle";
 import { MainMenu } from "@/components/MainMenu";
@@ -618,14 +619,12 @@ type DialogueUIProps = {
     exit: string;
     log: string;
     save: string;
-    skip: string;
     tapToContinue: string;
     tapToSkip: string;
   };
   onChoose: (next: string) => void;
   onSuppressAdvance: () => void;
   onAuto: () => void;
-  onSkip: () => void;
   onLog: () => void;
   onSave: () => void;
   onConfig: () => void;
@@ -651,7 +650,6 @@ const DialogueUI = memo(({
   onChoose,
   onSuppressAdvance,
   onAuto,
-  onSkip,
   onLog,
   onSave,
   onConfig,
@@ -703,7 +701,6 @@ const DialogueUI = memo(({
           exit: labels.exit,
           log: labels.log,
           save: labels.save,
-          skip: labels.skip,
         }}
         continueHint={labels.tapToContinue}
         finishHint={labels.tapToSkip}
@@ -719,7 +716,6 @@ const DialogueUI = memo(({
         onSuppressAdvance={onSuppressAdvance}
         isAuto={isAuto}
         onAuto={onAuto}
-        onSkip={onSkip}
         onLog={onLog}
         onSave={onSave}
         onConfig={onConfig}
@@ -757,7 +753,6 @@ const DialogueUI = memo(({
               {([
                 { label: labels.log, onClick: onLog },
                 { label: labels.auto, onClick: onAuto, active: isAuto },
-                { label: labels.skip, onClick: onSkip },
                 { label: labels.save, onClick: onSave },
                 { label: labels.config, onClick: onConfig },
                 { label: labels.exit, onClick: onExit },
@@ -1718,6 +1713,11 @@ const App = () => {
   const [revealedCount, setRevealedCount] = useState(0);
   const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
   const [isSceneTransitioning, setIsSceneTransitioning] = useState(false);
+  const [isBackgroundCameraResetting, setIsBackgroundCameraResetting] = useState(false);
+  const [backgroundCameraBlocked, setBackgroundCameraBlocked] = useState(false);
+  const backgroundElementRef = useRef<HTMLElement | null>(null);
+  const backgroundCameraFrameRef = useRef<{ element: HTMLElement; background: string; transform: string } | null>(null);
+  const isPresentationTransitioning = isSceneTransitioning || isBackgroundCameraResetting;
   const [isAuto, setIsAuto] = useState(false);
   const [showLog, setShowLog] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
@@ -1725,7 +1725,7 @@ const App = () => {
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [focusedChoiceIndex, setFocusedChoiceIndex] = useState(0);
   const [focusedControlIndex, setFocusedControlIndex] = useState(-1);
-  const CONTROL_COUNT = 6; // Auto, Skip, Log, Save, Config, Exit
+  const CONTROL_COUNT = 5; // Auto, Log, Save, Config, Exit
   const [blackScreenVisible, setBlackScreenVisible] = useState(false);
   const [language, setLanguage] = useState<LanguageCode>(() => {
     if (typeof window === "undefined") return DEFAULT_LANGUAGE;
@@ -1825,7 +1825,6 @@ const App = () => {
     save: resolveText(uiText.save, language),
     saved: resolveText(uiText.saved, language),
     settings: resolveText(uiText.settings, language),
-    skip: resolveText(uiText.skip, language),
     slot: resolveText(uiText.slot, language),
     start: resolveText(uiText.start, language),
     subtitle: resolveText(uiText.titleSubtitle, language),
@@ -2048,7 +2047,7 @@ const App = () => {
   }, [resolvedLine]);
 
   useEffect(() => {
-    if (!resolvedLine) return;
+    if (!resolvedLine || isBackgroundCameraResetting) return;
 
     const timer = window.setInterval(() => {
       setRevealedCount((current) => {
@@ -2061,7 +2060,7 @@ const App = () => {
     }, BASE_TEXT_SPEED / (textSpeed * Math.max(0.1, lineTypingSpeed)));
 
     return () => window.clearInterval(timer);
-  }, [resolvedLine, textSpeed, lineTypingSpeed]);
+  }, [resolvedLine, textSpeed, lineTypingSpeed, isBackgroundCameraResetting]);
 
   useEffect(() => {
     if (!blackScreenState?.active) {
@@ -2074,16 +2073,16 @@ const App = () => {
 
   // Auto-advance: when enabled, advance to the next line 1.5s after text finishes typing.
   useEffect(() => {
-    if (!isAuto || isTyping || choices.length > 0 || isSceneTransitioning || isEnded) return;
+    if (!isAuto || isTyping || choices.length > 0 || isPresentationTransitioning || isEnded) return;
     const timer = window.setTimeout(() => { advance(); }, 1500);
     return () => window.clearTimeout(timer);
-  }, [isAuto, isTyping, choices.length, isSceneTransitioning, isEnded, advance, resolvedLine]);
+  }, [isAuto, isTyping, choices.length, isPresentationTransitioning, isEnded, advance, resolvedLine]);
 
   useEffect(() => {
     const handleAdvance = () => {
       if (phase !== "story") return;
 
-      if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
+      if (suppressAdvanceOnceRef.current || isPresentationTransitioning) {
         suppressAdvanceOnceRef.current = false;
         return;
       }
@@ -2128,7 +2127,7 @@ const App = () => {
       window.removeEventListener("keydown", handleKeydown);
       window.removeEventListener("contextmenu", handleContextMenu);
     };
-  }, [activeMinigame, advance, choices.length, isEnded, isSceneTransitioning, isTyping, phase, resolvedLine.length]);
+  }, [activeMinigame, advance, choices.length, isEnded, isPresentationTransitioning, isTyping, phase, resolvedLine.length]);
 
   // Clear focus when choice set changes; highlight only after user presses D-pad
   useEffect(() => {
@@ -2263,22 +2262,13 @@ const App = () => {
 
   const handleAuto = () => setIsAuto((prev) => !prev);
 
-  const handleSkip = () => {
-    if (isTyping) {
-      setRevealedCount(resolvedLine.length);
-    } else {
-      advance();
-    }
-  };
-
   const activateControlRef = useRef<(idx: number) => void>(() => {});
   activateControlRef.current = (idx: number) => {
     if (idx === 0) handleAuto();
-    else if (idx === 1) handleSkip();
-    else if (idx === 2) setShowLog(true);
-    else if (idx === 3) setShowSaveSlots(true);
-    else if (idx === 4) setShowConfig(true);
-    else if (idx === 5) { handleExitToMenu(); }
+    else if (idx === 1) setShowLog(true);
+    else if (idx === 2) setShowSaveSlots(true);
+    else if (idx === 3) setShowConfig(true);
+    else if (idx === 4) { handleExitToMenu(); }
   };
 
   const buildSaveSlot = useCallback((): SaveSlot => ({
@@ -2362,6 +2352,44 @@ const App = () => {
   const renderCharacters = Object.values(characters)
     .filter((character) => character.visible || character.isExiting)
     .sort((left, right) => left.y - right.y);
+  const hasVisibleCharacters = renderCharacters.some((character) => character.opacity > 0);
+  useLayoutEffect(() => {
+    const element = backgroundElementRef.current;
+    if (!element || phase !== "story" || isVideoCutSceneActive) {
+      setBackgroundCameraBlocked(false);
+      setIsBackgroundCameraResetting(false);
+      return;
+    }
+
+    const backgroundKey = backgroundVideo?.src ?? background;
+    const previousFrame = backgroundCameraFrameRef.current;
+    const transform = previousFrame?.element === element && previousFrame.background === backgroundKey
+      ? previousFrame.transform
+      : "none";
+    element.style.transform = transform;
+
+    let stop: () => void;
+    if (hasVisibleCharacters || !backgroundAnimation) {
+      setBackgroundCameraBlocked(false);
+      setIsBackgroundCameraResetting(true);
+      stop = resetBackgroundCamera(element, transform, () => {
+        setBackgroundCameraBlocked(hasVisibleCharacters);
+        setIsBackgroundCameraResetting(false);
+      });
+    } else {
+      setBackgroundCameraBlocked(false);
+      setIsBackgroundCameraResetting(false);
+      const { keyframes, options } = getBackgroundCameraAnimation(backgroundAnimation, transform);
+      const animation = element.animate(keyframes, options);
+      stop = () => animation.cancel();
+    }
+
+    return () => {
+      const currentTransform = window.getComputedStyle(element).transform;
+      backgroundCameraFrameRef.current = { element, background: backgroundKey, transform: currentTransform };
+      freezeBackgroundCamera(element, currentTransform, stop);
+    };
+  }, [hasVisibleCharacters, phase, isVideoCutSceneActive, background, backgroundAnimation, backgroundVideo, sceneTransitionToken]);
 
   return (
     <>
@@ -2401,7 +2429,7 @@ const App = () => {
         <main
           className="vn-root"
           onClick={() => {
-            if (suppressAdvanceOnceRef.current || isSceneTransitioning) {
+            if (suppressAdvanceOnceRef.current || isPresentationTransitioning) {
               suppressAdvanceOnceRef.current = false;
               return;
             }
@@ -2421,7 +2449,7 @@ const App = () => {
         >
         {!isVideoCutSceneActive && backgroundVideo ? (
           <video
-            key={`${backgroundVideo.src}-${sceneTransitionKey}`}
+            key={`${backgroundVideo.src}-${sceneTransitionToken}`}
             className="absolute inset-0 h-full w-full object-cover"
             src={backgroundVideo.src}
             autoPlay
@@ -2430,33 +2458,21 @@ const App = () => {
             playsInline
             style={{
               filter: backgroundVideo.filter,
-              ...(backgroundAnimation && {
-                animation: `vn-bg-zoom-pan ${backgroundAnimation.duration ?? 8}s ease-in-out forwards`,
-              }),
-              ...(backgroundAnimation && ({
-                "--vn-bg-zoom": backgroundAnimation.zoom ?? 1.2,
-                "--vn-bg-pan-x": `${backgroundAnimation.panX ?? 10}%`,
-                "--vn-bg-pan-y": `${backgroundAnimation.panY ?? 0}%`,
-              } as CSSProperties)),
+              animation: "none",
             }}
             ref={(node) => {
+              backgroundElementRef.current = node;
               if (!node) return;
               node.playbackRate = backgroundVideo.playbackRate ?? 1;
             }}
           />
         ) : !isVideoCutSceneActive ? (
           <div
+            ref={(node) => { backgroundElementRef.current = node; }}
             className="vn-background"
             style={{
               backgroundImage: background,
-              ...(backgroundAnimation && {
-                animation: `vn-bg-zoom-pan ${backgroundAnimation.duration ?? 8}s ease-in-out forwards`,
-              }),
-              ...(backgroundAnimation && ({
-                "--vn-bg-zoom": backgroundAnimation.zoom ?? 1.2,
-                "--vn-bg-pan-x": `${backgroundAnimation.panX ?? 10}%`,
-                "--vn-bg-pan-y": `${backgroundAnimation.panY ?? 0}%`,
-              } as CSSProperties)),
+              animation: "none",
             }}
           />
         ) : (
@@ -2483,6 +2499,7 @@ const App = () => {
                   opacity: layer.opacity ?? 1,
                   animationName: layer.direction === "rtl" ? "vn-parallax-rtl" : "vn-parallax-ltr",
                   animationDuration: `${layer.speed ?? 20}s`,
+                  animationPlayState: hasVisibleCharacters ? "paused" : "running",
                 }}
               />
             </div>
@@ -2496,7 +2513,8 @@ const App = () => {
           ) : null}
 
           {!isVideoCutSceneActive &&
-            !isSceneTransitioning &&
+            !isPresentationTransitioning &&
+            (!hasVisibleCharacters || backgroundCameraBlocked) &&
             renderCharacters.map((character) => {
               const bundle = bundles[character.bundleId];
               if (!bundle) return null;
@@ -2544,7 +2562,7 @@ const App = () => {
           activeMinigame={activeMinigame}
           isCenteredText={isCenteredText}
           isNarration={isNarration}
-          isSceneTransitioning={isSceneTransitioning}
+          isSceneTransitioning={isPresentationTransitioning}
           speaker={speaker}
           visibleLine={visibleLine}
           resolvedLine={resolvedLine}
@@ -2558,7 +2576,6 @@ const App = () => {
           onChoose={choose}
           onSuppressAdvance={() => { suppressAdvanceOnceRef.current = true; }}
           onAuto={handleAuto}
-          onSkip={handleSkip}
           onLog={() => setShowLog(true)}
           onSave={() => setShowSaveSlots(true)}
           onConfig={() => setShowConfig(true)}

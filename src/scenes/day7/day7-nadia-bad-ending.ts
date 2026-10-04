@@ -514,5 +514,6 @@ export const day7NadiaBadEndingScene: VisualNovelCommand[] = [
     }),
     { size: "hero" },
   ),
+  setFlag("gallerySceneNadia2Unlocked", true),
   setFlag("nadiaBadEndingCompleted", true),
 ];

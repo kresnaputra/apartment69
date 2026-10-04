@@ -239,12 +239,6 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
       ko: "마야가 쓰러진다",
     }),
     {
-      backgroundAnimation: {
-        zoom: 1.08,
-        panX: 8,
-        panY: 0,
-        duration: 14,
-      },
       transitionDuration: 900,
     },
   ),

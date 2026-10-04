@@ -77,12 +77,7 @@ export const bg = (
     parallaxLayers?: ParallaxLayer[];
     transitionDuration?: number;
     backgroundVideo?: BackgroundVideo | null;
-    backgroundAnimation?: {
-      zoom?: number;
-      panX?: number;
-      panY?: number;
-      duration?: number;
-    };
+    backgroundAnimation?: SceneCommand["backgroundAnimation"];
   },
 ): SceneCommand => ({
   type: "scene",
@@ -91,7 +86,11 @@ export const bg = (
   parallaxLayers: options?.parallaxLayers,
   transitionDuration: options?.transitionDuration,
   backgroundVideo: options?.backgroundVideo ?? null,
-  backgroundAnimation: options?.backgroundAnimation,
+  backgroundAnimation: options?.backgroundAnimation === undefined
+    ? options?.backgroundVideo
+      ? null
+      : { drift: true, zoom: 1.08, panX: 2.5, panY: 1.5, duration: 24 }
+    : options.backgroundAnimation,
 });
 
 export const blackScreen = (

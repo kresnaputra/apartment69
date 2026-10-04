@@ -6,6 +6,103 @@ import { computeAllWorldTransforms, sampleAttachmentOpacityAtFrame, sampleBonesA
 import { createAnimationFrameGate } from "./src/lib/runtime/graphicsSettings";
 import { CanvasSbnRenderer } from "./src/lib/rendering/canvasSbnRenderer";
 import type { SbnProject, WorldBone } from "./src/types/sbn";
+import { bg, scene } from "./src/scenes/scriptTypes";
+import { freezeBackgroundCamera, getBackgroundCameraAnimation, resetBackgroundCamera } from "./src/lib/rendering/backgroundAnimation";
+
+describe("Background camera motion", () => {
+  test("image backgrounds default to a slow looping drift", () => {
+    expect(bg("apartment.png").backgroundAnimation).toEqual({
+      drift: true, zoom: 1.08, panX: 2.5, panY: 1.5, duration: 24,
+    });
+  });
+
+  test("preserves explicit camera settings and supports static backgrounds", () => {
+    const animation = { shake: true, intensity: 3, duration: 20 };
+    expect(bg("apartment.png", undefined, { backgroundAnimation: animation }).backgroundAnimation).toBe(animation);
+    expect(bg("apartment.png", undefined, { backgroundAnimation: null }).backgroundAnimation).toBeNull();
+  });
+
+  test("does not add camera drift to videos or black transitions", () => {
+    expect(bg("apartment.png", undefined, { backgroundVideo: { src: "morning.webm" } }).backgroundAnimation).toBeNull();
+    expect(scene("#000").backgroundAnimation).toBeUndefined();
+  });
+
+  test("returns from the current camera position before revealing characters", () => {
+    let frames: Keyframe[] = [];
+    let options: KeyframeAnimationOptions = {};
+    let completed = false;
+    let cancelled = false;
+    const animation = {
+      onfinish: null as (() => void) | null,
+      cancel: () => { cancelled = true; },
+    };
+    const element = {
+      style: { transform: "matrix(1.08, 0, 0, 1.08, 24, 12)" },
+      animate: (keyframes: Keyframe[], settings: KeyframeAnimationOptions) => {
+        frames = keyframes;
+        options = settings;
+        return animation;
+      },
+    } as unknown as HTMLElement;
+    const stop = resetBackgroundCamera(element, "matrix(1.08, 0, 0, 1.08, 24, 12)", () => { completed = true; });
+    expect(frames).toEqual([
+      { transform: "matrix(1.08, 0, 0, 1.08, 24, 12)" },
+      { transform: "none" },
+    ]);
+    expect(options.duration).toBe(600);
+    expect(options.fill).toBe("forwards");
+    expect(completed).toBe(false);
+    animation.onfinish?.();
+    expect(completed).toBe(true);
+    expect(element.style.transform).toBe("none");
+    expect(cancelled).toBe(true);
+    stop();
+    expect(cancelled).toBe(true);
+    expect(animation.onfinish).toBeNull();
+  });
+
+  test("skips camera reset for an already static background", () => {
+    let completed = false;
+    resetBackgroundCamera({ style: {} } as HTMLElement, "none", () => { completed = true; });
+    expect(completed).toBe(true);
+  });
+
+  test("cancelling a camera animation preserves its last visible frame", () => {
+    const transform = "matrix(1.04, 0, 0, 1.04, 16, 8)";
+    const element = { style: { transform: "none" } } as HTMLElement;
+    let transformWhenCancelled = "";
+    freezeBackgroundCamera(element, transform, () => {
+      transformWhenCancelled = element.style.transform;
+    });
+    expect(transformWhenCancelled).toBe(transform);
+    expect(element.style.transform).toBe(transform);
+  });
+
+  test("camera loops start and end at the unzoomed position without a restart jump", () => {
+    for (const settings of [{ drift: true }, { shake: true }]) {
+      const { keyframes, options } = getBackgroundCameraAnimation(settings);
+      expect(keyframes[0].transform).toBe("none");
+      expect(keyframes.at(-1)!.transform).toBe("none");
+      expect(options.iterations).toBe(Infinity);
+    }
+  });
+
+  test("interrupted camera loops continue from the captured transform", () => {
+    const transform = "matrix(1.04, 0, 0, 1.04, 16, 8)";
+    const { keyframes } = getBackgroundCameraAnimation({ drift: true }, transform);
+    expect(keyframes[0].transform).toBe(transform);
+    expect(keyframes.at(-1)!.transform).toBe(transform);
+  });
+
+  test("preserves camera durations and one-shot zoom behavior", () => {
+    expect(getBackgroundCameraAnimation(bg("apartment.png").backgroundAnimation!).options.duration).toBe(24000);
+    expect(getBackgroundCameraAnimation({ shake: true, duration: 16 }).options.duration).toBe(16000);
+    const zoom = getBackgroundCameraAnimation({ zoom: 1.1, panX: 2, duration: 14 });
+    expect(zoom.options.duration).toBe(14000);
+    expect(zoom.options.iterations).toBe(1);
+    expect(zoom.keyframes.at(-1)!.transform).toBe("scale(1.1) translate(2%, 0%)");
+  });
+});
 
 const makeBone = (id: number, parentId: number | null): WorldBone => ({
   id, parentId, name: String(id), x: 1, y: 2, length: 10,

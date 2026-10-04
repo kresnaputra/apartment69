@@ -6,6 +6,8 @@ import sceneElena1 from "@/gallery/scene-elena-1.png";
 import sceneElena2 from "@/gallery/scene-elena-2.png";
 import sceneElena3 from "@/gallery/scene-elena-3.png";
 import sceneNadia1 from "@/gallery/scene-nadia-1.png";
+import sceneNadia2 from "@/gallery/scene-nadia-2.png";
+import sceneNadia3 from "@/gallery/scene-nadia-3.png";
 import type { FlagMap } from "@/types/novel";
 
 type GalleryOverlayProps = {
@@ -74,6 +76,22 @@ const GALLERY_ITEMS = [
     label: "Scene Nadia 1",
     sceneLabel: "day4-nadia-night-help",
     unlockFlag: "gallerySceneNadia1Unlocked",
+  },
+  {
+    id: "scene-nadia-2",
+    character: "Nadia",
+    imageUrl: sceneNadia2,
+    label: "Scene Nadia 2",
+    sceneLabel: "day7-nadia-bad-ending",
+    unlockFlag: "gallerySceneNadia2Unlocked",
+  },
+  {
+    id: "scene-nadia-3",
+    character: "Nadia",
+    imageUrl: sceneNadia3,
+    label: "Scene Nadia 3",
+    sceneLabel: "day7-nadia-good-ending",
+    unlockFlag: "gallerySceneNadia3Unlocked",
   },
 ] as const;
 
@@ -194,7 +212,10 @@ export const GalleryOverlay = ({
                     {sectionUnlocked} / {sectionItems.length}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div
+                  className="grid gap-4"
+                  style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
+                >
                   {sectionItems.map((item, itemIdx) => (
                     (() => {
                       const isUnlocked = Boolean(flags[item.unlockFlag]);
@@ -240,8 +261,7 @@ export const GalleryOverlay = ({
                           alt={item.label}
                           className={`h-full w-full object-cover transition-transform duration-300 ${isUnlocked ? "group-hover/btn:scale-[1.05]" : ""}`}
                           style={{
-                            filter: isUnlocked ? "none" : "blur(18px)",
-                            transform: isUnlocked ? "scale(1)" : "scale(1.1)",
+                            filter: isUnlocked ? "none" : "brightness(0)",
                           }}
                         />
                         {isUnlocked ? (

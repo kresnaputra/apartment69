@@ -12,7 +12,15 @@ export const day2BedroomScene: VisualNovelCommand[] = [
     en: "Apartment 69 Day 2",
     ja: "Apartment 69 - 2日目",
     ko: "Apartment 69 - 2일차",
-  })),
+  }), {
+    backgroundAnimation: {
+      drift: true,
+      zoom: 1.08,
+      panX: 2.5,
+      panY: 1.5,
+      duration: 24,
+    },
+  }),
   narrate(
     tx({
       id: "Pagi datang terlalu cepat. Arka meraih ponselnya sambil masih setengah sadar, lalu menatap daftar kontak yang semalam terus terlintas di kepalanya.",

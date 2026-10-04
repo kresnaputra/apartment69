@@ -332,8 +332,6 @@ export const MainMenu = ({
           <span className="vn-menu-badge">Early Access</span>
         </header>
 
-        <hr className="vn-menu-rule" />
-
         <nav className="vn-menu-nav">
           <button
             type="button"

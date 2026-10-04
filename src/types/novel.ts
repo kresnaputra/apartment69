@@ -128,7 +128,10 @@ export type SceneCommand = {
     panX?: number;
     panY?: number;
     duration?: number;
-  };
+    shake?: boolean;
+    drift?: boolean;
+    intensity?: number;
+  } | null;
 };
 
 export type ShowCharacterCommand = {

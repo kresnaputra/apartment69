@@ -19,6 +19,8 @@ export const characterEmotions = {
     "towelSmile",
     "towelBlush",
     "towelAngry",
+    "newNormal",
+    "newSmile",
   ] as const,
   sara: ["neutral"] as const,
   mayasFather: ["neutral"] as const,

@@ -5,7 +5,6 @@ type ControlLabels = {
   exit: string;
   log: string;
   save: string;
-  skip: string;
 };
 
 type DialogueMobileProps = {
@@ -24,7 +23,6 @@ type DialogueMobileProps = {
   onSuppressAdvance: () => void;
   isAuto?: boolean;
   onAuto?: () => void;
-  onSkip?: () => void;
   onLog?: () => void;
   onSave?: () => void;
   onConfig?: () => void;
@@ -47,7 +45,6 @@ export const DialogueMobile = ({
   onSuppressAdvance,
   isAuto = false,
   onAuto,
-  onSkip,
   onLog,
   onSave,
   onConfig,
@@ -117,7 +114,6 @@ export const DialogueMobile = ({
       >
         {[
           { label: controlLabels.auto, handler: onAuto, active: isAuto },
-          { label: controlLabels.skip, handler: onSkip, active: false },
           { label: controlLabels.log, handler: onLog, active: false },
           { label: controlLabels.save, handler: onSave, active: false },
           { label: controlLabels.config, handler: onConfig, active: false },

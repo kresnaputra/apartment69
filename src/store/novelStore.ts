@@ -39,6 +39,9 @@ type NovelStore = {
     panX?: number;
     panY?: number;
     duration?: number;
+    shake?: boolean;
+    drift?: boolean;
+    intensity?: number;
   } | null;
   blackScreen: BlackScreenState | null;
   location: LocalizedText;
@@ -104,6 +107,9 @@ const emptyState = {
     panX?: number;
     panY?: number;
     duration?: number;
+    shake?: boolean;
+    drift?: boolean;
+    intensity?: number;
   } | null,
   blackScreen: null as BlackScreenState | null,
   location: "",
