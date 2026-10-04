@@ -17,6 +17,17 @@ import nadiaGoodEnding1Url from "@/background/nadia good ending 1.png";
 import nadiaGoodEnding2Url from "@/background/nadia good ending 2.png";
 import nadiaGoodEnding3Url from "@/background/nadia good ending 3.png";
 import nadiaGoodEnding4Url from "@/background/nadia good ending 4.png";
+import nadia99 from "@/voice/nadia/nadia_00099.mp3";
+import nadia100 from "@/voice/nadia/nadia_000100.mp3";
+import nadia101 from "@/voice/nadia/nadia_000101.mp3";
+import nadia102 from "@/voice/nadia/nadia_000102.mp3";
+import nadia103 from "@/voice/nadia/nadia_000103.mp3";
+import nadia104 from "@/voice/nadia/nadia_000104.mp3";
+import nadia105 from "@/voice/nadia/nadia_000105.mp3";
+import nadia106 from "@/voice/nadia/nadia_000106.mp3";
+import nadia107 from "@/voice/nadia/nadia_000107.mp3";
+import nadia108 from "@/voice/nadia/nadia_000108.mp3";
+import nadia109 from "@/voice/nadia/nadia_000109.mp3";
 import nadiaGoodEnding1 from "@/cut-scene/nadia-good-ending-1.webm";
 import nadiaGoodEnding2 from "@/cut-scene/nadia-good-ending-2.webm";
 import nadiaGoodEnding3 from "@/cut-scene/nadia-good-ending-3.webm";
@@ -155,6 +166,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "あなた。ずっと待ってたの？",
       ko: "자기야. 오래 기다렸어?",
     }),
+    { voice: nadia99 },
   ),
   say(
     "arka",
@@ -175,6 +187,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "私、今ではセレブだもん。少し遅れるくらい普通でしょ。",
       ko: "나 이제 연예인이잖아. 좀 늦는 건 당연하지.",
     }),
+    { voice: nadia100 },
   ),
   narrate(
     tx({
@@ -193,6 +206,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "会いたかった。",
       ko: "보고 싶었어.",
     }),
+    { voice: nadia101 },
   ),
   say(
     "arka",
@@ -213,6 +227,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "一週間は長いよ。",
       ko: "일주일이면 길지.",
     }),
+    { voice: nadia102 },
   ),
   narrate(
     tx({
@@ -231,6 +246,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "ねえ、聞いた？昨日、あの大きなスポンサーがついにOKしたんだ。二年契約だよ。",
       ko: "있지, 알아? 어제 그 큰 스폰서가 드디어 승낙했어. 2년 계약이야.",
     }),
+    { voice: nadia103 },
   ),
   say(
     "arka",
@@ -311,6 +327,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "これが終わったら、アパートに戻るの？それとも先に私についていく？",
       ko: "이거 끝나면 아파트로 돌아갈 거야, 아니면 먼저 나 따라갈래?",
     }),
+    { voice: nadia104 },
   ),
   say(
     "arka",
@@ -331,6 +348,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "必要よ、確かに。でも仕事のことだけじゃない。",
       ko: "필요해, 맞아. 하지만 일 때문만은 아니야.",
     }),
+    { voice: nadia105 },
   ),
   narrate(
     tx({
@@ -349,6 +367,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "考えてたんだけど…この契約が終わったら、もっと休みを取りたい。もうずっと数字を追いかけるのはやめたいの。",
       ko: "생각해 봤는데… 이번 계약이 끝나면 쉬는 시간을 더 많이 갖고 싶어. 계속 숫자만 쫓고 싶지는 않아.",
     }),
+    { voice: nadia106 },
   ),
   say(
     "arka",
@@ -369,6 +388,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "それから…あなたともっと一緒にいたい。こういう休暇のときだけじゃなくて。",
       ko: "그리고… 너랑 더 자주 있고 싶어. 이렇게 휴가 때만 말고.",
     }),
+    { voice: nadia107 },
   ),
   say(
     "arka",
@@ -397,6 +417,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "よかった。あとはゆっくり話そう。今夜は難しいこと考えたくないの。",
       ko: "좋아. 자세한 건 나중에 천천히 얘기하자. 오늘 밤은 복잡한 생각하기 싫어.",
     }),
+    { voice: nadia108 },
   ),
   hide("nadia-day7-good-villa", "fadeAway"),
   blackScreen(),
@@ -409,6 +430,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
       ja: "今日の空、すごく綺麗だね。",
       ko: "오늘 하늘 진짜 예쁘다.",
     }),
+    { voice: nadia109 },
   ),
   say(
     "arka",
