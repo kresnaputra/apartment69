@@ -70,6 +70,10 @@ Character sprites now advance in their own `requestAnimationFrame` loops, not a 
 
 SBN `attachmentOpacityKeyframes` tracks use `slotId:attachmentName` keys. The Canvas renderer samples these with easing for both mesh and image attachments. The leaf animation relies on this fade-out to hide the position reset at its loop boundary; regression tests cover the actual `src/assets/leaf.sbn` asset.
 
+### Smartphone Route Verification
+
+Run `bun test smartphone-routing.test.ts` to check that Day 2–4 selection points pause at `smartphone-contacts`, contact choices enter their registered routes, and the Day 4 wrap-up only permits ending the day. Smartphone activation is controlled by scene `minigame()` commands; direct route `jump()` commands bypass its UI.
+
 ### Background Camera Motion
 
 `bg()` defaults image backgrounds to a 24-second looping drift. Explicit `backgroundAnimation` settings override this; `backgroundAnimation: null` opts out. Background videos and plain `scene()` transitions do not get default drift. `App.tsx` returns the camera smoothly to its original transform over 600 ms before revealing sprites, then disables camera motion and pauses parallax while visible or exiting sprites with positive opacity remain on stage. Dialogue typing and advance wait for the camera reset. `src/lib/rendering/backgroundAnimation.ts` supplies Web Animations keyframes and a cancellable reset for both image and video rendering. CSS camera animations must stay disabled: cancelling a Web Animation must first preserve its computed transform, and loops must begin and end at the same transform to avoid jumps when restarting. Regression coverage lives in `bun test rendering-performance.test.ts`.
