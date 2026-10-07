@@ -1,12 +1,14 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, centeredText, hide, jump, jumpIf, menu, narrate, say, setFlag, show } from "@/scenes/scriptTypes";
+import { bg, centeredText, hide, jump, jumpIf, menu, narrate, playBgm, say, setFlag, show } from "@/scenes/scriptTypes";
 import bedroomAfternoonUrl from "@/background/bedroom-afteroon.png";
 import nadiaHallwayUrl from "@/background/nadia-hallway.png";
 import nadiaRoomUrl from "@/background/nadia-room.png";
 import { addNadiaDay5To6Voices } from "@/voice/nadia/day5to6";
+import nadiaBgm from "@/music/day6-nadia.mp3";
 
 export const day6NadiaScene: VisualNovelCommand[] = addNadiaDay5To6Voices([
+  playBgm(nadiaBgm),
   bg(
     bedroomAfternoonUrl,
     tx({

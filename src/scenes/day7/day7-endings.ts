@@ -56,6 +56,8 @@ import mayaSpecialSceneNormalSound5 from "@/voice/maya/maya-special-scene-normal
 import mayaSpecialSceneNormalSound6 from "@/voice/maya/maya-special-scene-normal-6.wav";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 import day7Bgm from "@/music/day7.mp3";
+import mayaGoodEndingBgm from "@/music/good-maya.mp3";
+import mayaBadEndingBgm from "@/music/bad-maya.mp3";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   playBgm(day7Bgm),
@@ -107,6 +109,7 @@ export const day7IntroScene: VisualNovelCommand[] = [
 ];
 
 export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
+  playBgm(mayaBadEndingBgm),
   bg(
     bedroomNightUrl,
     tx({
@@ -552,6 +555,7 @@ export const day7DevotedSubmissionScene: VisualNovelCommand[] = [
 ];
 
 export const day7EternalPromiseScene: VisualNovelCommand[] = [
+  playBgm(mayaGoodEndingBgm),
   bg(
     bedroomNightUrl,
     tx({

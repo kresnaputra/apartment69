@@ -41,6 +41,8 @@ import mayaBed7 from "@/cut-scene/maya-bed-7.webm?url";
 import mayaBedSound7 from "@/voice/maya/maya-bed-7.wav";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 import day4Bgm from "@/music/day4.mp3";
+import mayaSpecialBgm from "@/music/special-scene-maya.mp3";
+import mayaBadEndingBgm from "@/music/bad-maya.mp3";
 import breakSound from "@/sfx/break.wav";
 
 export const day4MayaCollapseScene: VisualNovelCommand[] = [
@@ -192,6 +194,7 @@ export const day4MayaCollapseScene: VisualNovelCommand[] = [
 ];
 
 export const day4MayaBadEndingScene: VisualNovelCommand[] = [
+  playBgm(mayaBadEndingBgm),
   setFlag("mayaRouteFailed", true),
   say(
     "arka",
@@ -339,6 +342,7 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
 ];
 
 export const day4MayaForceRestScene: VisualNovelCommand[] = [
+  playBgm(mayaSpecialBgm),
   bg(
     mayaBedroomUrl,
     tx({

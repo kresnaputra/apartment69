@@ -6,14 +6,17 @@ import {
   jumpIf,
   minigame,
   narrate,
+  playBgm,
   say,
   setFlag,
   show,
 } from "@/scenes/scriptTypes";
 import hallwayUrl from "@/background/hallway.png";
 import { elenaDay1To3Voices } from "@/voice/elena/day1to3";
+import elenaBgm from "@/music/day3-elena.mp3";
 
 export const day3ElenaMorningScene: VisualNovelCommand[] = [
+  playBgm(elenaBgm),
   bg(
     hallwayUrl,
     tx({

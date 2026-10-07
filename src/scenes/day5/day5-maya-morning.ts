@@ -4,10 +4,10 @@ import { bg, hide, jump, jumpIf, narrate, playBgm, say, show } from "@/scenes/sc
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import frontOfficeUrl from "@/background/front-office.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
-import day5Bgm from "@/music/day5.mp3";
+import day5MayaBgm from "@/music/day5-maya.mp3";
 
 export const day5MayaMorningScene: VisualNovelCommand[] = [
-  playBgm(day5Bgm),
+  playBgm(day5MayaBgm),
   jumpIf("maya-love", "day5-lobby-farewell", { value: 1 }),
   bg(
     mayaBedroomUrl,

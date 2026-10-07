@@ -10,6 +10,7 @@ import {
   jump,
   jumpIf,
   narrate,
+  playBgm,
   say,
   setFlag,
   show,
@@ -30,8 +31,10 @@ import nadiaDay4_4Sound from "@/voice/nadia/nadia-day-4-4.wav";
 import nadiaDay4_5Sound from "@/voice/nadia/nadia-day-4-5.wav";
 import nadiaDay4_6Sound from "@/voice/nadia/nadia-day-4-6.wav";
 import nadiaDay4_7Sound from "@/voice/nadia/nadia-day-4-7.wav";
+import nadiaBgm from "@/music/day4-nadia.mp3";
 
 export const day4NadiaNightScene: VisualNovelCommand[] = [
+  playBgm(nadiaBgm),
   setFlag("day4SelectedCharacter", "nadia"),
   jumpIf("nadia_help_day4", "day4-nadia-night-help", {
     value: true,

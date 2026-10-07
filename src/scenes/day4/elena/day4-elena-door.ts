@@ -5,6 +5,7 @@ import {
   hide,
   jump,
   narrate,
+  playBgm,
   say,
   setFlag,
   show,
@@ -14,8 +15,10 @@ import elenaHallwayOpenUrl from "@/background/elena-hallway-open.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import elenaArkaWork from "@/background/elena-arka-work.png";
 import { elenaDay4Voices } from "@/voice/elena/day4";
+import elenaBgm from "@/music/day4-elena.mp3";
 
 export const day4ElenaDoorScene: VisualNovelCommand[] = [
+  playBgm(elenaBgm),
   setFlag("day4SelectedCharacter", "elena"),
   bg(
     elenaHallwayOpenUrl,

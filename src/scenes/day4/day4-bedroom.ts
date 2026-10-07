@@ -1,7 +1,8 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, hide, minigame, narrate, say, show } from "@/scenes/scriptTypes";
+import { bg, hide, minigame, narrate, playBgm, say, show } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
+import day4Bgm from "@/music/day4.mp3";
 
 export const day4BedroomScene: VisualNovelCommand[] = [
   bg(apartmentUrl, tx({
@@ -61,6 +62,7 @@ export const day4BedroomScene: VisualNovelCommand[] = [
 ];
 
 export const day4AfterRoutePhoneScene: VisualNovelCommand[] = [
+  playBgm(day4Bgm),
   bg(apartmentUrl, tx({
     id: "Apartment 69 Hari 4",
     en: "Apartment 69 Day 4",

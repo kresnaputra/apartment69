@@ -10,6 +10,7 @@ import {
   moveTo,
   multiCutScene,
   narrate,
+  playBgm,
   playSfx,
   say,
   scene,
@@ -62,8 +63,11 @@ import elenaSpecialSceneBadG3_2 from "@/cut-scene/elena-bad-g3-2.webm";
 import elenaSpecialSceneBadG3_2Sound from "@/voice/elena/elena-bad-g3-2.wav";
 import elenaSpecialSceneBadG3_3 from "@/cut-scene/elena-bad-g3-3.webm";
 import elenaSpecialSceneBadG3_3Sound from "@/voice/elena/elena-bad-g3-3.wav";
+import elenaBadEndingBgm from "@/music/bad-elena.mp3";
+import elenaGoodEndingBgm from "@/music/bad-maya.mp3";
 
 export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
+  playBgm(elenaGoodEndingBgm),
   hide("arka-day6-elena"),
   hide("elena-day6-arthur"),
   hide("arthur-day6-elena"),
@@ -860,6 +864,7 @@ export const day7ElenaGoodEndingScene: VisualNovelCommand[] = [
 ];
 
 export const day7ElenaBadEndingScene: VisualNovelCommand[] = [
+  playBgm(elenaBadEndingBgm),
   hide("arka-day6-elena"),
   hide("elena-day6-arthur"),
   hide("arthur-day6-elena"),

@@ -18,7 +18,7 @@ import {
 import elenaHallwayUrl from "@/background/elena-hallway.png";
 import elenaBadroomUrl from "@/background/elena-badroom.png";
 import knockSound from "@/sfx/knock.wav";
-import day6Bgm from "@/music/day6.mp3";
+import day6Bgm from "@/music/day6-elena.mp3";
 import { elenaDay6Voices } from "@/voice/elena/day6";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 

@@ -16,10 +16,10 @@ import hallwayUrl from "@/background/hallway.png";
 import mayaBedroomUrl from "@/background/maya-bedroom.png";
 import mayaPhoneCallVideo from "@/cut-scene/cutscene-maya-room.webm?url";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
-import day3Bgm from "@/music/day3.mp3";
+import day3MayaBgm from "@/music/day3-maya.mp3";
 
 export const mayaPhoneCallScene: VisualNovelCommand[] = [
-  playBgm(day3Bgm),
+  playBgm(day3MayaBgm),
   bg(
     hallwayUrl,
     tx({

@@ -7,15 +7,18 @@ import {
   jumpIf,
   minigame,
   narrate,
+  playBgm,
   say,
   setFlag,
   show,
 } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
 import universityUrl from "@/background/university.png";
+import day3Bgm from "@/music/day3.mp3";
  
 
 export const day3BedroomScene: VisualNovelCommand[] = [
+  playBgm(day3Bgm),
   bg(
     apartmentUrl,
     tx({
@@ -99,6 +102,7 @@ export const day3BedroomScene: VisualNovelCommand[] = [
 ];
 
 export const day3AfterMayaPhoneScene: VisualNovelCommand[] = [
+  playBgm(day3Bgm),
   jumpIf("day3Slot2ElenaCompleted", "day3-route-selection"),
   bg(apartmentUrl, tx({
     id: "Apartment 69 Hari 3",
@@ -155,6 +159,7 @@ export const day3AfterMayaPhoneScene: VisualNovelCommand[] = [
 ];
 
 export const day3RouteSelectionScene: VisualNovelCommand[] = [
+  playBgm(day3Bgm),
   bg(
     universityUrl,
     tx({

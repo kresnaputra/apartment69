@@ -16,10 +16,10 @@ import bedroomUrl from "@/background/bedroom.png";
 import hallwayUrl from "@/background/hallway.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
 import phoneSound from "@/sfx/phone.mp3";
-import day6Bgm from "@/music/day6.mp3";
+import day6MayaBgm from "@/music/day6-maya.mp3";
 
 export const day6PapaConfrontationScene: VisualNovelCommand[] = [
-  playBgm(day6Bgm),
+  playBgm(day6MayaBgm),
   bg(
     bedroomUrl,
     tx({

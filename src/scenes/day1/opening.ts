@@ -1,9 +1,11 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, jump, narrate } from "@/scenes/scriptTypes";
+import { bg, jump, narrate, playBgm } from "@/scenes/scriptTypes";
 import apartment from "@/background/apartment.png";
+import day1Bgm from "@/music/day1.mp3";
 
 export const openingScene: VisualNovelCommand[] = [
+  playBgm(day1Bgm),
   bg(
     apartment,
     tx({

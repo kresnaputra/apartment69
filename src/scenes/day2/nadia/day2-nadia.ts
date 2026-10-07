@@ -7,6 +7,7 @@ import {
   hide,
   jump,
   narrate,
+  playBgm,
   say,
   scene,
   setFlag,
@@ -22,8 +23,10 @@ import nadiaCutSceneVoiceDay2_1 from "@/voice/nadia/nadia-cut-scene-voice-day-2-
 import nadiaCutSceneVoiceDay2_2 from "@/voice/nadia/nadia-cut-scene-voice-day-2-2.mp3";
 import nadiaCutSceneVoiceDay2_3 from "@/voice/nadia/nadia-cut-scene-voice-day-2-3.mp3";
 import { addNadiaVoices } from "@/voice/nadia/day1to4";
+import nadiaBgm from "@/music/day2-nadia.mp3";
 
 export const day2RouteNadiaScene: VisualNovelCommand[] = [
+  playBgm(nadiaBgm),
   narrate(
     tx({
       id: "Arka menatap layar ponselnya sejenak. Nadia? Dia baru saja pindah dan sudah minta bantuan lagi.",

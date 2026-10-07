@@ -8,6 +8,7 @@ import {
   jump,
   menu,
   narrate,
+  playBgm,
   say,
   setFlag,
   show,
@@ -23,8 +24,10 @@ import nadiaCutSceneVoiceDay3_2 from "@/voice/nadia/nadia-cut-scene-voice-day-3-
 import nadiaCutSceneVoiceDay3_3 from "@/voice/nadia/nadia-cut-scene-voice-day-3-3.mp3";
 import nadiaCutSceneVoiceDay3_4 from "@/voice/nadia/nadia-cut-scene-voice-day-3-4.mp3";
 import { addNadiaVoices } from "@/voice/nadia/day1to4";
+import nadiaBgm from "@/music/day3-nadia.mp3";
 
 export const day3NadiaNightScene: VisualNovelCommand[] = addNadiaVoices([
+  playBgm(nadiaBgm),
   bg(
     bedroomNightUrl,
     tx({

@@ -3,6 +3,8 @@ import { tx } from "@/lib/i18n";
 import { bg, jump, minigame, narrate, playBgm, say } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
 import bgm from "@/music/day2.mp3";
+import mayaBgm from "@/music/day2-maya.mp3";
+import elenaBgm from "@/music/day2-elena.mp3";
 import { day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
 
 export const day2BedroomScene: VisualNovelCommand[] = [
@@ -78,6 +80,7 @@ export const day2BedroomScene: VisualNovelCommand[] = [
 ];
 
 export const day2RouteMayaScene: VisualNovelCommand[] = [
+  playBgm(mayaBgm),
   narrate(
     tx({
       id: "Arka menjatuhkan ponselnya ke kasur lalu berdiri. Maya masih yang paling mengganggu pikirannya sejak kemarin.",
@@ -98,6 +101,7 @@ export const day2RouteMayaScene: VisualNovelCommand[] = [
 ];
 
 export const day2RouteElenaScene: VisualNovelCommand[] = [
+  playBgm(elenaBgm),
   narrate(
     tx({
       id: "Arka mengunci layar ponselnya lalu mengembuskan napas pendek. Kalau Elena benar-benar lagi bermasalah, lebih baik dibereskan dari pagi.",
