@@ -8,6 +8,7 @@ import {
   cutScene,
   hide,
   narrate,
+  playBgm,
   scene,
   setFlag,
 } from "@/scenes/scriptTypes";
@@ -28,8 +29,10 @@ import nadiaBad6Sound from "@/voice/nadia/nadia-bad-6.wav";
 import nadiaBad7Sound from "@/voice/nadia/nadia-bad-7.wav";
 import nadiaBad8Sound from "@/voice/nadia/nadia-bad-8.wav";
 import nadiaBad9Sound from "@/voice/nadia/nadia-bad-9.wav";
+import nadiaBadEndingBgm from "@/music/bad-maya.mp3";
 
 export const day7NadiaBadEndingScene: VisualNovelCommand[] = [
+  playBgm(nadiaBadEndingBgm),
   hide("arka-day6-nadia"),
   hide("nadia-day6"),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),

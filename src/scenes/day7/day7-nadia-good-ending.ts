@@ -8,11 +8,14 @@ import {
   cutScene,
   hide,
   narrate,
+  playBgm,
   say,
   scene,
   setFlag,
   show,
 } from "@/scenes/scriptTypes";
+import nadiaGoodEndingBgm from "@/music/good-nadia.mp3";
+import nadiaSpecialBgm from "@/music/special-scene-nadia.mp3";
 import nadiaGoodEnding1Url from "@/background/nadia good ending 1.png";
 import nadiaGoodEnding2Url from "@/background/nadia good ending 2.png";
 import nadiaGoodEnding3Url from "@/background/nadia good ending 3.png";
@@ -44,6 +47,7 @@ import nadiaGoodEnding8 from "@/cut-scene/nadia-good-ending-8.webm";
 import nadiaGoodEnding8Sound from "@/voice/nadia/nadia-good-ending-8-audio.wav";
 
 export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
+  playBgm(nadiaGoodEndingBgm),
   hide("arka-day6-nadia"),
   hide("nadia-day6"),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
@@ -420,6 +424,7 @@ export const day7NadiaGoodEndingScene: VisualNovelCommand[] = [
     { voice: nadia108 },
   ),
   hide("nadia-day7-good-villa", "fadeAway"),
+  playBgm(nadiaSpecialBgm),
   blackScreen(),
   say(
     "nadia",
