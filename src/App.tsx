@@ -29,8 +29,8 @@ import type { SceneBounds } from "@/types/sbn";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useGamepad } from "@/hooks/useGamepad";
 import { characterBundleRegistry } from "@/character";
-import type { SmartphoneContactId, SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
-import { resolveLockedSmartphoneContacts } from "@/components/minigames/smartphoneContacts";
+import type { SmartphoneContactLockOptions, SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
+import { resolveSmartphoneDisabledContacts } from "@/components/minigames/smartphoneContacts";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { playSfx as playRuntimeSfx, sharedSoundEffects } from "@/lib/runtime/soundEffects";
@@ -1668,46 +1668,7 @@ const App = () => {
   const persistedGalleryFlags = readGalleryUnlockFlags();
   const galleryFlags = { ...persistedGalleryFlags, ...flags };
   const smartphoneDisabledContacts = activeMinigame?.id === "smartphone-contacts"
-    ? (() => {
-        const baseDisabledContacts = resolveLockedSmartphoneContacts(
-          flags,
-          activeMinigame.options?.disabledContacts as string[] | undefined,
-        );
-        const conditionalDisabledContacts = activeMinigame.options?.conditionalDisabledContacts as
-          | Partial<Record<SmartphoneContactId, string | string[]>>
-          | undefined;
-        const conditionalEnabledContacts = activeMinigame.options?.conditionalEnabledContacts as
-          | Partial<Record<SmartphoneContactId, string>>
-          | undefined;
-        const requiredCompletionFlags = activeMinigame.options?.requiredCompletionFlags as
-          | string[]
-          | undefined;
-
-        const resolvedDisabledContacts = new Set(baseDisabledContacts);
-
-        if (conditionalDisabledContacts) {
-          (Object.entries(conditionalDisabledContacts) as Array<[SmartphoneContactId, string | string[]]>).forEach(([contactId, requiredFlags]) => {
-            const flagNames = Array.isArray(requiredFlags) ? requiredFlags : [requiredFlags];
-            if (flagNames.some((flagName) => flags[flagName])) {
-              resolvedDisabledContacts.add(contactId);
-            }
-          });
-        }
-
-        if (conditionalEnabledContacts) {
-          (Object.entries(conditionalEnabledContacts) as Array<[SmartphoneContactId, string]>).forEach(([contactId, flagName]) => {
-            if (flags[flagName]) {
-              resolvedDisabledContacts.delete(contactId);
-            }
-          });
-        }
-
-        if (requiredCompletionFlags?.some((flagName) => !flags[flagName])) {
-          resolvedDisabledContacts.add("sleep");
-        }
-
-        return [...resolvedDisabledContacts];
-      })()
+    ? resolveSmartphoneDisabledContacts(flags, activeMinigame.options as SmartphoneContactLockOptions | undefined)
     : [];
 
   const [revealedCount, setRevealedCount] = useState(0);

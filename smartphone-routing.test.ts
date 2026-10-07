@@ -2,7 +2,7 @@ import type {} from "bun";
 import { describe, expect, test } from "bun:test";
 import { useNovelStore } from "./src/store/novelStore";
 import { demoScript } from "./src/lib/runtime/dialogueScript";
-import { resolveLockedSmartphoneContacts, resolveSmartphoneContactOptions, type SmartphoneContactOverrides } from "./src/components/minigames/smartphoneContacts";
+import { resolveLockedSmartphoneContacts, resolveSmartphoneDisabledContacts, resolveSmartphoneContactOptions, type SmartphoneContactOverrides, type SmartphoneContactLockOptions } from "./src/components/minigames/smartphoneContacts";
 import type { FlagMap } from "./src/types/novel";
 
 const contactFlags: FlagMap = {
@@ -42,7 +42,7 @@ describe("Smartphone route selection", () => {
       expect(options).toBeDefined();
       const choices = resolveSmartphoneContactOptions({
         language: "id",
-        disabledContacts: resolveLockedSmartphoneContacts(state.flags, options?.disabledContacts as string[]),
+        disabledContacts: resolveSmartphoneDisabledContacts(state.flags, options as SmartphoneContactLockOptions | undefined),
         overrides: options?.contactOverrides as SmartphoneContactOverrides,
       });
       const choice = choices.find((option) => option.id === contact)!;
@@ -63,11 +63,74 @@ describe("Smartphone route selection", () => {
       language: "id",
       showSleepOption: options?.showSleepOption as boolean,
       sleepOptionNext: options?.sleepOptionNext as string,
-      disabledContacts: options?.disabledContacts as string[],
+      disabledContacts: resolveSmartphoneDisabledContacts(state.flags, options as SmartphoneContactLockOptions | undefined),
       overrides: options?.contactOverrides as SmartphoneContactOverrides,
     });
     expect(choices.filter((option) => !option.disabled).map((option) => option.id)).toEqual(["sleep"]);
     expect(choices.find((option) => option.id === "sleep")?.next).toBe("day4-complate");
+  });
+
+  test("Skip Day is available after Maya when no other contact can be selected", () => {
+    const state = reachSmartphone("day2-free-time", {
+      mayaAcceptedNumber: true,
+      day2MayaCompleted: true,
+    });
+    const options = state.activeMinigame!.options as SmartphoneContactLockOptions & {
+      showSleepOption: boolean;
+      sleepOptionNext: string;
+    };
+    const choices = resolveSmartphoneContactOptions({
+      language: "id",
+      showSleepOption: options.showSleepOption,
+      sleepOptionNext: options.sleepOptionNext,
+      disabledContacts: resolveSmartphoneDisabledContacts(state.flags, options),
+      overrides: options.contactOverrides,
+    });
+    expect(choices.filter((choice) => !choice.disabled).map((choice) => choice.id)).toEqual(["sleep"]);
+    const skip = choices.find((choice) => choice.id === "sleep")!;
+    expect(skip.next).toBe("day2-complate");
+    state.choose(skip.next);
+    expect(useNovelStore.getState().currentLabel).toBe("day2-complate");
+    expect(useNovelStore.getState().activeMinigame).toBeNull();
+  });
+
+  test("Skip Day remains locked when Elena is still available after Maya", () => {
+    const state = reachSmartphone("day2-free-time", {
+      mayaAcceptedNumber: true,
+      elenaAcceptedNumber: true,
+      day2MayaCompleted: true,
+    });
+    const options = state.activeMinigame!.options as SmartphoneContactLockOptions;
+    const choices = resolveSmartphoneContactOptions({
+      language: "id",
+      showSleepOption: true,
+      disabledContacts: resolveSmartphoneDisabledContacts(state.flags, options),
+      overrides: options.contactOverrides,
+    });
+    expect(choices.find((choice) => choice.id === "elena")?.disabled).toBeFalsy();
+    expect(choices.find((choice) => choice.id === "sleep")?.disabled).toBe(true);
+  });
+
+  test("unavailable contact overrides do not block Skip Day", () => {
+    const disabled = resolveSmartphoneDisabledContacts({ mayaAcceptedNumber: true }, {
+      requiredCompletionFlags: ["day2MayaCompleted"],
+      contactOverrides: { maya: { disabled: true } },
+    });
+    expect(disabled).not.toContain("sleep");
+    const choices = resolveSmartphoneContactOptions({
+      language: "id",
+      showSleepOption: true,
+      disabledContacts: disabled,
+      overrides: { maya: { disabled: true } },
+    });
+    expect(choices.find((choice) => choice.id === "sleep")?.disabled).toBeFalsy();
+  });
+
+  test("explicit Skip Day locks are preserved even without available contacts", () => {
+    expect(resolveSmartphoneDisabledContacts({}, {
+      disabledContacts: ["sleep"],
+      requiredCompletionFlags: ["day2MayaCompleted"],
+    })).toContain("sleep");
   });
 
   test("unknown contacts remain locked", () => {

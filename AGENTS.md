@@ -72,7 +72,7 @@ SBN `attachmentOpacityKeyframes` tracks use `slotId:attachmentName` keys. The Ca
 
 ### Smartphone Route Verification
 
-Run `bun test smartphone-routing.test.ts` to check that Day 2–4 selection points pause at `smartphone-contacts`, contact choices enter their registered routes, and the Day 4 wrap-up only permits ending the day. Smartphone activation is controlled by scene `minigame()` commands; direct route `jump()` commands bypass its UI.
+Run `bun test smartphone-routing.test.ts` to check that Day 2–4 selection points pause at `smartphone-contacts`, contact choices enter their registered routes, and the Day 4 wrap-up only permits ending the day. Smartphone activation is controlled by scene `minigame()` commands; direct route `jump()` commands bypass its UI. `resolveSmartphoneDisabledContacts` shares conditional locking between desktop/mobile and tests. Incomplete route flags must not lock Skip Day when every character contact is unavailable; explicit Skip Day locks still apply.
 
 ### Background Camera Motion
 

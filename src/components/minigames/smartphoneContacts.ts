@@ -79,6 +79,38 @@ export const resolveLockedSmartphoneContacts = (
   return [...resolvedDisabledContacts];
 };
 
+export type SmartphoneContactLockOptions = {
+  disabledContacts?: string[];
+  conditionalDisabledContacts?: Partial<Record<SmartphoneContactId, string | string[]>>;
+  conditionalEnabledContacts?: Partial<Record<SmartphoneContactId, string>>;
+  requiredCompletionFlags?: string[];
+  contactOverrides?: SmartphoneContactOverrides;
+};
+
+export const resolveSmartphoneDisabledContacts = (
+  flags: FlagMap,
+  options: SmartphoneContactLockOptions = {},
+): SmartphoneContactId[] => {
+  const disabled = new Set(resolveLockedSmartphoneContacts(flags, options.disabledContacts));
+
+  for (const [contactId, requiredFlags] of Object.entries(options.conditionalDisabledContacts ?? {})) {
+    const flagNames = Array.isArray(requiredFlags) ? requiredFlags : [requiredFlags];
+    if (flagNames.some((flagName) => flags[flagName])) disabled.add(contactId as SmartphoneContactId);
+  }
+
+  for (const [contactId, flagName] of Object.entries(options.conditionalEnabledContacts ?? {})) {
+    if (flags[flagName]) disabled.delete(contactId as SmartphoneContactId);
+  }
+
+  const hasAvailableContact = (Object.keys(smartphoneContactFlagMap) as SmartphoneContactId[])
+    .some((contactId) => !disabled.has(contactId) && !options.contactOverrides?.[contactId]?.disabled);
+  if (hasAvailableContact && options.requiredCompletionFlags?.some((flagName) => !flags[flagName])) {
+    disabled.add("sleep");
+  }
+
+  return [...disabled];
+};
+
 export const smartphoneContactOptions: SmartphoneContactOption[] = [
   {
     id: "maya",
