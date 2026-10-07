@@ -5,6 +5,7 @@ type ControlLabels = {
   exit: string;
   log: string;
   save: string;
+  load: string;
 };
 
 type DialogueMobileProps = {
@@ -25,6 +26,7 @@ type DialogueMobileProps = {
   onAuto?: () => void;
   onLog?: () => void;
   onSave?: () => void;
+  onLoad?: () => void;
   onConfig?: () => void;
   onExit?: () => void;
 };
@@ -47,6 +49,7 @@ export const DialogueMobile = ({
   onAuto,
   onLog,
   onSave,
+  onLoad,
   onConfig,
   onExit,
 }: DialogueMobileProps) => (
@@ -116,6 +119,7 @@ export const DialogueMobile = ({
           { label: controlLabels.auto, handler: onAuto, active: isAuto },
           { label: controlLabels.log, handler: onLog, active: false },
           { label: controlLabels.save, handler: onSave, active: false },
+          { label: controlLabels.load, handler: onLoad, active: false },
           { label: controlLabels.config, handler: onConfig, active: false },
           { label: controlLabels.exit, handler: onExit, active: false },
         ].map(({ label, handler, active }, idx) => {

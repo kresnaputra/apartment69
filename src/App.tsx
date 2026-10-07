@@ -619,6 +619,7 @@ type DialogueUIProps = {
     exit: string;
     log: string;
     save: string;
+    load: string;
     tapToContinue: string;
     tapToSkip: string;
   };
@@ -627,6 +628,7 @@ type DialogueUIProps = {
   onAuto: () => void;
   onLog: () => void;
   onSave: () => void;
+  onLoad: () => void;
   onConfig: () => void;
   onExit: () => void;
 };
@@ -652,6 +654,7 @@ const DialogueUI = memo(({
   onAuto,
   onLog,
   onSave,
+  onLoad,
   onConfig,
   onExit,
 }: DialogueUIProps) => {
@@ -701,6 +704,7 @@ const DialogueUI = memo(({
           exit: labels.exit,
           log: labels.log,
           save: labels.save,
+          load: labels.load,
         }}
         continueHint={labels.tapToContinue}
         finishHint={labels.tapToSkip}
@@ -718,6 +722,7 @@ const DialogueUI = memo(({
         onAuto={onAuto}
         onLog={onLog}
         onSave={onSave}
+        onLoad={onLoad}
         onConfig={onConfig}
         onExit={onExit}
       />
@@ -754,6 +759,7 @@ const DialogueUI = memo(({
                 { label: labels.log, onClick: onLog },
                 { label: labels.auto, onClick: onAuto, active: isAuto },
                 { label: labels.save, onClick: onSave },
+                { label: labels.load, onClick: onLoad },
                 { label: labels.config, onClick: onConfig },
                 { label: labels.exit, onClick: onExit },
               ] as { label: string; onClick: () => void; active?: boolean }[]).map(({ label, onClick, active }) => (
@@ -1682,11 +1688,12 @@ const App = () => {
   const [isAuto, setIsAuto] = useState(false);
   const [showLog, setShowLog] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
-  const [showSaveSlots, setShowSaveSlots] = useState(false);
+  const [saveSlotMode, setSaveSlotMode] = useState<"save" | "load" | null>(null);
+  const showSaveSlots = saveSlotMode !== null;
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [focusedChoiceIndex, setFocusedChoiceIndex] = useState(0);
   const [focusedControlIndex, setFocusedControlIndex] = useState(-1);
-  const CONTROL_COUNT = 5; // Auto, Log, Save, Config, Exit
+  const CONTROL_COUNT = 6; // Auto, Log, Save, Load, Config, Exit
   const [blackScreenVisible, setBlackScreenVisible] = useState(false);
   const [language, setLanguage] = useState<LanguageCode>(() => {
     if (typeof window === "undefined") return DEFAULT_LANGUAGE;
@@ -2034,10 +2041,10 @@ const App = () => {
 
   // Auto-advance: when enabled, advance to the next line 1.5s after text finishes typing.
   useEffect(() => {
-    if (!isAuto || isTyping || choices.length > 0 || isPresentationTransitioning || isEnded) return;
+    if (!isAuto || isTyping || choices.length > 0 || isPresentationTransitioning || isEnded || showSaveSlots) return;
     const timer = window.setTimeout(() => { advance(); }, 1500);
     return () => window.clearTimeout(timer);
-  }, [isAuto, isTyping, choices.length, isPresentationTransitioning, isEnded, advance, resolvedLine]);
+  }, [isAuto, isTyping, choices.length, isPresentationTransitioning, isEnded, showSaveSlots, advance, resolvedLine]);
 
   useEffect(() => {
     const handleAdvance = () => {
@@ -2067,6 +2074,7 @@ const App = () => {
 
     const handleKeydown = (event: KeyboardEvent) => {
       if (event.key !== " " && event.key !== "Enter") return;
+      if (showSaveSlotsRef.current || showConfigRef.current || showLogRef.current) return;
       if (activeMinigame) return;
       if (choicesRef.current.length > 0) return;
       event.preventDefault();
@@ -2142,7 +2150,7 @@ const App = () => {
       event.preventDefault();
       if (showLogRef.current) { setShowLog(false); return; }
       if (showConfigRef.current) { setShowConfig(false); return; }
-      if (showSaveSlotsRef.current) { setShowSaveSlots(false); return; }
+      if (showSaveSlotsRef.current) { setSaveSlotMode(null); return; }
       // Deselect focused control button if any
       if (focusedControlIndexRef.current >= 0) { setFocusedControlIndex(-1); return; }
       setShowConfig(true);
@@ -2212,7 +2220,7 @@ const App = () => {
     setIsAuto(false);
     setShowLog(false);
     setShowConfig(false);
-    setShowSaveSlots(false);
+    setSaveSlotMode(null);
     setFocusedChoiceIndex(-1);
     setFocusedControlIndex(-1);
     setRevealedCount(0);
@@ -2227,9 +2235,10 @@ const App = () => {
   activateControlRef.current = (idx: number) => {
     if (idx === 0) handleAuto();
     else if (idx === 1) setShowLog(true);
-    else if (idx === 2) setShowSaveSlots(true);
-    else if (idx === 3) setShowConfig(true);
-    else if (idx === 4) { handleExitToMenu(); }
+    else if (idx === 2) setSaveSlotMode("save");
+    else if (idx === 3) setSaveSlotMode("load");
+    else if (idx === 4) setShowConfig(true);
+    else if (idx === 5) { handleExitToMenu(); }
   };
 
   const buildSaveSlot = useCallback((): SaveSlot => ({
@@ -2264,7 +2273,7 @@ const App = () => {
     const slot = buildSaveSlot();
     writeSlot(slotIndex, slot);
     setSlots(readAllSlots());
-    setShowSaveSlots(false);
+    setSaveSlotMode(null);
     setSaveToast(true);
     window.setTimeout(() => setSaveToast(false), 2000);
   };
@@ -2297,6 +2306,17 @@ const App = () => {
       slot.activeSoundEffect ?? null,
     );
     setPhase("story");
+  };
+
+  const handleLoadFromSlot = (slotIndex: number) => {
+    const slot = slots[slotIndex];
+    if (!slot) return;
+    setIsAuto(false);
+    setSaveSlotMode(null);
+    setFocusedControlIndex(-1);
+    setFocusedChoiceIndex(-1);
+    setRevealedCount(0);
+    handleLoadFromMenu(slot);
   };
 
   const handleContinueFromMenu = () => {
@@ -2538,7 +2558,8 @@ const App = () => {
           onSuppressAdvance={() => { suppressAdvanceOnceRef.current = true; }}
           onAuto={handleAuto}
           onLog={() => setShowLog(true)}
-          onSave={() => setShowSaveSlots(true)}
+          onSave={() => setSaveSlotMode("save")}
+          onLoad={() => setSaveSlotMode("load")}
           onConfig={() => setShowConfig(true)}
           onExit={handleExitToMenu}
         />
@@ -2675,17 +2696,18 @@ const App = () => {
         />
       )}
 
-      {showSaveSlots && (
+      {saveSlotMode && (
         <SaveSlotOverlay
+          key={saveSlotMode}
           emptyLabel={uiText.emptySlot}
           language={language}
-          mode="save"
-          modeLabel={labels.save}
+          mode={saveSlotMode}
+          modeLabel={saveSlotMode === "save" ? labels.save : labels.load}
           slotLabel={labels.slot}
           slots={slots}
           unknownSceneLabel={uiText.unknownScene}
-          onSelect={handleSaveToSlot}
-          onClose={() => setShowSaveSlots(false)}
+          onSelect={saveSlotMode === "save" ? handleSaveToSlot : handleLoadFromSlot}
+          onClose={() => setSaveSlotMode(null)}
         />
       )}
 

@@ -70,6 +70,10 @@ Character sprites now advance in their own `requestAnimationFrame` loops, not a 
 
 SBN `attachmentOpacityKeyframes` tracks use `slotId:attachmentName` keys. The Canvas renderer samples these with easing for both mesh and image attachments. The leaf animation relies on this fade-out to hide the position reset at its loop boundary; regression tests cover the actual `src/assets/leaf.sbn` asset.
 
+### Dialogue Controls Verification
+
+Run `bun test dialogue-controls.test.ts` to verify the mobile Load button, its focus index, and saved dialogue/flag restoration. In-story Save and Load share `SaveSlotOverlay` via `saveSlotMode`; Auto and story keyboard advance pause while it is open.
+
 ### Smartphone Route Verification
 
 Run `bun test smartphone-routing.test.ts` to check that Day 2–4 selection points pause at `smartphone-contacts`, contact choices enter their registered routes, and the Day 4 wrap-up only permits ending the day. Smartphone activation is controlled by scene `minigame()` commands; direct route `jump()` commands bypass its UI. `resolveSmartphoneDisabledContacts` shares conditional locking between desktop/mobile and tests. Incomplete route flags must not lock Skip Day when every character contact is unavailable; explicit Skip Day locks still apply.
