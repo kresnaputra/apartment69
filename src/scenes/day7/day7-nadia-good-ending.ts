@@ -14,7 +14,7 @@ import {
   setFlag,
   show,
 } from "@/scenes/scriptTypes";
-import nadiaGoodEndingBgm from "@/music/good-nadia.mp3";
+import nadiaGoodEndingBgm from "@/music/bad-maya.mp3";
 import nadiaSpecialBgm from "@/music/special-scene-nadia.mp3";
 import nadiaGoodEnding1Url from "@/background/nadia good ending 1.png";
 import nadiaGoodEnding2Url from "@/background/nadia good ending 2.png";

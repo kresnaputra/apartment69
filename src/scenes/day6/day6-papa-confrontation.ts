@@ -44,10 +44,10 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
   playSfx(phoneSound), // phone ringing
   narrate(
     tx({
-      id: "Tiba-tiba Maya mengetuk pintu kamar.",
-      en: "Suddenly, Maya knocks on the door.",
-      ja: "突然、マヤが部屋のドアをノックした。",
-      ko: "갑자기 마야가 방 문을 두드리더니。",
+      id: "Tiba-tiba Maya menelpon Arka.",
+      en: "Suddenly, Maya calls Arka.",
+      ja: "突然、マヤからアルカに電話がかかってきた。",
+      ko: "갑자기 마야가 아르카에게 전화를 걸어왔다.",
     }),
   ),
   say(
