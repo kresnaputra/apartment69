@@ -72,7 +72,7 @@ SBN `attachmentOpacityKeyframes` tracks use `slotId:attachmentName` keys. The Ca
 
 ### Dialogue Controls Verification
 
-Run `bun test dialogue-controls.test.ts` to verify the mobile Load button, its focus index, and saved dialogue/flag restoration. In-story Save and Load share `SaveSlotOverlay` via `saveSlotMode`; Auto and story keyboard advance pause while it is open.
+Run `bun test dialogue-controls.test.ts` to verify persistent SVG toolbar controls, input isolation, and saved dialogue/cutscene restoration. `StoryToolbar` renders outside the story stage, fixed at the top-right for both desktop and mobile; control order is shared through `STORY_CONTROL_IDS`. On devices with a fine hover pointer, it starts hidden, appears only on mouse movement, and fades out after 2 seconds of inactivity. Keyboard input, toolbar focus, and opening modals must not reveal it or extend the idle timer. Hidden controls leave the tab order and release focus. Touch devices keep it visible; use pointer capabilities rather than viewport dimensions for this behavior. Its layer is 110, above cutscenes (100) and below story modals (120), loading (140), and exit confirmation (200). In-story Save and Load share `SaveSlotOverlay` via `saveSlotMode`; Auto and story keyboard advance pause while story modals are open. Cutscene keyboard handlers must ignore toolbar focus, open modals, and already-handled key events.
 
 ### Smartphone Route Verification
 

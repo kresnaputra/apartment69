@@ -1,15 +1,5 @@
 type Choice = { id: string; label: string; next: string; disabled?: boolean };
-type ControlLabels = {
-  auto: string;
-  config: string;
-  exit: string;
-  log: string;
-  save: string;
-  load: string;
-};
-
 type DialogueMobileProps = {
-  controlLabels: ControlLabels;
   continueHint: string;
   speaker: string | null;
   finishHint: string;
@@ -19,20 +9,11 @@ type DialogueMobileProps = {
   isSceneTransitioning: boolean;
   choices: Choice[];
   focusedChoiceIndex?: number;
-  focusedControlIndex?: number;
   onChoose: (next: string) => void;
   onSuppressAdvance: () => void;
-  isAuto?: boolean;
-  onAuto?: () => void;
-  onLog?: () => void;
-  onSave?: () => void;
-  onLoad?: () => void;
-  onConfig?: () => void;
-  onExit?: () => void;
 };
 
 export const DialogueMobile = ({
-  controlLabels,
   continueHint,
   speaker,
   finishHint,
@@ -42,16 +23,8 @@ export const DialogueMobile = ({
   isSceneTransitioning,
   choices,
   focusedChoiceIndex,
-  focusedControlIndex = -1,
   onChoose,
   onSuppressAdvance,
-  isAuto = false,
-  onAuto,
-  onLog,
-  onSave,
-  onLoad,
-  onConfig,
-  onExit,
 }: DialogueMobileProps) => (
   <div
     className={`absolute left-0 right-0 bottom-2 z-30 pointer-events-none transition-opacity duration-[160ms] ${isSceneTransitioning ? "opacity-0" : "opacity-100"}`}
@@ -110,39 +83,5 @@ export const DialogueMobile = ({
       )}
     </div>
 
-    {choices.length === 0 ? (
-      <div
-        className="flex justify-center gap-1 flex-wrap mt-1.5 pointer-events-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {[
-          { label: controlLabels.auto, handler: onAuto, active: isAuto },
-          { label: controlLabels.log, handler: onLog, active: false },
-          { label: controlLabels.save, handler: onSave, active: false },
-          { label: controlLabels.load, handler: onLoad, active: false },
-          { label: controlLabels.config, handler: onConfig, active: false },
-          { label: controlLabels.exit, handler: onExit, active: false },
-        ].map(({ label, handler, active }, idx) => {
-          const isFocused = focusedControlIndex === idx;
-          return (
-          <button
-            key={label}
-            type="button"
-            onClick={handler}
-            className={[
-              "rounded px-2 py-1 text-[0.6rem] tracking-[0.02em] border backdrop-blur-sm transition-all duration-150 active:scale-95",
-              active
-                ? "text-[#d2a456] border-[rgba(210,164,86,0.4)] bg-[rgba(210,164,86,0.12)]"
-                : isFocused
-                ? "text-white border-white/50 bg-[rgba(255,255,255,0.14)] scale-105"
-                : "text-white/65 border-white/15 bg-[rgba(10,8,13,0.45)] hover:text-white/90 hover:border-white/30",
-            ].join(" ")}
-          >
-            {label}
-          </button>
-          );
-        })}
-      </div>
-    ) : null}
   </div>
 );

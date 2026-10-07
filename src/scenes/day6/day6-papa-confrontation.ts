@@ -15,7 +15,7 @@ import {
 import bedroomUrl from "@/background/bedroom.png";
 import hallwayUrl from "@/background/hallway.png";
 import { mayaDay1To4Voices } from "@/voice/maya/day1to4";
-import knockSound from "@/sfx/knock.wav";
+import phoneSound from "@/sfx/phone.mp3";
 import day6Bgm from "@/music/day6.mp3";
 
 export const day6PapaConfrontationScene: VisualNovelCommand[] = [
@@ -41,7 +41,7 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "조용한 아침. 아르카는 PC 앞에서 여유롭게 앉아 있었다. 딱히 할 일도 없었다.",
     }),
   ),
-  playSfx(knockSound),
+  playSfx(phoneSound), // phone ringing
   narrate(
     tx({
       id: "Tiba-tiba Maya mengetuk pintu kamar.",
@@ -50,10 +50,6 @@ export const day6PapaConfrontationScene: VisualNovelCommand[] = [
       ko: "갑자기 마야가 방 문을 두드리더니。",
     }),
   ),
-  show("maya-day6-papa-confrontation", "maya", "worried", {
-    position: "center",
-    enterFrom: "fade",
-  }),
   say(
     "maya",
     "worried",
