@@ -24,14 +24,13 @@ export const nadiaBalconyScene: VisualNovelCommand[] = addNadiaVoices([
     ja: "レンテラ・アパートメント - 寝室",
     ko: "렌테라 아파트 - 침실",
   })),
-  hide("elena-hallway"),
   hide("arka-hallway"),
   narrate(
     tx({
-      id: "Banyak juga yang kejadian hari ini... semoga besok aku masih bisa sampai kampus tepat waktu.",
-      en: "A lot happened today... hope I can still make it to campus on time tomorrow.",
-      ja: "今日はずいぶん色々あったな…明日はちゃんと時間通りに大学へ行けるといいけど。",
-      ko: "오늘 진짜 일이 많았네... 내일은 제시간에 학교에 갈 수 있으면 좋겠다.",
+      id: "Akhirnya beres juga beres-beres hari pertama... semoga besok aku masih bisa sampai kampus tepat waktu.",
+      en: "Finally done settling in on day one... hope I can still make it to campus on time tomorrow.",
+      ja: "初日の荷ほどきもようやく終わった…明日はちゃんと時間通りに大学へ行けるといいけど。",
+      ko: "첫날 짐 정리도 드디어 끝났네... 내일은 제시간에 학교에 갈 수 있으면 좋겠다.",
     }),
   ),
   show("arka-balcony", "arka", "neutral", {
@@ -207,7 +206,7 @@ export const nadiaAdviceHelpScene: VisualNovelCommand[] = addNadiaVoices([
       ko: "어쩌면... 다음엔 내가 먼저 연락하게 될지도 모르겠다.",
     }),
   ),
-  jump("sara-hallway"),
+  jump("bedroom-day1"),
   hide("nadia-balcony"),
 ], 2);
 
@@ -229,5 +228,5 @@ export const nadiaAdviceRefuseScene: VisualNovelCommand[] = addNadiaVoices([
     ja: "わかった、やってみる。",
     ko: "알겠어, 한번 해볼게.",
   }), { hideName: true }),
-  jump("sara-hallway"),
+  jump("bedroom-day1"),
 ], 6);
