@@ -1,4 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import sceneMaya1 from "@/gallery/scene-maya-1.png";
+import sceneMaya2 from "@/gallery/scene-maya-2.png";
+import sceneMaya3 from "@/gallery/scene-maya-3.png";
+import sceneElena1 from "@/gallery/scene-elena-1.png";
+import sceneElena2 from "@/gallery/scene-elena-2.png";
+import sceneElena3 from "@/gallery/scene-elena-3.png";
 import sceneNadia1 from "@/gallery/scene-nadia-1.png";
 import sceneNadia2 from "@/gallery/scene-nadia-2.png";
 import sceneNadia3 from "@/gallery/scene-nadia-3.png";
@@ -15,6 +21,54 @@ type GalleryOverlayProps = {
 };
 
 const GALLERY_ITEMS = [
+  {
+    id: "scene-maya-1",
+    character: "Maya",
+    imageUrl: sceneMaya1,
+    label: "Scene Maya 1",
+    sceneLabel: "day4-maya-force-rest",
+    unlockFlag: "gallerySceneMaya1Unlocked",
+  },
+  {
+    id: "scene-maya-2",
+    character: "Maya",
+    imageUrl: sceneMaya2,
+    label: "Scene Maya 2",
+    sceneLabel: "day7-devoted-submission",
+    unlockFlag: "gallerySceneMaya2Unlocked",
+  },
+  {
+    id: "scene-maya-3",
+    character: "Maya",
+    imageUrl: sceneMaya3,
+    label: "Scene Maya 3",
+    sceneLabel: "day7-eternal-promise",
+    unlockFlag: "gallerySceneMaya3Unlocked",
+  },
+  {
+    id: "scene-elena-1",
+    character: "Elena",
+    imageUrl: sceneElena1,
+    label: "Scene Elena 1",
+    sceneLabel: "day5-elena-hallway",
+    unlockFlag: "gallerySceneElena1Unlocked",
+  },
+  {
+    id: "scene-elena-2",
+    character: "Elena",
+    imageUrl: sceneElena2,
+    label: "Scene Elena 2",
+    sceneLabel: "day7-elena-good-ending",
+    unlockFlag: "gallerySceneElena2Unlocked",
+  },
+  {
+    id: "scene-elena-3",
+    character: "Elena",
+    imageUrl: sceneElena3,
+    label: "Scene Elena 3",
+    sceneLabel: "day7-elena-bad-ending",
+    unlockFlag: "gallerySceneElena3Unlocked",
+  },
   {
     id: "scene-nadia-1",
     character: "Nadia",
@@ -41,7 +95,7 @@ const GALLERY_ITEMS = [
   },
 ] as const;
 
-const GALLERY_SECTIONS = ["Nadia"] as const;
+const GALLERY_SECTIONS = ["Maya", "Elena", "Nadia"] as const;
 
 const LockIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">

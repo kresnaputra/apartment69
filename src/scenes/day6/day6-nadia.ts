@@ -442,6 +442,6 @@ export const day6NadiaEndingScene: VisualNovelCommand[] = addNadiaDay5To6Voices(
   setFlag("day6NadiaCompleted", true),
   jumpIf("nadiaBadPathLocked", "day7-nadia-bad-ending", {
     value: true,
-    elseTarget: "day7-nadia-good-ending",
+    elseTarget: "day7-intro",
   }),
 ], 19);

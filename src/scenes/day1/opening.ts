@@ -38,5 +38,5 @@ export const openingScene: VisualNovelCommand[] = [
       ko: "아르카(속마음): 프리랜서 IT 일에 고장 난 기계를 고치는 취미까지 있으니, 원래 난 혼자 있는 쪽이 편하다. 그런데 이 낡은 건물은 아무래도 다른 계획이 있는 모양이다.",
     }),
   ),
-  jump("nadia-balcony"),
+  jump("elevator-meeting"),
 ];

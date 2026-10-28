@@ -166,7 +166,7 @@ describe("SBN transforms", () => {
     expect(bones.every((bone) => Number.isFinite(bone._wx))).toBe(true);
   });
 
-  for (const asset of ["nadia/nadia-normal.sbn", "nadia/nadia-angry-talk.sbn"]) {
+  for (const asset of ["maya/maya-sad.sbn", "mayas-father/maya's-father-normal.sbn"]) {
     test(`matches existing transforms for ${asset}`, async () => {
       const zip = await JSZip.loadAsync(await readFile(new URL(`./src/character/${asset}`, import.meta.url)));
       const project = JSON.parse(await zip.file("project.json")!.async("string")) as SbnProject;

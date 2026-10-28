@@ -1,41 +1,124 @@
-import type { LocalizedText } from "@/lib/i18n";
-import type { LanguageCode } from "@/lib/i18n";
-import type { SayCommand, VisualNovelCommand, VisualNovelScript } from "@/types/novel";
-import { openingScene } from "@/scenes/day1/opening";
+import {
+  elenaEncounterScene,
+  helpElenaScene,
+  ignoreElenaScene,
+} from "@/scenes/day1/elenaEncounter";
+import {
+  acceptMayaNumberScene,
+  declineMayaNumberScene,
+  elevatorMeetingScene,
+} from "@/scenes/day1/elevatorMeeting";
+import { epilogueScene } from "@/scenes/epilogue";
 import {
   nadiaAdviceHelpScene,
   nadiaAdviceRefuseScene,
   nadiaBalconyScene,
 } from "@/scenes/day1/nadiaBalcony";
-import { bedroomDay1Scene } from "@/scenes/day1/bedroomDay1";
+import { openingScene } from "@/scenes/day1/opening";
+import {
+  saraHallwayScene,
+  saraHelpScene,
+  saraRefuseScene,
+} from "@/scenes/day1/saraHallway";
+import {
+  bedroomDay1ElenaScene,
+  bedroomDay1MayaScene,
+  bedroomDay1NadiaScene,
+  bedroomDay1SaraScene,
+  bedroomDay1Scene,
+} from "@/scenes/day1/bedroomDay1";
+import { stayRouteScene } from "@/scenes/stayRoute";
+import { visitRouteScene } from "@/scenes/visitRoute";
+import type { LocalizedText } from "@/lib/i18n";
+import type { LanguageCode } from "@/lib/i18n";
+import type { SayCommand, VisualNovelCommand, VisualNovelScript } from "@/types/novel";
 import { day1ComplateScene } from "@/scenes/day1/day1-complate";
-import { day2BedroomScene } from "@/scenes/day2/day2-bedroom";
+import {
+  day2BedroomScene,
+  day2RouteElenaScene,
+  day2RouteMayaScene,
+} from "@/scenes/day2/day2-bedroom";
+import { day2FreeTimeScene } from "@/scenes/day2/day2-free-time";
+import { day2HallwayScene } from "@/scenes/day2/day2-hallway";
+import { day2MayaBedroomScene } from "@/scenes/day2/day2-maya-bedroom";
+import { day2ComplateScene } from "@/scenes/day2/day2-complate";
+import { day2ElenaHallwayScene } from "@/scenes/day2/elena/day2-elena-hallway";
 import { day2NadiaFreeTimeScene } from "@/scenes/day2/nadia/day2-nadia-free-time";
 import { day2NadiaRoomScene, day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
-import { day2ComplateScene } from "@/scenes/day2/day2-complate";
-import { day3BedroomScene } from "@/scenes/day3/day3-route-selection";
+import { day3ElenaMorningScene } from "@/scenes/day3/elena/day3-elena-morning";
 import {
   day3NadiaNightScene,
   day3NadiaNightHelpScene,
   day3NadiaNightRefuseScene,
   day3NadiaNightEndingScene,
 } from "@/scenes/day3/nadia/day3-nadia-night";
-import { day3ComplateScene } from "@/scenes/day3/day3-complate";
-import { day4BedroomScene } from "@/scenes/day4/day4-bedroom";
 import {
   day4NadiaNightScene,
   day4NadiaNightHelpScene,
   day4NadiaNightSkipScene,
 } from "@/scenes/day4/nadia/day4-nadia-night";
+import {
+  mayaPhoneCallScene,
+  mayaPhoneCallLogicalScene,
+  mayaPhoneCallEmpathyScene,
+} from "@/scenes/day3/day3-mayaPhoneCall";
+import {
+  day3AfterMayaPhoneScene,
+  day3BedroomScene,
+  day3RouteSelectionScene,
+  day3Slot2CompleteScene,
+  day3Slot2ElenaScene,
+  day3Slot2NadiaScene,
+  day3Slot2SarahScene,
+} from "@/scenes/day3/day3-route-selection";
+import { day3ComplateScene } from "@/scenes/day3/day3-complate";
+import {
+  day4MayaBadEndingScene,
+  day4MayaCollapseScene,
+  day4MayaForceRestScene,
+} from "@/scenes/day4/day4-maya-collapse";
+import { day4AfterRoutePhoneScene, day4BedroomScene } from "@/scenes/day4/day4-bedroom";
+import { day4ElenaDoorScene } from "@/scenes/day4/elena/day4-elena-door";
+import {
+  day5MayaMorningScene,
+  day5LobbyFarewellScene,
+} from "@/scenes/day5/day5-maya-morning";
+import { day5ComplateScene } from "@/scenes/day5/day5-complate";
 import { day5NadiaScene } from "@/scenes/day5/day5-nadia";
+import { day5ElenaHallwayScene } from "@/scenes/day5/elena/day5-elena-hallway";
+import {
+  day6PapaConfrontationScene,
+  day6ProtectiveScene,
+  day6SupportiveScene,
+  day6AftermathScene,
+} from "@/scenes/day6/day6-papa-confrontation";
+import {
+  day6ElenaArthurScene,
+  day6ElenaProtectScene,
+  day6ElenaStandScene,
+} from "@/scenes/day6/elena/day6-elena-arthur";
+import { day6ComplateScene } from "@/scenes/day6/day6-complate";
 import {
   day6NadiaScene,
   day6NadiaGoodPathScene,
   day6NadiaBadPathScene,
   day6NadiaEndingScene,
 } from "@/scenes/day6/day6-nadia";
+import {
+  day7IntroScene,
+  day7DevotedSubmissionScene,
+  day7EternalPromiseScene,
+} from "@/scenes/day7/day7-endings";
+import {
+  day7ElenaBadEndingScene,
+  day7ElenaGoodEndingScene,
+} from "@/scenes/day7/day7-elena-good-ending";
 import { day7NadiaBadEndingScene } from "@/scenes/day7/day7-nadia-bad-ending";
 import { day7NadiaGoodEndingScene } from "@/scenes/day7/day7-nadia-good-ending";
+import { day4ComplateScene } from "@/scenes/day4/day4-complate";
+import { sbnTestScene } from "@/scenes/sbnTestScene";
+import { day4ElenaComplateScene } from "@/scenes/day4/elena/day4-elena-complate";
+import { day5ElenaComplateScene } from "@/scenes/day5/elena/day5-elena-complate";
 
 const splitSentences = (text: string) => {
   const trimmed = text.trim();
@@ -134,40 +217,98 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
   startLabel: "opening",
   labels: {
     "gallery-return": [],
+    "sbn-maya-test": sbnTestScene,
     // Day 1
     opening: openingScene,
+    "elevator-meeting": elevatorMeetingScene,
+    "accept-maya-number": acceptMayaNumberScene,
+    "decline-maya-number": declineMayaNumberScene,
+    "elena-encounter": elenaEncounterScene,
+    "help-elena": helpElenaScene,
+    "ignore-elena": ignoreElenaScene,
+    "stay-route": stayRouteScene,
+    "visit-route": visitRouteScene,
     "nadia-balcony": nadiaBalconyScene,
     "nadia-advice-help": nadiaAdviceHelpScene,
     "nadia-advice-refuse": nadiaAdviceRefuseScene,
+    "sara-hallway": saraHallwayScene,
+    "sara-help": saraHelpScene,
+    "sara-refuse": saraRefuseScene,
     "bedroom-day1": bedroomDay1Scene,
+    "bedroom-day1-maya": bedroomDay1MayaScene,
+    "bedroom-day1-elena": bedroomDay1ElenaScene,
+    "bedroom-day1-nadia": bedroomDay1NadiaScene,
+    "bedroom-day1-sara": bedroomDay1SaraScene,
     "day1-complate": day1ComplateScene,
     // Day 2
     "day2-bedroom": day2BedroomScene,
+    "day2-route-maya": day2RouteMayaScene,
+    "day2-route-elena": day2RouteElenaScene,
+    "day2-hallway": day2HallwayScene,
+    "day2-maya-bedroom": day2MayaBedroomScene,
+    "day2-elena-hallway": day2ElenaHallwayScene,
     "day2-route-nadia": day2RouteNadiaScene,
     "day2-nadia-room": day2NadiaRoomScene,
     "day2-nadia-free-time": day2NadiaFreeTimeScene,
+    "day3-elena-morning": day3ElenaMorningScene,
+    "day2-free-time": day2FreeTimeScene,
     "day2-complate": day2ComplateScene,
     // Day 3
     "day3-bedroom": day3BedroomScene,
+    "day3-after-maya-phone": day3AfterMayaPhoneScene,
+    "day3-maya-phone-call": mayaPhoneCallScene,
+    "maya-phone-call-logical": mayaPhoneCallLogicalScene,
+    "maya-phone-call-empathy": mayaPhoneCallEmpathyScene,
+    "day3-route-selection": day3RouteSelectionScene,
+    "day3-slot2-complete": day3Slot2CompleteScene,
+    "day3-slot2-elena": day3Slot2ElenaScene,
+    "day3-slot2-nadia": day3Slot2NadiaScene,
     "day3-nadia-night": day3NadiaNightScene,
     "day3-nadia-night-help": day3NadiaNightHelpScene,
     "day3-nadia-night-refuse": day3NadiaNightRefuseScene,
     "day3-nadia-night-ending": day3NadiaNightEndingScene,
+    "day3-slot2-sarah": day3Slot2SarahScene,
     "day3-complete": day3ComplateScene,
     // Day 4
     "day4-bedroom": day4BedroomScene,
+    "day4-after-route-phone": day4AfterRoutePhoneScene,
     "day4-nadia-night": day4NadiaNightScene,
     "day4-nadia-night-help": day4NadiaNightHelpScene,
     "day4-nadia-night-skip": day4NadiaNightSkipScene,
+    "day4-elena-door": day4ElenaDoorScene,
+    "day4-maya-collapse": day4MayaCollapseScene,
+    "day4-maya-bad-ending": day4MayaBadEndingScene,
+    "day4-maya-force-rest": day4MayaForceRestScene,
+    "day4-complate": day4ComplateScene,
+    "day4-elena-complate": day4ElenaComplateScene,
     // Day 5
+    "day5-maya-morning": day5MayaMorningScene,
+    "day5-elena-hallway": day5ElenaHallwayScene,
     "day5-nadia": day5NadiaScene,
+    "day5-lobby-farewell": day5LobbyFarewellScene,
+    "day5-complate": day5ComplateScene,
+    "day5-elena-complate": day5ElenaComplateScene,
     // Day 6
+    "day6-elena-arthur": day6ElenaArthurScene,
+    "day6-elena-protect": day6ElenaProtectScene,
+    "day6-elena-stand": day6ElenaStandScene,
+    "day6-papa-confrontation": day6PapaConfrontationScene,
+    "day6-protective": day6ProtectiveScene,
+    "day6-supportive": day6SupportiveScene,
+    "day6-aftermath": day6AftermathScene,
+    "day6-complate": day6ComplateScene,
     "day6-nadia": day6NadiaScene,
     "day6-nadia-good-path": day6NadiaGoodPathScene,
     "day6-nadia-bad-path": day6NadiaBadPathScene,
     "day6-nadia-ending": day6NadiaEndingScene,
     // Day 7
+    "day7-intro": day7IntroScene,
+    "day7-elena-good-ending": day7ElenaGoodEndingScene,
+    "day7-elena-bad-ending": day7ElenaBadEndingScene,
     "day7-nadia-bad-ending": day7NadiaBadEndingScene,
     "day7-nadia-good-ending": day7NadiaGoodEndingScene,
+    "day7-devoted-submission": day7DevotedSubmissionScene,
+    "day7-eternal-promise": day7EternalPromiseScene,
+    epilogue: epilogueScene,
   },
 });
