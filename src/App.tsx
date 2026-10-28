@@ -1671,6 +1671,7 @@ const App = () => {
   const [slots, setSlots] = useState<(SaveSlot | null)[]>(readAllSlots);
   const [autoSaveSlot, setAutoSaveSlot] = useState<SaveSlot | null>(readAutoSave);
   const [autoOpenGalleryOnMenu, setAutoOpenGalleryOnMenu] = useState(false);
+  const [autoOpenReviewOnMenu, setAutoOpenReviewOnMenu] = useState(false);
   const [menuSessionKey, setMenuSessionKey] = useState(0);
   const lastAutoSaveKeyRef = useRef<string | null>(null);
   const audioRef = useRef<NovelAudioEngine | null>(null);
@@ -2166,6 +2167,12 @@ const App = () => {
     setPhase("story");
   };
 
+  const handleOpenReviewScene = (label: string) => {
+    setAutoOpenReviewOnMenu(true);
+    startFromLabel(label, { galleryMode: true });
+    setPhase("story");
+  };
+
   const handleExitToMenu = useCallback(() => {
     setShowExitConfirmation(true);
   }, []);
@@ -2356,8 +2363,8 @@ const App = () => {
 
       {phase === "menu" && (
         isMobile
-          ? <MainMenuMobile key={`menu-mobile-${menuSessionKey}`} bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onContinue={handleContinueFromMenu} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} autoSaveSlot={autoSaveSlot} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
-          : <MainMenu key={`menu-desktop-${menuSessionKey}`} bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onContinue={handleContinueFromMenu} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} autoSaveSlot={autoSaveSlot} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} />
+          ? <MainMenuMobile key={`menu-mobile-${menuSessionKey}`} bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onContinue={handleContinueFromMenu} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} autoSaveSlot={autoSaveSlot} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} onOpenReviewScene={handleOpenReviewScene} autoOpenReview={autoOpenReviewOnMenu} onAutoOpenReviewConsumed={() => setAutoOpenReviewOnMenu(false)} />
+          : <MainMenu key={`menu-desktop-${menuSessionKey}`} bgVolume={bgVolume} labels={labels} frameRate={frameRate} frameRateOptions={frameRateOptions} graphicsQuality={graphicsQuality} graphicsQualityOptions={resolvedGraphicsQualityOptions} language={language} textSpeed={textSpeed} onFrameRateChange={setFrameRate} onGraphicsQualityChange={setGraphicsQuality} onLanguageChange={setLanguage} onBgVolumeChange={handleBgVolumeChange} onTextSpeedChange={setTextSpeed} onStart={handleStartStory} onContinue={handleContinueFromMenu} onOpenGalleryScene={handleOpenGalleryScene} onLoad={handleLoadFromMenu} slots={slots} autoSaveSlot={autoSaveSlot} isReady={bundlesReady} flags={galleryFlags} autoOpenGallery={autoOpenGalleryOnMenu} onAutoOpenGalleryConsumed={() => setAutoOpenGalleryOnMenu(false)} onOpenReviewScene={handleOpenReviewScene} autoOpenReview={autoOpenReviewOnMenu} onAutoOpenReviewConsumed={() => setAutoOpenReviewOnMenu(false)} />
       )}
       {phase === "story" ? (
         <main
