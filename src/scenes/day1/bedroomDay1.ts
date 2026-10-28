@@ -11,6 +11,8 @@ export const bedroomDay1Scene: VisualNovelCommand[] = [
     ko: "렌테라 아파트 - 침실",
   })),
   hide("arka-hallway"),
+  hide("arka-elevator"),
+  hide("maya-elevator"),
   show("arka-bedroom", "arka", "neutral", {
     position: "left",
     enterFrom: "fade",
