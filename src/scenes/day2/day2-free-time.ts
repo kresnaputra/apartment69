@@ -1,6 +1,6 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, minigame, narrate, playBgm, show } from "@/scenes/scriptTypes";
+import { bg, jump, narrate, playBgm, show } from "@/scenes/scriptTypes";
 import bedroomNightUrl from "@/background/bedroom-night.png";
 import bgm from "@/music/day2.mp3";
 
@@ -30,38 +30,12 @@ export const day2FreeTimeScene: VisualNovelCommand[] = [
   ),
   narrate(
     tx({
-      id: "Selanjutnya mau ke mana, atau bantu siapa lagi ya?",
-      en: "So where to next... or who else should I check on?",
-      ja: "さて、次はどこに行くか…それとも誰か他に手伝えるやつはいるかな。",
-      ko: "그럼 다음엔 어디로 가지... 아니면 누구를 더 도와줄 수 있을까.",
+      id: "Hari ini cukup. Maya akhirnya bisa istirahat, dan aku juga butuh tidur buat besok.",
+      en: "That's enough for today. Maya can finally get some rest, and I need sleep for tomorrow too.",
+      ja: "今日はここまで。マヤもやっと休めるし、俺も明日に備えて寝ないと。",
+      ko: "오늘은 여기까지. 마야도 드디어 쉴 수 있고, 나도 내일을 위해 자야 한다.",
     }),
     "arka",
   ),
-  minigame("smartphone-contacts", {
-    showSleepOption: true,
-    sleepOptionNext: "day2-complate",
-    requiredCompletionFlags: ["day2MayaCompleted", "day2ElenaCompleted"],
-    disabledContacts: ["nadia", "sara"],
-    conditionalDisabledContacts: {
-      maya: "day2MayaCompleted",
-      elena: "day2ElenaCompleted",
-    },
-    title: tx({
-      id: "Lanjutkan Hari 2",
-      en: "Continue Day 2",
-      ja: "2日目を続ける",
-      ko: "2일차 계속하기",
-    }),
-    subtitle: tx({
-      id: "Kalau masih ada waktu, pilih lagi siapa yang mau kamu cek sebelum hari ini selesai.",
-      en: "If there's still time left, choose who else you want to check on before the day ends.",
-      ja: "まだ時間があるなら、今日は終わる前に次に誰を見に行くか選ぼう。",
-      ko: "아직 시간이 남았다면 오늘이 끝나기 전에 다음에 누구를 보러 갈지 고르자.",
-    }),
-    contactOverrides: {
-      maya: { next: "day2-route-maya" },
-      elena: { next: "day2-route-elena" },
-      nadia: { next: "day2-route-nadia" },
-    },
-  }),
+  jump("day2-complate"),
 ];

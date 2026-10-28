@@ -6,7 +6,7 @@ import {
   say,
   show,
   menu,
-  jump,
+  jumpIf,
   setFlag,
   cutScene,
   hide,
@@ -240,7 +240,10 @@ export const mayaPhoneCallLogicalScene: VisualNovelCommand[] = [
   setFlag("day3MayaMorningCompleted", true),
   hide("maya-bedroom"),
   hide("arka-hallway"),
-  jump("day3-after-maya-phone"),
+  jumpIf("galleryMode", "gallery-return", {
+    value: true,
+    elseTarget: "day3-after-maya-phone",
+  }),
 ];
 
 export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
@@ -312,5 +315,8 @@ export const mayaPhoneCallEmpathyScene: VisualNovelCommand[] = [
   setFlag("day3MayaMorningCompleted", true),
   hide("maya-bedroom"),
   hide("arka-hallway"),
-  jump("day3-after-maya-phone"),
+  jumpIf("galleryMode", "gallery-return", {
+    value: true,
+    elseTarget: "day3-after-maya-phone",
+  }),
 ];

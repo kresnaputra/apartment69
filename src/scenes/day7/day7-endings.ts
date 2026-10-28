@@ -61,18 +61,6 @@ import mayaBadEndingBgm from "@/music/bad-maya.mp3";
 
 export const day7IntroScene: VisualNovelCommand[] = [
   playBgm(day7Bgm),
-  jumpIf("elenaRelationshipStrengthened", "day7-elena-good-ending", {
-    value: true,
-  }),
-  jumpIf("elenaRelationshipDamaged", "day7-elena-bad-ending", {
-    value: true,
-  }),
-  jumpIf("nadiaBadPathLocked", "day7-nadia-bad-ending", {
-    value: true,
-  }),
-  jumpIf("nadiaGoodPathLocked", "day7-nadia-good-ending", {
-    value: true,
-  }),
   bg(
     bedroomNightUrl,
     tx({

@@ -1,10 +1,6 @@
 import { type CSSProperties, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
-import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorButtonMinigameMobile";
-import { PipeConnectionMinigameMobile } from "@/components/minigames/PipeConnectionMinigameMobile";
-import { SmartphoneContactMinigame } from "@/components/minigames/SmartphoneContactMinigame";
-import { SmartphoneContactMinigameMobile } from "@/components/minigames/SmartphoneContactMinigameMobile";
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
@@ -30,8 +26,6 @@ import type { SceneBounds } from "@/types/sbn";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useGamepad } from "@/hooks/useGamepad";
 import { characterBundleRegistry } from "@/character";
-import type { SmartphoneContactLockOptions, SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
-import { resolveSmartphoneDisabledContacts } from "@/components/minigames/smartphoneContacts";
 import { NovelAudioEngine } from "@/lib/runtime/audioEngine";
 import { BackgroundMusic } from "@/lib/runtime/backgroundMusic";
 import { playSfx as playRuntimeSfx, sharedSoundEffects } from "@/lib/runtime/soundEffects";
@@ -1629,9 +1623,7 @@ const App = () => {
   const flags = useNovelStore((state) => state.flags);
   const persistedGalleryFlags = readGalleryUnlockFlags();
   const galleryFlags = { ...persistedGalleryFlags, ...flags };
-  const smartphoneDisabledContacts = activeMinigame?.id === "smartphone-contacts"
-    ? resolveSmartphoneDisabledContacts(flags, activeMinigame.options as SmartphoneContactLockOptions | undefined)
-    : [];
+
 
   const [revealedCount, setRevealedCount] = useState(0);
   const [sceneTransitionKey, setSceneTransitionKey] = useState(0);
@@ -2536,32 +2528,6 @@ const App = () => {
           isMobile
             ? <ElevatorButtonMinigameMobile onComplete={completeMinigame} />
             : <ElevatorButtonMinigame onComplete={completeMinigame} />
-        ) : activeMinigame?.id === "pipe-connection" ? (
-          isMobile
-            ? <PipeConnectionMinigameMobile onComplete={completeMinigame} />
-            : <PipeConnectionMinigame onComplete={completeMinigame} />
-        ) : activeMinigame?.id === "smartphone-contacts" ? (
-          isMobile
-            ? <SmartphoneContactMinigameMobile 
-                onSelect={choose} 
-                language={language}
-                showSleepOption={activeMinigame.options?.showSleepOption as boolean}
-                sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
-                disabledContacts={smartphoneDisabledContacts}
-                title={activeMinigame.options?.title as LocalizedText}
-                subtitle={activeMinigame.options?.subtitle as LocalizedText}
-                contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
-              />
-            : <SmartphoneContactMinigame 
-                onSelect={choose} 
-                language={language}
-                showSleepOption={activeMinigame.options?.showSleepOption as boolean}
-                sleepOptionNext={activeMinigame.options?.sleepOptionNext as string}
-                disabledContacts={smartphoneDisabledContacts}
-                title={activeMinigame.options?.title as LocalizedText}
-                subtitle={activeMinigame.options?.subtitle as LocalizedText}
-                contactOverrides={activeMinigame.options?.contactOverrides as SmartphoneContactOverrides}
-              />
         ) : activeMinigame?.id === "laptop-cleanup" ? (
           <LaptopCleanupMinigame onComplete={completeMinigame} />
         ) : activeMinigame?.id === "email-compose" ? (

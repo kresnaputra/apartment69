@@ -1,11 +1,9 @@
 import type { VisualNovelCommand } from "@/types/novel";
 import { tx } from "@/lib/i18n";
-import { bg, jump, minigame, narrate, playBgm, say } from "@/scenes/scriptTypes";
+import { bg, jump, narrate, playBgm, say } from "@/scenes/scriptTypes";
 import apartmentUrl from "@/background/apartment.png";
 import bgm from "@/music/day2.mp3";
 import mayaBgm from "@/music/day2-maya.mp3";
-import elenaBgm from "@/music/day2-elena.mp3";
-import { day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
 
 export const day2BedroomScene: VisualNovelCommand[] = [
   playBgm(bgm),
@@ -35,48 +33,13 @@ export const day2BedroomScene: VisualNovelCommand[] = [
     "arka",
     "serious",
     tx({
-      id: "Oke... sekarang tentuin dulu. Pagi ini aku mulai dari siapa?",
-      en: "Okay... decide first. Who am I starting with this morning?",
-      ja: "よし…まず決めよう。今朝は誰から行く？",
-      ko: "좋아... 먼저 정하자. 오늘 아침은 누구부터 갈까?",
+      id: "Oke... udah jelas. Pagi ini aku cek Maya dulu.",
+      en: "Okay... decided. This morning I'm checking on Maya first.",
+      ja: "よし…決まりだ。今朝はまずマヤの様子を見る。",
+      ko: "좋아... 정했다. 오늘 아침은 마야부터 확인하러 가자.",
     }),
   ),
-  minigame("smartphone-contacts", {
-    title: tx({
-      id: "Pilih Tujuan Pagi Ini",
-      en: "Choose This Morning's Stop",
-      ja: "今朝の行き先を選ぶ",
-      ko: "오늘 아침 목적지 선택",
-    }),
-    subtitle: tx({
-      id: "Nggak mungkin semuanya sekaligus. Fokus ke satu orang dulu.",
-      en: "No way to handle everyone at once. Focus on one person first.",
-      ja: "全員を一度に相手するのは無理だ。まずは一人に絞ろう。",
-      ko: "모두를 한 번에 챙길 수는 없다. 우선 한 사람에게 집중하자.",
-    }),
-    disabledContacts: ["sara", "sleep"],
-    contactOverrides: {
-      maya: { next: "day2-route-maya" },
-      elena: { next: "day2-route-elena" },
-      nadia: {
-        next: "day2-route-nadia",
-        blurb: tx({
-          id: "Nadia butuh bantuan setup streamingnya lagi.",
-          en: "Nadia needs help with her streaming setup again.",
-          ja: "ナディアはまた配信セットアップの助けが必要だ。",
-          ko: "나디아는 다시 방송 세팅 도움이 필요해.",
-        }),
-      },
-      sara: {
-        blurb: tx({
-          id: "Belum ada alur Hari 2 untuk Sarah.",
-          en: "No Day 2 route for Sarah yet.",
-          ja: "サラの2日目ルートはまだない。",
-          ko: "사라의 2일차 루트는 아직 없다.",
-        }),
-      },
-    },
-  }),
+  jump("day2-route-maya"),
 ];
 
 export const day2RouteMayaScene: VisualNovelCommand[] = [
@@ -99,28 +62,3 @@ export const day2RouteMayaScene: VisualNovelCommand[] = [
   ),
   jump("day2-hallway"),
 ];
-
-export const day2RouteElenaScene: VisualNovelCommand[] = [
-  playBgm(elenaBgm),
-  narrate(
-    tx({
-      id: "Arka mengunci layar ponselnya lalu mengembuskan napas pendek. Kalau Elena benar-benar lagi bermasalah, lebih baik dibereskan dari pagi.",
-      en: "Arka locks his phone and lets out a short breath. If Elena is really dealing with something, it's better to handle it early.",
-      ja: "アルカはスマホの画面を消して、短く息を吐いた。エレナが本当に問題を抱えているなら、朝のうちに片づけたほうがいい。",
-      ko: "아르카는 휴대폰 화면을 끄고 짧게 숨을 내쉰다. 엘레나가 정말 문제를 안고 있다면 아침부터 처리하는 편이 낫다.",
-    }),
-  ),
-  say(
-    "arka",
-    "serious",
-    tx({
-      id: "Elena dulu. Kemarin jelas ada yang nggak beres di unitnya.",
-      en: "Elena first. Something was clearly off in her unit yesterday.",
-      ja: "まずはエレナだ。昨日、あの部屋は明らかに様子がおかしかった。",
-      ko: "먼저 엘레나다. 어제 그 방은 분명 뭔가 이상했다.",
-    }),
-  ),
-  jump("day2-elena-hallway"),
-];
-
-export { day2RouteNadiaScene };

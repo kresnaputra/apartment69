@@ -3,7 +3,6 @@ import { tx } from "@/lib/i18n";
 import {
   bg,
   jump,
-  menu,
   minigame,
   narrate,
   playSfx,
@@ -117,26 +116,7 @@ export const elevatorMeetingScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[4] },
   ),
-  menu(
-    tx({
-      id: "Pilihanmu?",
-      en: "Your choice?",
-      ja: "どうする？",
-      ko: "어떻게 할까?",
-    }),
-    [
-      {
-        id: "accept-maya-number",
-        label: tx({ id: "Terima", en: "Accept", ja: "受け取る", ko: "받기" }),
-        next: "accept-maya-number",
-      },
-      {
-        id: "decline-maya-number",
-        label: tx({ id: "Tolak", en: "Decline", ja: "断る", ko: "거절하기" }),
-        next: "decline-maya-number",
-      },
-    ],
-  ),
+  jump("accept-maya-number"),
 ];
 
 export const acceptMayaNumberScene: VisualNovelCommand[] = [
@@ -152,21 +132,5 @@ export const acceptMayaNumberScene: VisualNovelCommand[] = [
     }),
     { voice: mayaDay1To4Voices[5] },
   ),
-  jump("elena-encounter"),
-];
-
-export const declineMayaNumberScene: VisualNovelCommand[] = [
-  setFlag("mayaAcceptedNumber", false),
-  say(
-    "maya",
-    "calm",
-    tx({
-      id: "Ah... maaf kalau aku bikin kamu nggak nyaman...",
-      en: "Ah… sorry if I made you uncomfortable…",
-      ja: "あ…ごめんね、嫌な感じにさせちゃったなら…",
-      ko: "아... 내가 불편하게 했다면 미안해...",
-    }),
-    { voice: mayaDay1To4Voices[6] },
-  ),
-  jump("elena-encounter"),
+  jump("bedroom-day1"),
 ];
