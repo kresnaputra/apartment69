@@ -11,6 +11,8 @@ import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
 import { ExitConfirmationOverlay } from "@/components/ExitConfirmationOverlay";
+import { ReviewMenuOverlay } from "@/components/ReviewMenuOverlay";
+import { isReviewBuild } from "@/lib/runtime/reviewScenes";
 import { createAnimationFrameGate, type AnimationFrameRate, type GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
@@ -201,6 +203,9 @@ type MainMenuProps = {
   flags: FlagMap;
   autoOpenGallery?: boolean;
   onAutoOpenGalleryConsumed?: () => void;
+  onOpenReviewScene?: (label: string) => void;
+  autoOpenReview?: boolean;
+  onAutoOpenReviewConsumed?: () => void;
 };
 
 export const MainMenu = ({
@@ -227,11 +232,15 @@ export const MainMenu = ({
   flags,
   autoOpenGallery = false,
   onAutoOpenGalleryConsumed,
+  onOpenReviewScene,
+  autoOpenReview = false,
+  onAutoOpenReviewConsumed,
 }: MainMenuProps) => {
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [showLoadSlots, setShowLoadSlots] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
@@ -274,6 +283,12 @@ export const MainMenu = ({
     setShowGallery(true);
     onAutoOpenGalleryConsumed?.();
   }, [autoOpenGallery, onAutoOpenGalleryConsumed]);
+
+  useEffect(() => {
+    if (!autoOpenReview) return;
+    setShowReview(true);
+    onAutoOpenReviewConsumed?.();
+  }, [autoOpenReview, onAutoOpenReviewConsumed]);
 
   const handleStart = () => {
     if (!isReady) return;
@@ -370,6 +385,15 @@ export const MainMenu = ({
           >
             {labels.gallery}
           </button>
+          {isReviewBuild() && onOpenReviewScene ? (
+            <button
+              type="button"
+              className="vn-menu-btn"
+              onClick={() => setShowReview(true)}
+            >
+              Scene Review
+            </button>
+          ) : null}
           <button
             type="button"
             className="vn-menu-btn"
@@ -428,6 +452,13 @@ export const MainMenu = ({
           title={labels.galleryTitle}
         />
       )}
+
+      {showReview && onOpenReviewScene ? (
+        <ReviewMenuOverlay
+          onClose={() => setShowReview(false)}
+          onOpenScene={onOpenReviewScene}
+        />
+      ) : null}
 
       {showSettings && (
         <MainMenuSettingsOverlay

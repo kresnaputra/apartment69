@@ -9,6 +9,8 @@ import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { GalleryOverlay } from "@/components/GalleryOverlay";
 import { ExitConfirmationOverlay } from "@/components/ExitConfirmationOverlay";
+import { ReviewMenuOverlay } from "@/components/ReviewMenuOverlay";
+import { isReviewBuild } from "@/lib/runtime/reviewScenes";
 import type { AnimationFrameRate, GraphicsQuality } from "@/lib/runtime/graphicsSettings";
 import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import type { FlagMap } from "@/types/novel";
@@ -60,6 +62,9 @@ type MainMenuMobileProps = {
   flags: FlagMap;
   autoOpenGallery?: boolean;
   onAutoOpenGalleryConsumed?: () => void;
+  onOpenReviewScene?: (label: string) => void;
+  autoOpenReview?: boolean;
+  onAutoOpenReviewConsumed?: () => void;
 };
 
 export const MainMenuMobile = ({
@@ -86,21 +91,27 @@ export const MainMenuMobile = ({
   flags,
   autoOpenGallery = false,
   onAutoOpenGalleryConsumed,
+  onOpenReviewScene,
+  autoOpenReview = false,
+  onAutoOpenReviewConsumed,
 }: MainMenuMobileProps) => {
   const [visible, setVisible] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [showLoadSlots, setShowLoadSlots] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [focusedMenuIndex, setFocusedMenuIndex] = useState(0);
   const bgMusicRef = useRef<BackgroundMusic | null>(null);
   const showLoadSlotsRef = useRef(showLoadSlots);
   const showGalleryRef = useRef(showGallery);
+  const showReviewRef = useRef(showReview);
   const showSettingsRef = useRef(showSettings);
   const focusedMenuIndexRef = useRef(focusedMenuIndex);
   showLoadSlotsRef.current = showLoadSlots;
   showGalleryRef.current = showGallery;
+  showReviewRef.current = showReview;
   showSettingsRef.current = showSettings;
   focusedMenuIndexRef.current = focusedMenuIndex;
 
@@ -143,19 +154,26 @@ export const MainMenuMobile = ({
     onAutoOpenGalleryConsumed?.();
   }, [autoOpenGallery, onAutoOpenGalleryConsumed]);
 
+  useEffect(() => {
+    if (!autoOpenReview) return;
+    setShowReview(true);
+    onAutoOpenReviewConsumed?.();
+  }, [autoOpenReview, onAutoOpenReviewConsumed]);
+
   // Gamepad/keyboard navigation for main menu buttons and overlays
   useEffect(() => {
-    const MENU_COUNT = 6; // Continue, Start, Load, Gallery, Settings, Exit
+    const MENU_COUNT = isReviewBuild() ? 7 : 6; // Continue, Start, Load, Gallery, [Review], Settings, Exit
     const handler = (event: KeyboardEvent) => {
       // B button (Escape) closes any open overlay
       if (event.key === "Escape") {
         if (showLoadSlotsRef.current) { setShowLoadSlots(false); return; }
         if (showGalleryRef.current) { setShowGallery(false); return; }
+        if (showReviewRef.current) { setShowReview(false); return; }
         if (showSettingsRef.current) { setShowSettings(false); return; }
         return;
       }
       // Only navigate main menu when no overlay is open
-      if (showLoadSlotsRef.current || showGalleryRef.current || showSettingsRef.current) return;
+      if (showLoadSlotsRef.current || showGalleryRef.current || showReviewRef.current || showSettingsRef.current) return;
 
       if (event.key === "ArrowUp") {
         event.preventDefault();
@@ -331,6 +349,12 @@ export const MainMenuMobile = ({
           <button id="main-menu-btn-5" type="button" onClick={handleExit} className={focusedMenuIndex === 5 ? btnFocused : btnActive} style={fontStyle}>
             {labels.exit}
           </button>
+
+          {isReviewBuild() && onOpenReviewScene ? (
+            <button id="main-menu-btn-6" type="button" onClick={() => setShowReview(true)} className={focusedMenuIndex === 6 ? btnFocused : btnActive} style={fontStyle}>
+              Scene Review
+            </button>
+          ) : null}
         </div>
       </div>
 
@@ -368,6 +392,13 @@ export const MainMenuMobile = ({
           title={labels.galleryTitle}
         />
       )}
+
+      {showReview && onOpenReviewScene ? (
+        <ReviewMenuOverlay
+          onClose={() => setShowReview(false)}
+          onOpenScene={onOpenReviewScene}
+        />
+      ) : null}
 
       {showSettings && (
         <MainMenuSettingsOverlay
