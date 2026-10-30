@@ -110,7 +110,6 @@ export const saraHallwayScene: VisualNovelCommand[] = [
           ko: "도와준다",
         }),
         next: "sara-help",
-        disabled: true,
       },
       {
         id: "refuse-sara",
