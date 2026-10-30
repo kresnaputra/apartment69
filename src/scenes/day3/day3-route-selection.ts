@@ -68,6 +68,7 @@ export const day3BedroomScene: VisualNovelCommand[] = [
     conditionalEnabledContacts: {
       elena: "day2ElenaCompleted",
       nadia: "day2NadiaCompleted",
+      sara: "day2SaraCompleted",
     },
     contactOverrides: {
       maya: {
@@ -95,6 +96,13 @@ export const day3BedroomScene: VisualNovelCommand[] = [
           en: "Nadia said she might need help again today.",
           ja: "ナディアは今日また助けが必要かもしれないと言っていた。",
           ko: "나디아는 오늘 다시 도움이 필요할 수도 있다고 말했다.",
+        }),
+      },
+      sara: {
+        next: "day3-slot2-sarah",
+        blurb: tx({
+          id: "Sarah mengajak minum kopi nanti sore di café lantai dasar.",
+          en: "Sarah invited me for coffee later this afternoon at the ground-floor café.",
         }),
       },
     },
@@ -207,6 +215,9 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
     showSleepOption: true,
     sleepOptionNext: "day3-complete",
     disabledContacts: ["maya", "elena", "sara"],
+    conditionalEnabledContacts: {
+      sara: "day2SaraCompleted",
+    },
     title: tx({
       id: "Pilih rute berikutnya",
       en: "Pick the next route",
@@ -243,6 +254,13 @@ export const day3RouteSelectionScene: VisualNovelCommand[] = [
           en: "Nadia texted earlier. She said she has something tonight at her unit.",
           ja: "ナディアから昼に連絡が来た。今夜、彼女の部屋で何かあるらしい。",
           ko: "나디아가 오늘 오전에 연락 왔어. 오늘 밤 그녀 유닛에서 할 일이 있다고 했어.",
+        }),
+      },
+      sara: {
+        next: "day3-slot2-sarah",
+        blurb: tx({
+          id: "Sarah mengajak minum kopi di café lantai dasar. Katanya bukan urusan teknis.",
+          en: "Sarah invited me for coffee at the ground-floor café. She said it isn't a technical issue.",
         }),
       },
       sleep: {
@@ -291,18 +309,15 @@ export const day3Slot2NadiaScene: VisualNovelCommand[] = [
 
 export const day3Slot2SarahScene: VisualNovelCommand[] = [
   setFlag("slot2Route", "sarah"),
-  setFlag("day3Slot2SarahCompleted", true),
   say(
     "arka",
     "neutral",
     tx({
-      id: "Kalau begitu Sarah. Kalau ada bayaran dan sistem penthouse yang bermasalah, sepertinya aku memang perlu lihat sendiri kekacauannya kayak apa.",
-      en: "Sarah it is. If there's money on the table and some broken penthouse system involved, I should probably see what kind of mess I'm walking into.",
-      ja: "サラにするか。金になる話で、しかも壊れたペントハウスのシステムが絡んでるなら、どんな厄介ごとか自分で見に行くべきだろう。",
-      ko: "그럼 사라다. 돈도 걸려 있고 펜트하우스 시스템까지 고장 났다면, 어떤 난장판인지 직접 가서 보는 게 맞다.",
+      id: "Sarah dulu. Setelah kemarin, mengabaikan ajakan kopinya justru terasa salah.",
+      en: "Sarah first. After yesterday, turning down her coffee invitation would feel wrong.",
     }),
   ),
-  jump("day3-slot2-complete"),
+  jump("day3-sara-start"),
 ];
 
 export const day3Slot2CompleteScene: VisualNovelCommand[] = [

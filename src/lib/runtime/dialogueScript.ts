@@ -54,6 +54,15 @@ import {
   day3NadiaNightEndingScene,
 } from "@/scenes/day3/nadia/day3-nadia-night";
 import {
+  day3SaraCafeContinueScene,
+  day3SaraDeclineScene,
+  day3SaraEmpathyScene,
+  day3SaraEndingScene,
+  day3SaraEscortScene,
+  day3SaraListenScene,
+  day3SaraStartScene,
+} from "@/scenes/day3/sara/day3-sara";
+import {
   day4NadiaNightScene,
   day4NadiaNightHelpScene,
   day4NadiaNightSkipScene,
@@ -277,6 +286,13 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day3-nadia-night-refuse": day3NadiaNightRefuseScene,
     "day3-nadia-night-ending": day3NadiaNightEndingScene,
     "day3-slot2-sarah": day3Slot2SarahScene,
+    "day3-sara-start": day3SaraStartScene,
+    "day3-sara-empathy": day3SaraEmpathyScene,
+    "day3-sara-listen": day3SaraListenScene,
+    "day3-sara-cafe-continue": day3SaraCafeContinueScene,
+    "day3-sara-escort": day3SaraEscortScene,
+    "day3-sara-decline": day3SaraDeclineScene,
+    "day3-sara-ending": day3SaraEndingScene,
     "day3-complete": day3ComplateScene,
     // Day 4
     "day4-bedroom": day4BedroomScene,
