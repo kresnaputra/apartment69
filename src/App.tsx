@@ -7,6 +7,7 @@ import { SmartphoneContactMinigame } from "@/components/minigames/SmartphoneCont
 import { SmartphoneContactMinigameMobile } from "@/components/minigames/SmartphoneContactMinigameMobile";
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
+import { CableMatchingMinigame } from "@/components/minigames/CableMatchingMinigame";
 import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
 import { freezeBackgroundCamera, getBackgroundCameraAnimation, resetBackgroundCamera } from "@/lib/rendering/backgroundAnimation";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
@@ -2566,6 +2567,8 @@ const App = () => {
           <LaptopCleanupMinigame onComplete={completeMinigame} />
         ) : activeMinigame?.id === "email-compose" ? (
           <EmailComposeMinigame onComplete={completeMinigame} />
+        ) : activeMinigame?.id === "cable-matching" ? (
+          <CableMatchingMinigame onComplete={completeMinigame} />
         ) : null}
 
         {activeCutScene ? (

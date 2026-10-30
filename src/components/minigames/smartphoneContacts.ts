@@ -39,6 +39,7 @@ const day2RouteCompletionFlagMap: Partial<Record<SmartphoneContactId, string>> =
   maya: "day2MayaCompleted",
   elena: "day2ElenaCompleted",
   nadia: "day2NadiaCompleted",
+  sara: "day2SaraCompleted",
 };
 
 const day4RouteCharacterIds = ["maya", "elena", "nadia"] as const;

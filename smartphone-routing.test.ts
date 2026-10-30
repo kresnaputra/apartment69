@@ -2,6 +2,7 @@ import type {} from "bun";
 import { describe, expect, test } from "bun:test";
 import { useNovelStore } from "./src/store/novelStore";
 import { demoScript } from "./src/lib/runtime/dialogueScript";
+import { saraBundleRegistry, saraCharacter } from "./src/character/sara/character";
 import { resolveLockedSmartphoneContacts, resolveSmartphoneDisabledContacts, resolveSmartphoneContactOptions, type SmartphoneContactOverrides, type SmartphoneContactLockOptions } from "./src/components/minigames/smartphoneContacts";
 import type { FlagMap } from "./src/types/novel";
 
@@ -9,6 +10,7 @@ const contactFlags: FlagMap = {
   mayaAcceptedNumber: true,
   elenaAcceptedNumber: true,
   nadiaAcceptedNumber: true,
+  saraAcceptedNumber: true,
 };
 
 const reachSmartphone = (label: string, flags: FlagMap = contactFlags) => {
@@ -22,6 +24,13 @@ const reachSmartphone = (label: string, flags: FlagMap = contactFlags) => {
 };
 
 describe("Smartphone route selection", () => {
+  test("Sarah has idle and talking bundles for every Day 2 emotion", () => {
+    for (const emotion of ["neutral", "angry", "blush", "sad", "smile"] as const) {
+      expect(saraBundleRegistry[saraCharacter.bundleIdByEmotion![emotion]! as keyof typeof saraBundleRegistry]).toBeDefined();
+      expect(saraBundleRegistry[saraCharacter.talkingBundleIdByEmotion![emotion]! as keyof typeof saraBundleRegistry]).toBeDefined();
+    }
+  });
+
   for (const label of [
     "day2-bedroom", "day2-free-time", "day3-bedroom", "day3-after-maya-phone",
     "day3-route-selection", "day4-bedroom", "day4-after-route-phone",
@@ -35,7 +44,7 @@ describe("Smartphone route selection", () => {
     });
   }
 
-  for (const contact of ["maya", "elena", "nadia"] as const) {
+  for (const contact of ["maya", "elena", "nadia", "sara"] as const) {
     test(`Day 2 allows choosing the ${contact} route`, () => {
       const state = reachSmartphone("day2-bedroom");
       const options = state.activeMinigame?.options;
@@ -53,6 +62,33 @@ describe("Smartphone route selection", () => {
       expect(useNovelStore.getState().activeMinigame).toBeNull();
       expect(useNovelStore.getState().currentLabel).toBe(choice.next);
     });
+  }
+
+  for (const firstChoice of ["day2-sara-accept", "day2-sara-delay"]) {
+    for (const lastChoice of ["day2-sara-yes", "day2-sara-maybe"]) {
+      test(`Sarah route ${firstChoice} then ${lastChoice} completes after cable matching`, () => {
+        useNovelStore.getState().startFromLabel("day2-route-sara", contactFlags);
+        let sawCables = false;
+        for (let step = 0; step < 100; step += 1) {
+          const state = useNovelStore.getState();
+          if (state.activeMinigame?.id === "smartphone-contacts") break;
+          if (state.activeMinigame?.id === "cable-matching") {
+            sawCables = true;
+            state.completeMinigame();
+          } else if (state.choices.length > 0) {
+            state.choose(state.currentLabel === "day2-route-sara" ? firstChoice : lastChoice);
+          } else {
+            state.advance();
+          }
+        }
+        const state = useNovelStore.getState();
+        expect(sawCables).toBe(true);
+        expect(state.flags.day2SaraCompleted).toBe(true);
+        expect(state.activeMinigame?.id).toBe("smartphone-contacts");
+        const disabled = resolveSmartphoneDisabledContacts(state.flags, state.activeMinigame?.options as SmartphoneContactLockOptions);
+        expect(disabled).toContain("sara");
+      });
+    }
   }
 
   test("Day 4 wrap-up only permits ending the day", () => {

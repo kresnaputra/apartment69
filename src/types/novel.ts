@@ -23,7 +23,7 @@ export type ChoiceOption = {
 export type FlagValue = boolean | number | string | null;
 export type FlagMap = Record<string, FlagValue>;
 
-export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts" | "laptop-cleanup" | "email-compose";
+export type MinigameId = "elevator-button" | "pipe-connection" | "smartphone-contacts" | "laptop-cleanup" | "email-compose" | "cable-matching";
 export type CutSceneNarrationEntry = LocalizedText | {
   text: LocalizedText;
   voice?: string;

@@ -45,6 +45,7 @@ import { day2ComplateScene } from "@/scenes/day2/day2-complate";
 import { day2ElenaHallwayScene } from "@/scenes/day2/elena/day2-elena-hallway";
 import { day2NadiaFreeTimeScene } from "@/scenes/day2/nadia/day2-nadia-free-time";
 import { day2NadiaRoomScene, day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
+import { day2SaraScene, day2SaraAcceptScene, day2SaraDelayScene, day2SaraLiftScene, day2SaraAfterCablesScene, day2SaraYesScene, day2SaraMaybeScene, day2SaraEndingScene } from "@/scenes/day2/sara/day2-sara";
 import { day3ElenaMorningScene } from "@/scenes/day3/elena/day3-elena-morning";
 import {
   day3NadiaNightScene,
@@ -248,6 +249,14 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day2-maya-bedroom": day2MayaBedroomScene,
     "day2-elena-hallway": day2ElenaHallwayScene,
     "day2-route-nadia": day2RouteNadiaScene,
+    "day2-route-sara": day2SaraScene,
+    "day2-sara-accept": day2SaraAcceptScene,
+    "day2-sara-delay": day2SaraDelayScene,
+    "day2-sara-lift": day2SaraLiftScene,
+    "day2-sara-after-cables": day2SaraAfterCablesScene,
+    "day2-sara-yes": day2SaraYesScene,
+    "day2-sara-maybe": day2SaraMaybeScene,
+    "day2-sara-ending": day2SaraEndingScene,
     "day2-nadia-room": day2NadiaRoomScene,
     "day2-nadia-free-time": day2NadiaFreeTimeScene,
     "day3-elena-morning": day3ElenaMorningScene,

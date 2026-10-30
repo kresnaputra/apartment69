@@ -40,11 +40,11 @@ export const day2NadiaFreeTimeScene: VisualNovelCommand[] = [
     showSleepOption: true,
     sleepOptionNext: "day2-complate",
     requiredCompletionFlags: ["day2MayaCompleted", "day2ElenaCompleted"],
-    disabledContacts: ["sara"],
     conditionalDisabledContacts: {
       maya: "day2MayaCompleted",
       elena: "day2ElenaCompleted",
       nadia: "day2NadiaCompleted",
+      sara: "day2SaraCompleted",
     },
     title: tx({
       id: "Lanjutkan Hari 2",
@@ -67,6 +67,9 @@ export const day2NadiaFreeTimeScene: VisualNovelCommand[] = [
       },
       nadia: {
         next: "day2-route-nadia",
+      },
+      sara: {
+        next: "day2-route-sara",
       },
     },
   }),

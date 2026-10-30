@@ -54,7 +54,7 @@ export const day2BedroomScene: VisualNovelCommand[] = [
       ja: "全員を一度に相手するのは無理だ。まずは一人に絞ろう。",
       ko: "모두를 한 번에 챙길 수는 없다. 우선 한 사람에게 집중하자.",
     }),
-    disabledContacts: ["sara", "sleep"],
+    disabledContacts: ["sleep"],
     contactOverrides: {
       maya: { next: "day2-route-maya" },
       elena: { next: "day2-route-elena" },
@@ -68,11 +68,10 @@ export const day2BedroomScene: VisualNovelCommand[] = [
         }),
       },
       sara: {
+        next: "day2-route-sara",
         blurb: tx({
-          id: "Belum ada alur Hari 2 untuk Sarah.",
-          en: "No Day 2 route for Sarah yet.",
-          ja: "サラの2日目ルートはまだない。",
-          ko: "사라의 2일차 루트는 아직 없다.",
+          id: "Sarah mungkin perlu bantuan merapikan kabel di penthouse.",
+          en: "Sarah might need help with the cables in her penthouse.",
         }),
       },
     },

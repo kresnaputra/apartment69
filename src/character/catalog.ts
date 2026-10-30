@@ -22,7 +22,7 @@ export const characterEmotions = {
     "newNormal",
     "newSmile",
   ] as const,
-  sara: ["neutral"] as const,
+  sara: ["neutral", "angry", "blush", "sad", "smile"] as const,
   mayasFather: ["neutral"] as const,
   arthur: ["neutral", "angry"] as const,
 } as const;

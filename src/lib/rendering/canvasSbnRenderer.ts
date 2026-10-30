@@ -1,8 +1,10 @@
 import { resolveSceneDrawables, sampleAttachmentOpacityAtFrame, sampleBonesAtFrame, sampleMeshDeformAtFrame } from "@/lib/sbn/sampling";
 import type { GraphicsQuality } from "@/lib/runtime/graphicsSettings";
+import { rasterizeMesh } from "@/lib/rendering/meshGlRasterizer";
 import type { SceneBounds, SbnAttachment, SbnProject, WorldBone } from "@/types/sbn";
 
 const CROPPED_IMAGE_GUTTER_PX = 2;
+const MESH_SOURCE_PAD_TEXELS = 1;
 
 type RenderInput = {
   project: SbnProject;
@@ -20,6 +22,7 @@ export class CanvasSbnRenderer {
   private backingWidth = 0;
   private backingHeight = 0;
   private pixelRatio = 1;
+  private meshLayer: CanvasRenderingContext2D | null = null;
   private static imageCache = new Map<string, HTMLImageElement>();
   private static loadingCache = new Map<string, Promise<HTMLImageElement>>();
   private static paddedImageCache = new WeakMap<HTMLImageElement, Map<number, HTMLCanvasElement>>();
@@ -44,6 +47,11 @@ export class CanvasSbnRenderer {
     this.backingWidth = 0;
     this.backingHeight = 0;
     this.pixelRatio = 1;
+    if (this.meshLayer) {
+      this.meshLayer.canvas.width = 0;
+      this.meshLayer.canvas.height = 0;
+      this.meshLayer = null;
+    }
   }
 
   resize(
@@ -205,6 +213,7 @@ export class CanvasSbnRenderer {
   }
 
   private drawTexturedTriangle(
+    ctx: CanvasRenderingContext2D,
     sx0: number, sy0: number,
     sx1: number, sy1: number,
     sx2: number, sy2: number,
@@ -213,8 +222,6 @@ export class CanvasSbnRenderer {
     tu2: number, tv2: number,
     image: HTMLImageElement,
   ) {
-    if (!this.ctx) return;
-
     const det = tu0 * (tv1 - tv2) + tu1 * (tv2 - tv0) + tu2 * (tv0 - tv1);
     if (Math.abs(det) < 1e-10) return;
 
@@ -226,39 +233,27 @@ export class CanvasSbnRenderer {
     const f = (sy0 * (tu1 * tv2 - tu2 * tv1) - sy1 * (tu0 * tv2 - tu2 * tv0) + sy2 * (tu0 * tv1 - tu1 * tv0)) / det;
 
     // Crop drawImage to only the triangle's UV bounding box — avoids drawing the full image per triangle
-    const srcX = Math.max(0, Math.floor(Math.min(tu0, tu1, tu2)) - 1);
-    const srcY = Math.max(0, Math.floor(Math.min(tv0, tv1, tv2)) - 1);
-    const srcX2 = Math.min(image.naturalWidth, Math.ceil(Math.max(tu0, tu1, tu2)) + 1);
-    const srcY2 = Math.min(image.naturalHeight, Math.ceil(Math.max(tv0, tv1, tv2)) + 1);
+    const srcX = Math.max(0, Math.floor(Math.min(tu0, tu1, tu2)) - MESH_SOURCE_PAD_TEXELS);
+    const srcY = Math.max(0, Math.floor(Math.min(tv0, tv1, tv2)) - MESH_SOURCE_PAD_TEXELS);
+    const srcX2 = Math.min(image.naturalWidth, Math.ceil(Math.max(tu0, tu1, tu2)) + MESH_SOURCE_PAD_TEXELS);
+    const srcY2 = Math.min(image.naturalHeight, Math.ceil(Math.max(tv0, tv1, tv2)) + MESH_SOURCE_PAD_TEXELS);
     const srcW = srcX2 - srcX;
     const srcH = srcY2 - srcY;
     if (srcW <= 0 || srcH <= 0) return;
 
-    // Expand clip triangle 1px outward from centroid to close sub-pixel seam artifacts
-    const cx = (sx0 + sx1 + sx2) / 3;
-    const cy = (sy0 + sy1 + sy2) / 3;
-    const expandVert = (sx: number, sy: number) => {
-      const dx = sx - cx;
-      const dy = sy - cy;
-      const dist = Math.hypot(dx, dy);
-      if (dist < 1e-5) return { x: sx, y: sy };
-      return { x: sx + dx / dist, y: sy + dy / dist };
-    };
-    const p0 = expandVert(sx0, sy0);
-    const p1 = expandVert(sx1, sy1);
-    const p2 = expandVert(sx2, sy2);
-
-    this.ctx.save();
-    this.ctx.beginPath();
-    this.ctx.moveTo(p0.x, p0.y);
-    this.ctx.lineTo(p1.x, p1.y);
-    this.ctx.lineTo(p2.x, p2.y);
-    this.ctx.closePath();
-    this.ctx.clip();
+    // Exact (unexpanded) clip: neighbouring triangles get complementary anti-aliased coverage on their
+    // shared edge, which the caller sums back to full coverage with "lighter" compositing.
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(sx0, sy0);
+    ctx.lineTo(sx1, sy1);
+    ctx.lineTo(sx2, sy2);
+    ctx.closePath();
+    ctx.clip();
     // Adjust translation for source crop offset
-    this.ctx.transform(a, b, c, d, e + a * srcX + c * srcY, f + b * srcX + d * srcY);
-    this.ctx.drawImage(image, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
-    this.ctx.restore();
+    ctx.transform(a, b, c, d, e + a * srcX + c * srcY, f + b * srcX + d * srcY);
+    ctx.drawImage(image, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
+    ctx.restore();
   }
 
   private drawMeshAttachment(
@@ -295,8 +290,45 @@ export class CanvasSbnRenderer {
       return this.worldToScreen(worldX, worldY, viewportWidth, viewportHeight, camera, scale);
     });
 
-    this.ctx.save();
-    if (opacity < 1) this.ctx.globalAlpha = opacity;
+    // Draw the triangles into a separate layer with additive ("lighter") blending, the way a GPU
+    // rasterises a mesh: the partial edge coverage of two neighbouring triangles adds up to exactly one,
+    // so there is neither a see-through seam nor a doubled band where semi-transparent texels overlap.
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const v of screenVerts) {
+      minX = Math.min(minX, v.x);
+      minY = Math.min(minY, v.y);
+      maxX = Math.max(maxX, v.x);
+      maxY = Math.max(maxY, v.y);
+    }
+    const dpr = this.pixelRatio;
+    const layerX = Math.floor(minX * dpr) - 1;
+    const layerY = Math.floor(minY * dpr) - 1;
+    const layerWidth = Math.ceil(maxX * dpr) + 1 - layerX;
+    const layerHeight = Math.ceil(maxY * dpr) + 1 - layerY;
+    if (layerWidth <= 0 || layerHeight <= 0) return;
+
+    const glLayer = this.rasterizeMeshOnGpu(attachment, image, screenVerts, dpr, layerX, layerY, layerWidth, layerHeight);
+    if (glLayer) {
+      this.ctx.save();
+      if (opacity < 1) this.ctx.globalAlpha = opacity;
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.drawImage(glLayer, 0, 0, layerWidth, layerHeight, layerX, layerY, layerWidth, layerHeight);
+      this.ctx.restore();
+      return;
+    }
+
+    // Fallback without WebGL2: Canvas 2D, one clipped drawImage per triangle.
+    const layer = this.getMeshLayer(layerWidth, layerHeight);
+    if (!layer) return;
+    layer.setTransform(1, 0, 0, 1, 0, 0);
+    layer.clearRect(0, 0, layerWidth, layerHeight);
+    layer.setTransform(dpr, 0, 0, dpr, -layerX, -layerY);
+    layer.globalCompositeOperation = "lighter";
+    layer.imageSmoothingEnabled = true;
+    layer.imageSmoothingQuality = "high";
 
     for (const tri of attachment.meshTriangles) {
       const [i0, i1, i2] = tri;
@@ -308,6 +340,7 @@ export class CanvasSbnRenderer {
       const mv2 = attachment.meshVertices[i2];
 
       this.drawTexturedTriangle(
+        layer,
         sv0.x, sv0.y,
         sv1.x, sv1.y,
         sv2.x, sv2.y,
@@ -318,7 +351,52 @@ export class CanvasSbnRenderer {
       );
     }
 
+    this.ctx.save();
+    if (opacity < 1) this.ctx.globalAlpha = opacity;
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.drawImage(layer.canvas, 0, 0, layerWidth, layerHeight, layerX, layerY, layerWidth, layerHeight);
     this.ctx.restore();
+  }
+
+  private rasterizeMeshOnGpu(
+    attachment: SbnAttachment,
+    image: HTMLImageElement,
+    screenVerts: Array<{ x: number; y: number }>,
+    dpr: number,
+    layerX: number,
+    layerY: number,
+    layerWidth: number,
+    layerHeight: number,
+  ) {
+    const meshVertices = attachment.meshVertices;
+    const meshTriangles = attachment.meshTriangles;
+    if (!meshVertices || !meshTriangles || meshVertices.length > 0xffff) return null;
+
+    const positions = new Float32Array(screenVerts.length * 2);
+    const uvs = new Float32Array(meshVertices.length * 2);
+    screenVerts.forEach((v, i) => {
+      positions[i * 2] = v.x * dpr - layerX;
+      positions[i * 2 + 1] = v.y * dpr - layerY;
+      uvs[i * 2] = meshVertices[i].u;
+      uvs[i * 2 + 1] = meshVertices[i].v;
+    });
+    const indices = new Uint16Array(meshTriangles.length * 3);
+    meshTriangles.forEach((tri, i) => indices.set(tri, i * 3));
+
+    return rasterizeMesh(image, positions, uvs, indices, layerWidth, layerHeight);
+  }
+
+  private getMeshLayer(width: number, height: number) {
+    if (!this.meshLayer) {
+      this.meshLayer = document.createElement("canvas").getContext("2d");
+      if (!this.meshLayer) return null;
+    }
+    const { canvas } = this.meshLayer;
+    if (canvas.width < width || canvas.height < height) {
+      canvas.width = Math.max(canvas.width, width);
+      canvas.height = Math.max(canvas.height, height);
+    }
+    return this.meshLayer;
   }
 
   private drawAttachment(
