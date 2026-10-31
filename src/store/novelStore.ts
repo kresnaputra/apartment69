@@ -546,6 +546,7 @@ const runScriptUntilPause = (state: NovelStore) => {
           audioSrc: command.audioSrc,
           loop: command.loop,
           narrate: command.narrate,
+          choices: command.choices,
           showSpeedControl: command.showSpeedControl,
           speed: command.speed,
           endFrame: command.endFrame,
@@ -791,8 +792,11 @@ export const useNovelStore = create<NovelStore>((set) => ({
     }),
 
   choose: (nextLabel) =>
-    set((state) =>
-      runScriptUntilPause({
+    set((state) => {
+      if (state.activeCutScene?.choices && !state.activeCutScene.choices.options.some((option) => option.next === nextLabel && !option.disabled)) {
+        return state;
+      }
+      return runScriptUntilPause({
         ...state,
         currentLabel: nextLabel,
         currentIndex: 0,
@@ -806,8 +810,8 @@ export const useNovelStore = create<NovelStore>((set) => ({
         activeInterstitial: null,
         activeVoice: null,
         ready: false,
-      }),
-    ),
+      });
+    }),
 
   completeMinigame: () =>
     set((state) => {
@@ -829,7 +833,7 @@ export const useNovelStore = create<NovelStore>((set) => ({
 
   completeCutScene: () =>
     set((state) => {
-      if (!state.activeCutScene) {
+      if (!state.activeCutScene || state.activeCutScene.choices) {
         return state;
       }
 

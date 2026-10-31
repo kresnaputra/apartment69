@@ -8,6 +8,7 @@ import type {
   ChoiceOption,
   BackgroundVideo,
   CutSceneCommand,
+  CutSceneChoices,
   CutSceneNarration,
   CutSceneSelection,
   CutSceneSpeed,
@@ -253,7 +254,7 @@ export const playBgm = (src: string, options?: BackgroundMusicOptions): PlayBack
  * @param src - Vite-imported video URL (e.g. `import nadiaVideo from "@/cut-scene/Nadia Cut Scene.webm?url"`)
  * @param loop - If true, video will loop until user clicks or presses a button
  * @param narrate - Optional narration text to display during the cutscene
- * @param showSpeedControl - If true, shows on-screen buttons to change playback speed
+ * @param showSpeedControlOrChoices - Speed controls or choices shown after the final narration
  * @param audioSrc - Optional standalone audio track for the cutscene
  * @param endFrame - Optional last frame to play before pausing/ending the cutscene
  * @param fps - Frame rate used to convert `endFrame` into seconds
@@ -262,7 +263,7 @@ export const cutScene = (
   src: string,
   loop?: boolean,
   narrate?: CutSceneNarration,
-  showSpeedControl?: boolean,
+  showSpeedControlOrChoices?: boolean | CutSceneChoices,
   audioSrc?: string,
   endFrame?: number,
   fps?: number,
@@ -273,7 +274,8 @@ export const cutScene = (
   audioSrc,
   loop,
   narrate,
-  showSpeedControl,
+  showSpeedControl: typeof showSpeedControlOrChoices === "boolean" ? showSpeedControlOrChoices : undefined,
+  choices: typeof showSpeedControlOrChoices === "object" ? showSpeedControlOrChoices : undefined,
   speed,
   endFrame,
   fps,

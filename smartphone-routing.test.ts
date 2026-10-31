@@ -180,14 +180,39 @@ describe("Smartphone route selection", () => {
       for (const thirdChoice of day4SaraThirdChoices) {
         test(`Sarah Day 4 ${firstChoice}, ${secondChoice}, then ${thirdChoice} completes`, () => {
           useNovelStore.getState().startFromLabel("day4-sara-start", contactFlags);
+          let sawFirstCarCutScene = false;
+          let sawSecondCarCutScene = false;
+          let sawThirdCarCutScene = false;
           for (let step = 0; step < 160; step += 1) {
             const state = useNovelStore.getState();
             if (state.currentLabel === "day4-complate") break;
-            if (state.choices.length > 0) {
+            if (state.activeCutScene) {
+              if (!sawFirstCarCutScene) {
+                expect(state.activeCutScene.src).toContain("sara-park-1.mp4");
+                expect(state.activeCutScene.narrate).toHaveLength(7);
+                expect(state.activeCutScene.choices).toBeUndefined();
+                sawFirstCarCutScene = true;
+                state.completeCutScene();
+              } else if (!sawSecondCarCutScene) {
+                expect(state.activeCutScene.src).toContain("sara-park-2.mp4");
+                expect(state.activeCutScene.narrate).toHaveLength(1);
+                expect(state.activeCutScene.choices?.options.map((option) => option.next)).toEqual(day4SaraSecondChoices);
+                state.completeCutScene();
+                expect(useNovelStore.getState().activeCutScene).not.toBeNull();
+                state.choose("day4-sara-stay");
+                expect(useNovelStore.getState().currentLabel).toBe("day4-sara-car-invite");
+                sawSecondCarCutScene = true;
+                state.choose(secondChoice);
+              } else {
+                expect(state.activeCutScene.src).toContain("sara-park-3.mp4");
+                expect(state.activeCutScene.narrate).toHaveLength(3);
+                expect(state.activeCutScene.choices).toBeUndefined();
+                sawThirdCarCutScene = true;
+                state.completeCutScene();
+              }
+            } else if (state.choices.length > 0) {
               if (state.currentLabel === "day4-sara-start") {
                 state.choose(firstChoice);
-              } else if (state.currentLabel === "day4-sara-car-invite") {
-                state.choose(secondChoice);
               } else {
                 state.choose(thirdChoice);
               }
@@ -196,6 +221,9 @@ describe("Smartphone route selection", () => {
             }
           }
           const state = useNovelStore.getState();
+          expect(sawFirstCarCutScene).toBe(true);
+          expect(sawSecondCarCutScene).toBe(true);
+          expect(sawThirdCarCutScene).toBe(true);
           expect(state.currentLabel).toBe("day4-complate");
           expect(state.flags.day4SelectedCharacter).toBe("sara");
           expect(state.flags.day4SaraCompleted).toBe(true);

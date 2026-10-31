@@ -57,7 +57,7 @@ import { useNovelStore } from "@/store/novelStore";
 import { characterFrameRegistry } from "@/lib/runtime/characterFrameRegistry";
 import { getCharacterBundleTotalFrames } from "@/types/characterBundle";
 import type { LoadedCharacterBundle } from "@/types/characterBundle";
-import type { CharacterInstance, CutSceneNarration, CutSceneSelection, CutSceneSpeed } from "@/types/novel";
+import type { CharacterInstance, CutSceneChoices, CutSceneNarration, CutSceneSelection, CutSceneSpeed } from "@/types/novel";
 import gameplayMusic from "@/music/gameplay.mp3";
 import nropLogo from "@/assets/logo-nrop.png";
 import nvmLogo from "@/assets/nvm-logo-white.png";
@@ -871,6 +871,7 @@ const CutSceneOverlay = ({
   audioSrc,
   loop,
   narrate,
+  choices,
   showSpeedControl,
   endFrame,
   fps,
@@ -884,11 +885,13 @@ const CutSceneOverlay = ({
   forcedPlaybackSpeed,
   narrationClassName,
   onComplete,
+  onChoose,
 }: {
   src: string;
   audioSrc?: string;
   loop?: boolean;
   narrate?: CutSceneNarration;
+  choices?: CutSceneChoices;
   showSpeedControl?: boolean;
   endFrame?: number;
   fps?: number;
@@ -907,12 +910,14 @@ const CutSceneOverlay = ({
   forcedPlaybackSpeed?: number;
   narrationClassName?: string;
   onComplete: () => void;
+  onChoose?: (nextLabel: string) => void;
 }) => {
   const [visible, setVisible] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
   const [currentSpeed, setCurrentSpeed] = useState(1);
+  const [showChoices, setShowChoices] = useState(false);
   const completedRef = useRef(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const audio = useCutSceneAudio(audioSrc);
@@ -1028,13 +1033,22 @@ const CutSceneOverlay = ({
   const handleExit = useCallback(() => {
     if (narrationRef.current?.advance()) return;
     if (completedRef.current) return;
+    if (choices) return;
     // Allow exit if video ended OR if loop is enabled
     if (!allowDirectExit) return;
     if (!videoEnded && !loop) return;
     completedRef.current = true;
     setFadingOut(true);
     window.setTimeout(onComplete, CUTSCENE_FADE_MS);
-  }, [allowDirectExit, loop, onComplete, videoEnded]);
+  }, [allowDirectExit, choices, loop, onComplete, videoEnded]);
+
+  const revealChoices = useCallback(() => setShowChoices(true), []);
+  const handleChoose = (nextLabel: string) => {
+    if (completedRef.current || !showChoices || !choices?.options.some((option) => option.next === nextLabel && !option.disabled)) return;
+    completedRef.current = true;
+    setFadingOut(true);
+    window.setTimeout(() => onChoose?.(nextLabel), CUTSCENE_FADE_MS);
+  };
 
   const shouldHandleOverlayClick = allowDirectExit || hasNarration;
 
@@ -1156,13 +1170,36 @@ const CutSceneOverlay = ({
       <CutSceneNarrationLayer
         ref={narrationRef}
         narrate={narrate}
+        onFinalLineRevealed={choices ? revealChoices : undefined}
         language={language}
         continueHint={continueHint}
         textSpeed={textSpeed}
         fadingOut={fadingOut}
         visible={visible}
-        narrationClassName={narrationClassName}
+        narrationClassName={`${narrationClassName ?? ""}${choices && showChoices ? " vn-cutscene-narrator-with-choices" : ""}`}
       />
+      {choices && showChoices ? (
+        <div
+          className="vn-cutscene-choices"
+          onClick={(event) => event.stopPropagation()}
+          onKeyDown={(event) => event.stopPropagation()}
+        >
+          <div className="vn-cutscene-choices-prompt">{resolveText(choices.prompt, language)}</div>
+          <div className="vn-choices">
+            {choices.options.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className="vn-choice"
+                disabled={option.disabled || fadingOut}
+                onClick={() => handleChoose(option.next)}
+              >
+                {resolveText(option.label, language)}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
       {!hasNarration && allowDirectExit && (videoEnded || loop) ? (
         <div
           style={{
@@ -1298,6 +1335,7 @@ type CutSceneNarrationHandle = {
 
 type CutSceneNarrationLayerProps = {
   narrate?: CutSceneNarration;
+  onFinalLineRevealed?: () => void;
   language: LanguageCode;
   continueHint: string;
   textSpeed?: number;
@@ -1308,6 +1346,7 @@ type CutSceneNarrationLayerProps = {
 
 const CutSceneNarrationLayer = memo(forwardRef<CutSceneNarrationHandle, CutSceneNarrationLayerProps>(function CutSceneNarrationLayer({
   narrate,
+  onFinalLineRevealed,
   language,
   continueHint,
   textSpeed = 1,
@@ -1335,6 +1374,12 @@ const CutSceneNarrationLayer = memo(forwardRef<CutSceneNarrationHandle, CutScene
     : [];
   const isCurrentBlockFullyRevealed = revealedCount >= currentNarrateBlock.length;
   const hasMoreNarrationBlocks = currentNarrateIndex < resolvedNarrateBlocks.length - 1;
+
+  useEffect(() => {
+    if (hasNarration && isCurrentBlockFullyRevealed && !hasMoreNarrationBlocks) {
+      onFinalLineRevealed?.();
+    }
+  }, [hasNarration, hasMoreNarrationBlocks, isCurrentBlockFullyRevealed, onFinalLineRevealed]);
 
   useEffect(() => {
     setCurrentNarrateIndex(0);
@@ -2578,6 +2623,7 @@ const App = () => {
             audioSrc={VOICE_ACTING_ENABLED ? activeCutScene.audioSrc : undefined}
             loop={activeCutScene.loop}
             narrate={activeCutScene.narrate}
+            choices={activeCutScene.choices}
             showSpeedControl={activeCutScene.showSpeedControl}
             forcedPlaybackSpeed={resolveCutSceneSpeed(activeCutScene.speed)}
             endFrame={activeCutScene.endFrame}
@@ -2594,6 +2640,7 @@ const App = () => {
             narrationClassName={isMobile ? "vn-cutscene-narrator-shell-mobile" : undefined}
             keyboardBlocked={isStoryOverlayOpen || focusedControlIndex >= 0}
             onComplete={completeCutScene}
+            onChoose={choose}
           />
         ) : null}
 

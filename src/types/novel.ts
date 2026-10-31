@@ -30,6 +30,11 @@ export type CutSceneNarrationEntry = LocalizedText | {
 };
 export type CutSceneNarration = CutSceneNarrationEntry | CutSceneNarrationEntry[];
 
+export type CutSceneChoices = {
+  prompt: LocalizedText;
+  options: ChoiceOption[];
+};
+
 /**
  * Fixed playback speed for a cut scene, set in the script rather than by the
  * player. Accepts the shorthand "2x" or the plain number 2.
@@ -41,6 +46,7 @@ export type ActiveCutScene = {
   audioSrc?: string;
   loop?: boolean;
   narrate?: CutSceneNarration;
+  choices?: CutSceneChoices;
   showSpeedControl?: boolean;
   speed?: CutSceneSpeed;
   endFrame?: number;
@@ -231,6 +237,7 @@ export type CutSceneCommand = {
   audioSrc?: string;
   loop?: boolean;
   narrate?: CutSceneNarration;
+  choices?: CutSceneChoices;
   showSpeedControl?: boolean;
   speed?: CutSceneSpeed;
   endFrame?: number;

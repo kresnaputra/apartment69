@@ -211,6 +211,37 @@ textarea {
   color: rgba(232, 214, 194, 0.8);
 }
 
+.vn-cutscene-choices {
+  position: absolute;
+  z-index: 31;
+  left: 50%;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(38rem, calc(100vw - 2rem));
+  max-height: 48vh;
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid rgba(224, 183, 112, 0.3);
+  border-radius: 1rem;
+  background: rgba(12, 11, 16, 0.86);
+  backdrop-filter: blur(16px);
+  color: var(--text);
+  pointer-events: auto;
+}
+
+.vn-cutscene-choices-prompt {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.vn-cutscene-choices .vn-choice {
+  cursor: pointer;
+}
+
+.vn-cutscene-narrator-with-choices {
+  align-items: flex-start;
+}
+
 .vn-cutscene-narrator-shell-mobile {
   align-items: center;
   justify-content: flex-start;
