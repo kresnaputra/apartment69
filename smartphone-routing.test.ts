@@ -143,6 +143,69 @@ describe("Smartphone route selection", () => {
     }
   }
 
+  test("Day 4 unlocks Sarah only after her Day 3 route", () => {
+    const lockedState = reachSmartphone("day4-bedroom");
+    const lockedOptions = lockedState.activeMinigame?.options;
+    const lockedChoices = resolveSmartphoneContactOptions({
+      language: "id",
+      disabledContacts: resolveSmartphoneDisabledContacts(lockedState.flags, lockedOptions as SmartphoneContactLockOptions | undefined),
+      overrides: lockedOptions?.contactOverrides as SmartphoneContactOverrides,
+    });
+    expect(lockedChoices.find((option) => option.id === "sara")?.disabled).toBe(true);
+
+    const state = reachSmartphone("day4-bedroom", {
+      ...contactFlags,
+      day3SaraCompleted: true,
+    });
+    const options = state.activeMinigame?.options;
+    const choices = resolveSmartphoneContactOptions({
+      language: "id",
+      disabledContacts: resolveSmartphoneDisabledContacts(state.flags, options as SmartphoneContactLockOptions | undefined),
+      overrides: options?.contactOverrides as SmartphoneContactOverrides,
+    });
+    const choice = choices.find((option) => option.id === "sara")!;
+    expect(choice.disabled).toBeFalsy();
+    expect(choice.next).toBe("day4-sara-start");
+    expect(demoScript.labels[choice.next]).toBeDefined();
+    state.choose(choice.next);
+    expect(useNovelStore.getState().currentLabel).toBe(choice.next);
+  });
+
+  const day4SaraFirstChoices = ["day4-sara-reserved", "day4-sara-reading", "day4-sara-listening"];
+  const day4SaraSecondChoices = ["day4-sara-too-long", "day4-sara-not-strong"];
+  const day4SaraThirdChoices = ["day4-sara-stay", "day4-sara-move-closer"];
+
+  for (const firstChoice of day4SaraFirstChoices) {
+    for (const secondChoice of day4SaraSecondChoices) {
+      for (const thirdChoice of day4SaraThirdChoices) {
+        test(`Sarah Day 4 ${firstChoice}, ${secondChoice}, then ${thirdChoice} completes`, () => {
+          useNovelStore.getState().startFromLabel("day4-sara-start", contactFlags);
+          for (let step = 0; step < 160; step += 1) {
+            const state = useNovelStore.getState();
+            if (state.currentLabel === "day4-complate") break;
+            if (state.choices.length > 0) {
+              if (state.currentLabel === "day4-sara-start") {
+                state.choose(firstChoice);
+              } else if (state.currentLabel === "day4-sara-car-invite") {
+                state.choose(secondChoice);
+              } else {
+                state.choose(thirdChoice);
+              }
+            } else {
+              state.advance();
+            }
+          }
+          const state = useNovelStore.getState();
+          expect(state.currentLabel).toBe("day4-complate");
+          expect(state.flags.day4SelectedCharacter).toBe("sara");
+          expect(state.flags.day4SaraCompleted).toBe(true);
+          expect(state.flags.day4SaraIntimate).toBe(true);
+          expect(state.flags.day4SaraMovedCloser).toBe(thirdChoice === "day4-sara-move-closer");
+        });
+      }
+    }
+  }
+
   test("Day 4 wrap-up only permits ending the day", () => {
     const state = reachSmartphone("day4-after-route-phone");
     const options = state.activeMinigame?.options;

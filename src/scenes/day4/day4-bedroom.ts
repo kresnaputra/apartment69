@@ -52,11 +52,21 @@ export const day4BedroomScene: VisualNovelCommand[] = [
       elena: "day4ElenaCompleted",
       nadia: "day4NadiaCompleted",
     },
-    conditionalEnabledContacts: { nadia: "day3NadiaCompleted" },
+    conditionalEnabledContacts: {
+      nadia: "day3NadiaCompleted",
+      sara: "day3SaraCompleted",
+    },
     contactOverrides: {
       maya: { next: "day4-maya-collapse" },
       elena: { next: "day4-elena-door" },
       nadia: { next: "day4-nadia-night" },
+      sara: {
+        next: "day4-sara-start",
+        blurb: tx({
+          id: "Sarah meminta bertemu di basement parking dalam dua puluh menit.",
+          en: "Sarah asked to meet in the basement parking within twenty minutes.",
+        }),
+      },
     },
   }),
 ];

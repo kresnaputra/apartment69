@@ -42,7 +42,7 @@ const day2RouteCompletionFlagMap: Partial<Record<SmartphoneContactId, string>> =
   sara: "day2SaraCompleted",
 };
 
-const day4RouteCharacterIds = ["maya", "elena", "nadia"] as const;
+const day4RouteCharacterIds = ["maya", "elena", "nadia", "sara"] as const;
 
 export const resolveLockedSmartphoneContacts = (
   flags: FlagMap,

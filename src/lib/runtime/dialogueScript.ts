@@ -90,6 +90,20 @@ import {
 import { day4AfterRoutePhoneScene, day4BedroomScene } from "@/scenes/day4/day4-bedroom";
 import { day4ElenaDoorScene } from "@/scenes/day4/elena/day4-elena-door";
 import {
+  day4SaraCarInviteScene,
+  day4SaraEndingScene,
+  day4SaraKissScene,
+  day4SaraListeningScene,
+  day4SaraMoveCloserScene,
+  day4SaraNotStrongScene,
+  day4SaraReadingScene,
+  day4SaraReservedScene,
+  day4SaraStartScene,
+  day4SaraStayScene,
+  day4SaraTensionScene,
+  day4SaraTooLongScene,
+} from "@/scenes/day4/sara/day4-sara";
+import {
   day5MayaMorningScene,
   day5LobbyFarewellScene,
 } from "@/scenes/day5/day5-maya-morning";
@@ -304,6 +318,18 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day4-maya-collapse": day4MayaCollapseScene,
     "day4-maya-bad-ending": day4MayaBadEndingScene,
     "day4-maya-force-rest": day4MayaForceRestScene,
+    "day4-sara-start": day4SaraStartScene,
+    "day4-sara-reserved": day4SaraReservedScene,
+    "day4-sara-reading": day4SaraReadingScene,
+    "day4-sara-listening": day4SaraListeningScene,
+    "day4-sara-car-invite": day4SaraCarInviteScene,
+    "day4-sara-too-long": day4SaraTooLongScene,
+    "day4-sara-not-strong": day4SaraNotStrongScene,
+    "day4-sara-tension": day4SaraTensionScene,
+    "day4-sara-stay": day4SaraStayScene,
+    "day4-sara-move-closer": day4SaraMoveCloserScene,
+    "day4-sara-kiss": day4SaraKissScene,
+    "day4-sara-ending": day4SaraEndingScene,
     "day4-complate": day4ComplateScene,
     "day4-elena-complate": day4ElenaComplateScene,
     // Day 5
