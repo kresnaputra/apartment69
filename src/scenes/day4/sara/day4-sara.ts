@@ -22,9 +22,17 @@ import saraParkVideo3Url from "@/cut-scene/sara-park-3.mp4";
 import saraParkVideo4Url from "@/cut-scene/sara-park-4.mp4";
 import saraParkVideo5Url from "@/cut-scene/sara-park-5.mp4";
 import saraParkVideo6Url from "@/cut-scene/sara-park-6.mp4";
+import saraParkVideo7Url from "@/cut-scene/sara-park-7.mp4";
+import saraParkVideo8Url from "@/cut-scene/sara-park-8.mp4";
+import saraParkVideo9Url from "@/cut-scene/sara-park-9.mp4";
+import saraParkVideo10Url from "@/cut-scene/sara-park-10.mp4";
 import saraParkVoice4Url from "@/voice/sara/sara-park-4.wav";
 import saraParkVoice5Url from "@/voice/sara/sara-park-5.wav";
 import saraParkVoice6Url from "@/voice/sara/sara-park-6.wav";
+import saraParkVoice7Url from "@/voice/sara/sara-park-7.wav";
+import saraParkVoice8Url from "@/voice/sara/sara-park-8.wav";
+import saraParkVoice9Url from "@/voice/sara/sara-park-9.wav";
+import saraParkVoice10Url from "@/voice/sara/sara-park-10.wav";
 import day4Bgm from "@/music/day4.mp3";
 
 export const day4SaraStartScene: VisualNovelCommand[] = [
@@ -559,228 +567,189 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
     false,
     saraParkVoice6Url,
   ),
-  narrate(
-    tx({
-      id: "Sambil tetap mencium, tangan Sarah turun dan membuka celana Arka. Ia memegang milik Arka dengan gerakan yang sengaja pelan.",
-      en: "Still kissing him, Sarah's hand moves down and opens Arka's pants. She holds him with a deliberately slow touch.",
-      ja: "口づけを続けたまま、サラの手が下りてアルカのズボンを開ける。彼女はわざとゆっくりした動きで彼を握る。",
-      ko: "입을 맞춘 채로 사라의 손이 내려가 아르카의 바지를 연다. 그녀는 일부러 느린 손길로 그를 쥔다.",
-    }),
+  cutScene(
+    saraParkVideo7Url,
+    true,
+    [
+      tx({
+        id: "Sambil tetap mencium, tangan Sarah turun dan membuka celana Arka. Ia memegang milik Arka dengan gerakan yang sengaja pelan.",
+        en: "Still kissing him, Sarah's hand moves down and opens Arka's pants. She holds him with a deliberately slow touch.",
+        ja: "口づけを続けたまま、サラの手が下りてアルカのズボンを開ける。彼女はわざとゆっくりした動きで彼を握る。",
+        ko: "입을 맞춘 채로 사라의 손이 내려가 아르카의 바지를 연다. 그녀는 일부러 느린 손길로 그를 쥔다.",
+      }),
+      tx({
+        id: "Sarah: Sudah seperti ini hanya karena ciuman…",
+        en: "Sarah: Already like this, just from a kiss...",
+        ja: "サラ：口づけだけで、もうこうなの……",
+        ko: "사라: 입맞춤만으로 벌써 이렇게...",
+      }),
+      tx({
+        id: "Sarah: Kamu kurang ajar.",
+        en: "Sarah: You're shameless.",
+        ja: "サラ：ふらちなのね。",
+        ko: "사라: 뻔뻔하기도 해.",
+      }),
+      tx({
+        id: "Arka: Kamu yang mulai.",
+        en: "Arka: You started it.",
+        ja: "アルカ：始めたのはあなたです。",
+        ko: "아르카: 시작한 건 당신이잖아요.",
+      }),
+      tx({
+        id: "Sarah: Dan aku yang akan mengakhiri.",
+        en: "Sarah: And I'll be the one who finishes it.",
+        ja: "サラ：終わらせるのは私よ。",
+        ko: "사라: 끝내는 건 나야.",
+      }),
+    ],
+    false,
+    saraParkVoice7Url,
   ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Sudah seperti ini hanya karena ciuman…",
-      en: "Already like this, just from a kiss...",
-      ja: "口づけだけで、もうこうなの……",
-      ko: "입맞춤만으로 벌써 이렇게...",
-    }),
+  cutScene(
+    saraParkVideo8Url,
+    true,
+    [
+      tx({
+        id: "Sarah menggerakkan tangannya naik-turun dengan tempo yang ia kendalikan sendiri.",
+        en: "Sarah moves her hand up and down at a pace she controls herself.",
+        ja: "サラは自分で決めた調子で、手を上下に動かす。",
+        ko: "사라는 스스로 정한 속도로 손을 위아래로 움직인다.",
+      }),
+      tx({
+        id: "Sarah: Jangan bergerak.",
+        en: "Sarah: Don't move.",
+        ja: "サラ：動かないで。",
+        ko: "사라: 움직이지 마.",
+      }),
+      tx({
+        id: "Arka: Tanganmu… erat.",
+        en: "Arka: Your hand... it's tight.",
+        ja: "アルカ：手……きつい。",
+        ko: "아르카: 손이... 세.",
+      }),
+    ],
+    false,
+    saraParkVoice8Url,
   ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Kamu kurang ajar.",
-      en: "You're shameless.",
-      ja: "ふらちなのね。",
-      ko: "뻔뻔하기도 해.",
-    }),
+  cutScene(
+    saraParkVideo9Url,
+    true,
+    [
+      tx({
+        id: "Gerakan tangan Sarah menjadi lebih cepat. Napasnya mulai terdengar, tapi ia masih menahan suara.",
+        en: "Sarah's hand moves faster. Her breathing becomes audible, but she still holds her voice back.",
+        ja: "サラの手の動きが速くなる。息づかいが聞こえ始めるが、彼女はまだ声を抑えている。",
+        ko: "사라의 손 움직임이 빨라진다. 숨소리가 들리기 시작하지만, 그녀는 아직 목소리를 참는다.",
+      }),
+      tx({
+        id: "Sarah: Kamu berdenyut…",
+        en: "Sarah: You're throbbing...",
+        ja: "サラ：脈打ってる……",
+        ko: "사라: 뛰고 있어...",
+      }),
+      tx({
+        id: "Sarah: Kamu bisa menahannya, bukan?",
+        en: "Sarah: You can hold it, can't you?",
+        ja: "サラ：我慢できるでしょう？",
+        ko: "사라: 참을 수 있지?",
+      }),
+      tx({
+        id: "Arka: Sulit tidak menahan.",
+        en: "Arka: It's hard to hold it back.",
+        ja: "アルカ：我慢するのが難しい。",
+        ko: "아르카: 참기가 어려워.",
+      }),
+      tx({
+        id: "Sarah: Kalau begitu, jangan ditahan lagi.",
+        en: "Sarah: Then don't hold it anymore.",
+        ja: "サラ：それなら、もう我慢しないで。",
+        ko: "사라: 그렇다면 더는 참지 마.",
+      }),
+      tx({
+        id: "Ia mempercepat gerakannya.",
+        en: "She speeds up her movements.",
+        ja: "彼女は動きを速める。",
+        ko: "그녀는 움직임을 더 빠르게 한다.",
+      }),
+      tx({
+        id: "Sarah: Keluarlah.",
+        en: "Sarah: Come.",
+        ja: "サラ：イって。",
+        ko: "사라: 싸.",
+      }),
+      tx({
+        id: "Sarah: Di tangan aku.",
+        en: "Sarah: In my hand.",
+        ja: "サラ：私の手の中に。",
+        ko: "사라: 내 손에.",
+      }),
+      tx({
+        id: "Sarah: Sekarang.",
+        en: "Sarah: Now.",
+        ja: "サラ：今。",
+        ko: "사라: 지금.",
+      }),
+      tx({
+        id: "Sarah: Aku bilang sekarang.",
+        en: "Sarah: I said now.",
+        ja: "サラ：今って言ったの。",
+        ko: "사라: 지금이라고 했어.",
+      }),
+      tx({
+        id: "Arka: Sarah… aku hampir…",
+        en: "Arka: Sarah... I'm close...",
+        ja: "アルカ：サラ……もう……",
+        ko: "아르카: 사라... 나 곧...",
+      }),
+    ],
+    false,
+    saraParkVoice9Url,
   ),
-  say(
-    "arka",
-    "neutral",
-    tx({
-      id: "Kamu yang mulai.",
-      en: "You started it.",
-      ja: "始めたのはあなたです。",
-      ko: "시작한 건 당신이잖아요.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Dan aku yang akan mengakhiri.",
-      en: "And I'll be the one who finishes it.",
-      ja: "終わらせるのは私よ。",
-      ko: "끝내는 건 나야.",
-    }),
-  ),
-  narrate(
-    tx({
-      id: "Sarah menggerakkan tangannya naik-turun dengan tempo yang ia kendalikan sendiri.",
-      en: "Sarah moves her hand up and down at a pace she controls herself.",
-      ja: "サラは自分で決めた調子で、手を上下に動かす。",
-      ko: "사라는 스스로 정한 속도로 손을 위아래로 움직인다.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Jangan bergerak.",
-      en: "Don't move.",
-      ja: "動かないで。",
-      ko: "움직이지 마.",
-    }),
-  ),
-  say(
-    "arka",
-    "neutral",
-    tx({
-      id: "Tanganmu… erat.",
-      en: "Your hand... it's tight.",
-      ja: "手……きつい。",
-      ko: "손이... 세.",
-    }),
-  ),
-  narrate(
-    tx({
-      id: "Gerakan tangan Sarah menjadi lebih cepat. Napasnya mulai terdengar, tapi ia masih menahan suara.",
-      en: "Sarah's hand moves faster. Her breathing becomes audible, but she still holds her voice back.",
-      ja: "サラの手の動きが速くなる。息づかいが聞こえ始めるが、彼女はまだ声を抑えている。",
-      ko: "사라의 손 움직임이 빨라진다. 숨소리가 들리기 시작하지만, 그녀는 아직 목소리를 참는다.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Kamu berdenyut…",
-      en: "You're throbbing...",
-      ja: "脈打ってる……",
-      ko: "뛰고 있어...",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Kamu bisa menahannya, bukan?",
-      en: "You can hold it, can't you?",
-      ja: "我慢できるでしょう？",
-      ko: "참을 수 있지?",
-    }),
-  ),
-  say(
-    "arka",
-    "neutral",
-    tx({
-      id: "Sulit tidak menahan.",
-      en: "It's hard to hold it back.",
-      ja: "我慢するのが難しい。",
-      ko: "참기가 어려워.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Kalau begitu, jangan ditahan lagi.",
-      en: "Then don't hold it anymore.",
-      ja: "それなら、もう我慢しないで。",
-      ko: "그렇다면 더는 참지 마.",
-    }),
-  ),
-  narrate(
-    tx({
-      id: "Ia mempercepat gerakannya.",
-      en: "She speeds up her movements.",
-      ja: "彼女は動きを速める。",
-      ko: "그녀는 움직임을 더 빠르게 한다.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Keluarlah.",
-      en: "Come.",
-      ja: "イって。",
-      ko: "싸.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Di tangan aku.",
-      en: "In my hand.",
-      ja: "私の手の中に。",
-      ko: "내 손에.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Sekarang.",
-      en: "Now.",
-      ja: "今。",
-      ko: "지금.",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Aku bilang sekarang.",
-      en: "I said now.",
-      ja: "今って言ったの。",
-      ko: "지금이라고 했어.",
-    }),
-  ),
-  say(
-    "arka",
-    "neutral",
-    tx({
-      id: "Sarah… aku hampir…",
-      en: "Sarah... I'm close...",
-      ja: "サラ……もう……",
-      ko: "사라... 나 곧...",
-    }),
-  ),
-  narrate(
-    tx({
-      id: "Arka keluar di tangan Sarah. Sarah terus menggerakkan tangannya sampai selesai, baru kemudian melepaskan ciuman.",
-      en: "Arka finishes in Sarah's hand. Sarah keeps moving her hand until he is done, and only then does she break the kiss.",
-      ja: "アルカはサラの手の中で果てる。サラは終わるまで手を動かし続け、それから口づけを解く。",
-      ko: "아르카는 사라의 손 안에서 싼다. 사라는 끝날 때까지 손을 움직이다가, 그다음에야 입술을 뗀다.",
-    }),
-  ),
-  say(
-    "arka",
-    "neutral",
-    tx({
-      id: "Nngghh…",
-      en: "Nngghh...",
-      ja: "んっ……",
-      ko: "으응...",
-    }),
-  ),
-  say(
-    "sara",
-    "neutral",
-    tx({
-      id: "Hnn…",
-      en: "Hnn...",
-      ja: "んん……",
-      ko: "흐응...",
-    }),
-  ),
-  narrate(
-    tx({
-      id: "Ia mengambil tisu dan membersihkan tangannya dengan gerakan rapi.",
-      en: "She takes a tissue and cleans her hand with neat movements.",
-      ja: "彼女はティッシュを取り、整った動作で手を拭く。",
-      ko: "그녀는 티슈를 집어 단정한 손놀림으로 손을 닦는다.",
-    }),
+  cutScene(
+    saraParkVideo10Url,
+    true,
+    [
+      tx({
+        id: "Arka keluar di tangan Sarah. Sarah terus menggerakkan tangannya sampai selesai, baru kemudian melepaskan ciuman.",
+        en: "Arka finishes in Sarah's hand. Sarah keeps moving her hand until he is done, and only then does she break the kiss.",
+        ja: "アルカはサラの手の中で果てる。サラは終わるまで手を動かし続け、それから口づけを解く。",
+        ko: "아르카는 사라의 손 안에서 싼다. 사라는 끝날 때까지 손을 움직이다가, 그다음에야 입술을 뗀다.",
+      }),
+      tx({
+        id: "Arka: Nngghh…",
+        en: "Arka: Nngghh...",
+        ja: "アルカ：んっ……",
+        ko: "아르카: 으응...",
+      }),
+      tx({
+        id: "Sarah: Hnn…",
+        en: "Sarah: Hnn...",
+        ja: "サラ：んん……",
+        ko: "사라: 흐응...",
+      }),
+      tx({
+        id: "Ia mengambil tisu dan membersihkan tangannya dengan gerakan rapi.",
+        en: "She takes a tissue and cleans her hand with neat movements.",
+        ja: "彼女はティッシュを取り、整った動作で手を拭く。",
+        ko: "그녀는 티슈를 집어 단정한 손놀림으로 손을 닦는다.",
+      }),
+    ],
+    false,
+    saraParkVoice10Url,
   ),
   jump("day4-sara-ending"),
 ];
 
 export const day4SaraEndingScene: VisualNovelCommand[] = [
+  bg(
+    parkUrl,
+    tx({
+      id: "Basement Parking",
+      en: "Basement Parking",
+      ja: "地下駐車場",
+      ko: "지하 주차장",
+    }),
+  ),
   say(
     "sara",
     "neutral",

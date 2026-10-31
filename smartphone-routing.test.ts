@@ -186,6 +186,10 @@ describe("Smartphone route selection", () => {
           let sawFourthCarCutScene = false;
           let sawFifthCarCutScene = false;
           let sawSixthCarCutScene = false;
+          let sawSeventhCarCutScene = false;
+          let sawEighthCarCutScene = false;
+          let sawNinthCarCutScene = false;
+          let sawTenthCarCutScene = false;
           for (let step = 0; step < 160; step += 1) {
             const state = useNovelStore.getState();
             if (state.currentLabel === "day4-complate") break;
@@ -226,12 +230,40 @@ describe("Smartphone route selection", () => {
                 expect(state.activeCutScene.audioSrc).toContain("sara-park-5.wav");
                 sawFifthCarCutScene = true;
                 state.completeCutScene();
-              } else {
+              } else if (!sawSixthCarCutScene) {
                 expect(state.activeCutScene.src).toContain("sara-park-6.mp4");
                 expect(state.activeCutScene.narrate).toHaveLength(2);
                 expect(state.activeCutScene.choices).toBeUndefined();
                 expect(state.activeCutScene.audioSrc).toContain("sara-park-6.wav");
                 sawSixthCarCutScene = true;
+                state.completeCutScene();
+              } else if (!sawSeventhCarCutScene) {
+                expect(state.activeCutScene.src).toContain("sara-park-7.mp4");
+                expect(state.activeCutScene.narrate).toHaveLength(5);
+                expect(state.activeCutScene.choices).toBeUndefined();
+                expect(state.activeCutScene.audioSrc).toContain("sara-park-7.wav");
+                sawSeventhCarCutScene = true;
+                state.completeCutScene();
+              } else if (!sawEighthCarCutScene) {
+                expect(state.activeCutScene.src).toContain("sara-park-8.mp4");
+                expect(state.activeCutScene.narrate).toHaveLength(3);
+                expect(state.activeCutScene.choices).toBeUndefined();
+                expect(state.activeCutScene.audioSrc).toContain("sara-park-8.wav");
+                sawEighthCarCutScene = true;
+                state.completeCutScene();
+              } else if (!sawNinthCarCutScene) {
+                expect(state.activeCutScene.src).toContain("sara-park-9.mp4");
+                expect(state.activeCutScene.narrate).toHaveLength(11);
+                expect(state.activeCutScene.choices).toBeUndefined();
+                expect(state.activeCutScene.audioSrc).toContain("sara-park-9.wav");
+                sawNinthCarCutScene = true;
+                state.completeCutScene();
+              } else {
+                expect(state.activeCutScene.src).toContain("sara-park-10.mp4");
+                expect(state.activeCutScene.narrate).toHaveLength(4);
+                expect(state.activeCutScene.choices).toBeUndefined();
+                expect(state.activeCutScene.audioSrc).toContain("sara-park-10.wav");
+                sawTenthCarCutScene = true;
                 state.completeCutScene();
               }
             } else if (state.choices.length > 0) {
@@ -251,6 +283,10 @@ describe("Smartphone route selection", () => {
           expect(sawFourthCarCutScene).toBe(true);
           expect(sawFifthCarCutScene).toBe(true);
           expect(sawSixthCarCutScene).toBe(true);
+          expect(sawSeventhCarCutScene).toBe(true);
+          expect(sawEighthCarCutScene).toBe(true);
+          expect(sawNinthCarCutScene).toBe(true);
+          expect(sawTenthCarCutScene).toBe(true);
           expect(state.currentLabel).toBe("day4-complate");
           expect(state.flags.day4SelectedCharacter).toBe("sara");
           expect(state.flags.day4SaraCompleted).toBe(true);
