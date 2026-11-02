@@ -212,7 +212,7 @@ describe("Smartphone route selection", () => {
                 state.choose(secondChoice);
               } else if (!sawThirdCarCutScene) {
                 expect(state.activeCutScene.src).toContain("sara-park-3.mp4");
-                expect(state.activeCutScene.narrate).toHaveLength(3);
+                expect(state.activeCutScene.narrate).toHaveLength(4);
                 expect(state.activeCutScene.choices).toBeUndefined();
                 sawThirdCarCutScene = true;
                 state.completeCutScene();

@@ -387,35 +387,13 @@ export const day4SaraCarInviteScene: VisualNovelCommand[] = [
 ];
 
 export const day4SaraTooLongScene: VisualNovelCommand[] = [
-  say(
-    "arka",
-    "neutral",
-    tx({
-      id: "Kedengarannya kamu sudah menahan terlalu lama.",
-      en: "It sounds like you've been holding it in for too long.",
-      ja: "かなり長く我慢してきたように聞こえます。",
-      ko: "너무 오래 참아 온 것처럼 들립니다.",
-    }),
-  ),
-  jump("day4-sara-tension"),
-];
-
-export const day4SaraNotStrongScene: VisualNovelCommand[] = [
-  say(
-    "arka",
-    "neutral",
-    tx({
-      id: "Kamu tidak harus selalu terlihat kuat.",
-      en: "You don't always have to look strong.",
-      ja: "いつも強く見える必要はありません。",
-      ko: "언제나 강해 보일 필요는 없습니다.",
-    }),
-  ),
-  jump("day4-sara-tension"),
-];
-
-export const day4SaraTensionScene: VisualNovelCommand[] = [
   cutScene(saraParkVideo3Url, true, [
+    tx({
+      id: "Arka: Kedengarannya kamu sudah menahan terlalu lama.",
+      en: "Arka: It sounds like you've been holding it in for too long.",
+      ja: "アルカ：かなり長く我慢してきたように聞こえます。",
+      ko: "아르카: 너무 오래 참아 온 것처럼 들립니다.",
+    }),
     tx({
       id: "Sarah: Kau benar.",
       en: "Sarah: You're right.",
@@ -435,6 +413,40 @@ export const day4SaraTensionScene: VisualNovelCommand[] = [
       ko: "사라: 대부분 사람들처럼 당장 무언가를 원하지 않아서일지도 몰라.",
     }),
   ]),
+  jump("day4-sara-tension"),
+];
+
+export const day4SaraNotStrongScene: VisualNovelCommand[] = [
+  cutScene(saraParkVideo3Url, true, [
+    tx({
+      id: "Arka: Kamu tidak harus selalu terlihat kuat.",
+      en: "Arka: You don't always have to look strong.",
+      ja: "アルカ：いつも強く見える必要はありません。",
+      ko: "아르카: 언제나 강해 보일 필요는 없습니다.",
+    }),
+    tx({
+      id: "Sarah: Kau benar.",
+      en: "Sarah: You're right.",
+      ja: "サラ：そのとおりね。",
+      ko: "사라: 네 말이 맞아.",
+    }),
+    tx({
+      id: "Sarah: Aku tidak tahu kenapa aku terus memanggilmu.",
+      en: "Sarah: I don't know why I keep calling you.",
+      ja: "サラ：どうしてあなたを呼び続けるのか、自分でもわからない。",
+      ko: "사라: 왜 계속 너를 부르는지, 나도 모르겠어.",
+    }),
+    tx({
+      id: "Sarah: Mungkin karena kamu tidak langsung menginginkan sesuatu seperti orang kebanyakan.",
+      en: "Sarah: Maybe because you don't immediately want something, the way most people do.",
+      ja: "サラ：たいていの人みたいに、すぐに何かを求めてこないからかもしれない。",
+      ko: "사라: 대부분 사람들처럼 당장 무언가를 원하지 않아서일지도 몰라.",
+    }),
+  ]),
+  jump("day4-sara-tension"),
+];
+
+export const day4SaraTensionScene: VisualNovelCommand[] = [
   blackScreen(),
   narrate(
     tx({
