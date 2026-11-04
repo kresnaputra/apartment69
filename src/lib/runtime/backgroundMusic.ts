@@ -10,7 +10,7 @@ export class BackgroundMusic {
   private fadeTimer: number | null = null;
   private transitionToken = 0;
 
-  play(src: string, volume: number = 0.5) {
+  play(src: string, volume: number = 0.5, fadeOutMs: number = FADE_OUT_MS) {
     this.targetVolume = this.clampVolume(volume);
 
     // If same track is already playing, don't restart. Just sync the volume.
@@ -54,7 +54,7 @@ export class BackgroundMusic {
 
     const currentAudio = this.audio;
     if (currentAudio) {
-      this.fadeTo(currentAudio, 0, FADE_OUT_MS, () => {
+      this.fadeTo(currentAudio, 0, fadeOutMs, () => {
         if (this.audio === currentAudio) {
           currentAudio.pause();
           currentAudio.currentTime = 0;

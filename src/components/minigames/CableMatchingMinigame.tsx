@@ -1,13 +1,29 @@
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { resolveText, tx, type LanguageCode } from "@/lib/i18n";
 
 type CableId = "power" | "network" | "display";
 type Point = { x: number; y: number };
 
-const cables: Array<{ id: CableId; name: string; color: string; shade: string }> = [
-  { id: "power", name: "Daya", color: "#e8b86c", shade: "#a87a33" },
-  { id: "network", name: "Jaringan", color: "#78a9c2", shade: "#457189" },
-  { id: "display", name: "Layar", color: "#d99591", shade: "#9c5c58" },
-];
+const cables = [
+  {
+    id: "power",
+    name: tx({ id: "Daya", en: "Power", ja: "電源", ko: "전원" }),
+    color: "#e8b86c",
+    shade: "#a87a33",
+  },
+  {
+    id: "network",
+    name: tx({ id: "Jaringan", en: "Network", ja: "ネットワーク", ko: "네트워크" }),
+    color: "#78a9c2",
+    shade: "#457189",
+  },
+  {
+    id: "display",
+    name: tx({ id: "Layar", en: "Display", ja: "ディスプレイ", ko: "디스플레이" }),
+    color: "#d99591",
+    shade: "#9c5c58",
+  },
+] as const;
 
 // Ports sit in a different order than the plugs so the wires have to cross.
 const portOrder: CableId[] = ["display", "power", "network"];
@@ -95,7 +111,30 @@ const SocketHole = ({ id }: { id: CableId }) => {
   return <path d="M-14 -7 H14 V2 L9 8 H-9 L-14 2 Z" fill="#0b0e12" />;
 };
 
-export const CableMatchingMinigame = ({ onComplete }: { onComplete: () => void }) => {
+const minigameText = {
+  board: tx({ id: "Papan kabel", en: "Cable board", ja: "ケーブルボード", ko: "케이블 보드" }),
+  port: (name: string) => tx({ id: `Port ${name}`, en: `${name} port`, ja: `${name}ポート`, ko: `${name} 포트` }),
+  cable: (name: string) => tx({ id: `Kabel ${name}`, en: `${name} cable`, ja: `${name}ケーブル`, ko: `${name} 케이블` }),
+  wrongPort: tx({ id: "Port tidak cocok.", en: "Wrong port.", ja: "ポートが違います。", ko: "잘못된 포트입니다." }),
+  allConnected: tx({ id: "Semua kabel tersambung.", en: "All cables connected.", ja: "すべてのケーブルが接続されました。", ko: "모든 케이블이 연결되었습니다." }),
+  connectedCount: (count: number, total: number) =>
+    tx({
+      id: `${count} dari ${total} kabel tersambung.`,
+      en: `${count} of ${total} cables connected.`,
+      ja: `${total}本中${count}本のケーブルが接続されました。`,
+      ko: `케이블 ${total}개 중 ${count}개 연결됨.`,
+    }),
+  wrongPortHint: tx({ id: "Port tidak cocok", en: "Wrong port", ja: "ポートが違います", ko: "잘못된 포트" }),
+  dragHint: tx({
+    id: "Seret kabel ke port yang cocok",
+    en: "Drag each cable to the matching port",
+    ja: "ケーブルを合うポートまでドラッグ",
+    ko: "케이블을 맞는 포트로 드래그하세요",
+  }),
+  done: tx({ id: "Selesai", en: "Done", ja: "完了", ko: "완료" }),
+};
+
+export const CableMatchingMinigame = ({ onComplete, language = "id" }: { onComplete: () => void; language?: LanguageCode }) => {
   const [connected, setConnected] = useState<CableId[]>([]);
   const [selected, setSelected] = useState<CableId | null>(null);
   const [drag, setDrag] = useState<{ id: CableId; pointer: Point } | null>(null);
@@ -183,11 +222,13 @@ export const CableMatchingMinigame = ({ onComplete }: { onComplete: () => void }
   // Draw the plug being moved last so it stays on top.
   const plugDrawOrder = [...cables.map((cable) => cable.id)].sort((a, b) => Number(a === drag?.id) - Number(b === drag?.id));
 
+  const cableName = (id: CableId) => resolveText(cableById(id).name, language);
+
   const statusText = mistake
-    ? "Port tidak cocok."
+    ? resolveText(minigameText.wrongPort, language)
     : done
-      ? "Semua kabel tersambung."
-      : `${connected.length} dari ${cables.length} kabel tersambung.`;
+      ? resolveText(minigameText.allConnected, language)
+      : resolveText(minigameText.connectedCount(connected.length, cables.length), language);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(12, 15, 20, .88)" }} onClick={(event) => event.stopPropagation()}>
@@ -225,7 +266,7 @@ export const CableMatchingMinigame = ({ onComplete }: { onComplete: () => void }
           onPointerUp={endDrag}
           onPointerCancel={cancelDrag}
           role="group"
-          aria-label="Papan kabel"
+          aria-label={resolveText(minigameText.board, language)}
         >
           <defs>
             <linearGradient id="cable-plate" x1="0" y1="0" x2="0" y2="1">
@@ -279,7 +320,7 @@ export const CableMatchingMinigame = ({ onComplete }: { onComplete: () => void }
                 {/* tap target for the tap-plug-then-socket flow */}
                 <rect
                   x={socket.x - 26} y={socket.y - 26} width={52} height={52} fill="transparent"
-                  className="vn-cable-target" role="button" tabIndex={on ? -1 : 0} aria-label={`Port ${cable.name}`}
+                  className="vn-cable-target" role="button" tabIndex={on ? -1 : 0} aria-label={resolveText(minigameText.port(cableName(cable.id)), language)}
                   style={{ cursor: selected && !on ? "pointer" : "default" }}
                   onClick={() => connect(id, selected)}
                   onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); connect(id, selected); } }}
@@ -306,7 +347,7 @@ export const CableMatchingMinigame = ({ onComplete }: { onComplete: () => void }
                 className="vn-cable-target"
                 role="button"
                 tabIndex={on ? -1 : 0}
-                aria-label={`Kabel ${cable.name}`}
+                aria-label={resolveText(minigameText.cable(cableName(cable.id)), language)}
                 aria-pressed={selected === id}
                 style={{ cursor: on ? "default" : drag?.id === id ? "grabbing" : "grab" }}
                 onPointerDown={startDrag(id)}
@@ -334,11 +375,13 @@ export const CableMatchingMinigame = ({ onComplete }: { onComplete: () => void }
               className="w-full rounded-lg p-3 font-semibold"
               style={{ background: "#e8b86c", color: "#222831", animation: "vn-pipe-pop 0.4s ease-out both" }}
             >
-              Selesai
+              {resolveText(minigameText.done, language)}
             </button>
           ) : (
             <p className="text-xs sm:text-sm" style={{ color: mistake ? "#e8a39c" : "#8d939a" }} aria-hidden>
-              {mistake ? "Port tidak cocok" : "Seret kabel ke port yang cocok"}
+              {mistake
+                ? resolveText(minigameText.wrongPortHint, language)
+                : resolveText(minigameText.dragHint, language)}
             </p>
           )}
         </div>

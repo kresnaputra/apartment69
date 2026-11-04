@@ -1930,7 +1930,7 @@ const App = () => {
     if (phase === "story") {
       const musicSrc = activeBackgroundMusic?.src ?? gameplayMusic;
       const musicVolume = bgVolume * (activeBackgroundMusic?.options?.volume ?? 1);
-      bgMusicRef.current?.play(musicSrc, musicVolume);
+      bgMusicRef.current?.play(musicSrc, musicVolume, activeBackgroundMusic?.options?.fadeOutMs);
     } else {
       bgMusicRef.current?.stop();
       sharedSoundEffects.stopAll();
@@ -2613,7 +2613,7 @@ const App = () => {
         ) : activeMinigame?.id === "email-compose" ? (
           <EmailComposeMinigame onComplete={completeMinigame} />
         ) : activeMinigame?.id === "cable-matching" ? (
-          <CableMatchingMinigame onComplete={completeMinigame} />
+          <CableMatchingMinigame onComplete={completeMinigame} language={language} />
         ) : null}
 
         {activeCutScene ? (

@@ -8,6 +8,7 @@ import sceneElena3 from "@/gallery/scene-elena-3.png";
 import sceneNadia1 from "@/gallery/scene-nadia-1.png";
 import sceneNadia2 from "@/gallery/scene-nadia-2.png";
 import sceneNadia3 from "@/gallery/scene-nadia-3.png";
+import sceneSarah1 from "@/gallery/scene-sarah-1.png";
 import type { FlagMap } from "@/types/novel";
 
 type GalleryOverlayProps = {
@@ -93,9 +94,17 @@ const GALLERY_ITEMS = [
     sceneLabel: "day7-nadia-good-ending",
     unlockFlag: "gallerySceneNadia3Unlocked",
   },
+  {
+    id: "scene-sarah-1",
+    character: "Sarah",
+    imageUrl: sceneSarah1,
+    label: "Scene Sarah 1",
+    sceneLabel: "day4-sara-gallery",
+    unlockFlag: "gallerySceneSarah1Unlocked",
+  },
 ] as const;
 
-const GALLERY_SECTIONS = ["Maya", "Elena", "Nadia"] as const;
+const GALLERY_SECTIONS = ["Maya", "Elena", "Nadia", "Sarah"] as const;
 
 const LockIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">

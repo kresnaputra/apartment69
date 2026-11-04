@@ -16,7 +16,7 @@ import hallwayUrl from "@/background/hallway.png";
 import saraHallwayUrl from "@/background/sara-hallway.jpeg";
 import cafeUrl from "@/background/cafe.jpeg";
 import elevatorUrl from "@/background/elevator.png";
-import day3Bgm from "@/music/day3.mp3";
+import day3Bgm from "@/music/day3-sarah.mp3";
 import phoneSfx from "@/sfx/phone.mp3";
 import liftSfx from "@/sfx/lift.wav";
 import openDoorSfx from "@/sfx/open-door.wav";

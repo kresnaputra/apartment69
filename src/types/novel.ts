@@ -82,6 +82,7 @@ export type ActiveSoundEffect = {
 
 export type BackgroundMusicOptions = {
   volume?: number;
+  fadeOutMs?: number;
 };
 
 export type ActiveBackgroundMusic = {

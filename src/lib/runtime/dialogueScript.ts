@@ -92,6 +92,7 @@ import { day4ElenaDoorScene } from "@/scenes/day4/elena/day4-elena-door";
 import {
   day4SaraCarInviteScene,
   day4SaraEndingScene,
+  day4SaraGalleryScene,
   day4SaraKissScene,
   day4SaraListeningScene,
   day4SaraMoveCloserScene,
@@ -323,6 +324,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day4-sara-reading": day4SaraReadingScene,
     "day4-sara-listening": day4SaraListeningScene,
     "day4-sara-car-invite": day4SaraCarInviteScene,
+    "day4-sara-gallery": day4SaraGalleryScene,
     "day4-sara-too-long": day4SaraTooLongScene,
     "day4-sara-not-strong": day4SaraNotStrongScene,
     "day4-sara-tension": day4SaraTensionScene,

@@ -6,6 +6,7 @@ import {
   cutScene,
   hide,
   jump,
+  jumpIf,
   menu,
   narrate,
   playBgm,
@@ -33,7 +34,8 @@ import saraParkVoice7Url from "@/voice/sara/sara-park-7.wav";
 import saraParkVoice8Url from "@/voice/sara/sara-park-8.wav";
 import saraParkVoice9Url from "@/voice/sara/sara-park-9.wav";
 import saraParkVoice10Url from "@/voice/sara/sara-park-10.wav";
-import day4Bgm from "@/music/day4.mp3";
+import day4Bgm from "@/music/day3-sarah.mp3";
+import day4BgmCutscene from "@/music/cutscene-1-sarah.mp3";
 
 export const day4SaraStartScene: VisualNovelCommand[] = [
   playBgm(day4Bgm),
@@ -298,6 +300,7 @@ export const day4SaraCarInviteScene: VisualNovelCommand[] = [
       ko: "타. 지하에서 너무 오래 이야기하고 싶지 않아.",
     }),
   ),
+  setFlag("gallerySceneSarah1Unlocked", true),
   cutScene(saraParkVideoUrl, true, [
     tx({
       id: "Di dalam mobil, Sarah hanya duduk.",
@@ -386,6 +389,11 @@ export const day4SaraCarInviteScene: VisualNovelCommand[] = [
   ),
 ];
 
+export const day4SaraGalleryScene: VisualNovelCommand[] = [
+  playBgm(day4Bgm),
+  ...day4SaraCarInviteScene.slice(day4SaraCarInviteScene.findIndex((command) => command.type === "cutScene")),
+];
+
 export const day4SaraTooLongScene: VisualNovelCommand[] = [
   cutScene(saraParkVideo3Url, true, [
     tx({
@@ -447,6 +455,7 @@ export const day4SaraNotStrongScene: VisualNovelCommand[] = [
 ];
 
 export const day4SaraTensionScene: VisualNovelCommand[] = [
+  playBgm(day4BgmCutscene, { fadeOutMs: 1500 }),
   blackScreen(),
   narrate(
     tx({
@@ -841,5 +850,6 @@ export const day4SaraEndingScene: VisualNovelCommand[] = [
   hide("sara-day4"),
   hide("arka-day4-sara"),
   setFlag("day4SaraCompleted", true),
+  jumpIf("galleryMode", "gallery-return", { value: true }),
   jump("day4-complate"),
 ];

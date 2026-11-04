@@ -16,7 +16,7 @@ import lobby from "@/background/front-office.png";
 import elevator from "@/background/elevator.png";
 import penthouseRoom from "@/background/sara-penthouse-room.png";
 import penthouse from "@/background/sara-penthouse.png";
-import day2Bgm from "@/music/day2.mp3";
+import day2Bgm from "@/music/day2-sarah.mp3";
 
 export const day2SaraScene: VisualNovelCommand[] = [
   playBgm(day2Bgm),
