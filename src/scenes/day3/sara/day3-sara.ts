@@ -20,8 +20,9 @@ import day3Bgm from "@/music/day3-sarah.mp3";
 import phoneSfx from "@/sfx/phone.mp3";
 import liftSfx from "@/sfx/lift.wav";
 import openDoorSfx from "@/sfx/open-door.wav";
+import { addSaraVoices } from "@/voice/sara/day1to4";
 
-export const day3SaraStartScene: VisualNovelCommand[] = [
+export const day3SaraStartScene: VisualNovelCommand[] = addSaraVoices([
   playBgm(day3Bgm),
   hide("arka-campus"),
   bg(hallwayUrl, tx({
@@ -174,7 +175,7 @@ export const day3SaraStartScene: VisualNovelCommand[] = [
       next: "day3-sara-listen",
     },
   ]),
-];
+], 30);
 
 export const day3SaraEmpathyScene: VisualNovelCommand[] = [
   say("arka", "gentle", tx({
@@ -202,7 +203,7 @@ export const day3SaraListenScene: VisualNovelCommand[] = [
   jump("day3-sara-cafe-continue"),
 ];
 
-export const day3SaraCafeContinueScene: VisualNovelCommand[] = [
+export const day3SaraCafeContinueScene: VisualNovelCommand[] = addSaraVoices([
   say("sara", "sad", tx({
     id: "Suamiku pulang mungkin dua atau tiga kali dalam sebulan. Itupun biasanya hanya untuk mengambil dokumen dan pergi lagi.",
     en: "My husband comes home maybe two or three times a month. Even then, it's usually just to pick up documents and leave again.",
@@ -297,9 +298,9 @@ export const day3SaraCafeContinueScene: VisualNovelCommand[] = [
       next: "day3-sara-decline",
     },
   ]),
-];
+], 37);
 
-export const day3SaraEscortScene: VisualNovelCommand[] = [
+export const day3SaraEscortScene: VisualNovelCommand[] = addSaraVoices([
   setFlag("day3SaraEscorted", true),
   say("arka", "gentle", tx({
     id: "Aku antar.",
@@ -404,9 +405,9 @@ export const day3SaraEscortScene: VisualNovelCommand[] = [
     ko: "다음엔 커피만 마시자고 부르지 않을지도 몰라.",
   })),
   jump("day3-sara-ending"),
-];
+], 43);
 
-export const day3SaraDeclineScene: VisualNovelCommand[] = [
+export const day3SaraDeclineScene: VisualNovelCommand[] = addSaraVoices([
   setFlag("day3SaraEscorted", false),
   say("arka", "serious", tx({
     id: "Sebenarnya aku masih ada urusan lain. Mungkin lain kali.",
@@ -427,7 +428,7 @@ export const day3SaraDeclineScene: VisualNovelCommand[] = [
     ko: "사라는 화내지 않는다. 잔을 집어 들고 차분히 작별한 뒤 먼저 카페를 떠난다.",
   })),
   jump("day3-sara-ending"),
-];
+], 48);
 
 export const day3SaraEndingScene: VisualNovelCommand[] = [
   hide("arka-day3-sara"),

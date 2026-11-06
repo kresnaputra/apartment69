@@ -3,8 +3,9 @@ import { tx } from "@/lib/i18n";
 import { bg, hide, jump, menu, narrate, playSfx, say, setFlag, show } from "@/scenes/scriptTypes";
 import hallway from "@/background/hallway.png";
 import lift from "@/sfx/lift.wav";
+import { addSaraVoices } from "@/voice/sara/day1to4";
 
-export const saraHallwayScene: VisualNovelCommand[] = [
+export const saraHallwayScene: VisualNovelCommand[] = addSaraVoices([
   bg(
     hallway,
     tx({
@@ -123,9 +124,9 @@ export const saraHallwayScene: VisualNovelCommand[] = [
       },
     ],
   ),
-];
+], 0);
 
-export const saraHelpScene: VisualNovelCommand[] = [
+export const saraHelpScene: VisualNovelCommand[] = addSaraVoices([
   say(
     "arka",
     "gentle",
@@ -167,9 +168,9 @@ export const saraHelpScene: VisualNovelCommand[] = [
     }),
   ),
   jump("bedroom-day1"),
-];
+], 3);
 
-export const saraRefuseScene: VisualNovelCommand[] = [
+export const saraRefuseScene: VisualNovelCommand[] = addSaraVoices([
   setFlag("saraAcceptedNumber", false),
   say(
     "arka",
@@ -239,4 +240,4 @@ export const saraRefuseScene: VisualNovelCommand[] = [
     }),
   ),
   jump("bedroom-day1"),
-];
+], 5);

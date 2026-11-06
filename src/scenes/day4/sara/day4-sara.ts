@@ -36,8 +36,10 @@ import saraParkVoice9Url from "@/voice/sara/sara-park-9.wav";
 import saraParkVoice10Url from "@/voice/sara/sara-park-10.wav";
 import day4Bgm from "@/music/day3-sarah.mp3";
 import day4BgmCutscene from "@/music/cutscene-1-sarah.mp3";
+import { addSaraVoices } from "@/voice/sara/day1to4";
 
-export const day4SaraStartScene: VisualNovelCommand[] = [
+// The first Sara line is a text message, not spoken dialogue.
+export const day4SaraStartScene: VisualNovelCommand[] = addSaraVoices([
   playBgm(day4Bgm),
   setFlag("day4SelectedCharacter", "sara"),
   bg(
@@ -219,7 +221,7 @@ export const day4SaraStartScene: VisualNovelCommand[] = [
       },
     ],
   ),
-];
+], 49, true);
 
 export const day4SaraReservedScene: VisualNovelCommand[] = [
   say(
@@ -263,7 +265,7 @@ export const day4SaraListeningScene: VisualNovelCommand[] = [
   jump("day4-sara-car-invite"),
 ];
 
-export const day4SaraCarInviteScene: VisualNovelCommand[] = [
+export const day4SaraCarInviteScene: VisualNovelCommand[] = addSaraVoices([
   narrate(
     tx({
       id: "Sarah tersenyum tipis.",
@@ -387,7 +389,7 @@ export const day4SaraCarInviteScene: VisualNovelCommand[] = [
       ],
     },
   ),
-];
+], 54);
 
 export const day4SaraGalleryScene: VisualNovelCommand[] = [
   playBgm(day4Bgm),
@@ -454,7 +456,7 @@ export const day4SaraNotStrongScene: VisualNovelCommand[] = [
   jump("day4-sara-tension"),
 ];
 
-export const day4SaraTensionScene: VisualNovelCommand[] = [
+export const day4SaraTensionScene: VisualNovelCommand[] = addSaraVoices([
   playBgm(day4BgmCutscene, { fadeOutMs: 1500 }),
   blackScreen(),
   narrate(
@@ -506,7 +508,7 @@ export const day4SaraTensionScene: VisualNovelCommand[] = [
     ],
   ),
   clearBlackScreen(),
-];
+], 56);
 
 export const day4SaraStayScene: VisualNovelCommand[] = [
   setFlag("day4SaraMovedCloser", false),
@@ -761,7 +763,7 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
   jump("day4-sara-ending"),
 ];
 
-export const day4SaraEndingScene: VisualNovelCommand[] = [
+export const day4SaraEndingScene: VisualNovelCommand[] = addSaraVoices([
   bg(
     parkUrl,
     tx({
@@ -852,4 +854,4 @@ export const day4SaraEndingScene: VisualNovelCommand[] = [
   setFlag("day4SaraCompleted", true),
   jumpIf("galleryMode", "gallery-return", { value: true }),
   jump("day4-complate"),
-];
+], 57);
