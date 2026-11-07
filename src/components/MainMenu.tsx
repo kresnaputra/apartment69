@@ -340,7 +340,7 @@ export const MainMenu = ({
       <div className="vn-menu-layout">
         <header className="vn-menu-header">
           <h1 className="vn-menu-title">
-            <span className="vn-menu-title-main">APARTMENTS</span>
+            <span className="vn-menu-title-main">APARTMENT</span>
             <span className="vn-menu-title-num">69</span>
           </h1>
           <p className="vn-menu-subtitle">{labels.subtitle}</p>

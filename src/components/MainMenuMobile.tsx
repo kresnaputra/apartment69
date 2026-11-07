@@ -248,7 +248,7 @@ export const MainMenuMobile = ({
               className="text-white uppercase tracking-[0.02em]"
               style={{ fontFamily: '"New Amsterdam", sans-serif', fontSize: "clamp(2.6rem, 7vw, 5rem)", fontWeight: 400 }}
             >
-              APARTMENTS
+              APARTMENT
             </span>
             <span
               className="text-[#ffd6a0]"
