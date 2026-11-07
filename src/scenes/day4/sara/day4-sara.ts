@@ -37,6 +37,7 @@ import saraParkVoice10Url from "@/voice/sara/sara-park-10.wav";
 import day4Bgm from "@/music/day3-sarah.mp3";
 import day4BgmCutscene from "@/music/cutscene-1-sarah.mp3";
 import { addSaraVoices } from "@/voice/sara/day1to4";
+import { addSaraCutSceneVoices, saraCutScene1Voices } from "@/voice/sara/cutscene1";
 
 export const day4SaraStartScene: VisualNovelCommand[] = addSaraVoices([
   playBgm(day4Bgm),
@@ -302,7 +303,7 @@ export const day4SaraCarInviteScene: VisualNovelCommand[] = addSaraVoices([
     }),
   ),
   setFlag("gallerySceneSarah1Unlocked", true),
-  cutScene(saraParkVideoUrl, true, [
+  cutScene(saraParkVideoUrl, true, addSaraCutSceneVoices([
     tx({
       id: "Di dalam mobil, Sarah hanya duduk.",
       en: "Inside the car, Sarah simply sits.",
@@ -345,18 +346,18 @@ export const day4SaraCarInviteScene: VisualNovelCommand[] = addSaraVoices([
       ja: "彼女はアルカのほうを向く。",
       ko: "그녀는 아르카를 돌아본다.",
     }),
-  ]),
+  ], 0)),
   cutScene(
     saraParkVideo2Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Sarah: Kalau aku bilang aku lelah menjadi wanita yang selalu terlihat baik-baik saja, kamu akan bilang apa?",
         en: "Sarah: If I said I'm tired of being a woman who always looks perfectly fine, what would you say?",
         ja: "サラ：いつも平気そうに見える女でいるのに疲れたと言ったら、あなたは何て言う？",
         ko: "사라: 언제나 괜찮은 여자로 보이는 게 지겹다고 하면, 너는 뭐라고 할래?",
       }),
-    ],
+    ], 3),
     {
       prompt: tx({
         id: "Pilihan 2",
@@ -396,7 +397,7 @@ export const day4SaraGalleryScene: VisualNovelCommand[] = [
 ];
 
 export const day4SaraTooLongScene: VisualNovelCommand[] = [
-  cutScene(saraParkVideo3Url, true, [
+  cutScene(saraParkVideo3Url, true, addSaraCutSceneVoices([
     tx({
       id: "Arka: Kedengarannya kamu sudah menahan terlalu lama.",
       en: "Arka: It sounds like you've been holding it in for too long.",
@@ -421,12 +422,12 @@ export const day4SaraTooLongScene: VisualNovelCommand[] = [
       ja: "サラ：たいていの人みたいに、すぐに何かを求めてこないからかもしれない。",
       ko: "사라: 대부분 사람들처럼 당장 무언가를 원하지 않아서일지도 몰라.",
     }),
-  ]),
+  ], 4)),
   jump("day4-sara-tension"),
 ];
 
 export const day4SaraNotStrongScene: VisualNovelCommand[] = [
-  cutScene(saraParkVideo3Url, true, [
+  cutScene(saraParkVideo3Url, true, addSaraCutSceneVoices([
     tx({
       id: "Arka: Kamu tidak harus selalu terlihat kuat.",
       en: "Arka: You don't always have to look strong.",
@@ -451,7 +452,7 @@ export const day4SaraNotStrongScene: VisualNovelCommand[] = [
       ja: "サラ：たいていの人みたいに、すぐに何かを求めてこないからかもしれない。",
       ko: "사라: 대부분 사람들처럼 당장 무언가를 원하지 않아서일지도 몰라.",
     }),
-  ]),
+  ], 4)),
   jump("day4-sara-tension"),
 ];
 
@@ -475,6 +476,7 @@ export const day4SaraTensionScene: VisualNovelCommand[] = addSaraVoices([
       ja: "サラ： それとも……あなたがどこまで自分を抑えるのか、知りたいだけかもしれない。",
       ko: "사라: 아니면... 네가 어디까지 참는지 알고 싶을 뿐인지도 몰라.",
     }),
+    { voice: saraCutScene1Voices[7] },
   ),
   menu(
     tx({
@@ -524,7 +526,7 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
   cutScene(
     saraParkVideo4Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Sarah tidak menunggu lebih lama. Ia menutup sisa jarak di antara mereka dan mencium Arka, pelan di awal, lalu semakin dalam. Tangannya menahan kerah Arka seolah tidak ingin ia pergi.",
         en: "Sarah doesn't wait any longer. She closes the remaining distance between them and kisses Arka, softly at first, then deeper. Her hand holds Arka's collar as if she doesn't want him to leave.",
@@ -545,14 +547,14 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
         ja: "口づけはしばらく続き、サラが離す",
         ko: "입맞춤은 한동안 이어지다가 사라가 떨어진다",
       }),
-    ],
+    ], 8),
     false,
     saraParkVoice4Url,
   ),
   cutScene(
     saraParkVideo5Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Sarah: Ini pertama kalinya aku melakukan sesuatu yang benar-benar ingin kulakukan… tanpa memikirkan akibatnya.",
         en: "Sarah: This is the first time I've done something I truly wanted to do... without thinking about the consequences.",
@@ -565,14 +567,14 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
         ja: "サラ：黙って。",
         ko: "사라: 조용히 해.",
       }),
-    ],
+    ], 9),
     false,
     saraParkVoice5Url,
   ),
   cutScene(
     saraParkVideo6Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Sarah: Jangan tanya apa pun sekarang.",
         en: "Sarah: Don't ask anything right now.",
@@ -585,14 +587,14 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
         ja: "アルカ：サラ——",
         ko: "아르카: 사라——",
       }),
-    ],
+    ], 11),
     false,
     saraParkVoice6Url,
   ),
   cutScene(
     saraParkVideo7Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Sambil tetap mencium, tangan Sarah turun dan membuka celana Arka. Ia memegang milik Arka dengan gerakan yang sengaja pelan.",
         en: "Still kissing him, Sarah's hand moves down and opens Arka's pants. She holds him with a deliberately slow touch.",
@@ -623,14 +625,14 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
         ja: "サラ：終わらせるのは私よ。",
         ko: "사라: 끝내는 건 나야.",
       }),
-    ],
+    ], 12),
     false,
     saraParkVoice7Url,
   ),
   cutScene(
     saraParkVideo8Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Sarah menggerakkan tangannya naik-turun dengan tempo yang ia kendalikan sendiri.",
         en: "Sarah moves her hand up and down at a pace she controls herself.",
@@ -649,14 +651,14 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
         ja: "アルカ：手……きつい。",
         ko: "아르카: 손이... 세.",
       }),
-    ],
+    ], 15),
     false,
     saraParkVoice8Url,
   ),
   cutScene(
     saraParkVideo9Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Gerakan tangan Sarah menjadi lebih cepat. Napasnya mulai terdengar, tapi ia masih menahan suara.",
         en: "Sarah's hand moves faster. Her breathing becomes audible, but she still holds her voice back.",
@@ -723,14 +725,14 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
         ja: "アルカ：サラ……もう……",
         ko: "아르카: 사라... 나 곧...",
       }),
-    ],
+    ], 16),
     false,
     saraParkVoice9Url,
   ),
   cutScene(
     saraParkVideo10Url,
     true,
-    [
+    addSaraCutSceneVoices([
       tx({
         id: "Arka keluar di tangan Sarah. Sarah terus menggerakkan tangannya sampai selesai, baru kemudian melepaskan ciuman.",
         en: "Arka finishes in Sarah's hand. Sarah keeps moving her hand until he is done, and only then does she break the kiss.",
@@ -755,7 +757,7 @@ export const day4SaraKissScene: VisualNovelCommand[] = [
         ja: "彼女はティッシュを取り、整った動作で手を拭く。",
         ko: "그녀는 티슈를 집어 단정한 손놀림으로 손을 닦는다.",
       }),
-    ],
+    ], 23),
     false,
     saraParkVoice10Url,
   ),

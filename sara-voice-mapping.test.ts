@@ -1,8 +1,9 @@
 import type {} from "bun";
 import { expect, test } from "bun:test";
-import type { VisualNovelCommand } from "./src/types/novel";
+import type { CutSceneNarrationEntry, VisualNovelCommand } from "./src/types/novel";
 import saraForgetVoice from "./src/voice/sara/sarah_forget.mp3";
 import { saraDay1To4Voices } from "./src/voice/sara/day1to4";
+import { saraCutScene1Voices } from "./src/voice/sara/cutscene1";
 import { saraHallwayScene, saraHelpScene, saraRefuseScene } from "./src/scenes/day1/saraHallway";
 import {
   day2SaraScene, day2SaraAcceptScene, day2SaraDelayScene, day2SaraLiftScene,
@@ -13,6 +14,7 @@ import {
 } from "./src/scenes/day3/sara/day3-sara";
 import {
   day4SaraStartScene, day4SaraCarInviteScene, day4SaraTensionScene, day4SaraEndingScene,
+  day4SaraGalleryScene, day4SaraTooLongScene, day4SaraNotStrongScene, day4SaraKissScene,
 } from "./src/scenes/day4/sara/day4-sara";
 
 const voicesIn = (commands: VisualNovelCommand[]) =>
@@ -47,7 +49,9 @@ test("Sara's day 1-4 dialogue uses the matching recordings, including her Day 3 
     const voices = voicesIn(commands);
     const expected = commands === day3SaraStartScene
       ? [saraForgetVoice, ...saraDay1To4Voices.slice(start, start + count)]
-      : saraDay1To4Voices.slice(start, start + count);
+      : commands === day4SaraTensionScene
+        ? [saraCutScene1Voices[7]]
+        : saraDay1To4Voices.slice(start, start + count);
     expect(voices).toEqual(expected);
   }
   expect(voicesIn(day3SaraStartScene)[0]).toBe(saraForgetVoice);
@@ -56,6 +60,47 @@ test("Sara's day 1-4 dialogue uses the matching recordings, including her Day 3 
   expect(groups.flatMap(([commands]) => voicesIn(commands))).toEqual([
     ...saraDay1To4Voices.slice(0, 30),
     saraForgetVoice,
-    ...saraDay1To4Voices.slice(30),
+    ...saraDay1To4Voices.slice(30, 56),
+    saraCutScene1Voices[7],
+    ...saraDay1To4Voices.slice(57),
   ]);
+});
+
+const cutSceneEntriesIn = (commands: VisualNovelCommand[]): CutSceneNarrationEntry[] =>
+  commands.flatMap((command) => command.type === "cutScene"
+    ? Array.isArray(command.narrate) ? command.narrate : command.narrate ? [command.narrate] : []
+    : []);
+
+const cutSceneVoice = (entry: CutSceneNarrationEntry) =>
+  typeof entry === "object" && entry !== null && "text" in entry ? entry.voice : undefined;
+
+const cutSceneText = (entry: CutSceneNarrationEntry) => {
+  const text = typeof entry === "object" && entry !== null && "text" in entry ? entry.text : entry;
+  return typeof text === "string" ? text : text.id ?? "";
+};
+
+test("all 24 Sarah cutscene recordings follow the story order on either choice", () => {
+  expect(saraCutScene1Voices).toHaveLength(24);
+  const opening = cutSceneEntriesIn(day4SaraCarInviteScene);
+  const tooLong = cutSceneEntriesIn(day4SaraTooLongScene);
+  const notStrong = cutSceneEntriesIn(day4SaraNotStrongScene);
+  const kiss = cutSceneEntriesIn(day4SaraKissScene);
+  const sarahVoices = (entries: CutSceneNarrationEntry[]) =>
+    entries.filter((entry) => cutSceneText(entry).startsWith("Sarah:")).map(cutSceneVoice);
+
+  expect(sarahVoices(opening)).toEqual(saraCutScene1Voices.slice(0, 4));
+  expect(sarahVoices(tooLong)).toEqual(saraCutScene1Voices.slice(4, 7));
+  expect(sarahVoices(notStrong)).toEqual(saraCutScene1Voices.slice(4, 7));
+  expect(voicesIn(day4SaraTensionScene)).toEqual([saraCutScene1Voices[7]]);
+  expect(sarahVoices(kiss)).toEqual(saraCutScene1Voices.slice(8));
+  expect([
+    ...sarahVoices(opening), ...sarahVoices(tooLong),
+    ...voicesIn(day4SaraTensionScene), ...sarahVoices(kiss),
+  ]).toEqual(saraCutScene1Voices);
+  expect([...opening, ...tooLong, ...notStrong, ...kiss]
+    .filter((entry) => !cutSceneText(entry).startsWith("Sarah:"))
+    .every((entry) => cutSceneVoice(entry) === undefined)).toBe(true);
+  expect(day4SaraGalleryScene.slice(1)).toEqual(
+    day4SaraCarInviteScene.slice(day4SaraCarInviteScene.findIndex((command) => command.type === "cutScene")),
+  );
 });
