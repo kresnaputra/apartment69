@@ -231,6 +231,16 @@ export const jumpIf = (
   elseTarget: options?.elseTarget,
 });
 
+/**
+ * Jumps to `target` when every heroine is locked for a smartphone-contacts
+ * screen built with the same `options` (e.g. all chosen routes have failed).
+ */
+export const jumpIfNoRoute = (target: string, options?: Record<string, unknown>): VisualNovelCommand => ({
+  type: "jumpIfNoRoute",
+  target,
+  options,
+});
+
 export const minigame = (minigameId: MinigameId, options?: Record<string, unknown>): VisualNovelCommand => ({
   type: "minigame",
   minigameId,

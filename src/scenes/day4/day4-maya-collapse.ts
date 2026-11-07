@@ -312,15 +312,8 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
     "arka",
   ),
   scene("linear-gradient(180deg, #000000 0%, #030303 100%)", "", 1000),
-  centeredText(
-    tx({
-      id: "GAME OVER",
-      en: "GAME OVER",
-      ja: "GAME OVER",
-      ko: "GAME OVER",
-    }),
-    { size: "hero" },
-  ),
+  // GAME OVER is only shown once every chosen route has closed; see
+  // day4-route-fallback / route-game-over.
   centeredText(
     tx({
       id: "RUTE MAYA GAGAL",
@@ -328,7 +321,7 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
       ja: "マヤルート失敗",
       ko: "마야 루트 실패",
     }),
-    { size: "sub" },
+    { size: "hero" },
   ),
   centeredText(
     tx({
@@ -339,6 +332,7 @@ export const day4MayaBadEndingScene: VisualNovelCommand[] = [
     }),
     { size: "sub" },
   ),
+  jump("day4-route-fallback"),
 ];
 
 export const day4MayaForceRestScene: VisualNovelCommand[] = [

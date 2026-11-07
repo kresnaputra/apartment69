@@ -735,4 +735,8 @@ export const day4NadiaNightSkipScene: VisualNovelCommand[] = addNadiaVoices([
     { size: "hero" },
   ),
   setFlag("day4NadiaCompleted", true),
+  // Skipping Nadia on Day 4 closes her route; fall back to the other route.
+  setFlag("nadiaRouteFailed", true),
+  hide("arka-day4-nadia-skip"),
+  jump("day4-route-fallback"),
 ], 52);

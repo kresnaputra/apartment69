@@ -28,6 +28,7 @@ import type {
 } from "@/types/novel";
 import { isMobileDevice } from "@/lib/utils/deviceDetection";
 import { persistGalleryUnlockFlag } from "@/lib/runtime/galleryUnlocks";
+import { hasAvailableSmartphoneContact, type SmartphoneContactLockOptions } from "@/components/minigames/smartphoneContacts";
 
 type NovelStore = {
   bundles: Record<string, LoadedCharacterBundle>;
@@ -513,6 +514,16 @@ const runScriptUntilPause = (state: NovelStore) => {
         nextState.currentIndex = matched
           ? 0
           : (command.elseTarget ? 0 : (nextState.currentIndex ?? 0) + 1);
+        break;
+      }
+
+      case "jumpIfNoRoute": {
+        const noRoute = !hasAvailableSmartphoneContact(
+          nextState.flags ?? {},
+          command.options as SmartphoneContactLockOptions | undefined,
+        );
+        nextState.currentLabel = noRoute ? command.target : (nextState.currentLabel ?? script.startLabel);
+        nextState.currentIndex = noRoute ? 0 : (nextState.currentIndex ?? 0) + 1;
         break;
       }
 

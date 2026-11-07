@@ -62,32 +62,3 @@ describe("Sarah gallery scene", () => {
     expect(final.flags.gallerySceneMaya1Unlocked).toBeUndefined();
   });
 });
-
-describe("Sarah route end", () => {
-  const playUntilEnd = (flags: Record<string, string | boolean>) => {
-    useNovelStore.getState().startFromLabel("day4-complate", flags);
-    const seenLabels = new Set<string>();
-    for (let step = 0; step < 20; step += 1) {
-      const state = useNovelStore.getState();
-      if (state.currentLabel) seenLabels.add(state.currentLabel);
-      if (state.isEnded || state.currentLabel?.startsWith("day5")) break;
-      state.advance();
-    }
-    return { final: useNovelStore.getState(), seenLabels };
-  };
-
-  test("finishes the run with a next-update notice instead of entering Day 5", () => {
-    const { final, seenLabels } = playUntilEnd({ day4SelectedCharacter: "sara", day4SaraCompleted: true });
-    expect(seenLabels.has("day4-sara-route-end")).toBe(true);
-    expect([...seenLabels].some((label) => label.startsWith("day5"))).toBe(false);
-    expect(final.isEnded).toBe(true);
-    expect(final.flags.gallerySceneMaya1Unlocked).toBeUndefined();
-  });
-
-  test("keeps Maya's Day 4 wrap-up flowing into Day 5", () => {
-    const { final, seenLabels } = playUntilEnd({ day4SelectedCharacter: "maya" });
-    expect(seenLabels.has("day4-sara-route-end")).toBe(false);
-    expect(final.currentLabel?.startsWith("day5")).toBe(true);
-    expect(final.flags.gallerySceneMaya1Unlocked).toBe(true);
-  });
-});

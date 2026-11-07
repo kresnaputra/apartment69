@@ -226,6 +226,13 @@ export type JumpIfCommand = {
   elseTarget?: string;
 };
 
+/** Jumps to `target` when no heroine contact is selectable with the given phone lock options. */
+export type JumpIfNoRouteCommand = {
+  type: "jumpIfNoRoute";
+  target: string;
+  options?: Record<string, unknown>;
+};
+
 export type MinigameCommand = {
   type: "minigame";
   minigameId: MinigameId;
@@ -299,6 +306,7 @@ export type VisualNovelCommand =
   | SetFlagCommand
   | ClearFlagCommand
   | JumpIfCommand
+  | JumpIfNoRouteCommand
   | MinigameCommand
   | CutSceneCommand
   | MultiCutSceneCommand

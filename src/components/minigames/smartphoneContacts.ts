@@ -77,7 +77,49 @@ export const resolveLockedSmartphoneContacts = (
     });
   }
 
+  resolveRouteLockedContacts(flags).forEach((contactId) => resolvedDisabledContacts.add(contactId));
+
   return [...resolvedDisabledContacts];
+};
+
+/** A player can pursue at most this many heroines; the pick happens on Day 2. */
+export const MAX_ROUTE_CHARACTERS = 2;
+
+/**
+ * Flags that permanently close a heroine's route (failed, skipped, or no more
+ * content yet). A closed route can't be picked again, so the player falls back
+ * to their other route — or reaches game over when none is left.
+ */
+export const routeClosedFlagMap: Record<(typeof day4RouteCharacterIds)[number], string> = {
+  maya: "mayaRouteFailed",
+  elena: "elenaRouteFailed",
+  nadia: "nadiaRouteFailed",
+  sara: "saraRouteClosed",
+};
+
+/** Heroines whose Day 2 route was completed, i.e. the player's chosen routes. */
+export const getChosenRouteCharacters = (flags: FlagMap): SmartphoneContactId[] =>
+  day4RouteCharacterIds.filter((contactId) => Boolean(flags[day2RouteCompletionFlagMap[contactId] ?? ""]));
+
+/**
+ * Hard locks that no per-call option may undo: heroines outside the two chosen
+ * routes, and routes that have been closed.
+ */
+export const resolveRouteLockedContacts = (flags: FlagMap): SmartphoneContactId[] => {
+  const locked = new Set<SmartphoneContactId>();
+  const chosen = getChosenRouteCharacters(flags);
+
+  if (chosen.length >= MAX_ROUTE_CHARACTERS) {
+    day4RouteCharacterIds.forEach((contactId) => {
+      if (!chosen.includes(contactId)) locked.add(contactId);
+    });
+  }
+
+  day4RouteCharacterIds.forEach((contactId) => {
+    if (flags[routeClosedFlagMap[contactId]]) locked.add(contactId);
+  });
+
+  return [...locked];
 };
 
 export type SmartphoneContactLockOptions = {
@@ -86,6 +128,16 @@ export type SmartphoneContactLockOptions = {
   conditionalEnabledContacts?: Partial<Record<SmartphoneContactId, string>>;
   requiredCompletionFlags?: string[];
   contactOverrides?: SmartphoneContactOverrides;
+};
+
+/** True when at least one heroine contact can still be picked with these options. */
+export const hasAvailableSmartphoneContact = (
+  flags: FlagMap,
+  options: SmartphoneContactLockOptions = {},
+): boolean => {
+  const disabled = new Set(resolveSmartphoneDisabledContacts(flags, options));
+  return (Object.keys(smartphoneContactFlagMap) as SmartphoneContactId[])
+    .some((contactId) => !disabled.has(contactId) && !options.contactOverrides?.[contactId]?.disabled);
 };
 
 export const resolveSmartphoneDisabledContacts = (
@@ -102,6 +154,9 @@ export const resolveSmartphoneDisabledContacts = (
   for (const [contactId, flagName] of Object.entries(options.conditionalEnabledContacts ?? {})) {
     if (flags[flagName]) disabled.delete(contactId as SmartphoneContactId);
   }
+
+  // Re-apply route locks after conditional enables so they always win.
+  resolveRouteLockedContacts(flags).forEach((contactId) => disabled.add(contactId));
 
   const hasAvailableContact = (Object.keys(smartphoneContactFlagMap) as SmartphoneContactId[])
     .some((contactId) => !disabled.has(contactId) && !options.contactOverrides?.[contactId]?.disabled);
