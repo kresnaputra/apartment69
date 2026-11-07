@@ -16,6 +16,24 @@ type RenderInput = {
   viewportHeight: number;
 };
 
+/**
+ * Whether a rig ships pre-trimmed layer images, which lets the renderer use the
+ * higher pixel-ratio cap. Older editor exports mark this with `imageIsCropped`;
+ * newer (v1.6+) exports drop that flag and instead write images already trimmed
+ * to their opaque bounds, so an opaqueBounds rect covering the whole image
+ * counts too.
+ */
+export const projectUsesTrimmedImages = (project: SbnProject): boolean =>
+  project.attachments.some((attachment) => {
+    const bounds = attachment.opaqueBounds;
+    if (!bounds) return false;
+    if (attachment.imageIsCropped) return true;
+    return bounds.x === 0
+      && bounds.y === 0
+      && bounds.width === attachment.width
+      && bounds.height === attachment.height;
+  });
+
 export class CanvasSbnRenderer {
   private canvas: HTMLCanvasElement | null = null;
   private ctx: CanvasRenderingContext2D | null = null;

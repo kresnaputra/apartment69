@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import JSZip from "jszip";
 import { computeAllWorldTransforms, sampleAttachmentOpacityAtFrame, sampleBonesAtFrame } from "./src/lib/sbn/sampling";
 import { createAnimationFrameGate } from "./src/lib/runtime/graphicsSettings";
-import { CanvasSbnRenderer } from "./src/lib/rendering/canvasSbnRenderer";
+import { CanvasSbnRenderer, projectUsesTrimmedImages } from "./src/lib/rendering/canvasSbnRenderer";
 import type { SbnProject, WorldBone } from "./src/types/sbn";
 import { bg, scene } from "./src/scenes/scriptTypes";
 import { freezeBackgroundCamera, getBackgroundCameraAnimation, resetBackgroundCamera } from "./src/lib/rendering/backgroundAnimation";
@@ -333,5 +333,17 @@ test("padded images are reused across renderers by image identity and padding", 
   } finally {
     if (originalDocument) Object.defineProperty(globalThis, "document", originalDocument);
     else Reflect.deleteProperty(globalThis, "document");
+  }
+});
+
+describe("Character render resolution", () => {
+  // Every heroine rig must get the high pixel-ratio cap; Sarah's v1.6 export
+  // has no imageIsCropped flag and used to fall back to the lower cap.
+  for (const asset of ["sara/sara-normal.sbn", "nadia/nadia-normal.sbn", "elena/elena-angry.sbn", "maya/maya-sad.sbn"]) {
+    test(`${asset} uses the trimmed-image resolution cap`, async () => {
+      const zip = await JSZip.loadAsync(await readFile(new URL(`./src/character/${asset}`, import.meta.url)));
+      const project = JSON.parse(await zip.file("project.json")!.async("string")) as SbnProject;
+      expect(projectUsesTrimmedImages(project)).toBe(true);
+    });
   }
 });

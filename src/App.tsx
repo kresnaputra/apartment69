@@ -8,7 +8,7 @@ import { SmartphoneContactMinigameMobile } from "@/components/minigames/Smartpho
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
 import { CableMatchingMinigame } from "@/components/minigames/CableMatchingMinigame";
-import { CanvasSbnRenderer } from "@/lib/rendering/canvasSbnRenderer";
+import { CanvasSbnRenderer, projectUsesTrimmedImages } from "@/lib/rendering/canvasSbnRenderer";
 import { freezeBackgroundCamera, getBackgroundCameraAnimation, resetBackgroundCamera } from "@/lib/rendering/backgroundAnimation";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
 import { loadCharacterBundle } from "@/lib/rendering/loadCharacterBundle";
@@ -451,9 +451,7 @@ const SbnCharacterSprite = memo(({ bundle, character, graphicsQuality, frameRate
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer) return;
-    const usesCroppedImages = bundle.project.attachments.some(
-      (a) => a.imageIsCropped && a.opaqueBounds,
-    );
+    const usesCroppedImages = projectUsesTrimmedImages(bundle.project);
     renderer.resize(viewport.width, viewport.height, stageScale, usesCroppedImages, graphicsQuality);
     cameraRef.current = null;
   }, [bundle, graphicsQuality, stageScale, viewport.height, viewport.width]);
