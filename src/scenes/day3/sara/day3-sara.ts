@@ -20,6 +20,7 @@ import day3Bgm from "@/music/day3-sarah.mp3";
 import phoneSfx from "@/sfx/phone.mp3";
 import liftSfx from "@/sfx/lift.wav";
 import openDoorSfx from "@/sfx/open-door.wav";
+import saraForgetVoice from "@/voice/sara/sarah_forget.mp3";
 import { addSaraVoices } from "@/voice/sara/day1to4";
 
 export const day3SaraStartScene: VisualNovelCommand[] = addSaraVoices([
@@ -44,10 +45,10 @@ export const day3SaraStartScene: VisualNovelCommand[] = addSaraVoices([
   playSfx(phoneSfx),
   say("sara", "smile", tx({
     id: "Hi Arka, apa ada kegiatan hari ini?",
-    en: "Hi Arka, do you have anything going on today?", // TODO: Add voice line
+    en: "Hi Arka, do you have anything going on today?",
     ja: "こんにちは、アルカ。今日は予定がある？",
     ko: "안녕, 아르카. 오늘 뭐 하는 일 있어?",
-  })),
+  }), { voice: saraForgetVoice }),
   say("arka", "neutral", tx({
     id: "Aku baru selesai mengerjakan tugas kuliahu. Ada apa?",
     en: "I just finished my college assignment. What's up?",
@@ -298,7 +299,7 @@ export const day3SaraCafeContinueScene: VisualNovelCommand[] = addSaraVoices([
       next: "day3-sara-decline",
     },
   ]),
-], 37);
+], 36);
 
 export const day3SaraEscortScene: VisualNovelCommand[] = addSaraVoices([
   setFlag("day3SaraEscorted", true),
@@ -405,7 +406,7 @@ export const day3SaraEscortScene: VisualNovelCommand[] = addSaraVoices([
     ko: "다음엔 커피만 마시자고 부르지 않을지도 몰라.",
   })),
   jump("day3-sara-ending"),
-], 43);
+], 42);
 
 export const day3SaraDeclineScene: VisualNovelCommand[] = addSaraVoices([
   setFlag("day3SaraEscorted", false),
@@ -428,7 +429,7 @@ export const day3SaraDeclineScene: VisualNovelCommand[] = addSaraVoices([
     ko: "사라는 화내지 않는다. 잔을 집어 들고 차분히 작별한 뒤 먼저 카페를 떠난다.",
   })),
   jump("day3-sara-ending"),
-], 48);
+], 47);
 
 export const day3SaraEndingScene: VisualNovelCommand[] = [
   hide("arka-day3-sara"),

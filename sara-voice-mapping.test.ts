@@ -1,6 +1,7 @@
 import type {} from "bun";
 import { expect, test } from "bun:test";
 import type { VisualNovelCommand } from "./src/types/novel";
+import saraForgetVoice from "./src/voice/sara/sarah_forget.mp3";
 import { saraDay1To4Voices } from "./src/voice/sara/day1to4";
 import { saraHallwayScene, saraHelpScene, saraRefuseScene } from "./src/scenes/day1/saraHallway";
 import {
@@ -18,7 +19,7 @@ const voicesIn = (commands: VisualNovelCommand[]) =>
   commands.filter((command) => command.type === "say" && command.speaker === "sara")
     .map((command) => command.type === "say" ? command.voice : undefined);
 
-test("Sara's day 1-4 dialogue uses each numbered recording in script order", () => {
+test("Sara's day 1-4 dialogue uses the matching recordings, including her Day 3 greeting", () => {
   const groups: Array<[VisualNovelCommand[], number, number]> = [
     [saraHallwayScene, 0, 3],
     [saraHelpScene, 3, 2],
@@ -31,11 +32,11 @@ test("Sara's day 1-4 dialogue uses each numbered recording in script order", () 
     [day2SaraYesScene, 27, 1],
     [day2SaraMaybeScene, 28, 1],
     [day2SaraEndingScene, 29, 1],
-    [day3SaraStartScene, 30, 7],
-    [day3SaraCafeContinueScene, 37, 6],
-    [day3SaraEscortScene, 43, 5],
-    [day3SaraDeclineScene, 48, 1],
-    [day4SaraStartScene, 49, 5],
+    [day3SaraStartScene, 30, 6],
+    [day3SaraCafeContinueScene, 36, 6],
+    [day3SaraEscortScene, 42, 5],
+    [day3SaraDeclineScene, 47, 1],
+    [day4SaraStartScene, 48, 6],
     [day4SaraCarInviteScene, 54, 2],
     [day4SaraTensionScene, 56, 1],
     [day4SaraEndingScene, 57, 4],
@@ -44,9 +45,17 @@ test("Sara's day 1-4 dialogue uses each numbered recording in script order", () 
   expect(saraDay1To4Voices).toHaveLength(61);
   for (const [commands, start, count] of groups) {
     const voices = voicesIn(commands);
-    const spokenVoices = commands === day4SaraStartScene ? voices.slice(1) : voices;
-    expect(spokenVoices).toEqual(saraDay1To4Voices.slice(start, start + count));
+    const expected = commands === day3SaraStartScene
+      ? [saraForgetVoice, ...saraDay1To4Voices.slice(start, start + count)]
+      : saraDay1To4Voices.slice(start, start + count);
+    expect(voices).toEqual(expected);
   }
-  expect(voicesIn(day4SaraStartScene)[0]).toBeUndefined();
-  expect(groups.flatMap(([commands]) => voicesIn(commands)).filter(Boolean)).toHaveLength(61);
+  expect(voicesIn(day3SaraStartScene)[0]).toBe(saraForgetVoice);
+  expect(voicesIn(day3SaraStartScene)[1]).toBe(saraDay1To4Voices[30]);
+  expect(voicesIn(day4SaraStartScene)[0]).toBe(saraDay1To4Voices[48]);
+  expect(groups.flatMap(([commands]) => voicesIn(commands))).toEqual([
+    ...saraDay1To4Voices.slice(0, 30),
+    saraForgetVoice,
+    ...saraDay1To4Voices.slice(30),
+  ]);
 });

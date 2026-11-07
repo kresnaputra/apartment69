@@ -74,17 +74,12 @@ export const saraDay1To4Voices = [
 export const addSaraVoices = (
   commands: VisualNovelCommand[],
   startIndex: number,
-  skipFirst = false,
 ): VisualNovelCommand[] => {
   let voiceIndex = startIndex;
-  let skipped = false;
 
   return commands.map((command) => {
     if (command.type !== "say" || command.speaker !== "sara") return command;
-    if (skipFirst && !skipped) {
-      skipped = true;
-      return command;
-    }
+    if (command.voice) return command;
 
     const voice = saraDay1To4Voices[voiceIndex++];
     if (!voice) throw new Error(`Missing Sara voice at index ${voiceIndex - 1}`);

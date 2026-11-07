@@ -38,7 +38,6 @@ import day4Bgm from "@/music/day3-sarah.mp3";
 import day4BgmCutscene from "@/music/cutscene-1-sarah.mp3";
 import { addSaraVoices } from "@/voice/sara/day1to4";
 
-// The first Sara line is a text message, not spoken dialogue.
 export const day4SaraStartScene: VisualNovelCommand[] = addSaraVoices([
   playBgm(day4Bgm),
   setFlag("day4SelectedCharacter", "sara"),
@@ -221,7 +220,7 @@ export const day4SaraStartScene: VisualNovelCommand[] = addSaraVoices([
       },
     ],
   ),
-], 49, true);
+], 48);
 
 export const day4SaraReservedScene: VisualNovelCommand[] = [
   say(
