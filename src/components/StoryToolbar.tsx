@@ -28,18 +28,27 @@ export const listenForToolbarMouseMovement = (target: EventTarget, wake: () => v
   return () => target.removeEventListener("pointermove", onPointerMove);
 };
 
-export const useStoryToolbarVisibility = ({ enabled }: { enabled: boolean }) => {
-  const [visible, setVisible] = useState(false);
+const FINE_POINTER_QUERY = "(hover: hover) and (pointer: fine)";
+
+/** True on devices with a hovering mouse/trackpad; false on touch devices. */
+export const useHasFinePointer = () => {
   const [hasCursor, setHasCursor] = useState(() =>
-    typeof window === "undefined" || window.matchMedia("(hover: hover) and (pointer: fine)").matches,
+    typeof window === "undefined" || window.matchMedia(FINE_POINTER_QUERY).matches,
   );
 
   useEffect(() => {
-    const query = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const query = window.matchMedia(FINE_POINTER_QUERY);
     const update = () => setHasCursor(query.matches);
     query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
   }, []);
+
+  return hasCursor;
+};
+
+export const useStoryToolbarVisibility = ({ enabled }: { enabled: boolean }) => {
+  const [visible, setVisible] = useState(false);
+  const hasCursor = useHasFinePointer();
 
   useEffect(() => {
     setVisible(false);
@@ -128,6 +137,89 @@ export const StoryToolbar = ({
           <span className="vn-story-control-tooltip" aria-hidden="true">{labels[id]}</span>
         </button>
       ))}
+    </div>
+  );
+};
+
+type StoryToolbarMenuProps = Omit<StoryToolbarProps, "visible" | "focusedControlIndex" | "onControlFocus"> & {
+  labels: Record<StoryControlId | "menu" | "close", string>;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+const MenuIcon = ({ open }: { open: boolean }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true" focusable="false">
+    {open ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+  </svg>
+);
+
+/**
+ * Touch-device version of the story controls: a single hamburger button that
+ * opens a labelled dropdown, so the six icon-only buttons don't cover the
+ * scene on small screens. Fully controlled (open state lives in the caller).
+ */
+export const StoryToolbarMenu = ({
+  labels, isAuto, disabled = false, open, onOpenChange,
+  onAuto, onLog, onSave, onLoad, onConfig, onExit,
+}: StoryToolbarMenuProps) => {
+  const handlers = { log: onLog, auto: onAuto, save: onSave, load: onLoad, config: onConfig, exit: onExit };
+  const isOpen = open && !disabled;
+
+  return (
+    <div
+      className="vn-story-menu"
+      data-open={isOpen}
+      onClick={(event) => event.stopPropagation()}
+      onPointerDown={(event) => event.stopPropagation()}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") event.stopPropagation();
+        if (event.key === "Escape" && isOpen) {
+          event.stopPropagation();
+          onOpenChange(false);
+        }
+      }}
+    >
+      {isOpen ? (
+        <div
+          className="vn-story-menu-backdrop"
+          aria-hidden="true"
+          onClick={() => onOpenChange(false)}
+        />
+      ) : null}
+      <button
+        type="button"
+        className={`vn-story-control vn-story-menu-toggle${isOpen ? " is-active" : ""}`}
+        aria-label={isOpen ? labels.close : labels.menu}
+        aria-expanded={isOpen}
+        aria-controls="vn-story-menu-panel"
+        disabled={disabled}
+        onClick={() => onOpenChange(!isOpen)}
+      >
+        <MenuIcon open={isOpen} />
+        {isAuto && !isOpen ? <span className="vn-story-menu-badge" aria-hidden="true" /> : null}
+      </button>
+      {isOpen ? (
+        <div id="vn-story-menu-panel" className="vn-story-menu-panel" role="menu" aria-label={labels.menu}>
+          {STORY_CONTROL_IDS.map((id) => (
+            <button
+              key={id}
+              type="button"
+              data-control={id}
+              role={id === "auto" ? "menuitemcheckbox" : "menuitem"}
+              aria-checked={id === "auto" ? isAuto : undefined}
+              className={`vn-story-menu-item${id === "auto" && isAuto ? " is-active" : ""}${id === "exit" ? " is-exit" : ""}`}
+              onClick={() => {
+                onOpenChange(false);
+                handlers[id]();
+              }}
+            >
+              <ControlIcon id={id} isAuto={isAuto} />
+              <span>{labels[id]}</span>
+              {id === "auto" ? <span className="vn-story-menu-state" aria-hidden="true">{isAuto ? "ON" : "OFF"}</span> : null}
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };

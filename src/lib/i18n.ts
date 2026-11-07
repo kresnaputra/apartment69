@@ -84,6 +84,7 @@ export const uiText = {
   skip: tx({ id: "Lewati", en: "Skip", ja: "スキップ", ko: "건너뛰기" }),
   config: tx({ id: "Konfigurasi", en: "Config", ja: "設定", ko: "설정" }),
   close: tx({ id: "Tutup", en: "Close", ja: "閉じる", ko: "닫기" }),
+  menu: tx({ id: "Menu", en: "Menu", ja: "メニュー", ko: "메뉴" }),
   volumeBgm: tx({
     id: "Volume BGM",
     en: "BGM Volume",

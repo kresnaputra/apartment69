@@ -17,7 +17,7 @@ import { MainMenuMobile } from "@/components/MainMenuMobile";
 import { MainMenuSettingsOverlay } from "@/components/MainMenuSettingsOverlay";
 import { NarratorMobile } from "@/components/NarratorMobile";
 import { DialogueMobile } from "@/components/DialogueMobile";
-import { StoryToolbar, STORY_CONTROL_IDS, useStoryToolbarVisibility } from "@/components/StoryToolbar";
+import { StoryToolbar, StoryToolbarMenu, STORY_CONTROL_IDS, useHasFinePointer, useStoryToolbarVisibility } from "@/components/StoryToolbar";
 import { LogOverlay } from "@/components/LogOverlay";
 import { SaveSlotOverlay } from "@/components/SaveSlotOverlay";
 import { ExitConfirmationOverlay } from "@/components/ExitConfirmationOverlay";
@@ -29,6 +29,7 @@ import type { SaveSlot } from "@/lib/runtime/saveSlots";
 import { fitCameraToScene } from "@/lib/sbn/sampling";
 import type { SceneBounds } from "@/types/sbn";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { isAndroidApp } from "@/lib/utils/deviceDetection";
 import { useGamepad } from "@/hooks/useGamepad";
 import { characterBundleRegistry } from "@/character";
 import type { SmartphoneContactLockOptions, SmartphoneContactOverrides } from "@/components/minigames/smartphoneContacts";
@@ -77,6 +78,7 @@ const CHARACTER_MIN_STAGE_HEIGHT_RATIO = 0.58;
 const BG_VOLUME_STORAGE_KEY = "apartment69:bg-volume";
 const DEFAULT_BG_VOLUME = 0.5;
 const VOICE_ACTING_ENABLED = isVoiceActingEnabled();
+const IS_ANDROID_APP = isAndroidApp();
 
 type CharacterSpriteProps = {
   bundle: LoadedCharacterBundle;
@@ -1696,6 +1698,12 @@ const App = () => {
   const CONTROL_COUNT = STORY_CONTROL_IDS.length; // Log, Auto, Save, Load, Config, Exit
   const isStoryOverlayOpen = showLog || showConfig || showSaveSlots || showExitConfirmation;
   const isToolbarVisible = useStoryToolbarVisibility({ enabled: phase === "story" });
+  // Touch devices get a hamburger menu instead of the six-icon toolbar.
+  const isCompactStoryMenu = !useHasFinePointer();
+  const [isStoryMenuOpen, setIsStoryMenuOpen] = useState(false);
+  useEffect(() => {
+    if (phase !== "story" || isStoryOverlayOpen || !isCompactStoryMenu) setIsStoryMenuOpen(false);
+  }, [phase, isStoryOverlayOpen, isCompactStoryMenu]);
   useLayoutEffect(() => {
     if (isToolbarVisible) return;
     setFocusedControlIndex(-1);
@@ -2077,10 +2085,10 @@ const App = () => {
 
   // Auto-advance: when enabled, advance to the next line 1.5s after text finishes typing.
   useEffect(() => {
-    if (!isAuto || isTyping || choices.length > 0 || isPresentationTransitioning || isEnded || isStoryOverlayOpen) return;
+    if (!isAuto || isTyping || choices.length > 0 || isPresentationTransitioning || isEnded || isStoryOverlayOpen || isStoryMenuOpen) return;
     const timer = window.setTimeout(() => { advance(); }, 1500);
     return () => window.clearTimeout(timer);
-  }, [isAuto, isTyping, choices.length, isPresentationTransitioning, isEnded, isStoryOverlayOpen, advance, resolvedLine]);
+  }, [isAuto, isTyping, choices.length, isPresentationTransitioning, isEnded, isStoryOverlayOpen, isStoryMenuOpen, advance, resolvedLine]);
 
   useEffect(() => {
     const handleAdvance = () => {
@@ -2559,7 +2567,8 @@ const App = () => {
               );
             })}
 
-          {hasResolvedLocation && (isMobile ? (
+          {/* The location pill crowds the hamburger menu in the Android app. */}
+          {hasResolvedLocation && !IS_ANDROID_APP && (isMobile ? (
             <div className="absolute top-19 right-3 z-20">
               <div className="border border-white/10 bg-[rgba(11,10,18,0.36)] backdrop-blur-[14px] rounded-full px-3 py-1.5 text-[0.6rem] tracking-[0.32em] uppercase text-[#ccb9a9]">
                 {resolvedLocation}
@@ -2703,7 +2712,21 @@ const App = () => {
         </main>
       ) : null}
 
-      {phase === "story" ? (
+      {phase === "story" && isCompactStoryMenu ? (
+        <StoryToolbarMenu
+          labels={{ ...labels, menu: resolveText(uiText.menu, language) }}
+          isAuto={isAuto}
+          open={isStoryMenuOpen}
+          disabled={isStoryOverlayOpen}
+          onOpenChange={setIsStoryMenuOpen}
+          onAuto={handleAuto}
+          onLog={() => setShowLog(true)}
+          onSave={() => setSaveSlotMode("save")}
+          onLoad={() => setSaveSlotMode("load")}
+          onConfig={() => setShowConfig(true)}
+          onExit={handleExitToMenu}
+        />
+      ) : phase === "story" ? (
         <StoryToolbar
           labels={labels}
           isAuto={isAuto}

@@ -3,7 +3,7 @@ import { describe, expect, spyOn, test } from "bun:test";
 import { Children, isValidElement, type KeyboardEvent, type MouseEvent, type ReactElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { DialogueMobile } from "./src/components/DialogueMobile";
-import { createToolbarIdleController, listenForToolbarMouseMovement, StoryToolbar, STORY_CONTROL_IDS, STORY_TOOLBAR_IDLE_MS } from "./src/components/StoryToolbar";
+import { createToolbarIdleController, listenForToolbarMouseMovement, StoryToolbar, StoryToolbarMenu, STORY_CONTROL_IDS, STORY_TOOLBAR_IDLE_MS } from "./src/components/StoryToolbar";
 import { useNovelStore } from "./src/store/novelStore";
 import { demoScript } from "./src/lib/runtime/dialogueScript";
 import { cutScene } from "./src/scenes/scriptTypes";
@@ -187,5 +187,62 @@ describe("Persistent story controls", () => {
     expect(loaded.currentLabel).toBe(saved.currentLabel);
     expect(loaded.line).toEqual(saved.line);
     expect(loaded.flags).toEqual(flags);
+  });
+});
+
+describe("Mobile story menu", () => {
+  const menuProps = {
+    ...toolbarProps,
+    labels: { ...toolbarProps.labels, menu: "Menu", close: "Close" },
+    open: false,
+    onOpenChange: (_open: boolean) => {},
+  };
+
+  test("collapsed state shows only the hamburger button", () => {
+    const markup = renderToStaticMarkup(StoryToolbarMenu(menuProps));
+    expect(markup.match(/<button/g)?.length).toBe(1);
+    expect(markup).toContain('aria-label="Menu"');
+    expect(markup).toContain('aria-expanded="false"');
+  });
+
+  test("tapping the hamburger requests opening", () => {
+    let requested: boolean | undefined;
+    const tree = StoryToolbarMenu({ ...menuProps, onOpenChange: (open) => { requested = open; } });
+    findButton(tree, "Menu")?.props.onClick?.();
+    expect(requested).toBe(true);
+  });
+
+  test("open menu lists every control with a text label and closes after a pick", () => {
+    let saves = 0;
+    let lastOpen: boolean | undefined;
+    const tree = StoryToolbarMenu({
+      ...menuProps,
+      open: true,
+      isAuto: true,
+      onSave: () => { saves += 1; },
+      onOpenChange: (open) => { lastOpen = open; },
+    });
+    const markup = renderToStaticMarkup(tree);
+    for (const id of STORY_CONTROL_IDS) expect(markup).toContain(`<span>${toolbarProps.labels[id]}</span>`);
+    expect(markup).toContain('aria-label="Close"');
+    expect(markup).toContain('aria-checked="true"');
+    const findMenuItem = (node: ReactNode, id: string): ReactElement<ButtonProps> | undefined => {
+      for (const child of Children.toArray(node)) {
+        if (!isValidElement<{ children?: ReactNode; "data-control"?: string }>(child)) continue;
+        if (child.type === "button" && child.props["data-control"] === id) return child as ReactElement<ButtonProps>;
+        const found = findMenuItem(child.props.children, id);
+        if (found) return found;
+      }
+      return undefined;
+    };
+    findMenuItem(tree, "save")?.props.onClick?.();
+    expect(saves).toBe(1);
+    expect(lastOpen).toBe(false);
+  });
+
+  test("stays closed while a story modal is open", () => {
+    const markup = renderToStaticMarkup(StoryToolbarMenu({ ...menuProps, open: true, disabled: true }));
+    expect(markup.match(/<button/g)?.length).toBe(1);
+    expect(markup).toContain("disabled");
   });
 });
