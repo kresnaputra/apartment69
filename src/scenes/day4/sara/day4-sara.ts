@@ -470,10 +470,10 @@ export const day4SaraTensionScene: VisualNovelCommand[] = addSaraVoices([
     "sara",
     "neutral",
     tx({
-      id: "Atau mungkin… aku hanya ingin tahu sampai di mana kamu akan menahan diri.",
-      en: "Or maybe... I just want to know how far you'll hold yourself back.",
-      ja: "それとも……あなたがどこまで自分を抑えるのか、知りたいだけかもしれない。",
-      ko: "아니면... 네가 어디까지 참는지 알고 싶을 뿐인지도 몰라.",
+      id: "Sarah: Atau mungkin… aku hanya ingin tahu sampai di mana kamu akan menahan diri.",
+      en: "Sarah: Or maybe... I just want to know how far you'll hold yourself back.",
+      ja: "サラ： それとも……あなたがどこまで自分を抑えるのか、知りたいだけかもしれない。",
+      ko: "사라: 아니면... 네가 어디까지 참는지 알고 싶을 뿐인지도 몰라.",
     }),
   ),
   menu(
