@@ -19,9 +19,35 @@ export const day4ComplateScene: VisualNovelCommand[] = [
     }),
     { size: "hero", typingSpeed: 0.3 },
   ),
+  // Sarah's route has no Day 5 content yet, and choosing her on Day 4 locks the
+  // other heroines, so end the run here instead of falling into Maya's Day 5.
+  jumpIf("day4SelectedCharacter", "day4-sara-route-end", { value: "sara" }),
   setFlag("gallerySceneMaya1Unlocked", true),
   jumpIf("galleryMode", "gallery-return", {
     value: true,
     elseTarget: "day5-maya-morning",
   }),
+];
+
+// Ending the label marks the story as finished; the next click/tap returns to
+// the main menu.
+export const day4SaraRouteEndScene: VisualNovelCommand[] = [
+  centeredText(
+    tx({
+      id: "RUTE SARAH SELESAI",
+      en: "SARAH'S ROUTE COMPLETE",
+      ja: "サラルート 終了",
+      ko: "사라 루트 완료",
+    }),
+    { size: "hero" },
+  ),
+  centeredText(
+    tx({
+      id: "Kisah Sarah akan berlanjut di update berikutnya. Terima kasih sudah bermain!",
+      en: "Sarah's story will continue in the next update. Thank you for playing!",
+      ja: "サラの物語は次回のアップデートで続きます。プレイしていただきありがとうございます！",
+      ko: "사라의 이야기는 다음 업데이트에서 계속됩니다. 플레이해 주셔서 감사합니다!",
+    }),
+    { size: "sub" },
+  ),
 ];

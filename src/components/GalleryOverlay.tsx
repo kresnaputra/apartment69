@@ -223,7 +223,10 @@ export const GalleryOverlay = ({
                 </div>
                 <div
                   className="grid gap-4"
-                  style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
+                  // auto-fill (not auto-fit) keeps empty tracks, so a section with
+                  // fewer items keeps the same card size as the full sections.
+                  // Track minimum caps the layout at 3 columns (gap-4 = 1rem).
+                  style={{ gridTemplateColumns: "repeat(auto-fill, minmax(max(200px, calc((100% - 2rem) / 3)), 1fr))" }}
                 >
                   {sectionItems.map((item, itemIdx) => (
                     (() => {

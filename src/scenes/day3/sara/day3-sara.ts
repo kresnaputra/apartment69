@@ -44,7 +44,7 @@ export const day3SaraStartScene: VisualNovelCommand[] = addSaraVoices([
   playSfx(phoneSfx),
   say("sara", "smile", tx({
     id: "Hi Arka, apa ada kegiatan hari ini?",
-    en: "Hi Arka, do you have anything going on today?",
+    en: "Hi Arka, do you have anything going on today?", // TODO: Add voice line
     ja: "こんにちは、アルカ。今日は予定がある？",
     ko: "안녕, 아르카. 오늘 뭐 하는 일 있어?",
   })),

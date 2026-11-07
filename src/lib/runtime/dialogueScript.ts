@@ -140,7 +140,7 @@ import {
 } from "@/scenes/day7/day7-elena-good-ending";
 import { day7NadiaBadEndingScene } from "@/scenes/day7/day7-nadia-bad-ending";
 import { day7NadiaGoodEndingScene } from "@/scenes/day7/day7-nadia-good-ending";
-import { day4ComplateScene } from "@/scenes/day4/day4-complate";
+import { day4ComplateScene, day4SaraRouteEndScene } from "@/scenes/day4/day4-complate";
 import { sbnTestScene } from "@/scenes/sbnTestScene";
 import { day4ElenaComplateScene } from "@/scenes/day4/elena/day4-elena-complate";
 import { day5ElenaComplateScene } from "@/scenes/day5/elena/day5-elena-complate";
@@ -333,6 +333,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day4-sara-kiss": day4SaraKissScene,
     "day4-sara-ending": day4SaraEndingScene,
     "day4-complate": day4ComplateScene,
+    "day4-sara-route-end": day4SaraRouteEndScene,
     "day4-elena-complate": day4ElenaComplateScene,
     // Day 5
     "day5-maya-morning": day5MayaMorningScene,

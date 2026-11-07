@@ -1736,6 +1736,9 @@ const App = () => {
   const lastAutoSaveKeyRef = useRef<string | null>(null);
   const audioRef = useRef<NovelAudioEngine | null>(null);
   const voiceRef = useRef<HTMLAudioElement | null>(null);
+  const pendingVoiceRef = useRef<HTMLAudioElement | null>(null);
+  const isPresentationTransitioningRef = useRef(isPresentationTransitioning);
+  isPresentationTransitioningRef.current = isPresentationTransitioning;
   const hasStartedBundleLoadRef = useRef(false);
   const previousSceneTransitionTokenRef = useRef<number | null>(null);
   const suppressAdvanceOnceRef = useRef(false);
@@ -1856,15 +1859,21 @@ const App = () => {
       voiceRef.current = null;
     }
 
+    pendingVoiceRef.current = null;
     if (!VOICE_ACTING_ENABLED) return;
     if (!activeVoice) return;
 
+    // Preload now, but hold playback until the dialogue box is actually shown
+    // (scene transitions and the background camera reset keep it hidden).
     const audio = new Audio(activeVoice);
     audio.preload = "auto";
     voiceRef.current = audio;
-    void audio.play().catch(() => {});
+    pendingVoiceRef.current = audio;
 
     return () => {
+      if (pendingVoiceRef.current === audio) {
+        pendingVoiceRef.current = null;
+      }
       audio.pause();
       audio.src = "";
       audio.load();
@@ -1873,6 +1882,22 @@ const App = () => {
       }
     };
   }, [activeVoice]);
+
+  useEffect(() => {
+    if (isPresentationTransitioning || !pendingVoiceRef.current) return;
+
+    // Transition flags are raised from layout effects, so this effect can run
+    // one commit before they become visible in state. Re-check the live value
+    // on the next frame before starting the voice.
+    const frame = window.requestAnimationFrame(() => {
+      const audio = pendingVoiceRef.current;
+      if (!audio || isPresentationTransitioningRef.current) return;
+      pendingVoiceRef.current = null;
+      void audio.play().catch(() => {});
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [activeVoice, isPresentationTransitioning]);
 
   useEffect(() => {
     if (!activeSoundEffect) return;
