@@ -249,7 +249,7 @@ export const day2SaraLiftScene: VisualNovelCommand[] = addSaraVoices([
 export const day2SaraAfterCablesScene: VisualNovelCommand[] = addSaraVoices([
   say("sara", "smile", tx({
     id: "Cepat juga.",
-    en: "That was quick.",
+    en: "That was quick.", // TODO: add voice here
     ja: "早かったわね。",
     ko: "빠르기도 하네.",
   })),
