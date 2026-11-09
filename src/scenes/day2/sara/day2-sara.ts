@@ -17,6 +17,7 @@ import elevator from "@/background/elevator.png";
 import penthouseRoom from "@/background/sara-penthouse-room.png";
 import penthouse from "@/background/sara-penthouse.png";
 import day2Bgm from "@/music/day2-sarah.mp3";
+import saraForgetAfterCablesVoice from "@/voice/sara/sarah_forget-1.mp3";
 import { addSaraVoices } from "@/voice/sara/day1to4";
 
 export const day2SaraScene: VisualNovelCommand[] = addSaraVoices([
@@ -249,10 +250,10 @@ export const day2SaraLiftScene: VisualNovelCommand[] = addSaraVoices([
 export const day2SaraAfterCablesScene: VisualNovelCommand[] = addSaraVoices([
   say("sara", "smile", tx({
     id: "Cepat juga.",
-    en: "That was quick.", // TODO: add voice here
+    en: "That was quick.",
     ja: "早かったわね。",
     ko: "빠르기도 하네.",
-  })),
+  }), { voice: saraForgetAfterCablesVoice }),
   narrate(tx({
     id: "Sarah menuangkan air ke dua gelas, lalu menyerahkan satu kepada Arka.",
     en: "Sarah pours water into two glasses, then hands one to Arka.",
@@ -387,7 +388,7 @@ export const day2SaraYesScene: VisualNovelCommand[] = addSaraVoices([
     ko: "그럼 기억해 둘게.",
   })),
   jump("day2-sara-ending"),
-], 27);
+], 26);
 
 export const day2SaraMaybeScene: VisualNovelCommand[] = addSaraVoices([
   say("arka", "shy", tx({
@@ -403,7 +404,7 @@ export const day2SaraMaybeScene: VisualNovelCommand[] = addSaraVoices([
     ko: "그래? 이제 네 대답이 더 궁금해졌어.",
   })),
   jump("day2-sara-ending"),
-], 28);
+], 27);
 
 export const day2SaraEndingScene: VisualNovelCommand[] = addSaraVoices([
   say("sara", "smile", tx({
@@ -456,4 +457,4 @@ export const day2SaraEndingScene: VisualNovelCommand[] = addSaraVoices([
       sara: { next: "day2-route-sara" },
     },
   }),
-], 29);
+], 28);

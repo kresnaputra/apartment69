@@ -1,6 +1,9 @@
 import type {} from "bun";
 import { expect, test } from "bun:test";
 import type { CutSceneNarrationEntry, VisualNovelCommand } from "./src/types/novel";
+import { resolveText } from "./src/lib/i18n";
+import { useNovelStore } from "./src/store/novelStore";
+import saraForgetAfterCablesVoice from "./src/voice/sara/sarah_forget-1.mp3";
 import saraForgetVoice from "./src/voice/sara/sarah_forget.mp3";
 import { saraDay1To4Voices } from "./src/voice/sara/day1to4";
 import { saraCutScene1Voices } from "./src/voice/sara/cutscene1";
@@ -31,9 +34,9 @@ test("Sara's day 1-4 dialogue uses the matching recordings, including her Day 3 
     [day2SaraDelayScene, 12, 2],
     [day2SaraLiftScene, 14, 4],
     [day2SaraAfterCablesScene, 18, 9],
-    [day2SaraYesScene, 27, 1],
-    [day2SaraMaybeScene, 28, 1],
-    [day2SaraEndingScene, 29, 1],
+    [day2SaraYesScene, 26, 1],
+    [day2SaraMaybeScene, 27, 1],
+    [day2SaraEndingScene, 28, 1],
     [day3SaraStartScene, 30, 6],
     [day3SaraCafeContinueScene, 36, 6],
     [day3SaraEscortScene, 42, 5],
@@ -47,23 +50,48 @@ test("Sara's day 1-4 dialogue uses the matching recordings, including her Day 3 
   expect(saraDay1To4Voices).toHaveLength(61);
   for (const [commands, start, count] of groups) {
     const voices = voicesIn(commands);
-    const expected = commands === day3SaraStartScene
-      ? [saraForgetVoice, ...saraDay1To4Voices.slice(start, start + count)]
-      : commands === day4SaraTensionScene
-        ? [saraCutScene1Voices[7]]
-        : saraDay1To4Voices.slice(start, start + count);
+    const expected = commands === day2SaraAfterCablesScene
+      ? [saraForgetAfterCablesVoice, ...saraDay1To4Voices.slice(start, start + count - 1)]
+      : commands === day3SaraStartScene
+        ? [saraForgetVoice, ...saraDay1To4Voices.slice(start, start + count)]
+        : commands === day4SaraTensionScene
+          ? [saraCutScene1Voices[7]]
+          : saraDay1To4Voices.slice(start, start + count);
     expect(voices).toEqual(expected);
   }
+  expect(voicesIn(day2SaraAfterCablesScene)[0]).toBe(saraForgetAfterCablesVoice);
+  expect(voicesIn(day2SaraAfterCablesScene)[1]).toBe(saraDay1To4Voices[18]);
   expect(voicesIn(day3SaraStartScene)[0]).toBe(saraForgetVoice);
   expect(voicesIn(day3SaraStartScene)[1]).toBe(saraDay1To4Voices[30]);
   expect(voicesIn(day4SaraStartScene)[0]).toBe(saraDay1To4Voices[48]);
   expect(groups.flatMap(([commands]) => voicesIn(commands))).toEqual([
-    ...saraDay1To4Voices.slice(0, 30),
+    ...saraDay1To4Voices.slice(0, 18),
+    saraForgetAfterCablesVoice,
+    ...saraDay1To4Voices.slice(18, 29),
     saraForgetVoice,
     ...saraDay1To4Voices.slice(30, 56),
     saraCutScene1Voices[7],
     ...saraDay1To4Voices.slice(57),
   ]);
+});
+
+test("Sit for a moment starts voice 19 and carries it through the split dialogue", () => {
+  useNovelStore.getState().startFromLabel("day2-sara-after-cables");
+  expect(useNovelStore.getState().activeVoice).toBe(saraForgetAfterCablesVoice);
+
+  useNovelStore.getState().advance(); // Narration between the two lines
+  useNovelStore.getState().advance();
+  expect(resolveText(useNovelStore.getState().line, "en")).toBe("Sit for a moment.");
+  expect(useNovelStore.getState().activeVoice).toBe(saraDay1To4Voices[18]);
+
+  useNovelStore.getState().advance();
+  expect(resolveText(useNovelStore.getState().line, "en")).toBe("I don't like people leaving right after they help.");
+  expect(useNovelStore.getState().activeVoice).toBe(saraDay1To4Voices[18]);
+
+  useNovelStore.getState().advance();
+  useNovelStore.getState().advance();
+  expect(resolveText(useNovelStore.getState().line, "en")).toBe("How long have you lived here?");
+  expect(useNovelStore.getState().activeVoice).toBe(saraDay1To4Voices[19]);
 });
 
 const cutSceneEntriesIn = (commands: VisualNovelCommand[]): CutSceneNarrationEntry[] =>
