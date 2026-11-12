@@ -33,6 +33,10 @@ export const REVIEW_SCENE_GROUPS: ReviewSceneGroup[] = [
     scenes: [
       { label: "day4-nadia-night-help", title: "Nadia Night (Help)" },
       { label: "day4-maya-force-rest", title: "Maya Force Rest" },
+      { label: "day4-sara-car-invite", title: "Sarah Car & Park (full sequence)" },
+      { label: "day4-sara-too-long", title: "Sarah Park – \"Too Long\" branch" },
+      { label: "day4-sara-not-strong", title: "Sarah Park – \"Not Strong\" branch" },
+      { label: "day4-sara-kiss", title: "Sarah Intimate Scene" },
     ],
   },
   {

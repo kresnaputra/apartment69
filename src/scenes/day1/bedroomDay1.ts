@@ -29,10 +29,10 @@ export const bedroomDay1Scene: VisualNovelCommand[] = [
     "arka",
     "shy",
     tx({
-      id: "Ada Maya di sebelah, dan dia kelihatan udah remuk banget karena stres kuliah. Terus ada Elena di seberang, dinginnya minta ampun, Nadia yang energinya kebanyakan, dan Sarah... cewek penthouse yang ngomongnya kayak lagi kasih deadline kerjaan.",
-      en: "There's Maya next door, and she looks seriously wrecked from college stress. Then there's Elena across the hall, cold as hell, Nadia with way too much energy, and Sarah... the penthouse girl who talks like she's assigning me a deadline.",
-      ja: "隣には大学のストレスで限界そうなマヤがいて、向かいにはとにかく冷たいエレナ。やたら元気すぎるナディアに、そしてサラ…あの、まるで締切を押し付けてくるみたいな話し方をするペントハウスの女。",
-      ko: "옆집엔 대학 스트레스로 완전히 지쳐 보이는 마야가 있고, 맞은편엔 차갑기 짝이 없는 엘레나가 있다. 나디아는 에너지가 너무 넘치고, 사라는... 마치 나한테 마감 기한을 던지는 것처럼 말하는 펜트하우스 여자다.",
+      id: "Ada Maya di sebelah, mahasiswi kedokteran tahun ketiga umur 21, dan dia kelihatan udah remuk banget karena stres kuliah. Terus ada Elena di seberang, dinginnya minta ampun, Nadia yang energinya kebanyakan, dan Sarah... cewek penthouse yang ngomongnya kayak lagi kasih deadline kerjaan.",
+      en: "There's Maya next door, a 21-year-old third-year med student, and she looks seriously wrecked from college stress. Then there's Elena across the hall, cold as hell, Nadia with way too much energy, and Sarah... the penthouse girl who talks like she's assigning me a deadline.",
+      ja: "隣には21歳の医学部三年生で、大学のストレスで限界そうなマヤがいて、向かいにはとにかく冷たいエレナ。やたら元気すぎるナディアに、そしてサラ…あの、まるで締切を押し付けてくるみたいな話し方をするペントハウスの女。",
+      ko: "옆집엔 스물한 살 의대 3학년으로, 대학 스트레스로 완전히 지쳐 보이는 마야가 있고, 맞은편엔 차갑기 짝이 없는 엘레나가 있다. 나디아는 에너지가 너무 넘치고, 사라는... 마치 나한테 마감 기한을 던지는 것처럼 말하는 펜트하우스 여자다.",
     }),
   ),
   say(

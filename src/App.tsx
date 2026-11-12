@@ -126,6 +126,12 @@ const openingWarningText = {
     ja: "成人プレイヤーのみ対象です。続行すると、年齢条件を満たし内容を理解していることに同意したものとみなされます。",
     ko: "성인 플레이어 전용입니다. 계속 진행하면 연령 조건을 충족하며 콘텐츠를 이해했음을 확인하는 것입니다.",
   },
+  characters: {
+    id: "Semua karakter yang ditampilkan dalam game ini berusia 18 tahun atau lebih. Ini adalah karya fiksi.",
+    en: "All characters depicted in this game are 18 years of age or older. This is a work of fiction.",
+    ja: "本作に登場するすべてのキャラクターは18歳以上です。本作はフィクションです。",
+    ko: "이 게임에 등장하는 모든 캐릭터는 18세 이상입니다. 이 작품은 픽션입니다.",
+  },
 } satisfies Record<string, LocalizedText>;
 
 const OpeningLogo = ({ phaseState }: OpeningLogoProps) => (
@@ -175,6 +181,9 @@ const OpeningWarning = ({ language, phaseState }: OpeningWarningProps) => (
       </p>
       <p className="mt-5 max-w-[52ch] text-balance text-[clamp(0.84rem,1.6vw,1rem)] leading-relaxed text-[#b9aa9b]">
         {resolveText(openingWarningText.age, language)}
+      </p>
+      <p className="mt-6 max-w-[52ch] text-balance border-t border-[#d2a456]/25 pt-5 text-[clamp(0.9rem,1.7vw,1.05rem)] font-semibold leading-relaxed text-[#f6efe5]">
+        {resolveText(openingWarningText.characters, language)}
       </p>
     </section>
   </div>

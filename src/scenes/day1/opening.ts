@@ -32,10 +32,10 @@ export const openingScene: VisualNovelCommand[] = [
   ),
   narrate(
     tx({
-      id: "Pekerjaan freelance IT dan kebiasaanku membetulkan barang rusak biasanya bikin aku lebih nyaman sendirian. Tapi sepertinya bangunan tua ini punya rencana lain buatku.",
-      en: "Arka (thinking): My freelance IT work and my habit of fixing broken gadgets usually mean I prefer being alone. But, it looks like this old building has other plans for me.",
-      ja: "アルカ（心の声）: フリーのIT仕事と壊れた機械を直す癖のせいで、普段の俺は一人でいるほうが気楽だ。でも、この古びた建物はどうやら別の展開を用意してるらしい。",
-      ko: "아르카(속마음): 프리랜서 IT 일에 고장 난 기계를 고치는 취미까지 있으니, 원래 난 혼자 있는 쪽이 편하다. 그런데 이 낡은 건물은 아무래도 다른 계획이 있는 모양이다.",
+      id: "Umurku 22 tahun, mahasiswa tingkat akhir. Pekerjaan freelance IT dan kebiasaanku membetulkan barang rusak biasanya bikin aku lebih nyaman sendirian. Tapi sepertinya bangunan tua ini punya rencana lain buatku.",
+      en: "Arka (thinking): I'm 22, a final-year university student. My freelance IT work and my habit of fixing broken gadgets usually mean I prefer being alone. But, it looks like this old building has other plans for me.",
+      ja: "アルカ（心の声）: 俺は22歳、大学の最終学年だ。フリーのIT仕事と壊れた機械を直す癖のせいで、普段の俺は一人でいるほうが気楽だ。でも、この古びた建物はどうやら別の展開を用意してるらしい。",
+      ko: "아르카(속마음): 난 스물두 살, 대학 졸업반이다. 프리랜서 IT 일에 고장 난 기계를 고치는 취미까지 있으니, 원래 난 혼자 있는 쪽이 편하다. 그런데 이 낡은 건물은 아무래도 다른 계획이 있는 모양이다.",
     }),
   ),
   jump("elevator-meeting"),
