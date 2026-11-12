@@ -32,10 +32,10 @@ export const bedroomDay1Scene: VisualNovelCommand[] = [
     "arka",
     "gentle",
     tx({
-      id: "Terus ada Maya di sebelah. Dia kelihatan udah remuk banget karena stres kuliah, tinggal selangkah lagi buat benar-benar tumbang. Mending besok aku cek dia dulu sebelum urusan kampus makin berat.",
-      en: "Then there's Maya next door. She looks seriously wrecked from college stress, one bad day away from completely crashing out. I'd better check in on her first tomorrow before campus gets even rougher.",
-      ja: "それに隣のマヤ。大学のストレスでボロボレで、あと一日悪化したら本当に倒れそうだった。大学がもっと忙しくなる前に、明日まず彼女の様子を見ておいたほうがいい。",
-      ko: "그리고 옆집의 마야. 학교 스트레스로 완전히 지쳐서, 정말 딱 하루만 더 꼬이면 무너질 것처럼 보였다. 학교 일이 더 힘들어지기 전에 내일 먼저 챙겨봐야겠다.",
+      id: "Terus ada Maya di sebelah, mahasiswi kedokteran tahun ketiga, umurnya 21. Dia kelihatan udah remuk banget karena stres kuliah, tinggal selangkah lagi buat benar-benar tumbang. Mending besok aku cek dia dulu sebelum urusan kampus makin berat.",
+      en: "Then there's Maya next door, a 21-year-old third-year med student. She looks seriously wrecked from college stress, one bad day away from completely crashing out. I'd better check in on her first tomorrow before campus gets even rougher.",
+      ja: "それに隣のマヤ。21歳の医学部三年生だ。大学のストレスでボロボレで、あと一日悪化したら本当に倒れそうだった。大学がもっと忙しくなる前に、明日まず彼女の様子を見ておいたほうがいい。",
+      ko: "그리고 옆집의 마야. 스물한 살의 의대 3학년이다. 학교 스트레스로 완전히 지쳐서, 정말 딱 하루만 더 꼬이면 무너질 것처럼 보였다. 학교 일이 더 힘들어지기 전에 내일 먼저 챙겨봐야겠다.",
     }),
   ),
   narrate(
