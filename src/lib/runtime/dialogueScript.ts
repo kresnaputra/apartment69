@@ -45,7 +45,7 @@ import { day2ComplateScene } from "@/scenes/day2/day2-complate";
 import { day2ElenaHallwayScene } from "@/scenes/day2/elena/day2-elena-hallway";
 import { day2NadiaFreeTimeScene } from "@/scenes/day2/nadia/day2-nadia-free-time";
 import { day2NadiaRoomScene, day2RouteNadiaScene } from "@/scenes/day2/nadia/day2-nadia";
-import { day2SaraScene, day2SaraAcceptScene, day2SaraDelayScene, day2SaraLiftScene, day2SaraAfterCablesScene, day2SaraYesScene, day2SaraMaybeScene, day2SaraEndingScene } from "@/scenes/day2/sara/day2-sara";
+import { day2SaraScene, day2SaraAcceptScene, day2SaraDelayScene, day2SaraLiftScene, day2SaraAfterCablesScene, day2SaraYesScene, day2SaraMaybeScene, day2SaraEndingScene } from "@/cut-scene/day2-sara";
 import { day3ElenaMorningScene } from "@/scenes/day3/elena/day3-elena-morning";
 import {
   day3NadiaNightScene,
@@ -140,7 +140,18 @@ import {
 } from "@/scenes/day7/day7-elena-good-ending";
 import { day7NadiaBadEndingScene } from "@/scenes/day7/day7-nadia-bad-ending";
 import { day7NadiaGoodEndingScene } from "@/scenes/day7/day7-nadia-good-ending";
-import { day4ComplateScene, day4SaraRouteEndScene, day4SaraRouteNoticeScene } from "@/scenes/day4/day4-complate";
+import { day4ComplateScene } from "@/scenes/day4/day4-complate";
+import { day4SaraComplateScene } from "@/scenes/day4/sara/day4-sara-complate";
+import {
+  day5SaraFollowScene,
+  day5SaraNightScene,
+  day5SaraOfferScene,
+  day5SaraRefuseScene,
+  day5SaraStartScene,
+  day5SaraTracesClearedScene,
+  day5SaraTracesLeftScene,
+} from "@/scenes/day5/sara/day5-sara";
+import { day5SaraRouteEndScene, day5SaraRouteNoticeScene } from "@/scenes/day5/sara/day5-sara-complate";
 import { sbnTestScene } from "@/scenes/sbnTestScene";
 import { day4ElenaComplateScene } from "@/scenes/day4/elena/day4-elena-complate";
 import { day5ElenaComplateScene } from "@/scenes/day5/elena/day5-elena-complate";
@@ -239,7 +250,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "opening",
+  startLabel: "day5-sara-start",
   labels: {
     "gallery-return": [],
     "sbn-maya-test": sbnTestScene,
@@ -333,8 +344,7 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day4-sara-kiss": day4SaraKissScene,
     "day4-sara-ending": day4SaraEndingScene,
     "day4-complate": day4ComplateScene,
-    "day4-sara-route-end": day4SaraRouteEndScene,
-    "day4-sara-route-notice": day4SaraRouteNoticeScene,
+    "day4-sara-complate": day4SaraComplateScene,
     "day4-route-fallback": day4RouteFallbackScene,
     "route-game-over": routeGameOverScene,
     "day4-elena-complate": day4ElenaComplateScene,
@@ -345,6 +355,15 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day5-lobby-farewell": day5LobbyFarewellScene,
     "day5-complate": day5ComplateScene,
     "day5-elena-complate": day5ElenaComplateScene,
+    "day5-sara-start": day5SaraStartScene,
+    "day5-sara-refuse": day5SaraRefuseScene,
+    "day5-sara-follow": day5SaraFollowScene,
+    "day5-sara-traces-cleared": day5SaraTracesClearedScene,
+    "day5-sara-traces-left": day5SaraTracesLeftScene,
+    "day5-sara-offer": day5SaraOfferScene,
+    "day5-sara-night": day5SaraNightScene,
+    "day5-sara-route-end": day5SaraRouteEndScene,
+    "day5-sara-route-notice": day5SaraRouteNoticeScene,
     // Day 6
     "day6-elena-arthur": day6ElenaArthurScene,
     "day6-elena-protect": day6ElenaProtectScene,

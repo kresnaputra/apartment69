@@ -854,5 +854,5 @@ export const day4SaraEndingScene: VisualNovelCommand[] = addSaraVoices([
   hide("arka-day4-sara"),
   setFlag("day4SaraCompleted", true),
   jumpIf("galleryMode", "gallery-return", { value: true }),
-  jump("day4-sara-route-end"),
+  jump("day4-sara-complate"),
 ], 57);

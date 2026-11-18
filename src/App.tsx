@@ -8,6 +8,7 @@ import { SmartphoneContactMinigameMobile } from "@/components/minigames/Smartpho
 import { LaptopCleanupMinigame } from "@/components/minigames/LaptopCleanupMinigame";
 import { EmailComposeMinigame } from "@/components/minigames/EmailComposeMinigame";
 import { CableMatchingMinigame } from "@/components/minigames/CableMatchingMinigame";
+import { SaraPhoneTraceMinigame } from "@/components/minigames/SaraPhoneTraceMinigame";
 import { CanvasSbnRenderer, projectUsesTrimmedImages } from "@/lib/rendering/canvasSbnRenderer";
 import { freezeBackgroundCamera, getBackgroundCameraAnimation, resetBackgroundCamera } from "@/lib/rendering/backgroundAnimation";
 import { CanvasSpritesheetRenderer } from "@/lib/rendering/canvasSpritesheetRenderer";
@@ -136,7 +137,7 @@ const openingWarningText = {
 
 const OpeningLogo = ({ phaseState }: OpeningLogoProps) => (
   <div
-    className={`fixed inset-0 z-[80] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
+    className={`fixed inset-0 z-80 flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
   >
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(210,164,86,0.18),rgba(0,0,0,0)_34%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
     <section className="relative mx-auto flex w-[min(88vw,620px)] flex-col items-center text-center">
@@ -151,7 +152,7 @@ const OpeningLogo = ({ phaseState }: OpeningLogoProps) => (
 
 const PoweredByLogo = ({ phaseState }: PoweredByLogoProps) => (
   <div
-    className={`fixed inset-0 z-[80] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
+    className={`fixed inset-0 z-80 flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
   >
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),rgba(0,0,0,0)_34%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
     <section className="relative mx-auto flex w-[min(88vw,620px)] flex-col items-center">
@@ -169,7 +170,7 @@ const PoweredByLogo = ({ phaseState }: PoweredByLogoProps) => (
 
 const OpeningWarning = ({ language, phaseState }: OpeningWarningProps) => (
   <div
-    className={`fixed inset-0 z-[80] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
+    className={`fixed inset-0 z-80 flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_1200ms_ease_forwards]" : "animate-[vn-opening-fade-in_1400ms_ease_forwards]"}`}
   >
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(210,164,86,0.12),rgba(0,0,0,0)_42%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0))]" />
     <section className="relative mx-auto flex w-[min(88vw,680px)] flex-col items-center text-center">
@@ -190,7 +191,7 @@ const OpeningWarning = ({ language, phaseState }: OpeningWarningProps) => (
 );
 
 const SbnLoadingScreen = ({ loadingLabel, phaseState, statusMessage }: SbnLoadingScreenProps) => (
-  <div className={`fixed inset-0 z-[140] flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_900ms_ease_forwards]" : "animate-[vn-opening-fade-in_800ms_ease_forwards]"}`}>
+  <div className={`fixed inset-0 z-140 flex items-center justify-center bg-black text-[#f6efe5] ${phaseState === "exit" ? "animate-[vn-opening-fade-out_900ms_ease_forwards]" : "animate-[vn-opening-fade-in_800ms_ease_forwards]"}`}>
     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(210,164,86,0.12),rgba(0,0,0,0)_38%)]" />
     <section className="relative mx-auto flex w-[min(86vw,520px)] flex-col items-center text-center">
       <div className="mb-8 h-12 w-12 animate-spin rounded-full border border-[#d2a456]/20 border-t-[#d2a456]" />
@@ -2655,6 +2656,13 @@ const App = () => {
           <EmailComposeMinigame onComplete={completeMinigame} />
         ) : activeMinigame?.id === "cable-matching" ? (
           <CableMatchingMinigame onComplete={completeMinigame} language={language} />
+        ) : activeMinigame?.id === "sara-phone-traces" ? (
+          <SaraPhoneTraceMinigame
+            onSelect={choose}
+            language={language}
+            clearNext={activeMinigame.options?.clearNext as string}
+            leaveNext={activeMinigame.options?.leaveNext as string}
+          />
         ) : null}
 
         {activeCutScene ? (

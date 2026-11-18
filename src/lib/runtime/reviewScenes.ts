@@ -44,6 +44,7 @@ export const REVIEW_SCENE_GROUPS: ReviewSceneGroup[] = [
     scenes: [
       { label: "day5-nadia", title: "Nadia" },
       { label: "day5-elena-hallway", title: "Elena Hallway" },
+      { label: "day5-sara-offer", title: "Sarah Hotel Night" },
     ],
   },
   {

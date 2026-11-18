@@ -129,7 +129,7 @@ describe("Day 4 backup route and game over", () => {
     expect(enabledContacts(state.flags, state.activeMinigame?.options)).toEqual(["maya"]);
   });
 
-  test("Sarah finishing hands over to the other chosen route", () => {
+  test("Sarah finishing Day 5 hands over to the other chosen route", () => {
     const flags = {
       ...contactFlags,
       day2Completed: true,
@@ -138,13 +138,13 @@ describe("Day 4 backup route and game over", () => {
       day3SaraCompleted: true,
       day4SelectedCharacter: "sara",
     };
-    const { state, seenLabels } = runUntilStop("day4-sara-route-end", flags);
+    const { state, seenLabels } = runUntilStop("day5-sara-route-end", flags);
     expect(state.flags.saraRouteClosed).toBe(true);
     expect(enabledContacts(state.flags, state.activeMinigame?.options)).toEqual(["maya"]);
-    expect(seenLabels.has("day4-sara-route-notice")).toBe(false);
+    expect(seenLabels.has("day5-sara-route-notice")).toBe(false);
   });
 
-  test("Sarah finishing with no other route shows the next-update notice", () => {
+  test("Sarah finishing Day 5 with no other route shows the next-update notice", () => {
     const flags = {
       ...contactFlags,
       day2Completed: true,
@@ -152,11 +152,41 @@ describe("Day 4 backup route and game over", () => {
       day3SaraCompleted: true,
       day4SelectedCharacter: "sara",
     };
-    const { state, seenLabels } = runUntilStop("day4-sara-route-end", flags);
-    expect(seenLabels.has("day4-sara-route-notice")).toBe(true);
-    expect([...seenLabels].some((label) => label.startsWith("day5"))).toBe(false);
+    const { state, seenLabels } = runUntilStop("day5-sara-route-end", flags);
+    expect(seenLabels.has("day5-sara-route-notice")).toBe(true);
+    expect([...seenLabels].some((label) => label.startsWith("day6"))).toBe(false);
     expect(state.isEnded).toBe(true);
     expect(state.flags.gallerySceneMaya1Unlocked).toBeUndefined();
+  });
+
+  test("Sarah refused on Day 5 hands over to the other chosen route", () => {
+    const flags = {
+      ...contactFlags,
+      day2Completed: true,
+      day2MayaCompleted: true,
+      day2SaraCompleted: true,
+      day3SaraCompleted: true,
+      day4SelectedCharacter: "sara",
+    };
+    const { state } = runUntilStop("day5-sara-refuse", flags);
+    expect(state.flags.day5SaraRefused).toBe(true);
+    expect(state.flags.saraRouteClosed).toBe(true);
+    expect(state.currentLabel).toBe("day4-route-fallback");
+    expect(enabledContacts(state.flags, state.activeMinigame?.options)).toEqual(["maya"]);
+  });
+
+  test("Sarah refused on Day 5 with no other route ends in GAME OVER", () => {
+    const flags = {
+      ...contactFlags,
+      day2Completed: true,
+      day2SaraCompleted: true,
+      day3SaraCompleted: true,
+      day4SelectedCharacter: "sara",
+    };
+    const { state, seenLabels } = runUntilStop("day5-sara-refuse", flags);
+    expect(seenLabels.has("route-game-over")).toBe(true);
+    expect(seenLabels.has("day5-sara-route-notice")).toBe(false);
+    expect(state.isEnded).toBe(true);
   });
 
   test("Maya's normal Day 4 wrap-up still flows into Day 5", () => {

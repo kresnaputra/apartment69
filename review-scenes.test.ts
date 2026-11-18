@@ -3,9 +3,10 @@ import { describe, expect, test } from "bun:test";
 import { demoScript } from "./src/lib/runtime/dialogueScript";
 import { REVIEW_SCENE_GROUPS } from "./src/lib/runtime/reviewScenes";
 
-// Labels that only replay content already listed in the review menu.
+// Labels whose cutscenes can already be reached from a listed entry.
 const REPLAY_ALIASES: Record<string, string> = {
   "day4-sara-gallery": "day4-sara-car-invite",
+  "day5-sara-night": "day5-sara-offer",
 };
 
 const listedLabels = REVIEW_SCENE_GROUPS.flatMap((group) => group.scenes.map((scene) => scene.label));

@@ -192,7 +192,7 @@ describe("Smartphone route selection", () => {
           let sawTenthCarCutScene = false;
           for (let step = 0; step < 160; step += 1) {
             const state = useNovelStore.getState();
-            if (state.currentLabel === "day4-sara-route-end") break;
+            if (state.currentLabel === "day5-sara-start") break;
             if (state.activeCutScene) {
               if (!sawFirstCarCutScene) {
                 expect(state.activeCutScene.src).toContain("sara-park-1.mp4");
@@ -287,10 +287,9 @@ describe("Smartphone route selection", () => {
           expect(sawEighthCarCutScene).toBe(true);
           expect(sawNinthCarCutScene).toBe(true);
           expect(sawTenthCarCutScene).toBe(true);
-          expect(state.currentLabel).toBe("day4-sara-route-end");
-          expect(state.flags.saraRouteClosed).toBe(true);
-          // The Day 4 one-route lock is lifted so a backup route can be picked.
-          expect(state.flags.day4SelectedCharacter).toBeUndefined();
+          expect(state.currentLabel).toBe("day5-sara-start");
+          expect(state.flags.saraRouteClosed).toBeUndefined();
+          expect(state.flags.day4SelectedCharacter).toBe("sara");
           expect(state.flags.day4SaraCompleted).toBe(true);
           expect(state.flags.day4SaraIntimate).toBe(true);
           expect(state.flags.day4SaraMovedCloser).toBe(thirdChoice === "day4-sara-move-closer");
