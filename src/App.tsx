@@ -1,4 +1,5 @@
 import { type CSSProperties, forwardRef, memo, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { isTauri } from "@tauri-apps/api/core";
 import { ElevatorButtonMinigame } from "@/components/minigames/ElevatorButtonMinigame";
 import { PipeConnectionMinigame } from "@/components/minigames/PipeConnectionMinigame";
 import { ElevatorButtonMinigameMobile } from "@/components/minigames/ElevatorButtonMinigameMobile";
@@ -80,6 +81,7 @@ const BG_VOLUME_STORAGE_KEY = "apartment69:bg-volume";
 const DEFAULT_BG_VOLUME = 0.5;
 const VOICE_ACTING_ENABLED = isVoiceActingEnabled();
 const IS_ANDROID_APP = isAndroidApp();
+const IS_TAURI_APP = isTauri();
 
 type CharacterSpriteProps = {
   bundle: LoadedCharacterBundle;
@@ -2577,18 +2579,14 @@ const App = () => {
               );
             })}
 
-          {/* The location pill crowds the hamburger menu in the Android app. */}
-          {hasResolvedLocation && !IS_ANDROID_APP && (isMobile ? (
+          {/* A narrow Tauri window can use the mobile layout, but still hides the pill. */}
+          {hasResolvedLocation && isMobile && !IS_ANDROID_APP && !IS_TAURI_APP && (
             <div className="absolute top-19 right-3 z-20">
               <div className="border border-white/10 bg-[rgba(11,10,18,0.36)] backdrop-blur-[14px] rounded-full px-3 py-1.5 text-[0.6rem] tracking-[0.32em] uppercase text-[#ccb9a9]">
                 {resolvedLocation}
               </div>
             </div>
-          ) : (
-            <div className="vn-caption">
-              <div className="vn-location">{resolvedLocation}</div>
-            </div>
-          ))}
+          )}
         </div>
 
         {blackScreenState?.active ? (

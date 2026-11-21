@@ -95,26 +95,6 @@ textarea {
   animation: vn-scene-fade 720ms ease-in-out both;
 }
 
-.vn-caption {
-  position: absolute;
-  top: 2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 20;
-}
-
-.vn-location {
-  border: 1px solid var(--glass-edge);
-  background: rgba(11, 10, 18, 0.36);
-  backdrop-filter: blur(14px);
-  border-radius: 999px;
-  padding: 0.7rem 1.2rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.38em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 .vn-character {
   will-change: transform, opacity;
   background: transparent;
