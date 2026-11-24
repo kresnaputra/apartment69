@@ -33,6 +33,7 @@ import audio06 from "@/voice/sara/sarah-good-06-animation-audio.wav";
 import audio07 from "@/voice/sara/sarah-good-07-animation-audio.wav";
 import audio08 from "@/voice/sara/sarah-good-08-animation-audio.wav";
 import audio09 from "@/voice/sara/sarah-good-09-animation-audio.wav";
+import midnightHallway from "@/background/midnight-sara-hallway.png";
 
 export const day7SaraGoodEndingScene: VisualNovelCommand[] = [
   playBgm(goodEndingBgm),
@@ -420,6 +421,7 @@ export const day7SaraGoodEndingScene: VisualNovelCommand[] = [
     false,
     audio09,
   ),
+  bg(midnightHallway),
   say("sara", "blush", tx({
     id: "Suamiku tidak akan pulang sampai tiga hari lagi…",
     en: "My husband won't be home for another three days...",
