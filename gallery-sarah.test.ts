@@ -34,7 +34,7 @@ describe("Sarah gallery scene", () => {
       flags: state.flags,
     }));
     expect(unlocked).toContain("Scene Sarah 1");
-    expect(unlocked).toContain("1 / 10");
+    expect(unlocked).toContain("1 / 12");
   });
 
   test("replays from the first car video and returns to the gallery without unlocking Maya", () => {

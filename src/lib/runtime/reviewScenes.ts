@@ -54,6 +54,8 @@ export const REVIEW_SCENE_GROUPS: ReviewSceneGroup[] = [
       { label: "day7-elena-bad-ending", title: "Elena Bad Ending" },
       { label: "day7-nadia-good-ending", title: "Nadia Good Ending" },
       { label: "day7-nadia-bad-ending", title: "Nadia Bad Ending" },
+      { label: "day7-sara-good-ending", title: "Sarah Good Ending" },
+      { label: "day7-sara-bad-ending", title: "Sarah Bad Ending" },
       { label: "day7-devoted-submission", title: "Devoted Submission (Maya)" },
       { label: "day7-eternal-promise", title: "Eternal Promise (Maya)" },
     ],

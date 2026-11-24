@@ -129,7 +129,7 @@ describe("Day 4 backup route and game over", () => {
     expect(enabledContacts(state.flags, state.activeMinigame?.options)).toEqual(["maya"]);
   });
 
-  test("Sarah finishing Day 5 hands over to the other chosen route", () => {
+  test("after Sarah's Day 7 bad ending the other chosen route is still available", () => {
     const flags = {
       ...contactFlags,
       day2Completed: true,
@@ -137,26 +137,42 @@ describe("Day 4 backup route and game over", () => {
       day2SaraCompleted: true,
       day3SaraCompleted: true,
       day4SelectedCharacter: "sara",
+      day5SaraTracesCleared: false,
     };
     const { state, seenLabels } = runUntilStop("day5-sara-route-end", flags);
+    expect(seenLabels.has("day7-sara-bad-ending")).toBe(true);
+    expect(state.flags.saraBadEndingCompleted).toBe(true);
     expect(state.flags.saraRouteClosed).toBe(true);
+    expect(state.currentLabel).toBe("day4-route-fallback");
     expect(enabledContacts(state.flags, state.activeMinigame?.options)).toEqual(["maya"]);
-    expect(seenLabels.has("day5-sara-route-notice")).toBe(false);
   });
 
-  test("Sarah finishing Day 5 with no other route shows the next-update notice", () => {
+  test("Sarah's Day 7 bad ending with no other route ends in GAME OVER", () => {
     const flags = {
       ...contactFlags,
       day2Completed: true,
       day2SaraCompleted: true,
       day3SaraCompleted: true,
       day4SelectedCharacter: "sara",
+      day5SaraTracesCleared: false,
     };
     const { state, seenLabels } = runUntilStop("day5-sara-route-end", flags);
-    expect(seenLabels.has("day5-sara-route-notice")).toBe(true);
-    expect([...seenLabels].some((label) => label.startsWith("day6"))).toBe(false);
+    expect(seenLabels.has("day7-sara-bad-ending")).toBe(true);
+    expect(state.flags.saraBadEndingCompleted).toBe(true);
+    expect(state.currentLabel).toBe("route-game-over");
     expect(state.isEnded).toBe(true);
     expect(state.flags.gallerySceneMaya1Unlocked).toBeUndefined();
+  });
+
+  test("the old Day 5 notice continues into Sarah's good path without keeping the old route lock", () => {
+    const { state } = runUntilStop("day5-sara-route-notice", {
+      day5SaraTracesCleared: true,
+      saraRouteClosed: true,
+    });
+    expect(state.currentLabel).toBe("day7-sara-good-ending");
+    expect(state.flags.day6SaraEnding).toBe("good");
+    expect(state.flags.saraGoodEndingCompleted).toBe(true);
+    expect(state.flags.saraRouteClosed).toBeUndefined();
   });
 
   test("Sarah refused on Day 5 hands over to the other chosen route", () => {
@@ -185,7 +201,7 @@ describe("Day 4 backup route and game over", () => {
     };
     const { state, seenLabels } = runUntilStop("day5-sara-refuse", flags);
     expect(seenLabels.has("route-game-over")).toBe(true);
-    expect(seenLabels.has("day5-sara-route-notice")).toBe(false);
+    expect([...seenLabels].some((label) => label.startsWith("day6-sara-"))).toBe(false);
     expect(state.isEnded).toBe(true);
   });
 

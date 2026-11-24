@@ -130,6 +130,11 @@ import {
   day6NadiaEndingScene,
 } from "@/scenes/day6/day6-nadia";
 import {
+  day6SaraBadPathScene,
+  day6SaraGoodPathScene,
+  day6SaraStartScene,
+} from "@/scenes/day6/sara/day6-sara";
+import {
   day7IntroScene,
   day7DevotedSubmissionScene,
   day7EternalPromiseScene,
@@ -140,6 +145,8 @@ import {
 } from "@/scenes/day7/day7-elena-good-ending";
 import { day7NadiaBadEndingScene } from "@/scenes/day7/day7-nadia-bad-ending";
 import { day7NadiaGoodEndingScene } from "@/scenes/day7/day7-nadia-good-ending";
+import { day7SaraGoodEndingScene } from "@/scenes/day7/sara/good/day7-sara-good-ending";
+import { day7SaraBadEndingScene } from "@/scenes/day7/sara/bad/day7-sara-bad-ending";
 import { day4ComplateScene } from "@/scenes/day4/day4-complate";
 import { day4SaraComplateScene } from "@/scenes/day4/sara/day4-sara-complate";
 import {
@@ -250,7 +257,7 @@ const withSplitCharacterDialogue = (script: VisualNovelScript): VisualNovelScrip
 });
 
 export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
-  startLabel: "day5-sara-start",
+  startLabel: "day6-sara-start",
   // startLabel: "opening",
   labels: {
     "gallery-return": [],
@@ -378,12 +385,17 @@ export const demoScript: VisualNovelScript = withSplitCharacterDialogue({
     "day6-nadia-good-path": day6NadiaGoodPathScene,
     "day6-nadia-bad-path": day6NadiaBadPathScene,
     "day6-nadia-ending": day6NadiaEndingScene,
+    "day6-sara-start": day6SaraStartScene,
+    "day6-sara-good-path": day6SaraGoodPathScene,
+    "day6-sara-bad-path": day6SaraBadPathScene,
     // Day 7
     "day7-intro": day7IntroScene,
     "day7-elena-good-ending": day7ElenaGoodEndingScene,
     "day7-elena-bad-ending": day7ElenaBadEndingScene,
     "day7-nadia-bad-ending": day7NadiaBadEndingScene,
     "day7-nadia-good-ending": day7NadiaGoodEndingScene,
+    "day7-sara-good-ending": day7SaraGoodEndingScene,
+    "day7-sara-bad-ending": day7SaraBadEndingScene,
     "day7-devoted-submission": day7DevotedSubmissionScene,
     "day7-eternal-promise": day7EternalPromiseScene,
     epilogue: epilogueScene,

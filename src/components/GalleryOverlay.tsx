@@ -9,6 +9,8 @@ import sceneNadia1 from "@/gallery/scene-nadia-1.png";
 import sceneNadia2 from "@/gallery/scene-nadia-2.png";
 import sceneNadia3 from "@/gallery/scene-nadia-3.png";
 import sceneSarah1 from "@/gallery/scene-sarah-1.png";
+import sceneSarah2 from "@/background/sarah-bedroom.png";
+import sceneSarah3 from "@/background/sara-penthouse.png";
 import type { FlagMap } from "@/types/novel";
 
 type GalleryOverlayProps = {
@@ -102,6 +104,22 @@ const GALLERY_ITEMS = [
     sceneLabel: "day4-sara-gallery",
     unlockFlag: "gallerySceneSarah1Unlocked",
   },
+  {
+    id: "scene-sarah-2",
+    character: "Sarah",
+    imageUrl: sceneSarah2,
+    label: "Scene Sarah 2",
+    sceneLabel: "day7-sara-good-ending",
+    unlockFlag: "gallerySceneSarah2Unlocked",
+  },
+  {
+    id: "scene-sarah-3",
+    character: "Sarah",
+    imageUrl: sceneSarah3,
+    label: "Scene Sarah 3",
+    sceneLabel: "day7-sara-bad-ending",
+    unlockFlag: "gallerySceneSarah3Unlocked",
+  },
 ] as const;
 
 const GALLERY_SECTIONS = ["Maya", "Elena", "Nadia", "Sarah"] as const;
@@ -165,7 +183,7 @@ export const GalleryOverlay = ({
 
   return (
     <div
-      className="fixed inset-0 z-[120] flex flex-col pointer-events-auto"
+      className="fixed inset-0 z-120 flex flex-col pointer-events-auto"
       style={{
         background:
           "radial-gradient(120% 55% at 50% -8%, rgba(255,183,120,0.07), transparent 60%), rgba(4,5,8,0.82)",
@@ -181,7 +199,7 @@ export const GalleryOverlay = ({
           <p className="m-0 text-[0.82rem] tracking-[0.24em] uppercase text-white/75 font-medium">{title}</p>
           <div className="mt-2.5 flex items-center gap-2.5">
             <div className="h-px w-9" style={{ background: "rgba(255,214,173,0.45)" }} />
-            <span className="text-[0.65rem] tracking-[0.1em] text-white/35 tabular-nums">
+            <span className="text-[0.65rem] tracking-widest text-white/35 tabular-nums">
               {unlockedCount} / {GALLERY_ITEMS.length}
             </span>
           </div>
@@ -189,7 +207,7 @@ export const GalleryOverlay = ({
         <button
           type="button"
           onClick={handleClose}
-          className="rounded-full border border-white/12 px-3.5 py-1.5 text-[0.7rem] tracking-[0.1em] uppercase text-white/55 transition-colors hover:text-white hover:border-white/30"
+          className="rounded-full border border-white/12 px-3.5 py-1.5 text-[0.7rem] tracking-widest uppercase text-white/55 transition-colors hover:text-white hover:border-white/30"
         >
           {closeLabel}
         </button>
@@ -197,7 +215,7 @@ export const GalleryOverlay = ({
 
       {/* Sections */}
       <div className="flex-1 overflow-y-auto px-8 py-7">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-6">
+        <div className="mx-auto flex flex-col gap-6" style={{ maxWidth: 1400 }}>
           {GALLERY_SECTIONS.map((section) => {
             const sectionItems = GALLERY_ITEMS.filter(item => item.character === section);
             const sectionUnlocked = sectionItems.filter(item => Boolean(flags[item.unlockFlag])).length;
@@ -217,7 +235,7 @@ export const GalleryOverlay = ({
                     className="h-px flex-1"
                     style={{ background: "linear-gradient(90deg, rgba(255,214,173,0.35), rgba(255,214,173,0) 85%)" }}
                   />
-                  <span className="shrink-0 text-[0.65rem] tracking-[0.1em] text-white/35 tabular-nums">
+                  <span className="shrink-0 text-[0.65rem] tracking-widest text-white/35 tabular-nums">
                     {sectionUnlocked} / {sectionItems.length}
                   </span>
                 </div>
